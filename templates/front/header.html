@@ -32,11 +32,13 @@
                                 <strong class="text-uppercase">{{ user.first_name }} </strong>
                                 <ul class="onhover-show-div">
                                     {% if store is  None %}
-                                        <li><a href="{% url 'vendors:vendor_dashboard' %}" data-lng="es">{% translate "My Store" %}</a>
+                                        <li><a href="{% url 'vendors:vendor_dashboard' %}"
+                                               data-lng="es">{% translate "My Store" %}</a>
                                         </li>
 
                                     {% else %}
-                                        <li><a href="{% url 'vendors:become_seller' user.id %}" data-lng="es">{% translate "start selling" %}</a></li>
+                                        <li><a href="{% url 'vendors:become_seller' user.id %}"
+                                               data-lng="es">{% translate "start selling" %}</a></li>
                                     {% endif %}
 
                                     <li><a href="{% url 'accounts:customer_logout' %}" data-lng="es">Logout</a></li>
@@ -407,30 +409,25 @@
                                             <ul>
                                                 <div class="lan-selector">
 
-                                                    <li class="dropdown default-dropdown">
-                                                        <form action="{% url 'selectlanguage' %}"
-                                                              method="post">{% csrf_token %}
-                                                            <input name="next" type="hidden" value="{{ redirect_to }}">
-                                                            <select name="language" onchange="submit()">
 
-                                                                {% get_current_language as LANGUAGE_CODE %}
-                                                                {% get_available_languages as LANGUAGES %}
-                                                                {% get_language_info_list for LANGUAGES as languages %}
-                                                                {% for language in languages %}
-                                                                    <option value="{{ language.code }}"
-                                                                            {% if language.code == LANGUAGE_CODE %}
-                                                                            selected{% endif %}>
-                                                                        {{ language.name_local }} ({{ language.code }})
-                                                                    </option>
-                                                                {% endfor %}
+                                                    <form action="{% url 'localization:selectlanguage' %}"
+                                                          method="post">{% csrf_token %}
+                                                        <input name="next" type="hidden" value="{{ redirect_to }}">
+                                                        <select class="selectpicker" name="language"
+                                                                style="width: auto;" onchange="this.form.submit()">
+                                                            {% get_current_language as LANGUAGE_CODE %}
+                                                            {% get_available_languages as LANGUAGES %}
+                                                            {% get_language_info_list for LANGUAGES as languages %}
+                                                            {% for language in languages %}
+                                                                <option value="{{ language.code }}"
+                                                                        {% if language.code == LANGUAGE_CODE %}
+                                                                        selected{% endif %}>
+                                                                    {{ language.name_local }} ({{ language.code }})
+                                                                </option>
+                                                            {% endfor %}
+                                                        </select>
 
-                                                            </select>
-
-                                                                <input type="submit" value="Set"/>
-
-                                                        </form>
-                                                    </li>
-
+                                                    </form>
                                                 </div>
                                             </ul>
                                             <h6>currency</h6>

@@ -16,9 +16,9 @@ urlpatterns = [
 
         ########## categories  #########
     path('admin/category/', categories, name='categories'),
-    path('admin/category/edit/<int:id>/<slug:slug>', EditCategory.as_view(), name='EditCategory'),
+    path('admin/category/edit/<int:pk>/', EditCategory.as_view(), name='EditCategory'),
     path('admin/category/add/', AddCategory.as_view(), name='AddCategory'),
-    path('admin/category/delete/<int:id>/<slug:slug>/', DeleteCategory.as_view(), name='delete_category'),
+    path('admin/category/delete/<int:id>/', DeleteCategory.as_view(), name='delete_category'),
 
 
        ########## Products   #########

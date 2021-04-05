@@ -1,10 +1,11 @@
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
-from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render
+from django.http import HttpResponseRedirect, Http404, HttpResponse
+from django.shortcuts import render, redirect
 from django.conf import settings
 from django.utils import translation
 # Create your views here.
+from django.views import View
 from django.views.generic import CreateView, UpdateView, DeleteView
 
 from DNigne import settings
@@ -15,7 +16,7 @@ from localization.models import Home, Language
 def index(request):
     context = dict()
 
-    context['a'] = Home.objects.all()[2]
+    context['a'] = Home.objects.all()[4]
     context['b']= _("How are you?")
 
 
@@ -40,7 +41,7 @@ class AddLang(CreateView):
 class EditLang(UpdateView):
     model = Language
     fields = '__all__'
-    template_name = 'edit-setting.html'
+    template_name = 'edit-lang.html'
     success_url = reverse_lazy('localization:all_lang')
 
 
@@ -74,6 +75,17 @@ def change_language(request):
             response.set_cookie(settings.LANGUAGE_COOKIE_NAME, language)
     return response
 
+
+class ActivateLanguageView(View):
+    language_code = ''
+    redirect_to   = ''
+
+    def get(self, request, *args, **kwargs):
+        self.redirect_to   = request.META.get('HTTP_REFERER')
+        self.language_code = kwargs.get('language_code')
+        translation.activate(self.language_code)
+        request.session[translation.LANGUAGE_SESSION_KEY] = self.language_code
+        return redirect(self.redirect_to)
 
 def selectlanguage(request):
     if request.method == 'POST':  # check post

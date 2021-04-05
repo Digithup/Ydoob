@@ -21,11 +21,12 @@ from django.urls import path, include
 
 from localization import views
 
+
+
 urlpatterns = [
-    path('selectlanguage', views.selectlanguage, name='selectlanguage'),
-    #path('selectcurrency', views.selectcurrency, name='selectcurrency'),
-    path('savelangcur', views.savelangcur, name='savelangcur'),
-    path('i18n/', include('django.conf.urls.i18n')),
+
+   path('i18n/', include('django.conf.urls.i18n')),
+
 ]
 urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
@@ -44,7 +45,7 @@ urlpatterns += i18n_patterns(
     #API URL
     path('api-auth/', include('rest_framework.urls')),
 
- prefix_default_language=False,
+ #prefix_default_language=False,
 )
 
 # ... the rest of your URLconf goes here ...

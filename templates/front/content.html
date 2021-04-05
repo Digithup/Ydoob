@@ -76,14 +76,14 @@
 
 
                                     <a href="{% url 'home:ProductDetail' rs.id %}"></a><img
-                                        src="{{ rs.thumbnail.url }}"
+                                        src="{{ "rs.thumbnail.url"|resize:'220x240'  }} "
                                         class="img-fluid blur-up lazyload bg-img"
                                         alt="">
                                 </div>
 
 
                                 <div class="back">
-                                    <a href="{% url 'home:ProductDetail' rs.id %}"><img src="{{ rs.thumbnail.url }}"
+                                    <a href="{% url 'home:ProductDetail' rs.id %}"><img  src="{{  "rs.thumbnail.url"|resize:'220x240'    }}"
                                                                                         class="img-fluid blur-up lazyload bg-img"
                                                                                         alt=""></a>
                                 </div>

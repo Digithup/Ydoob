@@ -21,12 +21,8 @@ STATUS = (
 )
 
 
-class Category(MPTTModel, TranslatableModel):
+class Category(MPTTModel, ):
     parent = TreeForeignKey('self', blank=True, null=True, related_name='children', on_delete=models.CASCADE)
-    translations = TranslatedFields(
-        _title=models.CharField(blank=False, default='', db_index=True, max_length=128),
-        _slug=models.SlugField(blank=False, default='', db_index=True, unique=True, max_length=128)
-    )
     title = models.CharField(max_length=128)
     keywords = models.CharField(max_length=255)
     description = RichTextUploadingField()
@@ -39,14 +35,7 @@ class Category(MPTTModel, TranslatableModel):
     class Meta:
         #ordering = ('title',)
         verbose_name = 'category'
-        verbose_name_plural = 'categories'
-
-    def __str__(self):
-        return self.safe_translation_getter('title', any_language=True)
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.safe_translation_getter('title', any_language=True))
-        super(Category, self).save(*args, **kwargs)
+        #verbose_name_plural = 'categories'
 
     class MPTTMeta:
         order_insertion_by = ['title']

@@ -68,8 +68,8 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     "bootstrap4",
-    'jet.dashboard',
-    'jet',
+    # 'jet.dashboard',
+    # 'jet',
     'easy_thumbnails',
     'filer',
     'mptt',
@@ -83,6 +83,8 @@ INSTALLED_APPS = [
     'imagefit',
     'imagekit',
     'modeltranslation',
+    'parler',
+    'django_database_translation',
     'jquery',
     'djangoformsetjs',
 
@@ -135,6 +137,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.template.context_processors.i18n',
                 'core.context_processors.site_profile',
                 'sales.context_processors.cart',
                 # 'vendors.context_processors.user_profile',
@@ -194,27 +197,29 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
 
-
 # dynamic data translate
-_ = lambda s: s
-LANGUAGES = (
-    ('en', _('English')),
-    ('ar', _('Arabic')),
-)
-
-LOCALE_PATHS = (
-    os.path.join(BASE_DIR, 'locale'),
-)
-# MODELTRANSLATION_LANGUAGES = ('en', 'de', 'tr')
-LANGUAGE_COOKIE_NAME=''
-
-DEFAULT_CURRENCY = 'USD'
-LANGUAGE_CODE = 'en-us'
-
+LANGUAGE_CODE = 'en'
 TIME_ZONE = 'UTC'
 USE_I18N = True  # use internationalization
 USE_L10N = True  # use localization
 USE_TZ = True
+_ = lambda s: s
+LANGUAGES = (
+    ('en', ('English')),
+    ('ar', _('Arabic')),
+
+)
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+    os.path.join(BASE_DIR, 'DNigne/locale'),
+    os.path.join(BASE_DIR, 'DNigne/core/locale'),
+os.path.join(BASE_DIR, 'DNigne/catalog/locale'),
+)
+MODELTRANSLATION_LANGUAGES = ('en', 'ar')
+LANGUAGE_COOKIE_NAME = ''
+DEFAULT_CURRENCY = 'USD'
+
 
 # CUSTOM
 FORCE_SESSION_TO_ONE = True  # Default is false
