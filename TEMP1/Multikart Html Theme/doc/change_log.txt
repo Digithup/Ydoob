@@ -56,7 +56,7 @@ Add shop pages :
 1. metro 
 2. full width
 
-Add SellerProduct pages :
+Add SellerProducts pages :
 1. Bundle
 2. 4 image
 3 image swatch

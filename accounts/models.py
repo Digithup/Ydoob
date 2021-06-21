@@ -5,8 +5,9 @@ from django.utils.safestring import mark_safe
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, first_name=None, last_name=None, password=None, is_active=True, is_staff=False,is_seller=False,
-                    is_admin=False ,is_customer=True ):
+    def create_user(self, email, first_name=None, last_name=None, password=None, is_active=True, is_staff=False
+                    , is_seller=False,
+                    is_admin=False, is_customer=True):
         if not email:
             raise ValueError("Users must have an email address")
         if not password:
@@ -32,11 +33,10 @@ class UserManager(BaseUserManager):
             last_name=last_name,
             password=password,
 
-
         )
         return user
 
-    def create_seller(self, email, first_name=None, last_name=None, password=None ,):
+    def create_seller(self, email, first_name=None, last_name=None, password=None, ):
         user = self.create_user(
             email,
             first_name=first_name,
@@ -88,7 +88,7 @@ class User(AbstractBaseUser):
     youtube = models.URLField(blank=True, max_length=50)
     about = RichTextUploadingField(blank=True)
     active = models.BooleanField(default=True)
-    customer = models.BooleanField(default=False)
+    customer = models.BooleanField(default=True)
     seller = models.BooleanField(default=False)
     staff = models.BooleanField(default=False)
     admin = models.BooleanField(default=False)
@@ -129,7 +129,7 @@ class User(AbstractBaseUser):
     @property
     def is_seller(self):
         # "Is the user a member of staff?"
-        return self.customer
+        return self.seller
 
     @property
     def is_staff(self):
@@ -150,8 +150,6 @@ class User(AbstractBaseUser):
         return mark_safe('<img src="{}" height="50"/>'.format(self.image.url))
 
     image_tag.short_description = 'Image'
-
-
 
 
 class GuestEmail(models.Model):

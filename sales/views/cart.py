@@ -3,7 +3,7 @@ from django.conf import settings
 from django.db import models
 
 # Create your models here.
-from catalog.models.models import Product
+from catalog.models.models import Products
 
 
 class Cart(object):
@@ -36,7 +36,7 @@ class Cart(object):
 
     def __iter__(self):
         product_ids = self.cart.keys()
-        products = Product.objects.filter(id__in=product_ids)
+        products = Products.objects.filter(id__in=product_ids)
         for product in products:
             self.cart[str(product.id)]['product'] = product
 

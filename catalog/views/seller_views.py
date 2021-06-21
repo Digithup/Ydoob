@@ -13,14 +13,14 @@ from django.views.generic import View
 
 from DNigne.mixins import AjaxRequiredMixin, SubmitBtnMixin, MultiSlugMixin, LoginRequiredMixin
 from analytics.models import TagView
-from catalog.forms.seller_forms import ProductModelForm
-from catalog.mixins import ProductManagerMixin
-from catalog.models.seller_models import SellerProduct, ProductRating, MyProducts
+from catalog.forms.seller_forms import ProductsModelForm
+from catalog.mixins import ProductsManagerMixin
+from catalog.models.seller_models import SellerProducts, ProductsRating, MyProducts
 from tags.models import Tag
 from vendors.mixins import SellerAccountMixin
 
 
-class ProductRatingAjaxView(AjaxRequiredMixin, View):
+class ProductsRatingAjaxView(AjaxRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         # if request.is_ajax():
         # raise Http404
@@ -29,33 +29,33 @@ class ProductRatingAjaxView(AjaxRequiredMixin, View):
         # credit card required **
 
         user = request.user
-        product_id = request.POST.get("product_id")
+        Products_id = request.POST.get("Products_id")
         rating_value = request.POST.get("rating_value")
-        exists = SellerProduct.objects.filter(id=product_id).exists()
+        exists = SellerProducts.objects.filter(id=Products_id).exists()
         if not exists:
             return JsonResponse({}, status=404)
 
         try:
-            product_obj = SellerProduct.object.get(id=product_id)
+            Products_obj = SellerProducts.object.get(id=Products_id)
         except:
-            product_obj = SellerProduct.objects.filter(id=product_id).first()
+            Products_obj = SellerProducts.objects.filter(id=Products_id).first()
 
-        rating_obj, rating_obj_created = ProductRating.objects.get_or_create(
+        rating_obj, rating_obj_created = ProductsRating.objects.get_or_create(
             user=user,
-            product = product_obj
+            Products = Products_obj
         )
 
         try:
-            rating_obj = ProductRating.objects.get(user=user, product=product_obj)
-        except ProductRating.MultipleObjectsReturned:
-            rating_obj = ProductRating.objects.filter(user=user, product=product_obj).first()
+            rating_obj = ProductsRating.objects.get(user=user, Products=Products_obj)
+        except ProductsRating.MultipleObjectsReturned:
+            rating_obj = ProductsRating.objects.filter(user=user, Products=Products_obj).first()
         except:
-            rating_obj = ProductRating()
+            rating_obj = ProductsRating()
             rating_obj.user = user
-            rating_obj.product = product_obj
+            rating_obj.Products = Products_obj
         rating_obj.rating = int(rating_value)
-        myproducts = user.myproducts.products.all()
-        if product_obj in myproducts:
+        myProducts = user.myProducts.Products.all()
+        if Products_obj in myProducts:
             rating_obj.verified = True
         rating_obj.save()
 
@@ -64,16 +64,16 @@ class ProductRatingAjaxView(AjaxRequiredMixin, View):
   		}
         return JsonResponse(data)
 
-class ProductCreateView(SellerAccountMixin, SubmitBtnMixin, CreateView):
-    model = SellerProduct
+class ProductsCreateView(SellerAccountMixin, SubmitBtnMixin, CreateView):
+    model = SellerProducts
     template_name = "form.html"
-    form_class = ProductModelForm
-    submit_btn = "Add SellerProduct"
+    form_class = ProductsModelForm
+    submit_btn = "Add SellerProducts"
 
     def form_valid(self, form):
         seller = self.get_account()
         form.instance.seller = seller
-        valid_data = super(ProductCreateView, self).form_valid(form)
+        valid_data = super(ProductsCreateView, self).form_valid(form)
         tags = form.cleaned_data.get("tags")
         if tags:
             tags_list = tags.split(",")
@@ -81,19 +81,19 @@ class ProductCreateView(SellerAccountMixin, SubmitBtnMixin, CreateView):
             for tag in tags_list:
                 if not tag == " ":
                     new_tag = Tag.objects.get_or_create(title=str(tag).strip())[0]
-                    new_tag.products.add(form.instance)
+                    new_tag.Products.add(form.instance)
 
 
         return valid_data
 
-class ProductUpdateView(ProductManagerMixin, SubmitBtnMixin, MultiSlugMixin, UpdateView):
-    model = SellerProduct
+class ProductsUpdateView(ProductsManagerMixin, SubmitBtnMixin, MultiSlugMixin, UpdateView):
+    model = SellerProducts
     template_name = "form.html"
-    form_class = ProductModelForm
-    submit_btn = "Update SellerProduct"
+    form_class = ProductsModelForm
+    submit_btn = "Update SellerProducts"
 
     def get_initial(self):
-        initial = super(ProductUpdateView, self).get_initial()
+        initial = super(ProductsUpdateView, self).get_initial()
 
         tags = self.get_object().tag_set.all()
         initial["tags"] = ", ".join([x.title for x in tags])
@@ -105,7 +105,7 @@ class ProductUpdateView(ProductManagerMixin, SubmitBtnMixin, MultiSlugMixin, Upd
         return initial
 
     def form_valid(self, form):
-        valid_data = super(ProductUpdateView, self).form_valid(form)
+        valid_data = super(ProductsUpdateView, self).form_valid(form)
         tags = form.cleaned_data.get("tags")
         obj = self.get_object()
         obj.tag_set.clear()
@@ -115,33 +115,33 @@ class ProductUpdateView(ProductManagerMixin, SubmitBtnMixin, MultiSlugMixin, Upd
             for tag in tags_list:
                 if not tag == " ":
                     new_tag = Tag.objects.get_or_create(title=str(tag).strip())[0]
-                    new_tag.products.add(self.get_object())
+                    new_tag.Products.add(self.get_object())
         return valid_data
 
 
-class ProductDetailView(MultiSlugMixin, DetailView):
-    model = SellerProduct
+class ProductsDetailView(MultiSlugMixin, DetailView):
+    model = SellerProducts
 
     def get_context_data(self, *args, **kwargs):
-        context = super(ProductDetailView, self).get_context_data(*args, **kwargs)
+        context = super(ProductsDetailView, self).get_context_data(*args, **kwargs)
         obj = self.get_object()
         tags = obj.tag_set.all()
-        rating_avg = obj.productrating_set.aggregate(Avg("rating"), Count("rating"))
+        rating_avg = obj.Productsrating_set.aggregate(Avg("rating"), Count("rating"))
         context["rating_avg"] = rating_avg
         if self.request.user.is_authenticated():
-            rating_obj = ProductRating.objects.filter(user=self.request.user, product=obj)
+            rating_obj = ProductsRating.objects.filter(user=self.request.user, Products=obj)
             if rating_obj.exists():
                 context['my_rating'] = rating_obj.first().rating
             for tag in tags:
                 new_view = TagView.objects.add_count(self.request.user.id, tag)
         return context
 
-class ProductDownloadView(MultiSlugMixin, DetailView):
-    model = SellerProduct
+class ProductsDownloadView(MultiSlugMixin, DetailView):
+    model = SellerProducts
 
     def get(self, request, *args, **kwargs):
         obj = self.get_object()
-        if obj in request.user.myproducts.products.all():
+        if obj in request.user.myProducts.Products.all():
             filepath = os.path.join(settings.PROTECTED_ROOT, obj.media.path)
             guessed_type = guess_type(filepath)[0]
             wrapper = FileWrapper(filepath)
@@ -158,12 +158,12 @@ class ProductDownloadView(MultiSlugMixin, DetailView):
         else:
             raise Http404
 
-class SellerProductListView(SellerAccountMixin, ListView):
-    model = SellerProduct
-    template_name = "sellers/product_list_view.html"
+class SellerProductsListView(SellerAccountMixin, ListView):
+    model = SellerProducts
+    template_name = "sellers/Products_list_view.html"
 
     def get_queryset(self, *args, **kwargs):
-        qs = super(SellerProductListView, self).get_queryset(**kwargs)
+        qs = super(SellerProductsListView, self).get_queryset(**kwargs)
         qs = qs.filter(seller=self.get_account())
         query = self.request.GET.get("q")
         if query:
@@ -174,8 +174,8 @@ class SellerProductListView(SellerAccountMixin, ListView):
         return qs
 
 class VendorListView(ListView):
-    model = SellerProduct
-    template_name = "products/product_list.html"
+    model = SellerProducts
+    template_name = "Products/Products_list.html"
 
     def get_object(self):
         username = self.kwargs.get("vendor_name")
@@ -199,11 +199,11 @@ class VendorListView(ListView):
             ).order_by("title")
         return qs
 
-class ProductListView(ListView):
-    model = SellerProduct
+class ProductsListView(ListView):
+    model = SellerProducts
 
     def get_queryset(self, *args, **kwargs):
-        qs = super(ProductListView, self).get_queryset(**kwargs)
+        qs = super(ProductsListView, self).get_queryset(**kwargs)
         query = self.request.GET.get("q")
         if query:
             qs = qs.filter(
@@ -214,11 +214,11 @@ class ProductListView(ListView):
 
 class UserLibraryListView(LoginRequiredMixin, ListView):
     model = MyProducts
-    template_name = "products/library_list.html"
+    template_name = "Products/library_list.html"
 
     def get_queryset(self, *args, **kwargs):
         obj = MyProducts.objects.get_or_create(user=self.request.user)[0]
-        qs = obj.products.all()
+        qs = obj.Products.all()
         query = self.request.GET.get("q")
         if query:
             qs = qs.filter(
@@ -229,7 +229,7 @@ class UserLibraryListView(LoginRequiredMixin, ListView):
 
 def create_view(request):
     # Form
-    form = ProductModelForm(request.POST or None, request.FILES or None)
+    form = ProductsModelForm(request.POST or None, request.FILES or None)
     if form.is_valid():
 
         instance = form.save(commit=False)
@@ -238,48 +238,48 @@ def create_view(request):
     template = "form.html"
     context = {
         "form": form,
-        "submit_btn": "Create SellerProduct"
+        "submit_btn": "Create SellerProducts"
     }
     return render(request, template, context)
 
 def update_view(request, object_id=None):
-    product = get_object_or_404(SellerProduct, id=object_id)
-    forms = ProductModelForm(request.POST or None, instance=product)
+    Products = get_object_or_404(SellerProducts, id=object_id)
+    forms = ProductsModelForm(request.POST or None, instance=Products)
     if forms.is_valid():
         instance = forms.save(commit=False)
         # instance.sale_price = instance.price
         instance.save()
     template = "form.html"
     context = {
-            "object": product,
+            "object": Products,
             "form": forms,
-            "submit_btn": "Update SellerProduct"
+            "submit_btn": "Update SellerProducts"
         }
     return render(request, template, context)
 
 def detail_slug_view(request, slug=None):
-    product = SellerProduct.objects.get(slug=slug)
+    Products = SellerProducts.objects.get(slug=slug)
     try:
-        product = get_object_or_404(SellerProduct, slug=slug)
-    except SellerProduct.MultipleObjectsReturned:
-        product = SellerProduct.objects.filter(slug=slug).order_by("-title").first()
+        Products = get_object_or_404(SellerProducts, slug=slug)
+    except SellerProducts.MultipleObjectsReturned:
+        Products = SellerProducts.objects.filter(slug=slug).order_by("-title").first()
     template = "detail_view.html"
     context = {
-            "object": product
+            "object": Products
         }
     return render(request, template, context)
 
 def detail_view(request, object_id=None):
-    product = get_object_or_404(SellerProduct, id=object_id)
+    Products = get_object_or_404(SellerProducts, id=object_id)
     template = "detail_view.html"
     context = {
-            "object": product
+            "object": Products
         }
     return render(request, template, context)
 
 def list_view(request):
 
-    queryset = SellerProduct.objects.all()
+    queryset = SellerProducts.objects.all()
     template = "list_view.html"
     context = {
         "queryset": queryset

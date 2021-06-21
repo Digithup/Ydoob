@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.utils.crypto import get_random_string
 
 from accounts.models import User
-from catalog.models.models import Product, Category
+from catalog.models.models import Products, Categories
 from catalog.models.product_options import Variants
 
 from sales.models.order import ShopCart, Order, OrderForm, OrderProduct, ShopCartForm
@@ -17,7 +17,7 @@ def index(request):
 def addtoshopcart(request,id):
     url = request.META.get('HTTP_REFERER')  # get last url
     current_user = request.user  # Access User Session information
-    product= Product.objects.get(pk=id)
+    product= Products.objects.get(pk=id)
     variantid = request.POST.get('variantid')  # from variant add to cart
 
     if product.variant != 'None':
@@ -71,7 +71,7 @@ def addtoshopcart(request,id):
 
 
 def shopcart(request):
-    category = Category.objects.all()
+    category = Categories.objects.all()
     current_user = request.user  # Access User Session information
     shopcart = ShopCart.objects.filter(user_id=current_user.id)
     total=0
@@ -92,7 +92,7 @@ def deletefromcart(request,id):
 
 
 def orderproduct(request):
-    category = Category.objects.all()
+    category = Categories.objects.all()
     current_user = request.user
     shopcart = ShopCart.objects.filter(user_id=current_user.id)
     total = 0
@@ -138,7 +138,7 @@ def orderproduct(request):
                 detail.save()
                 # ***Reduce quantity of sold product from Amount of Product
                 if  rs.product.variant=='None':
-                    product = Product.objects.get(id=rs.product_id)
+                    product = Products.objects.get(id=rs.product_id)
                     product.amount -= rs.quantity
                     product.save()
                 else:

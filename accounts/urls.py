@@ -4,10 +4,10 @@ from django.contrib.auth.views import LogoutView
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 
-from .views.customer import customer_logout, CustomerRegister, CustomerLoginView, RegistrationView, EmailValidationView, \
-    VerificationView
+from .views.users import customer_logout, CustomerRegister, CustomerLoginView, RegistrationView, EmailValidationView, \
+    VerificationView, SellerRegisterView
 from .views.views import UserLoginView, RegisterView, update_profile, guest_user_view, user_list, user_profile, \
-    user_delete
+    user_delete, adminLogoutProcess
 
 app_name = 'accounts'
 
@@ -16,6 +16,7 @@ urlpatterns = [
     path('login/',UserLoginView.as_view(),name='user_login'),
     path('register/',RegisterView.as_view(),name='user_register'),
     path('logout/',LogoutView.as_view(),name='user_logout'),
+    path('admin/logout/',adminLogoutProcess,name='admin_logout'),
 
 
 
@@ -47,5 +48,8 @@ urlpatterns = [
 
 
 
+                ##########Seller################
 
+    #path('accounts/signup/teacher/', teachers.TeacherSignUpView.as_view(), name='teacher_signup')
+    path('register/seller/',SellerRegisterView.as_view(),name='seller_register'),
 ]

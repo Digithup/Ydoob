@@ -1,13 +1,13 @@
 from django import forms
 from django.utils.text import slugify
 
-from catalog.models.models import Product
+from catalog.models.models import Products
 
 PUBLISH_CHOICES = (
     ('publish', "Publish"),
     ('draft', "Draft")
 )
-class ProductAddForm(forms.Form):
+class ProductsAddForm(forms.Form):
     title = forms.CharField(label='Your Title', widget=forms.TextInput(
         attrs={
             "class": "custom-class",
@@ -40,12 +40,12 @@ class ProductAddForm(forms.Form):
         else:
             raise forms.ValidationError("Title must be greater than 3 characters long.")
 
-class ProductModelForm(forms.ModelForm):
+class ProductsModelForm(forms.ModelForm):
     tags = forms.CharField(label='Related Tags', required=False)
     publish = forms.ChoiceField(widget=forms.RadioSelect, choices=PUBLISH_CHOICES, required=False)
 
     class Meta:
-        model = Product
+        model = Products
         fields = [
             "title",
             "description",
@@ -66,7 +66,7 @@ class ProductModelForm(forms.ModelForm):
         }
 
 def clean(self, *args, **kwargs):
-    cleaned_data = super(ProductModelForm, self).clean(*args, **kwargs)
+    cleaned_data = super(ProductsModelForm, self).clean(*args, **kwargs)
     return cleaned_data
 
 

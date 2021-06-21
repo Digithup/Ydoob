@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="page-header-left">
-                        <h3>Product Detail
+                        <h3>Products Detail
                             <small>Multikart Admin panel</small>
                         </h3>
                     </div>
@@ -22,7 +22,7 @@
                     <ol class="breadcrumb pull-right">
                         <li class="breadcrumb-item"><a href="/admin"><i data-feather="home"></i></a></li>
                         <li class="breadcrumb-item">Physical</li>
-                        <li class="breadcrumb-item active">{{ product.title }}</li>
+                        <li class="breadcrumb-item active">{{ Products.title }}</li>
                     </ol>
                 </div>
             </div>
@@ -34,47 +34,47 @@
     <!-- Container-fluid starts-->
     <div class="container-fluid">
         <div class="card">
-            <div class="row product-page-main card-body">
+            <div class="row Products-page-main card-body">
 
                 <div class="col-xl-4">
 
-                    <div class="product-slider owl-carousel owl-theme" id="sync1">
+                    <div class="Products-slider owl-carousel owl-theme" id="sync1">
 
                         <div class="item"><img src="{{ banners.image.url }}" alt="" class="blur-up lazyloaded">
                         </div>
-                        <div class="item"><img src="{{ product.image1.url }}" alt="" class="blur-up lazyloaded">
+                        <div class="item"><img src="{{ Products.image1.url }}" alt="" class="blur-up lazyloaded">
                         </div>
-                        <div class="item"><img src="{{ product.image2.url }}" alt="" class="blur-up lazyloaded">
+                        <div class="item"><img src="{{ Products.image2.url }}" alt="" class="blur-up lazyloaded">
                         </div>
-                        <div class="item"><img src="{{ product.image3.url }}" alt="" class="blur-up lazyloaded">
+                        <div class="item"><img src="{{ Products.image3.url }}" alt="" class="blur-up lazyloaded">
                         </div>
-                        <div class="item"><img src="{{ product.image4.url }}" alt="" class="blur-up lazyloaded">
+                        <div class="item"><img src="{{ Products.image4.url }}" alt="" class="blur-up lazyloaded">
                         </div>
-                        <div class="item"><img src="{{ product.image5.url }}" alt="" class="blur-up lazyloaded">
+                        <div class="item"><img src="{{ Products.image5.url }}" alt="" class="blur-up lazyloaded">
                         </div>
-                        <div class="item"><img src="{{ product.image6.url }}" alt="" class="blur-up lazyloaded">
+                        <div class="item"><img src="{{ Products.image6.url }}" alt="" class="blur-up lazyloaded">
                         </div>
                     </div>
                     <div class="owl-carousel owl-theme" id="sync2">
-                        <div class="item"><img src="{{ product.thumbnail.url }}" alt="" class="blur-up lazyloaded">
+                        <div class="item"><img src="{{ Products.thumbnail.url }}" alt="" class="blur-up lazyloaded">
                         </div>
-                        <div class="item"><img src="{{ product.image1.url }}" alt="" class="blur-up lazyloaded">
+                        <div class="item"><img src="{{ Products.image1.url }}" alt="" class="blur-up lazyloaded">
                         </div>
-                        <div class="item"><img src="{{ product.image2.url }}" alt="" class="blur-up lazyloaded">
+                        <div class="item"><img src="{{ Products.image2.url }}" alt="" class="blur-up lazyloaded">
                         </div>
-                        <div class="item"><img src="{{ product.image3.url }}" alt="" class="blur-up lazyloaded">
+                        <div class="item"><img src="{{ Products.image3.url }}" alt="" class="blur-up lazyloaded">
                         </div>
-                        <div class="item"><img src="{{ product.image4.url }}" alt="" class="blur-up lazyloaded">
+                        <div class="item"><img src="{{ Products.image4.url }}" alt="" class="blur-up lazyloaded">
                         </div>
-                        <div class="item"><img src="{{ product.image5.url }}" alt="" class="blur-up lazyloaded">
+                        <div class="item"><img src="{{ Products.image5.url }}" alt="" class="blur-up lazyloaded">
                         </div>
-                        <div class="item"><img src="{{ product.image6.url }}" alt="" class="blur-up lazyloaded">
+                        <div class="item"><img src="{{ Products.image6.url }}" alt="" class="blur-up lazyloaded">
                         </div>
 
                     </div>
                 </div>
                 <div class="col-xl-8">
-                    <div class="product-page-details product-right mb-0">
+                    <div class="Products-page-details Products-right mb-0">
                         <h2>{{ banners.banner_name }}</h2>
                         <select id="u-rating-fontawesome-o" name="rating" data-current-rating="5" autocomplete="off">
                             <option value="1">1</option>
@@ -84,11 +84,11 @@
                             <option value="5">5</option>
                         </select>
                         <hr>
-                        <h6 class="product-title">product details</h6>
-                        <p>{{ product.description }}</p>
-                        <div class="product-price digits mt-2">
-                            <h3>{{ product.n_price }}
-                                <del>{{ product.price }}</del>
+                        <h6 class="Products-title">Products details</h6>
+                        <p>{{ Products.description }}</p>
+                        <div class="Products-price digits mt-2">
+                            <h3>{{ Products.n_price }}
+                                <del>{{ Products.price }}</del>
                             </h3>
                         </div>
                         <ul class="color-variant">
@@ -97,7 +97,7 @@
                             <li class="bg-light2"></li>
                         </ul>
                         <hr>
-                        <h6 class="product-title size-text">select size <span class="pull-right"><a href=""
+                        <h6 class="Products-title size-text">select size <span class="pull-right"><a href=""
                                                                                                     data-toggle="modal"
                                                                                                     data-target="#sizemodal">size chart</a></span>
                         </h6>
@@ -123,8 +123,8 @@
                                 <li><a href="#">xl</a></li>
                             </ul>
                         </div>
-                        <div class="add-product-form">
-                            <h6 class="product-title">quantity</h6>
+                        <div class="add-Products-form">
+                            <h6 class="Products-title">quantity</h6>
                             <fieldset class="qty-box mt-2 ml-0">
                                 <div class="input-group">
                                     <input class="touchspin" type="text" value="1">
@@ -132,7 +132,7 @@
                             </fieldset>
                         </div>
                         <hr>
-                        <h6 class="product-title">Time Reminder</h6>
+                        <h6 class="Products-title">Time Reminder</h6>
                         <div class="timer">
                             <p id="demo"><span>25 <span class="padding-l">:</span> <span class="timer-cal">Days</span> </span><span>22 <span
                                     class="padding-l">:</span> <span class="timer-cal">Hrs</span> </span><span>13 <span

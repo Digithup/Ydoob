@@ -22,7 +22,7 @@
                     </div>
                     <div class="col-lg-6">
                         <ol class="breadcrumb pull-right">
-                            <li class="breadcrumb-item"><a href="{% url 'core:index' %}"><i data-feather="home"></i></a>
+                            <li class="breadcrumb-item"><a href="{% url 'core:admin_index' %}"><i data-feather="home"></i></a>
                             </li>
                             <li class="breadcrumb-item">Physical</li>
                             <li class="breadcrumb-item active">Language</li>
@@ -70,7 +70,7 @@
                             Language Flag
                         </th>
                         <th style="width: 10%">
-                            Team Members
+                            translation progress
                         </th>
                         <th style="width: 8%" class="text-center">
                             Status
@@ -83,7 +83,7 @@
                     {% for rs in lang %}
                         <tr>
                             <td>
-                                {{ rs.id }}
+                                {{ forloop.counter }}
                             </td>
                             <td>
                                 <a>

@@ -14,8 +14,7 @@ class Store(models.Model):
         ('Disable', 'Disable'),
     )
 
-    vendor = models.OneToOneField(to=User , on_delete=models.CASCADE ,blank=True )
-    #catalog = models.ForeignKey(Product,on_delete=models.CASCADE ,null=True , blank=True)
+    vendor = models.OneToOneField(to=User, on_delete=models.CASCADE, blank=True ,related_name='Vendor')
     title = models.CharField(max_length=150 , null=True ,default='Nigne')
     keywords = models.CharField(max_length=255 , default=' ' , null=True)
     company = models.CharField(max_length=50 , default=' ', null=True)
@@ -34,17 +33,11 @@ class Store(models.Model):
     create_at = models.DateTimeField(auto_now=True ,null=False)
     update_at = models.DateTimeField(auto_now=True)
 
-    USERNAME_FIELD = 'email'
-
-    objects = UserManager()
 
     def __str__(self):
         return self.title
 
-
-
         ## method to create a fake table field in read only mode
-
     def image_tag(self):
         if self.image.url is not None:
             return mark_safe('<img src="{}" height="50"/>'.format(self.image.url))

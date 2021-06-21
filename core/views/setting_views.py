@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
 
 from core.forms.seeting_forms import SettingAddForm, SettingLangAddForm
-from core.models.models import Setting, SettingLang, langlist
+from core.models.models import Setting, SettingLang
 from localization.models import Language
 
 
@@ -80,8 +80,8 @@ def add_setting(request):
             setting_obj.save()  # last_modified field won't update on chaning other model field, save() trigger change
             # return reverse('core:catalog')
             return HttpResponseRedirect('/admin/setting', setting_created)
-            # return render(request,template_name='admin/pages/products-admin.html')
-            # return getNoteResponseData(product_obj, tags, product_created)
+            # return render(request,template_name='admin/pages/Products-admin.html')
+            # return getNoteResponseData(Products_obj, tags, Products_created)
         else:
             print("Form invalid, see below error msg")
             print(request.POST)

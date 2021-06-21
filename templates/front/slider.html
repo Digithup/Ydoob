@@ -1,49 +1,36 @@
 {% load static %}
 {% load imagefit %}
 {% load bootstrap4 %}
-    <!-- Home slider -->
-    <section class="p-0">
-         {% for rs in banner %}
+{% load i18n %}
+<!-- Home slider -->
+<section class="p-0">
         <div class="slide-1 home-slider">
-            <div>
-                <div class="home  text-center">
+            <div class="home  text-center">
+                {% for rs in banner %}
+                    {% if forloop.counter0|divisibleby:"2" %}
+                         {% if forloop.first %} active {% endif %}">
+                        <div class="row">{% endif %}
+                <img src="{{ rs.image.url }}" alt="" style="height: 5px" width="10px" class="bg-img blur-up lazyload">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="slider-contain">
+                                <div>
+                                    <h4>{% trans "welcome to fashion" %}</h4>
+                                    <h1> {{ rs.caption }}</h1>
+                                    <a href="#" class="btn btn-solid">shop now</a>
 
-                    <img src="{{ rs.image|resize:"1920x780,c" }}" alt="" class="bg-img blur-up lazyload">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col">
-                                <div class="slider-contain">
-                                    <div>
-                                        <h4>welcome to fashion</h4>
-                                        <h1> {{ rs.caption }}</h1>
-                                        <a href="#" class="btn btn-solid">shop now</a>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-            </div>
-            <div>
-                <div class="home text-center">
-                    <img src="{% static '' %}images/home-banner/2.jpg" alt="" class="bg-img blur-up lazyload">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col">
-                                <div class="slider-contain">
-                                    <div>
-                                        <h4>welcome to fashion</h4>
-                                        <h1>women fashion</h1>
-                                        <a href="#" class="btn btn-solid">shop now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                {% if forloop.counter0|divisibleby:"2" %}</div>
                     </div>
-                </div>
-            </div>
-        </div>
-          {% endfor %}
-    </section>
-    <!-- Home slider end -->
+                    </div>{% endif %}
+                {% endfor %}
+
+
+</section>
+<!-- Home slider end -->
+

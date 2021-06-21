@@ -1,14 +1,14 @@
 ##### get data from model ---------> json
 from rest_framework import routers, serializers, viewsets
-from catalog.models.models import Category, Product, Image
+from catalog.models.models import Categories, Products, Image
 
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Category
+        model = Categories
         fields = '__all__'
 
-class ProductSerializer(serializers.ModelSerializer):
+class Productserializer(serializers.ModelSerializer):
     class Meta:
-        model = Product
+        model = Products
         fields = '__all__'

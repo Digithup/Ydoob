@@ -1,10 +1,10 @@
 from modeltranslation.translator import translator, TranslationOptions
 
-from catalog.models.models import Category
+from catalog.models.models import Categories
+
 
 
 class CategoryTranslationOptions(TranslationOptions):
-    fields = ('title', 'slug')
+    fields = ('title',)
 
-
-translator.register(Category, CategoryTranslationOptions)
+translator.register(Categories, CategoryTranslationOptions)

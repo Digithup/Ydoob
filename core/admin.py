@@ -3,13 +3,13 @@ from django.contrib import admin
 # Register your models here.
 from mptt.admin import DraggableMPTTAdmin
 
-from catalog.models.models import Category, Product
+from catalog.models.models import Categories, Products
 
 
 class CategoryAdmin2(DraggableMPTTAdmin):
     mptt_indent_field = "title"
     list_display = ('tree_actions', 'indented_title',
-                    'related_products_count', 'related_products_cumulative_count')
+                    'related_Products_count', 'related_Products_cumulative_count')
     list_display_links = ('indented_title',)
     prepopulated_fields = {'slug': ('title',)}
 
@@ -17,17 +17,17 @@ class CategoryAdmin2(DraggableMPTTAdmin):
         qs = super().get_queryset(request)
 
         # Add cumulative catalog count
-        qs = Category.objects.add_related_count(
+        qs = Categories.objects.add_related_count(
                 qs,
-                Product,
+                Products,
                 'category',
-                'products_cumulative_count',
+                'Products_cumulative_count',
                 cumulative=True)
 
         # Add non cumulative catalog count
-        qs = Category.objects.add_related_count(qs,
-                 Product,
+        qs = Categories.objects.add_related_count(qs,
+                 Products,
                  'category',
-                 'products_count',
+                 'Products_count',
                  cumulative=False)
         return qs

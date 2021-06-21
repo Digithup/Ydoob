@@ -1,4 +1,4 @@
-{% load static%}
+{% load static %}
 
 <!-- latest jquery-->
 <script src="{% static '' %}js/jquery-3.3.1.min.js"></script>
@@ -15,8 +15,8 @@
 <script src="{% static '' %}js/sidebar-menu.js"></script>
 
 <!--dropzone js-->
-<script src="{% static ''%}js/dropzone/dropzone.js"></script>
-<script src="{% static ''%}js/dropzone/dropzone-script.js"></script>
+<script src="{% static '' %}js/dropzone/dropzone.js"></script>
+<script src="{% static '' %}js/dropzone/dropzone-script.js"></script>
 
 <!--chartist js-->
 <script src="{% static '' %}js/chart/chartist/chartist.js"></script>
@@ -96,30 +96,57 @@
 <script src="{% static '' %}js/admin-script.js"></script>
 
 
-
-
 <!--ck editor-->
-<script src="{%  static ''%}js/editor/ckeditor/ckeditor.js"></script>
-<script src="{%  static ''%}js/editor/ckeditor/styles.js"></script>
-<script src="{%  static ''%}js/editor/ckeditor/adapters/jquery.js"></script>
-<script src="{%  static ''%}js/editor/ckeditor/ckeditor.custom.js"></script>
+<script src="{% static '' %}js/editor/ckeditor/ckeditor.js"></script>
+<script src="{% static '' %}js/editor/ckeditor/styles.js"></script>
+<script src="{% static '' %}js/editor/ckeditor/adapters/jquery.js"></script>
+<script src="{% static '' %}js/editor/ckeditor/ckeditor.custom.js"></script>
+
+
+
+
+  <!-- Page Specific JS File -->
+  <script src="{% static '/js/page/index-0.js' %}"></script>
+
+  <!-- Template JS File -->
+  <script src="{% static '/js/scripts.js' %}"></script>
+  <script src="{% static '/js/custom.js' %}"></script>
+
+
+
+
+
 
 <script>
-        $(window).on('load', function () {
-            setTimeout(function () {
-                $('#exampleModal').modal('hide');
-            }, 2500);
-        });
-        function openSearch() {
-            document.getElementById("search-overlay").style.display = "block";
-        }
+    $(window).on('load', function () {
+        setTimeout(function () {
+            $('#exampleModal').modal('hide');
+        }, 2500);
+    });
 
-        function closeSearch() {
-            document.getElementById("search-overlay").style.display = "none";
-        }
+    function openSearch() {
+        document.getElementById("search-overlay").style.display = "block";
+    }
 
-
-        $('#language a:first').tab('show');
+    function closeSearch() {
+        document.getElementById("search-overlay").style.display = "none";
+    }
 
 
-    </script>
+    $('#language a:first').tab('show');
+
+   document.getElementById("title_en").onkeyup = function () {
+        document.getElementById("title").value = document.getElementById("title_en").value;
+        document.getElementById("slug").value = document.getElementById("title_en").value.toLowerCase().replaceAll(" ", "-");
+    }
+
+
+
+</script>
+
+<script>
+
+</script>
+
+
+

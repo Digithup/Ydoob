@@ -16,27 +16,27 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from catalog.models.models import Category, Product, Image
+from catalog.models.models import Categories, Products, Image
 
 
 
 def index(request):
 
-    catdata = Category.objects.all()
-    product = Product.objects.all
+    catdata = Categories.objects.all()
+    products = Products.objects.all
     page = "home"
     context = {
         'page': page,
 
         'catdata':catdata,
-        'catalog':product,
+        'catalog':Products,
     }
     return render(request, 'admin/index.html', context)
 
 
 def sidebar(request):
 
-    catdata = Category.objects.all()
+    catdata = Categories.objects.all()
     page = "home"
     context = {
         'page': page,
@@ -47,7 +47,7 @@ def sidebar(request):
 
 
 def category_list(request):
-    catdata = Category.objects.all()
+    catdata = Categories.objects.all()
     context = {
                # 'category':category,
                'catdata': catdata}
@@ -55,19 +55,19 @@ def category_list(request):
     return render(request, 'front/pages/category_list.html', context)
 
 
-def product_list(request, category_slug=None):
+def Products_list(request, category_slug=None):
     category = None
-    catdata = Category.objects.all()
-    products = Product.objects.filter(status=True)
+    catdata = Categories.objects.all()
+    products = Products.objects.filter(status=True)
     if category_slug:
-        category = get_object_or_404(Category, slug=category_slug)
-        products = Product.objects.filter(category=category)
+        category = get_object_or_404(Categories, slug=category_slug)
+        products = Products.objects.filter(category=category)
 
-    context = {'products': products,
+    context = {'Products': Products,
                 'category':category,
                'catdata': catdata}
     #return HttpResponse(1)
-    return render(request, 'admin/pages/category-admin.html', context)
+    return render(request, 'catalog/category/category-admin.html', context)
 
 
 def user_list(request, id, slug):
@@ -79,25 +79,25 @@ def user_list(request, id, slug):
 # return render(request,'admin/stores-list.html')
 
 
-def product_detail(request,id,slug):
+def Products_detail(request,id,slug):
     query = request.GET.get('q')
     # >>>>>>>>>>>>>>>> M U L T I   L A N G U G A E >>>>>> START
 
-    category = Category.objects.all()
+    category = Categories.objects.all()
 
-    product = get_object_or_404(Product, id=id, slug=slug, available=True)
+    products = get_object_or_404(Products, id=id, slug=slug, available=True)
 
-    images = Image.objects.filter(product_id=id)
+    images = Image.objects.filter(Products_id=id)
     paginator = Paginator(images, 1)  # Show 25 contacts per page.
 
 
     context = {
-        'product': product,
-        'cart_product_form': cart_product_form,
+        'Products': Products,
+
         'paginator':paginator,
     }
     #return HttpResponse('f')
-    return render(request, 'add-producttest.html', context)
+    return render(request, 'add-Productstest.html', context)
 
 
 
@@ -108,7 +108,7 @@ class CatList(APIView):
     template_name = 'admin/pages/category-admin.html'
 
     def get(self, request):
-        queryset = Category.objects.all()
+        queryset = Categories.objects.all()
         return Response({'categories': queryset})
 
 

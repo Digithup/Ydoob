@@ -12,26 +12,24 @@ from django.contrib.auth.models import User
 from django.forms import TextInput, EmailInput, Select, FileInput, Textarea, ImageField
 from haystack import indexes
 
-from catalog.models.models import Category, Product, Image
-from catalog.models.product_options import Manufacturer, SingleProduct
+from catalog.models.models import Categories, Products, Image
+
 from core.models.models import Images
 
 
 class CategoryAddForm(forms.ModelForm):
     title = forms.CharField(widget=CKEditorWidget())
+    category_id = forms.IntegerField(required=False)
 
     class Meta:
-        model = Category
+        model = Categories
         fields = '__all__'
 
 
-class SingleProductAddForm(forms.ModelForm):
-    class Meta:
-        model = SingleProduct
-        fields = ['title', ]
 
 
-class ProductAddForm(forms.ModelForm):
+
+class ProductsAddForm(forms.ModelForm):
     thumbnail = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False, label='image')
     status = forms.ChoiceField(label="status", choices=(
         ('True', 'Enable'),
@@ -48,7 +46,7 @@ class ProductAddForm(forms.ModelForm):
 
 
     class Meta:
-        model = Product
+        model = Products
         fields = '__all__'
         # extra_field = CategoryAddForm.Meta.fields
         widgets = {'title': forms.TextInput(attrs={'class': 'form-control'}),
@@ -69,15 +67,15 @@ class ImageForm(forms.ModelForm):
         fields = ('image',)
 
 
-class ProductFullForm(ProductAddForm):
-    product_id = forms.IntegerField(required=False)
+class ProductsFullForm(ProductsAddForm):
+    Products_id = forms.IntegerField(required=False)
     thumbnail = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False )
     image1 = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
     tags = forms.CharField(max_length=50, required=False)
 
-    class Meta(ProductAddForm.Meta):
+    class Meta(ProductsAddForm.Meta):
         fields = '__all__'
-        field_classes=ProductAddForm.Meta.fields
+        field_classes=ProductsAddForm.Meta.fields
 
         widgets = {'title': forms.TextInput(attrs={'class': 'form-control'}),
                    'keywords': forms.TextInput(attrs={'class': 'form-control'}),
@@ -90,26 +88,22 @@ class ProductFullForm(ProductAddForm):
                    }
 
     def save(self, *args, **kwargs):
-        image = super(ProductFullForm, self).save(*args, **kwargs)
+        image = super(ProductsFullForm, self).save(*args, **kwargs)
         if hasattr(self.files, 'getlist'):
             for f in self.files.getlist('image'):
-                Image.objects.create(product=image, image=f)
+                Image.objects.create(Products=image, image=f)
         return image
 
 
-class ManufacturerAddForm(forms.ModelForm):
-    class Meta:
-        model = Manufacturer
-        fields = '__all__'
 
 
-class ProductIndex(indexes.SearchIndex, indexes.Indexable):
+class ProductsIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     category = indexes.CharField(model_attr='catalog')
     pub_date = indexes.DateTimeField(model_attr='pub_date')
 
     def get_model(self):
-        return Product
+        return Products
 
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""

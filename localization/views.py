@@ -1,5 +1,12 @@
-from django.urls import reverse_lazy
-from django.utils.translation import gettext as _
+import http
+from audioop import reverse
+from pydoc import resolve
+from urllib.parse import urlsplit, urlunsplit
+
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse_lazy, Resolver404, NoReverseMatch
+from django.utils.http import is_safe_url
+from django.utils.translation import gettext as _, check_for_language, activate, LANGUAGE_SESSION_KEY
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render, redirect
 from django.conf import settings
@@ -13,23 +20,16 @@ from accounts.models import User
 from localization.models import Home, Language
 
 
-def index(request):
-    context = dict()
-
-    context['a'] = Home.objects.all()[4]
-    context['b']= _("How are you?")
 
 
-    return render(request, 'front/index.html', context)
 
 def all_lang(request):
-    lang = Language.objects.filter(status='True')
-
+    lang = Language.objects.all()
     context = {
         'lang': lang,
-
     }
     return render(request, 'lang-admin.html', context)
+
 
 class AddLang(CreateView):
     model = Language
@@ -37,6 +37,7 @@ class AddLang(CreateView):
     fields = '__all__'
 
     success_url = reverse_lazy('localization:all_lang')
+
 
 class EditLang(UpdateView):
     model = Language
@@ -57,36 +58,6 @@ class DeleteLang(DeleteView):
 
 
 
-
-def change_language(request):
-    response = HttpResponseRedirect('/')
-    if request.method == 'POST':
-        language = request.POST.get('language')
-        if language:
-            if language != settings.LANGUAGE_CODE and [lang for lang in settings.LANGUAGES if lang[0] == language]:
-                redirect_path = f'/{language}/'
-            elif language == settings.LANGUAGE_CODE:
-                redirect_path = '/'
-            else:
-                return response
-            from django.utils import translation
-            translation.activate(language)
-            response = HttpResponseRedirect(redirect_path)
-            response.set_cookie(settings.LANGUAGE_COOKIE_NAME, language)
-    return response
-
-
-class ActivateLanguageView(View):
-    language_code = ''
-    redirect_to   = ''
-
-    def get(self, request, *args, **kwargs):
-        self.redirect_to   = request.META.get('HTTP_REFERER')
-        self.language_code = kwargs.get('language_code')
-        translation.activate(self.language_code)
-        request.session[translation.LANGUAGE_SESSION_KEY] = self.language_code
-        return redirect(self.redirect_to)
-
 def selectlanguage(request):
     if request.method == 'POST':  # check post
         cur_language = translation.get_language()
@@ -99,7 +70,7 @@ def selectlanguage(request):
 
 
 
-#@login_required(login_url='/login') # Check login
+@login_required(login_url='/login') # Check login
 def savelangcur(request):
     lasturl = request.META.get('HTTP_REFERER')
     curren_user = request.user

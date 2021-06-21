@@ -3,16 +3,18 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView
 from django.views.generic.base import RedirectView
 
 from accounts.models import User
-from catalog.models.models import Product
+from catalog.models.models import Products
+from vendors.decorators import seller_required, admin_required
 from vendors.forms import StoreEditForm, StoreAddForm
 from vendors.models import Store
 
-
-@login_required  # Check login
+@admin_required
+#@method_decorator([login_required, admin_required], name='dispatch')
 def store_list(request):
     store = Store.objects.all()
     current_user = request.user  # Access User Session information
@@ -70,6 +72,9 @@ def become_seller(request, id):
         return render(request, 'store-page/become-seller.html', {'forms': forms})
     return render(request, 'store-page/become-seller.html', {'forms': forms})
 
+
+
+@method_decorator([login_required, seller_required], name='dispatch')
 def edit_store(request):
     store = Store.objects.get(id=request.store.id)
     forms = StoreEditForm(instance=store)
@@ -96,7 +101,7 @@ class SellerProductDetailRedirectView(RedirectView):
     permanent = True
 
     def get_redirect_url(self, *args, **kwargs):
-        obj = get_object_or_404(Product, pk=kwargs['pk'])
+        obj = get_object_or_404(Products, pk=kwargs['pk'])
         return obj.get_absolute_url()
 
 

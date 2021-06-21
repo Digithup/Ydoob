@@ -26,11 +26,14 @@ class BannerDetailView(DetailView):
 
 
 
-class ProfileCreate(CreateView):
+class BannerCreate(CreateView):
     model = Banners
     fields = ['banner_name', 'status']
+    template_name = 'banner/testoc.html'
+    success_url = reverse_lazy('core:BannerView')
 
-class CollectionDelete(DeleteView):
+class BannerDelete(DeleteView):
     model = Banners
+    fields = '__all__'
     template_name = 'banner/confirm_delete.html'
     success_url = reverse_lazy('core:BannerView')

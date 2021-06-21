@@ -30,7 +30,7 @@ def banner_create(request):
                 form.save_m2m()
 
                 messages.add_message(request, messages.SUCCESS,
-                                     "Registrert aktivitet " +
+                                     "Banner add successfully " +
                                      e.banner.group +
                                      ": " + e.caption + " (" + str(e.group) +") - "
                 )

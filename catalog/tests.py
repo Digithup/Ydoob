@@ -1,40 +1,44 @@
 from django.test import TestCase
 
 # Create your tests here.
+from catalog.models.models import Category
 
+europe = Category.objects.translate('title').all()
+
+print(europe)
 """""
 
-class ProductView(ListView):
-    model = SellerProduct
-    template_name = 'admin/pages/products-admin.html'
+class ProductsView(ListView):
+    model = SellerProducts
+    template_name = 'admin/pages/Products-admin.html'
     paginate_by = 10
 
 
-class ProductDetailView(DetailView):
-    model = SellerProduct
+class ProductsDetailView(DetailView):
+    model = SellerProducts
     template_name = 'admin/pages/banner-detail.html'
 
 
-class ProductCreateView(CreateView):
-    model = SellerProduct
+class ProductsCreateView(CreateView):
+    model = SellerProducts
     template_name = 'admin/pages/add-catalog.html'
     fields = '__all__'
 
 
-def products_admin(request):
+def Products_admin(request):
     category = Category.objects.all()
-    products = SellerProduct.objects.all()
-    context = {'products': products,
+    Products = SellerProducts.objects.all()
+    context = {'Products': Products,
 
                }
 
-    return render(request, 'admin/pages/products-admin.html', context)
+    return render(request, 'admin/pages/Products-admin.html', context)
 
 
-def product_admin(request, id, slug):
+def Products_admin(request, id, slug):
     query = request.GET.get('q')
     category = Category.objects.all()
-    catalog = SellerProduct.objects.get(pk=id)
+    catalog = SellerProducts.objects.get(pk=id)
 
     context = {'catalog': catalog, 'category': category,
 
@@ -45,35 +49,35 @@ def product_admin(request, id, slug):
 
 def create(request):
     if request.method == 'POST':
-        form = ProductAddForm(request.POST)
+        form = ProductsAddForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('/admin/catalog')
-    form = ProductAddForm()
+    form = ProductsAddForm()
     return render(request, 'admin/pages/add-catalog.html', {'form': form})
 
 
 def edit(request, pk, template_name='admin/pages/edit-catalog'):
-    catalog = get_object_or_404(SellerProduct, pk=pk)
-    form = ProductAddForm(request.POST or None, instance=title)
+    catalog = get_object_or_404(SellerProducts, pk=pk)
+    form = ProductsAddForm(request.POST or None, instance=title)
     if form.is_valid():
         form.save()
-        return redirect('/admin/products')
+        return redirect('/admin/Products')
     return render(request, template_name, {'form': form})
 
 
 def delete(request, pk, template_name='crudapp/confirm_delete.html'):
-    catalog = get_object_or_404(SellerProduct, pk=pk)
+    catalog = get_object_or_404(SellerProducts, pk=pk)
     if request.method == 'POST':
         catalog.delete()
         return redirect('/admin')
     return render(request, template_name, {'object': catalog})
 
 
-def product_edit(request, id, slug):
+def Products_edit(request, id, slug):
     # return HttpResponse('1')
-    products = SellerProduct.objects.all()
-    catalog = SellerProduct.objects.filter(pk=id)
+    Products = SellerProducts.objects.all()
+    catalog = SellerProducts.objects.filter(pk=id)
 
     context = {
         'catalog': catalog,
@@ -140,7 +144,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
 from django.forms import TextInput, EmailInput, Select, FileInput, Textarea
 
-from catalog.models import Category, SellerProduct, ImageAlbum, Manufacturer
+from catalog.models import Category, SellerProducts, ImageAlbum, Manufacturer
 
 
 class CategoryAddForm(forms.ModelForm):
@@ -151,12 +155,12 @@ class CategoryAddForm(forms.ModelForm):
 
 
 
-class ProductAddForm(forms.ModelForm):
+class ProductsAddForm(forms.ModelForm):
     class Meta:
-        model = SellerProduct
+        model = SellerProducts
         fields = '__all__'
 
-class ProductAddFormm(forms.ModelForm):
+class ProductsAddFormm(forms.ModelForm):
     STATUS = (
         ('True', 'True'),
         ('False', 'False'),
@@ -183,7 +187,7 @@ class ProductAddFormm(forms.ModelForm):
     slug = forms.SlugField()
     status = forms.ChoiceField(choices=STATUS)
     class Meta:
-        model = SellerProduct
+        model = SellerProducts
         fields = ('category','title','keywords','description','m_image','price','n_price','discount','amount','min_amount'
                   ,'variant','slug','status')
 
@@ -196,9 +200,9 @@ class ManufacturerAddForm(forms.ModelForm):
 
 
 
-def addProductView(request):
+def addProductsView(request):
     if request.method == "POST":
-        contributeForm = ProductFullForm(request.POST)
+        contributeForm = ProductsFullForm(request.POST)
 
         if contributeForm.is_valid():
             post = contributeForm.save(commit=False)
@@ -212,7 +216,7 @@ def addProductView(request):
             return render(request, 'admin/pages/add-catalog.html', {'contributeForm': contributeForm})
         elif request.method == "GET":
         category = Category.objects.all()
-        contributeForm = ProductFullForm()
+        contributeForm = ProductsFullForm()
         context = {'contributeForm': contributeForm
             , 'category': category}
         # return render(request, 'index.html', context) <-- why do you have this here?

@@ -31,45 +31,7 @@
                     <li class="onhover-dropdown"><a class="txt-dark" href="#">
                         <h6>EN</h6></a>
                         <ul class="language-dropdown onhover-show-div p-20">
-                              <div class="show-div setting">
-                                            <h6>language</h6>
-                                            <ul>
-                                                <div class="lan-selector">
 
-                                                    <li class="dropdown default-dropdown">
-                                                        <form action="{% url 'selectlanguage' %}"
-                                                              method="post">{% csrf_token %}
-                                                            <input name="next" type="hidden" value="{{ redirect_to }}">
-                                                            <select name="language" onchange="submit()">
-
-                                                                {% get_current_language as LANGUAGE_CODE %}
-                                                                {% get_available_languages as LANGUAGES %}
-                                                                {% get_language_info_list for LANGUAGES as languages %}
-                                                                {% for language in languages %}
-                                                                    <option value="{{ language.code }}"
-                                                                            {% if language.code == LANGUAGE_CODE %}
-                                                                            selected{% endif %}>
-                                                                        {{ language.name_local }} ({{ language.code }})
-                                                                    </option>
-                                                                {% endfor %}
-
-                                                            </select>
-
-                                                                <input type="submit" value="Set"/>
-
-                                                        </form>
-                                                    </li>
-
-                                                </div>
-                                            </ul>
-                                            <h6>currency</h6>
-                                            <ul class="list-inline">
-                                                <li><a href="#">euro</a></li>
-                                                <li><a href="#">rupees</a></li>
-                                                <li><a href="#">pound</a></li>
-                                                <li><a href="#">doller</a></li>
-                                            </ul>
-                                        </div>
                         </ul>
                     </li>
                     <li class="onhover-dropdown"><i data-feather="bell"></i><span class="badge badge-pill badge-primary pull-right notification-badge">3</span><span class="dot"></span>

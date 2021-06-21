@@ -24,7 +24,7 @@
                     <ol class="breadcrumb pull-right">
                         <li class="breadcrumb-item"><a href="/admin"><i data-feather="home"></i></a></li>
                         <li class="breadcrumb-item">Physical</li>
-                        <li class="breadcrumb-item active">Add Product</li>
+                        <li class="breadcrumb-item active">Add Products</li>
                     </ol>
                 </div>
             </div>
@@ -40,7 +40,7 @@
         <hr>
         <div class="col-md-4">
             {% if formset and banner_form %}
-                <form class="needs-validation add-product-form" novalidate=""
+                <form class="needs-validation add-Products-form" novalidate=""
                       enctype="multipart/form-data" action="{% url 'core:add_banner' %}"
                       method="post">
                     {% csrf_token %}

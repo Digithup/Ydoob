@@ -40,7 +40,7 @@ class StoreAddFormm(forms.ModelForm):
         if user is None:
             messages.error(
                 request, 'Account is not active,please check your email')
-            return render(request, 'front/UsersAccount/CustomerRegister.html', context={
+            return render(request, 'front/UsersAccount/../accounts/templates/accounts/CustomerRegister.html', context={
                 "title": "Register",
                 "form": UserRegisterForm
             })

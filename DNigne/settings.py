@@ -27,13 +27,13 @@ from django.utils.translation import ugettext_lazy as _
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
+# Quick-start development settings - unsuitable for Productsion
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
+# SECURITY WARNING: keep the secret key used in Productsion secret!
 SECRET_KEY = 'jwv-s5yx#u7bhnxh6zjt3ds=!jnvqv(qv5zu!2$g)t)n*d8zf+'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# SECURITY WARNING: don't run with debug turned on in Productsion!
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -41,6 +41,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
 
     # Admin APPS
+    # 'debug_toolbar',
     'catalog.apps.CatalogConfig',
     'coupons.apps.CouponsConfig',
     'invoice.apps.InvoiceConfig',
@@ -83,8 +85,10 @@ INSTALLED_APPS = [
     'imagefit',
     'imagekit',
     'modeltranslation',
+    'rosetta',
+    'translations',
     'parler',
-    'django_database_translation',
+    # 'django_database_translation',
     'jquery',
     'djangoformsetjs',
 
@@ -203,30 +207,27 @@ TIME_ZONE = 'UTC'
 USE_I18N = True  # use internationalization
 USE_L10N = True  # use localization
 USE_TZ = True
-_ = lambda s: s
+gettext = lambda s: s
 LANGUAGES = (
-    ('en', ('English')),
+    ('en', _('English')),
     ('ar', _('Arabic')),
 
 )
+MODELTRANSLATION_LANGUAGES = ('en', 'ar')
+LANGUAGE_COOKIE_NAME = 'django_language'
 
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'),
-    os.path.join(BASE_DIR, 'DNigne/locale'),
-    os.path.join(BASE_DIR, 'DNigne/core/locale'),
-os.path.join(BASE_DIR, 'DNigne/catalog/locale'),
 )
-MODELTRANSLATION_LANGUAGES = ('en', 'ar')
-LANGUAGE_COOKIE_NAME = ''
-DEFAULT_CURRENCY = 'USD'
 
+DEFAULT_CURRENCY = 'USD'
 
 # CUSTOM
 FORCE_SESSION_TO_ONE = True  # Default is false
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-IMAGEFIT_ROOT = "upload"
+IMAGEFIT_ROOT = "public"
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -249,7 +250,7 @@ CACHES = {
 
         {
             'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-            'KEY_PREFIX': 'DNigne.production',  # Change this
+            'KEY_PREFIX': 'DNigne.Productsion',  # Change this
             'LOCATION': '127.0.0.1:11211',
             'TIMEOUT': 24 * 3600
 
@@ -267,6 +268,7 @@ IMAGEFIT_PRESETS = {
 }
 # ...
 SITE_ID = 1
+BASE_URL = "http://127.0.0.1:8000"
 
 ####################################
 ##  CKEDITOR CONFIGURATION ##
@@ -293,3 +295,4 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 # Cart
 CART_SESSION_ID = 'cart'
 SESSION_COOKIE_AGE = 86400
+

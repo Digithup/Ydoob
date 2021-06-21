@@ -10,7 +10,7 @@ urlpatterns = [
     # path('category/', views.category_list, name='category_list'),
 
     path('category/', views.category_list, name='category_list'),
-   # path('category/<int:id>/<slug:slug>/', views.product_detail, name='product_detail'),
+   # path('category/<int:id>/<slug:slug>/', views.Products_detail, name='Products_detail'),
 
     # API
     path('api/category', api.category_list_api, name='category_list_api'),
@@ -21,8 +21,8 @@ urlpatterns = [
 
     path('api/v2/category/', api.CategoryListAPi.as_view(), name='CategoryListAPi'),
     path('api/v2/category/<int:id>', api.CategoryApi.as_view(), name='CategoryAPi'),
-    path('api/v2/category/catalog/', api.ProductListApi.as_view(), name='ProductListAPi'),
-    path('api/v2/category/catalog/<int:id>', api.ProductApi.as_view(), name='ProductAPi'),
+    path('api/v2/category/catalog/', api.ProductsListApi.as_view(), name='ProductsListAPi'),
+    path('api/v2/category/catalog/<int:id>', api.ProductsApi.as_view(), name='ProductsAPi'),
 
 
 ]

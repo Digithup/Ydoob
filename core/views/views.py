@@ -1,29 +1,35 @@
 import datetime
 import json
-
 from django.contrib import messages
 from django.core import serializers
-from django.forms import modelformset_factory
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
+from django.core.files.storage import FileSystemStorage
+from django.db.models import Q
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
 # Create your views here.
 from django.urls import reverse_lazy, reverse
-from django.views.generic import UpdateView, CreateView, ListView, DeleteView, DetailView
+from django.views import View
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import ListView, DeleteView, DetailView, UpdateView
 
-from catalog.forms.forms import ProductAddForm, ProductFullForm, ImageForm
-from catalog.models.models import Category, Product, Tag, Image
+from DNigne.settings import BASE_URL
+from accounts.admin import User
+from catalog.forms.forms import ProductsFullForm, CategoryAddForm
+from catalog.models.models import Categories, Image, ProductsDetails, ProductsAbout, ProductsTags, \
+    ProductsTransaction, Products, ProductsMedia
 from core.forms.forms import SearchForm
-
 from vendors.models import Store
 
 
 def index(request):
-    category = Category.objects.all()
-    product = Product.objects.all()
+    categories = Categories.objects.all()
+    category = Categories.objects.filter(id)
+    products = Products.objects.all()
     store = Store.objects.all()
     context = {
+        'categories': categories,
         'category': category,
-        'catalog': product,
+        'catalog': Products,
         'store': store,
 
     }
@@ -31,120 +37,192 @@ def index(request):
 
 
 def categories(request):
-    categories = Category.objects.filter(status='True')
+    categories = Categories.objects.filter(status='True')
 
     context = {
         'categories': categories,
 
     }
-    return render(request, 'admin/pages/category-admin.html', context)
+    return render(request, 'catalog/category/category-admin.html', context)
 
 
-class AddCategory(CreateView):
-    model = Category
-    template_name = 'admin/pages/add-category.html'
+def AddCategory(request):
+    if request.method == "POST":
+        print(request)
+        form = CategoryAddForm(request.POST or None, request.FILES or None)
+        files = request.FILES.getlist('images')
+        if form.is_valid():
+            print(request.POST)
+            category_created = True
+            title = form.cleaned_data['title']
+            title_en = form.cleaned_data['title_en']
+            title_ar = form.cleaned_data['title_ar']
+            keywords = form.cleaned_data['keywords']
+            description = form.cleaned_data['description']
+            parent = form.cleaned_data['parent']
+            image = form.cleaned_data['image']
+            slug = form.cleaned_data['slug']
+            status = form.cleaned_data['status']
+            category_id = form.cleaned_data['category_id']
+            if not category_id:
+                print(request)
+                category_obj = Categories.objects.create(title=title, title_ar=title_ar, title_en=title_en,
+                                                         keywords=keywords, parent=parent,
+                                                         description=description,image=image,
+                                                         slug=slug, status=status
+                                                         )  # create will create as well as save too in db.
+
+                # handling all cases of the tags
+                print(request)
+
+            for f in files:
+                print(request)
+                Image.objects.create(Products=category_obj, image=f)
+            category_obj.title = title
+            category_obj.title_en = title_en
+            category_obj.title_ar = title_ar
+            category_obj.keywords = keywords
+            category_obj.description = description
+            category_obj.image=image
+            category_obj.parent = parent
+            category_obj.slug = slug
+            category_obj.status = status
+            print(request.POST)
+            category_obj.save()  # last_modified field won't update on changing other model field, save() trigger change
+            # return reverse('core:catalog')
+            return HttpResponseRedirect('/admin/category', category_created)
+            # return render(request,template_name='admin/pages/Products-admin.html')
+            # return getNoteResponseData(Products_obj, tags, Products_created)
+        else:
+            print("Form invalid, see below error msg")
+            print(request.POST)
+            print(form.errors)
+            messages.error(request, "Error")
+    # if GET method form, or anything wrong then we will create blank form
+    else:
+        form = ProductsFullForm()
+    # return HttpResponseRedirect('/')
+    return render(request, 'catalog/category/add-category.html', {'form': form})
+
+
+class EditCategoryz(UpdateView):
+    model = Categories
     fields = '__all__'
-
+    template_name = 'catalog/category/edit-category.html'
     success_url = reverse_lazy('core:categories')
 
 
-class EditCategory(UpdateView):
-    model = Category
-    fields = '__all__'
-    template_name = 'admin/pages/edit-category.html'
-    success_url = reverse_lazy('core:categories')
+def EditCategory(request,):
+    categories = Categories.objects.all()
+    if request.method == "POST":
+        form = CategoryAddForm(request.POST or None, request.FILES or None)
+        files = request.FILES.getlist('images')
+        if form.is_valid():
+            print(request.POST)
+            category_created = True
+            title = form.cleaned_data['title']
+            title_en = form.cleaned_data['title_en']
+            title_ar = form.cleaned_data['title_ar']
+            keywords = form.cleaned_data['keywords']
+            description = form.cleaned_data['description']
+            image = form.cleaned_data['image']
+            parent = form.cleaned_data['parent']
+            slug = form.cleaned_data['slug']
+            status = form.cleaned_data['status']
+            category_id = form.cleaned_data['category_id']
+
+            if not category_id:
+                print(request)
+                category_obj = Categories.objects.create(title=title, title_ar=title_ar, title_en=title_en,
+                                                         keywords=keywords, parent=parent,
+                                                         description=description,
+                                                         image=image,
+                                                         slug=slug, status=status
+                                                         )  # create will create as well as save too in db.
+
+                # handling all cases of the tags
+                print(request)
+
+            for f in files:
+                print(request)
+                Image.objects.create(Products=category_obj, image=f)
+            category_obj.title = title
+            category_obj.title_en = title_en
+            category_obj.title_ar = title_ar
+            category_obj.keywords = keywords
+            category_obj.description = description
+            category_obj.image = image
+            category_obj.parent = parent
+
+            category_obj.slug = slug
+            category_obj.status = status
+            print(request.POST)
+            category_obj.save()  # last_modified field won't update on chaning other model field, save() trigger change
+            # return reverse('core:catalog')
+            return HttpResponseRedirect('/admin/category', category_created)
+            # return render(request,template_name='admin/pages/Products-admin.html')
+            # return getNoteResponseData(Products_obj, tags, Products_created)
+        else:
+            print("Form invalid, see below error msg")
+            print(request.POST)
+            print(form.errors)
+            messages.error(request, "Error")
+    # if GET method form, or anything wrong then we will create blank form
+    else:
+        form = ProductsFullForm()
+    # return HttpResponseRedirect('/')
+    return render(request, 'catalog/category/edit-category.html', {'form': form,'categories':categories})
 
 
 class DeleteCategory(DeleteView):
-    model = Category
+    model = Categories
     fields = '__all__'
     template_name = 'admin/pages/message/category_confirm_delete.html'
-    success_url = reverse_lazy('core:category_admin')
+    success_url = reverse_lazy('core:categories')
 
-def products_admin(request):
-    products = Product.objects.filter(status='True')
+
+def Products_admin(request):
+    products = Products.objects.filter(status='True')
 
     context = {
         'products': products,
 
     }
-    return render(request, 'admin/pages/products-admin.html', context)
+    return render(request, 'catalog/Products-admin.html', context)
 
 
-class ProductView(ListView):
-    template_name = 'admin/pages/products-admin.html'
-    context_object_name = 'product_list'
-
-    def get_queryset(self):
-        return Product.objects.all()
+class ProductsDetailView(DetailView):
+    model = Products
+    context_object_name = 'Products'
+    template_name = 'catlog/../templates/catalog/Products-detail.html'
 
 
-class ProductDetailView(DetailView):
-    model = Product
-    context_object_name = 'product'
-    template_name = 'admin/pages/product-detail.html'
-
-
-class ProductCreate(CreateView):
-    model = Product
-    form_class = ProductAddForm
-    #fields = '__all__'
-    template_name = 'add-producttest.html'
-    # template_name = 'coretest.html'
-    success_url = reverse_lazy('core:product')
-
-
-class ProductUpdate(UpdateView):
-    model = Product
-    template_name = 'admin/pages/edit-product.html'
-    #fields = ['title',]
-    success_url = reverse_lazy('core:product')
-
-
-class ProductDelete(DeleteView):
-    model = Category
+class ProductsDelete(DeleteView):
+    model = Categories
     # template_name = 'admin/pages/message/category_confirm_delete.html'
     success_url = '/admin/catalog/'
 
     def get_success_url(self):
-        return reverse('core:product')
+        return reverse('core:Products')
 
 
-''''
-
-
-
-@login_required  
-def movies_create(request):  
-     form = MoviesForm(request.POST or None)  
-   
-     if form.is_valid():  
-         movies = form.save(commit=False)  
-         movies.user = request.user  
-         movies.save()  
-         return redirect('CRUD_FBVs:movies_list')  
-     return render(request, 'movies_form.html', {'form': form})  
-  
-'''''
-
-
-def getNoteResponseData(product_obj, tags, product_created):
+def getNoteResponseData(Products_obj, tags, Products_created):
     date = datetime.datetime.now().strftime('%B') + " " + datetime.datetime.now().strftime(
         '%d') + ", " + datetime.datetime.now().strftime('%Y')
-    product_obj.refresh_from_db()
+    Products_obj.refresh_from_db()
     response_data = {
-        "id": product_obj.id,
-        "title": product_obj.title,
-        "keywords": product_obj.keywords,
-        "price": product_obj.price,
+        "id": Products_obj.id,
+        "title": Products_obj.title,
+        "keywords": Products_obj.keywords,
+        "price": Products_obj.price,
         "tags": tags,
         "last_mod": date,
-        "note_created": product_created
+        "note_created": Products_created
     }
     # return JsonResponse(response_data)
     # template_name = 'admin/pages/message/category_confirm_delete.html'
     # success_url = reverse_lazy('core:category_admin')
-    return render(product_created, 'admin/pages/category-admin.html')
+    return render(Products_created, 'admin/pages/../templates/catalog/category-admin.html')
 
 
 def tagsInDic(tags):
@@ -180,12 +258,12 @@ def search(request):
             query = form.cleaned_data['query']  # get form input data
             catid = form.cleaned_data['catid']
             if catid == 0:
-                products = Product.objects.filter(
+                products = Products.objects.filter(
                     title__icontains=query)  # SELECT * FROM catalog WHERE title LIKE '%query%'
             else:
-                products = Product.objects.filter(title__icontains=query, category_id=catid)
+                products = Products.objects.filter(title__icontains=query, category_id=catid)
 
-            category = Category.objects.all()
+            category = Categories.objects.all()
             context = {'products': products, 'query': query,
                        'category': category}
             return render(request, 'front/pages/search.html', context)
@@ -196,13 +274,13 @@ def search(request):
 def search_auto(request):
     if request.is_ajax():
         q = request.GET.get('term', '')
-        products = Product.objects.filter(title__icontains=q)
+        products = Products.objects.filter(title__icontains=q)
 
         results = []
         for rs in products:
-            product_json = {}
-            product_json = rs.title + " > " + rs.category.title
-            results.append(product_json)
+            Products_json = {}
+            Products_json = rs.title + " > " + rs.category.title
+            results.append(Products_json)
         data = json.dumps(results)
     else:
         data = 'fail'
@@ -214,9 +292,279 @@ def to_json(self, objects):
     return serializers.serialize('json', objects)
 
 
+class ProductView(View):
+    def get(self, request, *args, **kwargs):
+        categories = Categories.objects.filter(status=True)
+        categories_list = []
+        for category in categories:
+            sub_category = Categories.objects.filter(status=True, id=category.id)
+            categories_list.append({"category": category, "sub_category": sub_category})
+
+        merchant_users = User.objects.all()
+
+        return render(request, "catalog/product/product_create.html",
+                      {"categories": categories_list, "merchant_users": merchant_users})
+
+    def post(self, request, *args, **kwargs):
+        print(request)
+        product_name = request.POST.get("product_name")
+        brand = request.POST.get("brand")
+        url_slug = request.POST.get("url_slug")
+        sub_category = request.POST.get("sub_category")
+        product_max_price = request.POST.get("product_max_price")
+        product_discount_price = request.POST.get("product_discount_price")
+        product_description = request.POST.get("product_description")
+        added_by_merchant = request.POST.get("added_by_merchant")
+        in_stock_total = request.POST.get("in_stock_total")
+        media_type_list = request.POST.getlist("media_type[]")
+        media_content_list = request.FILES.getlist("media_content[]")
+        title_title_list = request.POST.getlist("title_title[]")
+        title_details_list = request.POST.getlist("title_details[]")
+        about_title_list = request.POST.getlist("about_title[]")
+        product_tags = request.POST.get("product_tags")
+        long_desc = request.POST.get("long_desc")
+
+        subcat_obj = Categories.objects.get(id=sub_category)
+        merchant_user_obj = User.objects.get(id=added_by_merchant)
+        product = Products(product_name=product_name, in_stock_total=in_stock_total, url_slug=url_slug, brand=brand,
+                           subcategories_id=subcat_obj, product_description=product_description,
+                           product_max_price=product_max_price, product_discount_price=product_discount_price,
+                           product_long_description=long_desc, added_by_merchant=merchant_user_obj)
+        product.save()
+
+        i = 0
+        for media_content in media_content_list:
+            fs = FileSystemStorage()
+            filename = fs.save(media_content.name, media_content)
+            media_url = fs.url(filename)
+            product_media = ProductsMedia(product_id=product, media_type=media_type_list[i], media_content=media_url)
+            product_media.save()
+            i = i + 1
+
+        j = 0
+        for title_title in title_title_list:
+            product_details = ProductsDetails(title=title_title, title_details=title_details_list[j], product_id=product)
+            product_details.save()
+            j = j + 1
+
+        for about in about_title_list:
+            product_about = ProductsAbout(title=about, product_id=product)
+            product_about.save()
+
+        product_tags_list = product_tags.split(",")
+
+        for product_tag in product_tags_list:
+            product_tag_obj = ProductsTags(product_id=product, title=product_tag)
+            product_tag_obj.save()
+
+        product_transaction = ProductsTransaction(product_id=product, transaction_type=1,
+                                                 transaction_product_count=in_stock_total,
+                                                 transaction_description="Intially Item Added in Stocks")
+        product_transaction.save()
+        return HttpResponse("OK")
+
+
+@csrf_exempt
+def file_upload(request):
+    file=request.FILES["file"]
+    fs=FileSystemStorage()
+    filename=fs.save(file.name,file)
+    file_url=fs.url(filename)
+    return HttpResponse('{"location":"'+BASE_URL+''+file_url+'"}')
+
+
+class ProductsListView(ListView):
+    model = Products
+    template_name = "catalog/Products-admin.html"
+    paginate_by = 3
+
+    def get_queryset(self):
+        filter_val = self.request.GET.get("filter", "")
+        order_by = self.request.GET.get("orderby", "id")
+        if filter_val != "":
+            products = Products.objects.filter(
+                Q(Products_name__contains=filter_val) | Q(Products_description__contains=filter_val)).order_by(order_by)
+        else:
+            products = Products.objects.all().order_by(order_by)
+
+        Products_list = Products.objects.all()
+        for products in products:
+            Products_media = ProductsMedia.objects.filter(Products_id=Products.id, media_type=1, is_active=1).first()
+            Products_list.append({"products": products, "media": Products_media})
+
+        return Products_list
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductsListView, self).get_context_data(**kwargs)
+        context["filter"] = self.request.GET.get("filter", "")
+        context["orderby"] = self.request.GET.get("orderby", "id")
+        context["all_table_fields"] = Products._meta.get_fields()
+        return context
+
+
+class ProductsEdit(View):
+
+    def get(self, request, *args, **kwargs):
+        Products_id = kwargs["Products_id"]
+        products = Products.objects.get(id=Products_id)
+        Products_details = ProductsDetails.objects.filter(Products_id=Products_id)
+        Products_about = ProductsAbout.objects.filter(Products_id=Products_id)
+        Products_tags = ProductsTags.objects.filter(Products_id=Products_id)
+
+        categories = Categories.objects.filter(is_active=1)
+        categories_list = []
+        for category in categories:
+            sub_category = Categories.objects.filter(is_active=1, category_id=category.id)
+            categories_list.append({"category": category, "sub_category": sub_category})
+
+        return render(request, "catalog/edit-Products.html",
+                      {"categories": categories_list, "Products": Products, "Products_details": Products_details,
+                       "Products_about": Products_about, "Products_tags": Products_tags})
+
+    def post(self, request, *args, **kwargs):
+
+        Products_name = request.POST.get("Products_name")
+        brand = request.POST.get("brand")
+        url_slug = request.POST.get("url_slug")
+        sub_category = request.POST.get("sub_category")
+        Products_max_price = request.POST.get("Products_max_price")
+        Products_discount_price = request.POST.get("Products_discount_price")
+        Products_description = request.POST.get("Products_description")
+        title_title_list = request.POST.getlist("title_title[]")
+        details_ids = request.POST.getlist("details_id[]")
+        title_details_list = request.POST.getlist("title_details[]")
+        about_title_list = request.POST.getlist("about_title[]")
+        about_ids = request.POST.getlist("about_id[]")
+        Products_tags = request.POST.get("Products_tags")
+        long_desc = request.POST.get("long_desc")
+        subcat_obj = Categories.objects.get(id=Categories)
+
+        Products_id = kwargs["Products_id"]
+        products = Products.objects.get(id=Products_id)
+        Products.Products_name = Products_name
+        Products.url_slug = url_slug
+        Products.brand = brand
+        Products.subcategories_id = subcat_obj
+        Products.Products_description = Products_description
+        Products.Products_max_price = Products_max_price
+        Products.Products_discount_price = Products_discount_price
+        Products.Products_long_description = long_desc
+        Products.save()
+
+        j = 0
+        for title_title in title_title_list:
+            detail_id = details_ids[j]
+            if detail_id == "blank" and title_title != "":
+                Products_details = ProductsDetails(title=title_title, title_details=title_details_list[j],
+                                                   Products_id=Products)
+                Products_details.save()
+            else:
+                if title_title != "":
+                    Products_details = ProductsDetails.objects.get(id=detail_id)
+                    Products_details.title = title_title
+                    Products_details.title_details = title_details_list[j]
+                    Products_details.Products_id = Products
+                    Products_details.save()
+            j = j + 1
+
+        k = 0
+        for about in about_title_list:
+            about_id = about_ids[k]
+            if about_id == "blank" and about != "":
+                Products_about = ProductsAbout(title=about, Products_id=Products)
+                Products_about.save()
+            else:
+                if about != "":
+                    Products_about = ProductsAbout.objects.get(id=about_id)
+                    Products_about.title = about
+                    Products_about.Products_id = Products
+                    Products_about.save()
+            k = k + 1
+
+        ProductsTags.objects.filter(Products_id=Products_id).delete()
+
+        Products_tags_list = Products_tags.split(",")
+
+        for Products_tag in Products_tags_list:
+            Products_tag_obj = ProductsTags(Products_id=Products, title=Products_tag)
+            Products_tag_obj.save()
+
+        return HttpResponse("OK")
+
+
+class ProductsAddMedia(View):
+    def get(self, request, *args, **kwargs):
+        Products_id = kwargs["Products_id"]
+        products = Products.objects.get(id=Products_id)
+        return render(request, "catalog/product/product_add_media.html", {"Products": Products})
+
+    def post(self, request, *args, **kwargs):
+        Products_id = kwargs["Products_id"]
+        products = Products.objects.get(id=Products_id)
+        media_type_list = request.POST.getlist("media_type[]")
+        media_content_list = request.FILES.getlist("media_content[]")
+
+        i = 0
+        for media_content in media_content_list:
+            fs = FileSystemStorage()
+            filename = fs.save(media_content.name, media_content)
+            media_url = fs.url(filename)
+            Products_media = ProductsMedia(Products_id=Products, media_type=media_type_list[i], media_content=media_url)
+            Products_media.save()
+            i = i + 1
+
+        return HttpResponse("OK")
+
+
+class ProductsEditMedia(View):
+    def get(self, request, *args, **kwargs):
+        Products_id = kwargs["Products_id"]
+        products = Products.objects.get(id=Products_id)
+        Products_medias = ProductsMedia.objects.filter(Products_id=Products_id)
+        return render(request, "catalog/product/product_edit_media.html",
+                      {"Products": Products, "Products_medias": Products_medias})
+
+
+class ProductsMediaDelete(View):
+    def get(self, request, *args, **kwargs):
+        media_id = kwargs["id"]
+        Products_media = ProductsMedia.objects.get(id=media_id)
+        import os
+        from DNigne import settings
+
+        # It will work too Sometimes
+        # Products_media.media_content.delete()
+        os.remove(settings.MEDIA_ROOT.replace("\media", "") + str(Products_media.media_content).replace("/", "\\"))
+
+        Products_id = Products_media.Products_id.id
+        Products_media.delete()
+        return HttpResponseRedirect(reverse("Products_edit_media", kwargs={"Products_id": Products_id}))
+
+
+class ProductsAddStocks(View):
+    def get(self, request, *args, **kwargs):
+        Products_id = kwargs["Products_id"]
+        products = Products.objects.get(id=Products_id)
+        return render(request, "catalog/product/product_add_stocks.html", {"Products": Products})
+
+    def post(self, request, *args, **kwargs):
+        Products_id = kwargs["Products_id"]
+        new_instock = request.POST.get("add_stocks")
+        products = Products.objects.get(id=Products_id)
+        old_stocks = Products.in_stock_total
+        new_stocks = int(new_instock) + int(old_stocks)
+        Products.in_stock_total = new_stocks
+        Products.save()
+
+        Products_obj = Products.objects.get(id=Products_id)
+        Products_transaction = ProductsTransaction(Products_id=Products_obj, transaction_Products_count=new_instock,
+                                                   transaction_description="New Products Added", transaction_type=1)
+        Products_transaction.save()
+        return HttpResponseRedirect(reverse("Products_add_stocks", kwargs={"Products_id": Products_id}))
+
 def AddProductView(request):
     if request.method == "POST":
-        form = ProductFullForm(request.POST or None, request.FILES or None)
+        form = ProductsFullForm(request.POST or None, request.FILES or None)
         files = request.FILES.getlist('images')
         if form.is_valid():
             print(request.POST)
@@ -246,8 +594,8 @@ def AddProductView(request):
             tags_dic = tags.copy()
             if not product_id:
                 print(request)
-                product_obj = Product.objects.create(title=title, keywords=keywords, category=category,
-                                                     description=description,variant=variant,
+                product_obj = Products.objects.create(title=title, keywords=keywords, category=category,
+                                                     description=description, variant=variant,
                                                      image1=image1, image2=image2, image3=image3, image4=image4,
                                                      image5=image5, image6=image6,
                                                      thumbnail=thumbnail, price=price, sale_price=sale_price,
@@ -256,26 +604,26 @@ def AddProductView(request):
                                                      slug=slug, status=status
                                                      )  # create will create as well as save too in db.
                 for k in tags.keys():
-                    tag_obj, created = Tag.objects.get_or_create(name=k)
+                    tag_obj, created = Products.objects.get_or_create(name=k)
                     product_obj.tags.add(tag_obj)  # it won't add duplicated as stated in django docs
             else:
                 # handling all cases of the tags
                 print(request)
-                product_obj = Product.objects.get(id=product_id)
+                product_obj = Products.objects.get(id=product_id)
                 for t in product_obj.tags.all():
                     if t.name not in tags_dic:
                         product_obj.tags.remove(t)
                     else:  # deleting pre-existing element so that we could know what's new tags are
                         del tags_dic[t.name]
                 for k, v in tags_dic.items():
-                    tag_obj, created = Tag.objects.get_or_create(name=k)
+                    tag_obj, created = Products.objects.get_or_create(name=k)
                     product_obj.tags.add(tag_obj)
                 product_created = False
             for f in files:
                 print(request)
                 Image.objects.create(product=product_obj, image=f)
             product_obj.category = category
-            product_obj.variant=variant
+            product_obj.variant = variant
             product_obj.title = title
             product_obj.keywords = keywords
             product_obj.description = description
@@ -297,7 +645,7 @@ def AddProductView(request):
             print(request.POST)
             product_obj.save()  # last_modified field won't update on chaning other model field, save() trigger change
             # return reverse('core:catalog')
-            return HttpResponseRedirect('/admin/product', product_created)
+            return HttpResponseRedirect('/admin/products', product_created)
             # return render(request,template_name='admin/pages/products-admin.html')
             # return getNoteResponseData(product_obj, tags, product_created)
         else:
@@ -307,100 +655,8 @@ def AddProductView(request):
             messages.error(request, "Error")
     # if GET method form, or anything wrong then we will create blank form
     else:
-        form = ProductFullForm()
+        form = ProductsFullForm()
     # return HttpResponseRedirect('/')
-    return render(request, 'add-product.html', {'form': form})
-def EditProductView(request  ):
-    if request.method == "POST":
-        form = ProductFullForm(request.POST or None, request.FILES or None)
-        files = request.FILES.getlist('images')
-        if form.is_valid():
-            print(request.POST)
-            product_created = True
-            title = form.cleaned_data['title']
-            keywords = form.cleaned_data['keywords']
-            description = form.cleaned_data['description']
-            thumbnail = form.cleaned_data['thumbnail']
-            image1 = form.cleaned_data['image1']
-            image2 = form.cleaned_data['image2']
-            image3 = form.cleaned_data['image3']
-            image4 = form.cleaned_data['image4']
-            image5 = form.cleaned_data['image5']
-            image6 = form.cleaned_data['image6']
-            category = form.cleaned_data['category']
-            price = form.cleaned_data['price']
-            sale_price = form.cleaned_data['sale_price']
-            discount = form.cleaned_data['discount']
-            amount = form.cleaned_data['amount']
-            min_amount = form.cleaned_data['min_amount']
-            detail = form.cleaned_data['detail']
-            slug = form.cleaned_data['slug']
-            status = form.cleaned_data['status']
-            product_id = form.cleaned_data['product_id']
-            tags = tagsInDic(form.cleaned_data['tags'].strip())
-            tags_dic = tags.copy()
-            if not product_id:
-                print(request)
-                product_obj = Product.objects.create(title=title, keywords=keywords, category=category,
-                                                     description=description,
-                                                     image1=image1, image2=image2, image3=image3, image4=image4,
-                                                     image5=image5, image6=image6,
-                                                     thumbnail=thumbnail, price=price, sale_price=sale_price,
-                                                     discount=discount,
-                                                     amount=amount, min_amount=min_amount, detail=detail,
-                                                     slug=slug, status=status
-                                                     )  # create will create as well as save too in db.
-                for k in tags.keys():
-                    tag_obj, created = Tag.objects.get_or_create(name=k)
-                    product_obj.tags.add(tag_obj)  # it won't add duplicated as stated in django docs
-            else:
-                # handling all cases of the tags
-                print(request)
-                product_obj = Product.objects.get(id=product_id)
-                for t in product_obj.tags.all():
-                    if t.name not in tags_dic:
-                        product_obj.tags.remove(t)
-                    else:  # deleting pre-existing element so that we could know what's new tags are
-                        del tags_dic[t.name]
-                for k, v in tags_dic.items():
-                    tag_obj, created = Tag.objects.get_or_create(name=k)
-                    product_obj.tags.add(tag_obj)
-                product_created = False
-            for f in files:
-                print(request)
-                Image.objects.create(product=product_obj, image=f)
-            product_obj.category = category
-            product_obj.title = title
-            product_obj.keywords = keywords
-            product_obj.description = description
-            product_obj.thumbnail = thumbnail
-            product_obj.image1 = image1
-            product_obj.image2 = image2
-            product_obj.image3 = image3
-            product_obj.image4 = image4
-            product_obj.image5 = image5
-            product_obj.image6 = image6
-            product_obj.price = price
-            product_obj.sale_price = sale_price
-            product_obj.discount = discount
-            product_obj.amount = amount
-            product_obj.min_amount = min_amount
-            product_obj.detail = detail
-            product_obj.slug = slug
-            product_obj.status = status
-            print(request.POST)
-            product_obj.save()  # last_modified field won't update on chaning other model field, save() trigger change
-            # return reverse('core:catalog')
-            return HttpResponseRedirect('/admin/product', product_created)
-            # return render(request,template_name='admin/pages/products-admin.html')
-            # return getNoteResponseData(product_obj, tags, product_created)
-        else:
-            print("Form invalid, see below error msg")
-            print(request.POST)
-            print(form.errors)
-            messages.error(request, "Error")
-    # if GET method form, or anything wrong then we will create blank form
-    else:
-        form = ProductFullForm()
-    # return HttpResponseRedirect('/')
-    return render(request, 'edit-product.html', {'form': form})
+    return render(request, 'catalog/add-product.html', {'form': form})
+
+

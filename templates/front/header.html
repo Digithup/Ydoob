@@ -410,7 +410,7 @@
                                                 <div class="lan-selector">
 
 
-                                                    <form action="{% url 'localization:selectlanguage' %}"
+                                                    <form action="{% url 'selectlanguage' %}"
                                                           method="post">{% csrf_token %}
                                                         <input name="next" type="hidden" value="{{ redirect_to }}">
                                                         <select class="selectpicker" name="language"
@@ -454,7 +454,7 @@
 
                                                             <a href="#"><img alt="" height="60px" width="80px"
                                                                              class="mr-3"
-                                                                             src="{{ product.thumbnail.url }}"></a>
+                                                                             src="{{ product.image.url }}"></a>
                                                             <div class="media-body">
                                                                 <a href="#">
                                                                     <h4>{{ product.title }}</h4>

@@ -15,7 +15,7 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="page-header-left">
-                            <h3>Categories
+                            <h3>Banners
                                 <small>Multikart Admin panel</small>
                             </h3>
                         </div>
@@ -23,8 +23,8 @@
                     <div class="col-lg-6">
                         <ol class="breadcrumb pull-right">
                             <li class="breadcrumb-item"><a href="{% url 'core:index' %}"><i data-feather="home"></i></a></li>
-                            <li class="breadcrumb-item">Physical</li>
-                            <li class="breadcrumb-item active">Category</li>
+                            <li class="breadcrumb-item">Banners</li>
+
                         </ol>
                     </div>
                 </div>
@@ -41,11 +41,11 @@
                             <!-- Default box -->
 
 
-                            <h5>  Category List </h5>
+                            <h5>  Banners List </h5>
                             <div class="card-tools ">
                                 <a href="{% url 'core:add_banner' %}">
                                     <button type="button" class="btn btn-primary" data-toggle="modal"
-                                            data-original-title="test" data-target="#exampleModal">Add Category
+                                            data-original-title="test" data-target="#exampleModal">Add Banners
                                     </button>
                                 </a>
 
@@ -63,10 +63,10 @@
                             #
                         </th>
                         <th style="width: 20%">
-                            Project Name
+                            Banners Name
                         </th>
                         <th style="width: 10%">
-                            Team Members
+                            Group Members
                         </th>
                         <th style="width: 10%">
                             Team Members
@@ -86,7 +86,7 @@
                             </td>
                             <td>
                                 <a>
-                                    {{ rs.group }}
+                                    {{ rs.caption }}
                                 </a>
                                 <br/>
                                 <small>
@@ -124,12 +124,12 @@
                                     </i>
                                     View
                                 </a>
-                                <a class="btn btn-info btn-sm" href="">
+                                <a class="btn btn-info btn-sm" href="{% url 'core:BannerDetailView' rs.id %}">
                                     <i class="fas fa-pencil-alt">
                                     </i>
                                     Edit
                                 </a>
-                                <a class="btn btn-danger btn-sm" href="">
+                                <a class="btn btn-danger btn-sm" href="{% url 'core:BannerDelete' rs.id  %}">
                                     <i class="fas fa-trash">
                                     </i>
                                     Delete

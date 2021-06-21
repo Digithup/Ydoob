@@ -15,7 +15,7 @@ urlpatterns = [
     #path('v/register/',SellerRegisterView.as_view(),name='seller_register'),
 
     ###############Adminn Seller Url##############
-    path('admin/s',store_list,name='store_list'),
+    path('admin/vendors/',store_list,name='store_list'),
     path('admin/s/<int:id>',admin_dashboard,name='store_page'),
     path('admin/s/edit/', edit_store, name='edit_store'),
     path('admin/s/<int:id>', store_delete, name='store_delete'),

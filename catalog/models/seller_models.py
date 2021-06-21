@@ -14,7 +14,7 @@ def download_media_location(instance, filename):
     return "%s/%s" % (instance.slug, filename)
 
 
-class SellerProduct(models.Model):
+class SellerProducts(models.Model):
     #store = models.ForeignKey(Store, on_delete=models.CASCADE)
     media = models.ImageField(blank=True,
                               null=True,
@@ -31,15 +31,15 @@ class SellerProduct(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        view_name = "products:detail_slug"
+        view_name = "Products:detail_slug"
         return reverse(view_name, kwargs={"slug": self.slug})
 
     def get_edit_url(self):
-        view_name = "sellers:product_edit"
+        view_name = "sellers:Products_edit"
         return reverse(view_name, kwargs={"pk": self.id})
 
     def get_download(self):
-        view_name = "products:download_slug"
+        view_name = "Products:download_slug"
         url = reverse(view_name, kwargs={"slug": self.slug})
         return url
 
@@ -62,7 +62,7 @@ def create_slug(instance, new_slug=None):
     slug = slugify(instance.title)
     if new_slug is not None:
         slug = new_slug
-    qs = SellerProduct.objects.filter(slug=slug)
+    qs = SellerProducts.objects.filter(slug=slug)
     exists = qs.exists()
     if exists:
         new_slug = "%s-%s" % (slug, qs.first().id)
@@ -70,16 +70,16 @@ def create_slug(instance, new_slug=None):
     return slug
 
 
-def product_pre_save_receiver(sender, instance, *args, **kwargs):
+def Products_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = create_slug(instance)
 
 
-pre_save.connect(product_pre_save_receiver, sender=SellerProduct)
+pre_save.connect(Products_pre_save_receiver, sender=SellerProducts)
 
 
 def thumbnail_location(instance, filename):
-    return "%s/%s" % (instance.product.slug, filename)
+    return "%s/%s" % (instance.Products.slug, filename)
 
 
 THUMB_CHOICES = (
@@ -90,7 +90,7 @@ THUMB_CHOICES = (
 
 
 class Thumbnail(models.Model):
-    product = models.ForeignKey(SellerProduct, on_delete=models.CASCADE)
+    Products = models.ForeignKey(SellerProducts, on_delete=models.CASCADE)
     type = models.CharField(max_length=20, choices=THUMB_CHOICES, default='hd')
     height = models.CharField(max_length=20, null=True, blank=True)
     width = models.CharField(max_length=20, null=True, blank=True)
@@ -140,11 +140,11 @@ def create_new_thumb(media_path, instance, owner_slug, max_length, max_width):
     return True
 
 
-def product_post_save_receiver(sender, instance, created, *args, **kwargs):
+def Products_post_save_receiver(sender, instance, created, *args, **kwargs):
     if instance.media:
-        hd, hd_created = Thumbnail.objects.get_or_create(product=instance, type='hd')
-        sd, sd_created = Thumbnail.objects.get_or_create(product=instance, type='sd')
-        micro, micro_created = Thumbnail.objects.get_or_create(product=instance, type='micro')
+        hd, hd_created = Thumbnail.objects.get_or_create(Products=instance, type='hd')
+        sd, sd_created = Thumbnail.objects.get_or_create(Products=instance, type='sd')
+        micro, micro_created = Thumbnail.objects.get_or_create(Products=instance, type='micro')
 
         hd_max = (500, 500)
         sd_max = (350, 350)
@@ -162,24 +162,24 @@ def product_post_save_receiver(sender, instance, created, *args, **kwargs):
             create_new_thumb(media_path, micro, owner_slug, micro_max[0], micro_max[1])
 
 
-post_save.connect(product_post_save_receiver, sender=SellerProduct)
+post_save.connect(Products_post_save_receiver, sender=SellerProducts)
 
 
 class MyProducts(models.Model):
     user = models.OneToOneField(User , on_delete=models.CASCADE)
-    products = models.ManyToManyField(SellerProduct, blank=True)
+    Products = models.ManyToManyField(SellerProducts, blank=True)
 
     def __unicode__(self):
-        return "%s" % (self.products.count())
+        return "%s" % (self.Products.count())
 
     class Meta:
-        verbose_name = "My products"
+        verbose_name = "My Products"
         verbose_name_plural = "My Products"
 
 
-class ProductRating(models.Model):
+class ProductsRating(models.Model):
     user = models.ForeignKey(User , on_delete=models.CASCADE)
-    product = models.ForeignKey(SellerProduct, on_delete=models.CASCADE)
+    Products = models.ForeignKey(SellerProducts, on_delete=models.CASCADE)
     rating = models.IntegerField(null=True, blank=True)
     verified = models.BooleanField(default=False)
 
@@ -190,7 +190,7 @@ class ProductRating(models.Model):
 class CuratedProducts(models.Model):
     user = models.ForeignKey(User , on_delete=models.CASCADE)
     section_name = models.CharField(max_length=120)
-    products = models.ManyToManyField(SellerProduct, blank=True)
+    Products = models.ManyToManyField(SellerProducts, blank=True)
     active = models.BooleanField(default=True)
 
     def __unicode__(self):

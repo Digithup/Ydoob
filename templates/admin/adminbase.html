@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+{% load i18n %}
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -17,7 +18,7 @@
     <link href="https://fonts.googleapis.com/css?family=Work+Sans:100,200,300,400,500,600,700,800,900" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
-    <!-- Font Awesome-->
+  <!-- Font Awesome-->
     <link rel="stylesheet" type="text/css" href="{% static '' %}css/fontawesome.css">
 
     <!-- Font Awesome -->
@@ -33,18 +34,18 @@
 
     <!-- Flag icon-->
     <link rel="stylesheet" type="text/css" href="{% static '' %}css/flag-icon.css">
-    
+
       <!-- Dropzone css-->
     <link rel="stylesheet" type="text/css" href="{% static ''%}css/dropzone.css">
     <!-- Themify icon-->
     <link rel="stylesheet" type="text/css" href="{% static '' %}css/themify-icons.css">
-    
+
      <!-- owlcarousel css-->
     <link rel="stylesheet" type="text/css" href="{% static '' %}css/owlcarousel.css">
 
     <!-- Rating css-->
     <link rel="stylesheet" type="text/css" href="{% static '' %}css/rating.css">
-    
+
     <!-- jsgrid css-->
     <link rel="stylesheet" type="text/css" href="{% static '' %}css/jsgrid.css">
 
@@ -62,6 +63,22 @@
 
     <!-- App css-->
     <link rel="stylesheet" type="text/css" href="{% static '' %}css/admin.css">
+
+
+
+
+    {% block custom_css %}
+    {% endblock custom_css %}
+
+    <style>
+        ul.errorlist {
+            margin: 0px;
+        }
+
+        .no-margin {
+            margin: 0px;
+        }
+    </style>
 </head>
 
 <body>
@@ -73,7 +90,8 @@
     <div class="page-main-header">
         <div class="main-header-right row">
             <div class="main-header-left d-lg-none">
-                <div class="logo-wrapper"><a href="index.html"><img class="blur-up lazyloaded" src="{{ setting.image.url }}" alt=""></a></div>
+                <div class="logo-wrapper"><a href="index.html"><img class="blur-up lazyloaded"
+                                                                    src="{{ setting.image.url }}" alt=""></a></div>
             </div>
             <div class="mobile-sidebar">
                 <div class="media-body text-right switch-sm">
@@ -85,27 +103,42 @@
                     <li>
                         <form class="form-inline search-form">
                             <div class="form-group">
-                                <input class="form-control-plaintext" type="search" placeholder="Search.."><span class="d-sm-none mobile-search"><i data-feather="search"></i></span>
+                                <input class="form-control-plaintext" type="search" placeholder="Search.."><span
+                                    class="d-sm-none mobile-search"><i data-feather="search"></i></span>
                             </div>
                         </form>
                     </li>
-                    <li><a class="text-dark" href="#!" onclick="javascript:toggleFullScreen()"><i data-feather="maximize-2"></i></a></li>
+                    <li><a class="text-dark" href="#!" onclick="toggleFullScreen()"><i
+                            data-feather="maximize-2"></i></a></li>
                     <li class="onhover-dropdown"><a class="txt-dark" href="#">
                         <h6>EN</h6></a>
                         <ul class="language-dropdown onhover-show-div p-20">
-                            <li><a href="#" data-lng="en"><i class="flag-icon flag-icon-is"></i> English</a></li>
-                            <li><a href="#" data-lng="es"><i class="flag-icon flag-icon-um"></i> Arabic</a></li>
-                            <li><a href="#" data-lng="pt"><i class="flag-icon flag-icon-uy"></i> Portuguese</a></li>
-                            <li><a href="#" data-lng="fr"><i class="flag-icon flag-icon-nz"></i> French</a></li>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <select name="language">
+                                    {% get_available_languages as LANGUAGES %}
+                                    {% for language in LANGUAGES %}
+                                        <option value="{{ language.0 }}" {% if language.0 == LANGUAGE_CODE %}
+                                                selected{% endif %}>
+                                            {{ language.0|language_name_local }} ({{ language.0 }})
+                                        </option>
+                                    {% endfor %}
+                                </select>
+
+                            </form>
                         </ul>
                     </li>
-                    <li class="onhover-dropdown"><i data-feather="bell"></i><span class="badge badge-pill badge-primary pull-right notification-badge">3</span><span class="dot"></span>
+                    <li class="onhover-dropdown"><i data-feather="bell"></i><span
+                            class="badge badge-pill badge-primary pull-right notification-badge">3</span><span
+                            class="dot"></span>
                         <ul class="notification-dropdown onhover-show-div p-0">
                             <li>Notification <span class="badge badge-pill badge-primary pull-right">3</span></li>
                             <li>
                                 <div class="media">
                                     <div class="media-body">
-                                        <h6 class="mt-0"><span><i class="shopping-color" data-feather="shopping-bag"></i></span>Your order ready for Ship..!</h6>
+                                        <h6 class="mt-0"><span><i class="shopping-color"
+                                                                  data-feather="shopping-bag"></i></span>Your order
+                                            ready for Ship..!</h6>
                                         <p class="mb-0">Lorem ipsum dolor sit amet, consectetuer.</p>
                                     </div>
                                 </div>
@@ -113,7 +146,9 @@
                             <li>
                                 <div class="media">
                                     <div class="media-body">
-                                        <h6 class="mt-0 txt-success"><span><i class="download-color font-success" data-feather="download"></i></span>Download Complete</h6>
+                                        <h6 class="mt-0 txt-success"><span><i class="download-color font-success"
+                                                                              data-feather="download"></i></span>Download
+                                            Complete</h6>
                                         <p class="mb-0">Lorem ipsum dolor sit amet, consectetuer.</p>
                                     </div>
                                 </div>
@@ -121,7 +156,9 @@
                             <li>
                                 <div class="media">
                                     <div class="media-body">
-                                        <h6 class="mt-0 txt-danger"><span><i class="alert-color font-danger" data-feather="alert-circle"></i></span>250 MB trash files</h6>
+                                        <h6 class="mt-0 txt-danger"><span><i class="alert-color font-danger"
+                                                                             data-feather="alert-circle"></i></span>250
+                                            MB trash files</h6>
                                         <p class="mb-0">Lorem ipsum dolor sit amet, consectetuer.</p>
                                     </div>
                                 </div>
@@ -129,10 +166,14 @@
                             <li class="txt-dark"><a href="#">All</a> notification</li>
                         </ul>
                     </li>
-                    <li><a href="#"><i class="right_side_toggle" data-feather="message-square"></i><span class="dot"></span></a></li>
+                    <li><a href="#"><i class="right_side_toggle" data-feather="message-square"></i><span
+                            class="dot"></span></a></li>
                     <li class="onhover-dropdown">
-                        <div class="media align-items-center"><img class="align-self-center pull-right img-50 rounded-circle blur-up lazyloaded" src="{% static '' %}images/dashboard/man.png" alt="header-user">
-                            <div class="dotted-animation"><span class="animate-circle"></span><span class="main-circle"></span></div>
+                        <div class="media align-items-center"><img
+                                class="align-self-center pull-right img-50 rounded-circle blur-up lazyloaded"
+                                src="{% static '' %}images/dashboard/man.png" alt="header-user">
+                            <div class="dotted-animation"><span class="animate-circle"></span><span
+                                    class="main-circle"></span></div>
                         </div>
                         <ul class="profile-dropdown onhover-show-div p-20 profile-dropdown-hover">
                             <li><a href="#"><i data-feather="user"></i>Edit Profile</a></li>
@@ -147,12 +188,28 @@
             </div>
         </div>
     </div>
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == "success" %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endif %}
+            {% if message.tags == "error" %}
+                <div class="alert alert-danger">
+                    {{ message }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% block page_content %}
+    {% endblock page_content %}
     <!-- Page Header Ends -->
 
     <!-- Page Body Start-->
     <div class="page-body-wrapper">
 
-       {% block sidebar %} {% include 'admin/sidebar.html' %} {% endblock %}
+        {% block sidebar %} {% include 'admin/sidebar.html' %} {% endblock %}
 
         <!-- Right sidebar Start-->
         <div class="right-sidebar" id="right_side_bar">
@@ -172,49 +229,56 @@
                     <div class="chat-box">
                         <div class="people-list friend-list">
                             <ul class="list">
-                                <li class="clearfix"><img class="rounded-circle user-image" src="{% static '' %}images/dashboard/user.png" alt="">
+                                <li class="clearfix"><img class="rounded-circle user-image"
+                                                          src="{% static '' %}images/dashboard/user.png" alt="">
                                     <div class="status-circle online"></div>
                                     <div class="about">
                                         <div class="name">Vincent Porter</div>
                                         <div class="status"> Online</div>
                                     </div>
                                 </li>
-                                <li class="clearfix"><img class="rounded-circle user-image" src="{% static '' %}images/dashboard/user1.jpg" alt="">
+                                <li class="clearfix"><img class="rounded-circle user-image"
+                                                          src="{% static '' %}images/dashboard/user1.jpg" alt="">
                                     <div class="status-circle away"></div>
                                     <div class="about">
                                         <div class="name">Ain Chavez</div>
                                         <div class="status"> 28 minutes ago</div>
                                     </div>
                                 </li>
-                                <li class="clearfix"><img class="rounded-circle user-image" src="{% static '' %}images/dashboard/user2.jpg" alt="">
+                                <li class="clearfix"><img class="rounded-circle user-image"
+                                                          src="{% static '' %}images/dashboard/user2.jpg" alt="">
                                     <div class="status-circle online"></div>
                                     <div class="about">
                                         <div class="name">Kori Thomas</div>
                                         <div class="status"> Online</div>
                                     </div>
                                 </li>
-                                <li class="clearfix"><img class="rounded-circle user-image" src="{% static '' %}images/dashboard/user3.jpg" alt="">
+                                <li class="clearfix"><img class="rounded-circle user-image"
+                                                          src="{% static '' %}images/dashboard/user3.jpg" alt="">
                                     <div class="status-circle online"></div>
                                     <div class="about">
                                         <div class="name">Erica Hughes</div>
                                         <div class="status"> Online</div>
                                     </div>
                                 </li>
-                                <li class="clearfix"><img class="rounded-circle user-image" src="{% static '' %}images/dashboard/man.png" alt="">
+                                <li class="clearfix"><img class="rounded-circle user-image"
+                                                          src="{% static '' %}images/dashboard/man.png" alt="">
                                     <div class="status-circle offline"></div>
                                     <div class="about">
                                         <div class="name">Ginger Johnston</div>
                                         <div class="status"> 2 minutes ago</div>
                                     </div>
                                 </li>
-                                <li class="clearfix"><img class="rounded-circle user-image" src="{% static '' %}images/dashboard/user5.jpg" alt="">
+                                <li class="clearfix"><img class="rounded-circle user-image"
+                                                          src="{% static '' %}images/dashboard/user5.jpg" alt="">
                                     <div class="status-circle away"></div>
                                     <div class="about">
                                         <div class="name">Prasanth Anand</div>
                                         <div class="status"> 2 hour ago</div>
                                     </div>
                                 </li>
-                                <li class="clearfix"><img class="rounded-circle user-image" src="{% static '' %}images/dashboard/designer.jpg" alt="">
+                                <li class="clearfix"><img class="rounded-circle user-image"
+                                                          src="{% static '' %}images/dashboard/designer.jpg" alt="">
                                     <div class="status-circle online"></div>
                                     <div class="about">
                                         <div class="name">Hileri Jecno</div>
@@ -231,7 +295,7 @@
 
         <div class="page-body">
 
-         {% block body %}  {% endblock %}
+            {% block body %}  {% endblock %}
 
         </div>
 
@@ -241,6 +305,13 @@
 </div>
 
 {% block js %}  {% endblock %}
+{% block custom_js %}
+{% endblock custom_js %}
 
 </body>
+<script>
+    document.getElementById("title").onkeyup = function () {
+        document.getElementById("url_slug").value = document.getElementById("title").value.toLowerCase().replaceAll(" ", "-");
+    }
+</script>
 </html>

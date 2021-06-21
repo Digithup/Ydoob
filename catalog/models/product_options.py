@@ -11,7 +11,7 @@ from django.utils.text import slugify
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
-from catalog.models.models import STATUS, Product, Image
+from catalog.models.models import STATUS, Products, Image
 
 
 
@@ -39,7 +39,7 @@ class Size(models.Model):
 
 class Variants(models.Model):
     title = models.CharField(max_length=100, blank=True, null=True)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    Products = models.ForeignKey(Products, on_delete=models.CASCADE)
     color = models.ForeignKey(Color, on_delete=models.CASCADE, blank=True, null=True)
     size = models.ForeignKey(Size, on_delete=models.CASCADE, blank=True, null=True)
     image_id = models.IntegerField(blank=True, null=True, default=0)
@@ -80,14 +80,14 @@ class Manufacturer(models.Model):
         return self.title
 
 
-class SingleProduct(models.Model):
+class SingleProducts(models.Model):
 
 
     title = models.CharField(max_length=150)
     keywords = models.CharField(max_length=255)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
-    # def getProductTags(self):
+    # def getProductsTags(self):
     # return self.tags.all()
 
     def __str__(self):

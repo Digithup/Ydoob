@@ -3,7 +3,7 @@ from django.contrib import admin
 # Register your models here.
 from mptt.admin import DraggableMPTTAdmin
 
-from catalog.models.models import Category, Product
+from catalog.models.models import Categories, Products
 
 
 class CategoryAdmin2(DraggableMPTTAdmin):
@@ -17,16 +17,16 @@ class CategoryAdmin2(DraggableMPTTAdmin):
         qs = super().get_queryset(request)
 
         # Add cumulative catalog count
-        qs = Category.objects.add_related_count(
+        qs = Categories.objects.add_related_count(
                 qs,
-                Product,
+                Products,
                 'category',
                 'products_cumulative_count',
                 cumulative=True)
 
         # Add non cumulative catalog count
-        qs = Category.objects.add_related_count(qs,
-                 Product,
+        qs = Categories.objects.add_related_count(qs,
+                 Products,
                  'category',
                  'products_count',
                  cumulative=False)

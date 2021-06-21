@@ -1,10 +1,11 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
-
+from django.urls import reverse_lazy, reverse
 
 from accounts.admin import UserAdmin
-from accounts.forms import GuestForm, UserAdminChangeForm
+from accounts.forms import GuestForm, UserAdminChangeForm,  SellerRegisterForm
 from django.utils.http import is_safe_url
 from accounts.signals import user_logged_in
 from django.views.generic import CreateView, TemplateView, UpdateView
@@ -49,6 +50,9 @@ def user_delete(request, user_id):
     return redirect('accounts:user_list')
 
 
+
+
+
 def update_profile(request):
     user = User.objects.get(id=request.user.id)
     forms = UserAdminChangeForm(instance=user)
@@ -67,14 +71,14 @@ class AddProfile(CreateView):
     model = User
     template_name = 'accounts/UpdateProfile.html'
     fields = '__all__'
-    # uccess_url =redirect('home:product_admin')
+    # uccess_url =redirect('home:Products_admin')
     success_url = reverse_lazy('accounts:user_profile')
 
 
 class EditProfile(UpdateView):
     model = User
     fields = '__all__'
-    template_name = 'admin/pages/edit-category.html'
+    template_name = 'accounts/UpdateProfile.html'
     success_url = reverse_lazy('accounts:user_profile')
 
 
@@ -138,6 +142,11 @@ def logout_func(request):
     logout(request)
 
     return render(request, 'admin/login.html')
+
+def adminLogoutProcess(request):
+    logout(request)
+    messages.success(request,"Logout Successfully!")
+    return HttpResponseRedirect(reverse("admin_login"))
 
 
 # class RegisterView(CreateView):

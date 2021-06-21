@@ -3,7 +3,7 @@ from django.db.models.signals import pre_save, post_save
 from django.core.urlresolvers import reverse
 from django.utils.text import slugify
 
-from products.models import Product
+
 
 class TagQuerySet(models.query.QuerySet):
     def active(self):
@@ -22,7 +22,7 @@ class TagManager(models.Manager):
 class Tag(models.Model):
     title = models.CharField(max_length=120, unique=True)
     slug = models.SlugField(unique=True)
-    products = models.ManyToManyField(Product, blank=True)
+    #products = models.ManyToManyField(Products, blank=True)
     active = models.BooleanField(default=True)
 
     objects = TagManager()

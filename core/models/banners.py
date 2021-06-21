@@ -3,7 +3,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.urls import reverse
 from django.utils.safestring import mark_safe
-from imagekit.models import ProcessedImageField
+from imagekit.models import ProcessedImageField, ImageSpecField
 from pilkit.processors import ResizeToFill
 
 from accounts.models import User
@@ -57,13 +57,17 @@ class Banners(models.Model):
     status = models.CharField(max_length=10, choices=STATUS  )
     caption = models.CharField(max_length=150, null=False,  verbose_name="Title")
     link = models.URLField(null=False, blank=True)
-    image = models.ImageField( upload_to='images/')
+    image = models.ImageField( upload_to='images/banners')
+    image_thumbnail=ImageSpecField(source='image',
+                   processors=[ResizeToFill(100, 50)],
+                   format='JPEG',
+                   options={'quality': 60})
     sort_order = models.SmallIntegerField(default=0,  null=False)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.group
+        return self.caption
 
         ## method to create a fake table field in read only mode
 

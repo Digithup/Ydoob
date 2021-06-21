@@ -20,21 +20,21 @@ def options(request):
         'categories': categories
     }
     # return HttpResponse(1)
-    return render(request, 'admin/pages/category-admin.html', context)
+    return render(request, 'admin/pages/templates/catalog/category-admin.html', context)
 
 
 class AddOptions(CreateView):
     model = Category
-    template_name = 'admin/pages/add-category.html'
+    template_name = 'admin/pages/templates/add-category.html'
     fields = '__all__'
-    # uccess_url =redirect('home:product_admin')
+    # uccess_url =redirect('home:Products_admin')
     success_url = reverse_lazy('home:category')
 
 
 class EditOptions(UpdateView):
     model = Category
     fields = '__all__'
-    template_name = 'admin/pages/edit-category.html'
+    template_name = 'admin/pages/templates/catalog/edit-category.html'
     success_url = reverse_lazy('home:category')
 
 
