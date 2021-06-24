@@ -7,8 +7,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Multikart admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
-    <meta name="keywords" content="admin template, Multikart admin template, dashboard template, flat admin template, responsive admin template, web app">
+    <meta name="description"
+          content="Multikart admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
+    <meta name="keywords"
+          content="admin template, Multikart admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="pixelstrap">
     <link rel="icon" href="{% static '' %}images/dashboard/favicon.png" type="image/x-icon">
     <link rel="shortcut icon" href="{% static '' %}images/dashboard/favicon.png" type="image/x-icon">
@@ -16,31 +18,32 @@
 
     <!-- Google font-->
     <link href="https://fonts.googleapis.com/css?family=Work+Sans:100,200,300,400,500,600,700,800,900" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
 
-  <!-- Font Awesome-->
+    <!-- Font Awesome-->
     <link rel="stylesheet" type="text/css" href="{% static '' %}css/fontawesome.css">
 
     <!-- Font Awesome -->
-  <link rel="stylesheet" href="{% static ''%}plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="{% static '' %}plugins/fontawesome-free/css/all.min.css">
     <!-- Flag icon-->
-  <link rel="stylesheet" type="text/css" href="{%  static ''%}css/flag-icon.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="{% static ''%}dist/css/adminlte.min.css">
-  <!-- Google Font: Source Sans Pro -->
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static '' %}css/flag-icon.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="{% static '' %}dist/css/adminlte.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 
     <!-- Flag icon-->
     <link rel="stylesheet" type="text/css" href="{% static '' %}css/flag-icon.css">
 
-      <!-- Dropzone css-->
-    <link rel="stylesheet" type="text/css" href="{% static ''%}css/dropzone.css">
+    <!-- Dropzone css-->
+    <link rel="stylesheet" type="text/css" href="{% static '' %}css/dropzone.css">
     <!-- Themify icon-->
     <link rel="stylesheet" type="text/css" href="{% static '' %}css/themify-icons.css">
 
-     <!-- owlcarousel css-->
+    <!-- owlcarousel css-->
     <link rel="stylesheet" type="text/css" href="{% static '' %}css/owlcarousel.css">
 
     <!-- Rating css-->
@@ -113,19 +116,26 @@
                     <li class="onhover-dropdown"><a class="txt-dark" href="#">
                         <h6>EN</h6></a>
                         <ul class="language-dropdown onhover-show-div p-20">
-                            <form action="" method="post">
-                                {% csrf_token %}
-                                <select name="language">
-                                    {% get_available_languages as LANGUAGES %}
-                                    {% for language in LANGUAGES %}
-                                        <option value="{{ language.0 }}" {% if language.0 == LANGUAGE_CODE %}
-                                                selected{% endif %}>
-                                            {{ language.0|language_name_local }} ({{ language.0 }})
-                                        </option>
-                                    {% endfor %}
-                                </select>
+                            <div class="lan-selector">
+                                <form action="{% url 'set_language' %}" method="post" id="language-form"
+                                      name="language-form">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="language" id="language" value=""/>
+                                </form>
+                                <script>
+                                    function set_language(code) {
+                                        $('#language').val(code);
+                                        $('#language-form').submit();
+                                    }
+                                </script>
+                                {% for language in index_language %}
+                                    <li><a href="javascript:set_language('{{ language.code }}')"><img
+                                            src="{{ language.image.url }} "
+                                            height="25px" width="25px"> {{ language.name }}</a></li>
+                                {% endfor %}
 
-                            </form>
+
+                            </div>
                         </ul>
                     </li>
                     <li class="onhover-dropdown"><i data-feather="bell"></i><span

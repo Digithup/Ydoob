@@ -3,59 +3,41 @@
 
 
 {% block body %}
-
-
-
-
     <div class="page-body">
+       <!-- Container-fluid starts-->
+    <div class="container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="page-header-left">
+                        <h3>Language List
+                            <small>
+                                <ol class="breadcrumb pull-left">
+                                    <li class="breadcrumb-item"><a href="{% url 'core:admin_index' %}"><i data-feather="home"></i></a></li>
 
-        <!-- Container-fluid starts-->
-        <div class="container-fluid">
-            <div class="page-header">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="page-header-left">
-                            <h3>Language
-                                <small>Multikart Admin panel</small>
-                            </h3>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <ol class="breadcrumb pull-right">
-                            <li class="breadcrumb-item"><a href="{% url 'core:admin_index' %}"><i data-feather="home"></i></a>
-                            </li>
-                            <li class="breadcrumb-item">Physical</li>
-                            <li class="breadcrumb-item active">Language</li>
+                                    <li class="breadcrumb-item active">Language List</li>
+                                </ol>
+                            </small>
+                        </h3>
+
                         </ol>
                     </div>
                 </div>
+                <div class="col-lg-6">
+                    <div class="card-tools pull-right ">
+                        <a href="{% url 'localization:AddLang' %}">
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-original-title="test" data-target="#exampleModal">Add Language
+                            </button>
+                        </a>
+                    </div>
+
+                </div>
+
             </div>
         </div>
-        <!-- Container-fluid Ends-->
-
-        <!-- Container-fluid starts-->
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <!-- Default box -->
-
-
-                            <h5> Language List </h5>
-                            <div class="card-tools ">
-                                <a href="{% url 'localization:AddLang' %}">
-                                    <button type="button" class="btn btn-primary" data-toggle="modal"
-                                            data-original-title="test" data-target="#exampleModal">Add Language
-                                    </button>
-                                </a>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+    </div>
+    <!-- Container-fluid Ends-->
             <div class="card-body p-0 ">
                 <table class="table table-striped projects">
                     <thead>
@@ -63,19 +45,19 @@
                         <th style="width: 1%">
                             #
                         </th>
-                        <th style="width: 20%">
+                        <th style="width: 10%">
                             Language Name
                         </th>
-                        <th style="width: 10%">
+                        <th style="width: 15% " >
                             Language Flag
                         </th>
-                        <th style="width: 10%">
+                        <th style="width: 15%">
                             translation progress
                         </th>
-                        <th style="width: 8%" class="text-center">
+                        <th style="width: 9%" class="text-center">
                             Status
                         </th>
-                        <th style="width: 30%">
+                        <th style="width: 50%">
                         </th>
                     </tr>
                     </thead>
@@ -97,7 +79,7 @@
                             <td>
                                 <ul class="list-inline">
                                     <li class="list-inline-item">
-                                        <img alt="Avatar" class="table-avatar"
+                                        <img alt="Avatar" width="25px" height="25px" class="table-avatar"
                                                 {% if rs.image %}
                                              src="{{ rs.image.url }}">
                                                 {% endif %}
@@ -106,25 +88,29 @@
                                 </ul>
                             </td>
                             <td class="project_progress">
+                                {% for pos in languages %}
                                 <div class="progress progress-sm">
                                     <div class="progress-bar bg-green" role="progressbar"
-                                         aria-volumenow="57" aria-volumemin="0" aria-volumemax="100"
-                                         style="width: 57%">
+                                         aria-volumenow="{{pos.percent_translated}}" aria-volumemin="0" aria-volumemax="100"
+                                         style="width:{{po.percent_translated}}%">
                                     </div>
                                 </div>
                                 <small>
-                                    57% Complete
+                                    {{pos.percent_translated}}%
                                 </small>
+                                    {% endfor %}
                             </td>
                             <td class="project-state">
                                 <span class="badge badge-success">{{ rs.status }}</span>
                             </td>
                             <td class="project-actions text-right">
-                                <a class="btn btn-primary btn-sm" href="#">
+                                {%  if rs.code != 'en' %}
+                                <a class="btn btn-primary btn-sm" href="{% url 'localization:rosetta-file-list-redirect'  %}">
                                     <i class="fas fa-folder">
                                     </i>
-                                    View
+                                    Edit Translation
                                 </a>
+                                {% endif %}
                                 <a class="btn btn-info btn-sm" href="{% url 'localization:EditLang' rs.id %}">
                                     <i class="fas fa-pencil-alt">
                                     </i>

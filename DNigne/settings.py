@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'catalog.apps.CatalogConfig',
     'coupons.apps.CouponsConfig',
     'invoice.apps.InvoiceConfig',
-    'localization',
+    'localization.apps.LocalizationConfig',
     'media.apps.MediaConfig',
     'reports.apps.ReportsConfig',
     'sales.apps.SalesConfig',
@@ -211,6 +211,7 @@ gettext = lambda s: s
 LANGUAGES = (
     ('en', _('English')),
     ('ar', _('Arabic')),
+
 
 )
 MODELTRANSLATION_LANGUAGES = ('en', 'ar')

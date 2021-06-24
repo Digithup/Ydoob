@@ -7,6 +7,8 @@ from vendors.models import Store
 
 
 class SettingAddForm(forms.ModelForm):
+    image = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False, label='image')
+
     class Meta:
         model = Setting
         fields = '__all__'

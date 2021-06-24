@@ -1,6 +1,6 @@
 from modeltranslation.forms import TranslationModelForm
 
-from locale.models import Home
+from localization.models import Home
 
 
 class MyForm(TranslationModelForm):

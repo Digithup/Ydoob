@@ -24,10 +24,11 @@ import core
 from localization import views
 
 urlpatterns = [
+    path('i18n/', include('django.conf.urls.i18n')),
     path('selectlanguage', views.selectlanguage, name='selectlanguage'),
     # path('selectcurrency', views.selectcurrency, name='selectcurrency'),
-    path('savelangcur', views.savelangcur, name='savelangcur'),
-    path('i18n/', include('django.conf.urls.i18n')),
+    #path('savelangcur', views.savelangcur, name='savelangcur'),
+
 ]
 
 urlpatterns += i18n_patterns(
@@ -46,7 +47,7 @@ urlpatterns += i18n_patterns(
     # LOGIN URL
     # API URL
     path('api-auth/', include('rest_framework.urls')),
-    prefix_default_language=False,
+    prefix_default_language=True,
 )
 
 # ... the rest of your URLconf goes here ...
@@ -55,5 +56,5 @@ urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if 'rosetta' in settings.INSTALLED_APPS:
     urlpatterns += [
-        re_path(r'^rosetta/', include('rosetta.urls'))
+        path('admin/lang/rosetta/', include('rosetta.urls') )
     ]

@@ -1,0 +1,113 @@
+{% extends 'admin/adminbase.html' %}
+{% load i18n static %}
+
+
+{% block body %}
+    <!-- Container-fluid starts-->
+    <div class="container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="page-header-left">
+                        <h3>Language List
+                            <small>
+                                <ol class="breadcrumb pull-left">
+                                    <li class="breadcrumb-item"><a href="{% url 'core:admin_index' %}"><i data-feather="home"></i></a></li>
+
+                                    <li class="breadcrumb-item active">{% trans "Language selection" %}</li>
+                                    {% if do_session_warn %}<p class="errornote session-warn">{% trans "Couldn't load the specified language file. This usually happens when using the Encrypted Cookies Session Storage backend on Django 1.4 or higher.<br/>Setting ROSETTA_STORAGE_CLASS = 'rosetta.storage.CacheRosettaStorage' in your settings file should fix this." %}</p>{% endif %}
+                                </ol>
+                            </small>
+                        </h3>
+
+                        </ol>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+ <div class="card-body p-0 ">
+    <ul class="card-block p-2">
+    <li class="breadcrumb-item">
+        <li class="card-block p-2">{% trans "Filter" %}:</li>
+    <li>|</li>
+        <li{% if po_filter == 'project' %} class="active"{% endif %}><a href="{% url 'rosetta-file-list' po_filter='project' %}">{% trans "Project" %}</a></li>
+     <li>|</li>
+        <li{% if po_filter == 'third-party' %} class="active"{% endif %}><a href="{% url 'rosetta-file-list' po_filter='third-party' %}">{% trans "Third party" %}</a></li>
+     <li>|</li>
+        <li{% if po_filter == 'django' %} class="active"{% endif %}><a href="{% url 'rosetta-file-list' po_filter='django' %}">Django</a></li>
+     <li>|</li>
+        <li{% if po_filter == 'all' %} class="active"{% endif %}><a href="{% url 'rosetta-file-list' po_filter='all' %}">{% trans "All" %}</a></li>
+    </ul>
+
+    {% if has_pos %}
+
+    {% for lid,language,pos in languages %}
+    {% if pos %}
+
+        <div class="table table-striped projects">
+
+            <table cellspacing="0">
+                <thead>
+                    <tr>
+                         <th>{{language}}</th>
+                        <th class="r">{% trans "Progress"%}</th>
+                        <th class="r">{% trans "Messages" %}</th>
+                        <th class="r">{% trans "Translated" %}</th>
+                        <th class="info-tip r" title="{% trans "Fuzzy entries call for revision by the translator." %}">{% trans "Fuzzy"%}</th>
+                        <th class="r">{% trans "Obsolete"%}</th>
+                        <th>{% trans "File" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for app,path,po in pos %}
+                    <tr class="{% cycle 'row1' 'row2' %}">
+                    <td>
+                        <a class="btn btn-info btn-sm" href="{% url 'rosetta-form' po_filter=po_filter lang_id=lid idx=forloop.counter0 %}">
+                                    <i class="fas fa-pencil-alt">
+                                    </i>
+                                   {{language}}
+                                </a>
+                    </td>
+                      {#   <td><a href="{% url 'rosetta-form' po_filter=po_filter lang_id=lid idx=forloop.counter0 %}">{{ app|title }}</a></td> #}
+                        <td class="project_progress">
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-green" role="progressbar"
+                                         aria-volumenow="{{po.percent_translated}}" aria-volumemin="0" aria-volumemax="100"
+                                         style="width:{{po.percent_translated}}%">
+                                    </div>
+                                </div>
+                                <small>
+                                    {{po.percent_translated}}%
+                                </small>
+                            </td>
+                        <td class="ch-progress r">{{po.percent_translated}}%</td>
+                        {% with po.untranslated_entries|length as len_untranslated_entries %}
+                        <td class="ch-messages r">{{po.translated_entries|length|add:len_untranslated_entries}}</td>
+                        {% endwith %}
+                        <td class="ch-translated r">{{po.translated_entries|length}}</td>
+                        <td class="ch-fuzzy r">{{po.fuzzy_entries|length}}</td>
+                        <td class="ch-obsolete r">{{po.obsolete_entries|length}}</td>
+                        <td class="hint">{{ path }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    {% endif %}
+    {% endfor %}
+    {% else %}
+    <h1>{% trans "Nothing to translate!" %}</h1>
+    <p>{% trans "You haven't specified any languages in your settings file, or haven't yet generated a batch of translation catalogs." %}</p>
+    <p>{% blocktrans with "http://docs.djangoproject.com/en/dev/topics/i18n/#topics-i18n" as i18n_doc_link  %}Please refer to <a href="{{i18n_doc_link}}">Django's I18N documentation</a> for a guide on how to set up internationalization for your project.{% endblocktrans %}</p>
+    {% endif %}
+      </div>
+{% endblock %}
+
+{% block foot %} {% include 'admin/footer.html' %}  {% endblock %}
+{% block js %}{% include 'admin/js.html' %}{% endblock %}

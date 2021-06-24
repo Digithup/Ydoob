@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.core import serializers
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, request
 from django.shortcuts import render, get_object_or_404
 # Create your views here.
 from django.urls import reverse_lazy, reverse
@@ -15,9 +15,11 @@ from django.views.generic import ListView, DeleteView, DetailView, UpdateView
 from DNigne.settings import BASE_URL
 from accounts.admin import User
 from catalog.forms.forms import ProductsFullForm, CategoryAddForm
-from catalog.models.models import Categories, Image, ProductsDetails, ProductsAbout, ProductsTags, \
-    ProductsTransaction, Products, ProductsMedia
+from catalog.models.models import Categories, Image, Products, ProductMedia, ProductDetails, ProductAbout, ProductTags, \
+    ProductTransaction
 from core.forms.forms import SearchForm
+from core.models.models import Setting
+from localization.models import Language
 from vendors.models import Store
 
 
@@ -26,11 +28,15 @@ def index(request):
     category = Categories.objects.filter(id)
     products = Products.objects.all()
     store = Store.objects.all()
+    setting = Setting.objects.all()
+    index_language=Language.objects.filter(status=True)
     context = {
         'categories': categories,
         'category': category,
         'catalog': Products,
         'store': store,
+        'setting':setting,
+        'index_language':index_language
 
     }
     return render(request, 'admin/', context)
@@ -68,7 +74,7 @@ def AddCategory(request):
                 print(request)
                 category_obj = Categories.objects.create(title=title, title_ar=title_ar, title_en=title_en,
                                                          keywords=keywords, parent=parent,
-                                                         description=description,image=image,
+                                                         description=description, image=image,
                                                          slug=slug, status=status
                                                          )  # create will create as well as save too in db.
 
@@ -83,7 +89,7 @@ def AddCategory(request):
             category_obj.title_ar = title_ar
             category_obj.keywords = keywords
             category_obj.description = description
-            category_obj.image=image
+            category_obj.image = image
             category_obj.parent = parent
             category_obj.slug = slug
             category_obj.status = status
@@ -105,73 +111,11 @@ def AddCategory(request):
     return render(request, 'catalog/category/add-category.html', {'form': form})
 
 
-class EditCategoryz(UpdateView):
+class EditCategory(UpdateView):
     model = Categories
     fields = '__all__'
     template_name = 'catalog/category/edit-category.html'
     success_url = reverse_lazy('core:categories')
-
-
-def EditCategory(request,):
-    categories = Categories.objects.all()
-    if request.method == "POST":
-        form = CategoryAddForm(request.POST or None, request.FILES or None)
-        files = request.FILES.getlist('images')
-        if form.is_valid():
-            print(request.POST)
-            category_created = True
-            title = form.cleaned_data['title']
-            title_en = form.cleaned_data['title_en']
-            title_ar = form.cleaned_data['title_ar']
-            keywords = form.cleaned_data['keywords']
-            description = form.cleaned_data['description']
-            image = form.cleaned_data['image']
-            parent = form.cleaned_data['parent']
-            slug = form.cleaned_data['slug']
-            status = form.cleaned_data['status']
-            category_id = form.cleaned_data['category_id']
-
-            if not category_id:
-                print(request)
-                category_obj = Categories.objects.create(title=title, title_ar=title_ar, title_en=title_en,
-                                                         keywords=keywords, parent=parent,
-                                                         description=description,
-                                                         image=image,
-                                                         slug=slug, status=status
-                                                         )  # create will create as well as save too in db.
-
-                # handling all cases of the tags
-                print(request)
-
-            for f in files:
-                print(request)
-                Image.objects.create(Products=category_obj, image=f)
-            category_obj.title = title
-            category_obj.title_en = title_en
-            category_obj.title_ar = title_ar
-            category_obj.keywords = keywords
-            category_obj.description = description
-            category_obj.image = image
-            category_obj.parent = parent
-
-            category_obj.slug = slug
-            category_obj.status = status
-            print(request.POST)
-            category_obj.save()  # last_modified field won't update on chaning other model field, save() trigger change
-            # return reverse('core:catalog')
-            return HttpResponseRedirect('/admin/category', category_created)
-            # return render(request,template_name='admin/pages/Products-admin.html')
-            # return getNoteResponseData(Products_obj, tags, Products_created)
-        else:
-            print("Form invalid, see below error msg")
-            print(request.POST)
-            print(form.errors)
-            messages.error(request, "Error")
-    # if GET method form, or anything wrong then we will create blank form
-    else:
-        form = ProductsFullForm()
-    # return HttpResponseRedirect('/')
-    return render(request, 'catalog/category/edit-category.html', {'form': form,'categories':categories})
 
 
 class DeleteCategory(DeleteView):
@@ -188,7 +132,7 @@ def Products_admin(request):
         'products': products,
 
     }
-    return render(request, 'catalog/Products-admin.html', context)
+    return render(request, 'admin_templates/product_list.html', context)
 
 
 class ProductsDetailView(DetailView):
@@ -242,13 +186,6 @@ def tagsInDic(tags):
 #
 #
 #################################################
-def user_list(request, id, slug):
-    # query = request.GET.get('q')
-    # usersaaa = UserProfile.objects.all()
-    return HttpResponse('h')
-
-
-# return render(request,'admin/stores-list.html')
 
 
 def search(request):
@@ -292,29 +229,25 @@ def to_json(self, objects):
     return serializers.serialize('json', objects)
 
 
-class ProductView(View):
+class ProductAddView(View):
     def get(self, request, *args, **kwargs):
-        categories = Categories.objects.filter(status=True)
-        categories_list = []
-        for category in categories:
-            sub_category = Categories.objects.filter(status=True, id=category.id)
-            categories_list.append({"category": category, "sub_category": sub_category})
-
-        merchant_users = User.objects.all()
-
-        return render(request, "catalog/product/product_create.html",
-                      {"categories": categories_list, "merchant_users": merchant_users})
-
-    def post(self, request, *args, **kwargs):
         print(request)
-        product_name = request.POST.get("product_name")
+        category = Categories.objects.filter(status=True)
+        sellers = User.objects.filter(seller=True)
+
+        return render(request, "catalog/add-product.html",
+                      {"categories": category, "sellers": sellers})
+    print(request)
+    def post(self, request, *args, **kwargs):
+        title = request.POST.get("title")
         brand = request.POST.get("brand")
-        url_slug = request.POST.get("url_slug")
-        sub_category = request.POST.get("sub_category")
+        slug = request.POST.get("slug")
+        category = request.POST.get("category")
+        product_description = request.POST.get("product_description")
+        long_desc = request.POST.get("long_desc")
         product_max_price = request.POST.get("product_max_price")
         product_discount_price = request.POST.get("product_discount_price")
-        product_description = request.POST.get("product_description")
-        added_by_merchant = request.POST.get("added_by_merchant")
+        seller = request.POST.get("seller")
         in_stock_total = request.POST.get("in_stock_total")
         media_type_list = request.POST.getlist("media_type[]")
         media_content_list = request.FILES.getlist("media_content[]")
@@ -322,14 +255,16 @@ class ProductView(View):
         title_details_list = request.POST.getlist("title_details[]")
         about_title_list = request.POST.getlist("about_title[]")
         product_tags = request.POST.get("product_tags")
-        long_desc = request.POST.get("long_desc")
+        print(request.POST)
 
-        subcat_obj = Categories.objects.get(id=sub_category)
-        merchant_user_obj = User.objects.get(id=added_by_merchant)
-        product = Products(product_name=product_name, in_stock_total=in_stock_total, url_slug=url_slug, brand=brand,
-                           subcategories_id=subcat_obj, product_description=product_description,
+        #status = request.POST.get("status")
+
+        category = Categories.objects.get(id=category)
+        seller = User.objects.get(id=seller)
+        product = Products(title=title, in_stock_total=in_stock_total, slug=slug, brand=brand,
+                           product_description=product_description,category=category,
                            product_max_price=product_max_price, product_discount_price=product_discount_price,
-                           product_long_description=long_desc, added_by_merchant=merchant_user_obj)
+                           product_long_description=long_desc,seller=seller)
         product.save()
 
         i = 0
@@ -337,45 +272,47 @@ class ProductView(View):
             fs = FileSystemStorage()
             filename = fs.save(media_content.name, media_content)
             media_url = fs.url(filename)
-            product_media = ProductsMedia(product_id=product, media_type=media_type_list[i], media_content=media_url)
+            product_media = ProductMedia(product_id=product, media_type=media_type_list[i], media_content=media_url)
             product_media.save()
             i = i + 1
 
         j = 0
         for title_title in title_title_list:
-            product_details = ProductsDetails(title=title_title, title_details=title_details_list[j], product_id=product)
+            product_details = ProductDetails(title=title_title, title_details=title_details_list[j],
+                                              product_id=product)
             product_details.save()
             j = j + 1
 
         for about in about_title_list:
-            product_about = ProductsAbout(title=about, product_id=product)
+            product_about = ProductAbout(title=about, product_id=product)
             product_about.save()
 
         product_tags_list = product_tags.split(",")
 
         for product_tag in product_tags_list:
-            product_tag_obj = ProductsTags(product_id=product, title=product_tag)
+            product_tag_obj = ProductTags(product_id=product, title=product_tag)
             product_tag_obj.save()
 
-        product_transaction = ProductsTransaction(product_id=product, transaction_type=1,
-                                                 transaction_product_count=in_stock_total,
-                                                 transaction_description="Intially Item Added in Stocks")
+        product_transaction = ProductTransaction(product_id=product, transaction_type=1,
+                                                  transaction_product_count=in_stock_total,
+                                                  transaction_description="Intially Item Added in Stocks")
         product_transaction.save()
         return HttpResponse("OK")
+        #return render(request, 'catalog/products-admin.html')
 
 
 @csrf_exempt
 def file_upload(request):
-    file=request.FILES["file"]
-    fs=FileSystemStorage()
-    filename=fs.save(file.name,file)
-    file_url=fs.url(filename)
-    return HttpResponse('{"location":"'+BASE_URL+''+file_url+'"}')
+    file = request.FILES["file"]
+    fs = FileSystemStorage()
+    filename = fs.save(file.name, file)
+    file_url = fs.url(filename)
+    return HttpResponse('{"location":"' + BASE_URL + '' + file_url + '"}')
 
 
 class ProductsListView(ListView):
     model = Products
-    template_name = "catalog/Products-admin.html"
+    template_name = "catalog/product/products-admin.html"
     paginate_by = 3
 
     def get_queryset(self):
@@ -386,13 +323,12 @@ class ProductsListView(ListView):
                 Q(Products_name__contains=filter_val) | Q(Products_description__contains=filter_val)).order_by(order_by)
         else:
             products = Products.objects.all().order_by(order_by)
+        product_list = []
+        for product in products:
+            product_media = ProductMedia.objects.filter(product_id=product.id, media_type=1, is_active=1).first()
+            product_list.append({"product": product, "media": product_media})
 
-        Products_list = Products.objects.all()
-        for products in products:
-            Products_media = ProductsMedia.objects.filter(Products_id=Products.id, media_type=1, is_active=1).first()
-            Products_list.append({"products": products, "media": Products_media})
-
-        return Products_list
+        return product_list
 
     def get_context_data(self, **kwargs):
         context = super(ProductsListView, self).get_context_data(**kwargs)
@@ -407,9 +343,9 @@ class ProductsEdit(View):
     def get(self, request, *args, **kwargs):
         Products_id = kwargs["Products_id"]
         products = Products.objects.get(id=Products_id)
-        Products_details = ProductsDetails.objects.filter(Products_id=Products_id)
-        Products_about = ProductsAbout.objects.filter(Products_id=Products_id)
-        Products_tags = ProductsTags.objects.filter(Products_id=Products_id)
+        Products_details = ProductDetails.objects.filter(Products_id=Products_id)
+        Products_about = ProductAbout.objects.filter(Products_id=Products_id)
+        Products_tags = ProductTags.objects.filter(Products_id=Products_id)
 
         categories = Categories.objects.filter(is_active=1)
         categories_list = []
@@ -455,12 +391,12 @@ class ProductsEdit(View):
         for title_title in title_title_list:
             detail_id = details_ids[j]
             if detail_id == "blank" and title_title != "":
-                Products_details = ProductsDetails(title=title_title, title_details=title_details_list[j],
+                Products_details = ProductDetails(title=title_title, title_details=title_details_list[j],
                                                    Products_id=Products)
                 Products_details.save()
             else:
                 if title_title != "":
-                    Products_details = ProductsDetails.objects.get(id=detail_id)
+                    Products_details = ProductDetails.objects.get(id=detail_id)
                     Products_details.title = title_title
                     Products_details.title_details = title_details_list[j]
                     Products_details.Products_id = Products
@@ -471,22 +407,22 @@ class ProductsEdit(View):
         for about in about_title_list:
             about_id = about_ids[k]
             if about_id == "blank" and about != "":
-                Products_about = ProductsAbout(title=about, Products_id=Products)
+                Products_about = ProductAbout(title=about, Products_id=Products)
                 Products_about.save()
             else:
                 if about != "":
-                    Products_about = ProductsAbout.objects.get(id=about_id)
+                    Products_about = ProductAbout.objects.get(id=about_id)
                     Products_about.title = about
                     Products_about.Products_id = Products
                     Products_about.save()
             k = k + 1
 
-        ProductsTags.objects.filter(Products_id=Products_id).delete()
+        ProductTags.objects.filter(Products_id=Products_id).delete()
 
         Products_tags_list = Products_tags.split(",")
 
         for Products_tag in Products_tags_list:
-            Products_tag_obj = ProductsTags(Products_id=Products, title=Products_tag)
+            Products_tag_obj = ProductTags(Products_id=Products, title=Products_tag)
             Products_tag_obj.save()
 
         return HttpResponse("OK")
@@ -509,18 +445,19 @@ class ProductsAddMedia(View):
             fs = FileSystemStorage()
             filename = fs.save(media_content.name, media_content)
             media_url = fs.url(filename)
-            Products_media = ProductsMedia(Products_id=Products, media_type=media_type_list[i], media_content=media_url)
+            Products_media = ProductMedia(Products_id=Products, media_type=media_type_list[i], media_content=media_url)
             Products_media.save()
             i = i + 1
 
-        return HttpResponse("OK")
+        return render(request, "catalog/product/products-admin.html",
+                      )
 
 
 class ProductsEditMedia(View):
     def get(self, request, *args, **kwargs):
         Products_id = kwargs["Products_id"]
         products = Products.objects.get(id=Products_id)
-        Products_medias = ProductsMedia.objects.filter(Products_id=Products_id)
+        Products_medias = ProductMedia.objects.filter(Products_id=Products_id)
         return render(request, "catalog/product/product_edit_media.html",
                       {"Products": Products, "Products_medias": Products_medias})
 
@@ -528,7 +465,7 @@ class ProductsEditMedia(View):
 class ProductsMediaDelete(View):
     def get(self, request, *args, **kwargs):
         media_id = kwargs["id"]
-        Products_media = ProductsMedia.objects.get(id=media_id)
+        Products_media = ProductMedia.objects.get(id=media_id)
         import os
         from DNigne import settings
 
@@ -557,10 +494,11 @@ class ProductsAddStocks(View):
         Products.save()
 
         Products_obj = Products.objects.get(id=Products_id)
-        Products_transaction = ProductsTransaction(Products_id=Products_obj, transaction_Products_count=new_instock,
+        Products_transaction = ProductTransaction(Products_id=Products_obj, transaction_Products_count=new_instock,
                                                    transaction_description="New Products Added", transaction_type=1)
         Products_transaction.save()
         return HttpResponseRedirect(reverse("Products_add_stocks", kwargs={"Products_id": Products_id}))
+
 
 def AddProductView(request):
     if request.method == "POST":
@@ -595,14 +533,14 @@ def AddProductView(request):
             if not product_id:
                 print(request)
                 product_obj = Products.objects.create(title=title, keywords=keywords, category=category,
-                                                     description=description, variant=variant,
-                                                     image1=image1, image2=image2, image3=image3, image4=image4,
-                                                     image5=image5, image6=image6,
-                                                     thumbnail=thumbnail, price=price, sale_price=sale_price,
-                                                     discount=discount,
-                                                     amount=amount, min_amount=min_amount, detail=detail,
-                                                     slug=slug, status=status
-                                                     )  # create will create as well as save too in db.
+                                                      description=description, variant=variant,
+                                                      image1=image1, image2=image2, image3=image3, image4=image4,
+                                                      image5=image5, image6=image6,
+                                                      thumbnail=thumbnail, price=price, sale_price=sale_price,
+                                                      discount=discount,
+                                                      amount=amount, min_amount=min_amount, detail=detail,
+                                                      slug=slug, status=status
+                                                      )  # create will create as well as save too in db.
                 for k in tags.keys():
                     tag_obj, created = Products.objects.get_or_create(name=k)
                     product_obj.tags.add(tag_obj)  # it won't add duplicated as stated in django docs
@@ -658,5 +596,3 @@ def AddProductView(request):
         form = ProductsFullForm()
     # return HttpResponseRedirect('/')
     return render(request, 'catalog/add-product.html', {'form': form})
-
-

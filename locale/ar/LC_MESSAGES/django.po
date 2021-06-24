@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-13 14:00+0200\n"
-"PO-Revision-Date: 2021-06-16 13:55+0000\n"
-"Last-Translator: b'None None <yuri89@gmail.com>'\n"
+"POT-Creation-Date: 2021-06-23 12:57+0200\n"
+"PO-Revision-Date: 2021-06-23 19:22+0000\n"
+"Last-Translator: b'hitham None <yuri89@gmail.com>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -19,16 +19,20 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Translated-Using: django-rosetta 0.9.6\n"
 
-#: .\DNigne\settings.py:208
+#: .\DNigne\settings.py:212
 msgid "English"
 msgstr ""
 
-#: .\DNigne\settings.py:209
+#: .\DNigne\settings.py:213
 msgid "Arabic"
 msgstr ""
 
-#: .\DNigne\urls.py:30
-msgid "admin/"
+#: .\catalog\models\models.py:29
+msgid "title"
+msgstr ""
+
+#: .\catalog\models\models.py:30
+msgid "the title of the continent"
 msgstr ""
 
 #: .\core\models\banners.py:43
@@ -36,8 +40,8 @@ msgstr ""
 msgid "The picture will be resized to fit {width}px x {height}px."
 msgstr ""
 
-#: .\localization\views.py:20
-msgid "How are you?"
+#: .\home\views.py:74
+msgid "hello"
 msgstr ""
 
 #: .\project\Lib\site-packages\bootstrap4\components.py:17
@@ -1482,12 +1486,12 @@ msgstr "متجري هيثم"
 
 #: .\templates\front\header.html:41
 msgid "start selling"
-msgstr "ابداء البيع"
+msgstr "ابداء البيعالان"
 
 #: .\templates\front\header.html:223
 msgid "home"
 msgstr "القائمة الرئيسة"
 
-#: .\templates\front\slider.html:18
+#: .\templates\front\slider.html:19
 msgid "welcome to fashion"
 msgstr ""

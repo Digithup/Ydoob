@@ -14,7 +14,7 @@ from haystack import indexes
 
 from catalog.models.models import Categories, Products, Image
 
-from core.models.models import Images
+
 
 
 class CategoryAddForm(forms.ModelForm):
@@ -60,11 +60,6 @@ class ProductsAddForm(forms.ModelForm):
                    }
 
 
-class ImageForm(forms.ModelForm):
-
-    class Meta:
-        model = Images
-        fields = ('image',)
 
 
 class ProductsFullForm(ProductsAddForm):

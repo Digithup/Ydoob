@@ -7,7 +7,7 @@ from core.views.banners_views import BannerView, BannerDetailView, BannerDelete
 from core.views.setting_views import update_setting, add_setting
 from core.views.views import AddCategory, categories, EditCategory, DeleteCategory, ProductsListView, \
     ProductsEdit, ProductsAddMedia, ProductsEditMedia, ProductsMediaDelete, ProductsAddStocks, file_upload, index, \
-    AddProductView, ProductView, EditCategoryz
+      ProductsDelete, ProductAddView
 
 app_name = 'core'
 urlpatterns = [
@@ -17,15 +17,16 @@ urlpatterns = [
     ########## categories  #########
     path('admin/category/', categories, name='categories'),
     #path('admin/category/edit/<int:pk>/', EditCategory, name='EditCategory'),
-    path('admin/category/edit/<int:pk>/', EditCategoryz.as_view(), name='EditCategory'),
+    path('admin/category/edit/<int:pk>/', EditCategory.as_view(), name='EditCategory'),
     path('admin/category/add/', AddCategory, name='AddCategory'),
     path('admin/category/delete/<int:pk>/', DeleteCategory.as_view(), name='delete_category'),
 
     ########## Products   #########
     # Products
-    path('admin/Products_create', ProductView.as_view(), name="Products_view"),
+    path('admin/Products_create', ProductAddView.as_view(), name="Product_add"),
     path('admin/Products_list', ProductsListView.as_view(), name="Products_list"),
     path('admin/Products_edit/<str:Products_id>', ProductsEdit.as_view(), name="Products_edit"),
+    path('admin/Products_delete/<int:pk>/', ProductsDelete.as_view(), name="ProductsDelete"),
     path('admin/Products_add_media/<str:Products_id>', ProductsAddMedia.as_view(), name="Products_add_media"),
     path('admin/Products_edit_media/<str:Products_id>', ProductsEditMedia.as_view(), name="Products_edit_media"),
     path('admin/Products_media_delete/<str:id>', ProductsMediaDelete.as_view(), name="Products_media_delete"),
@@ -52,8 +53,9 @@ urlpatterns = [
     # path('admin/catalog/<int:pk>/', ProductsDetailView.as_view(), name='ProductsDetailView'),
 
     ########## Manufacturer   #########
-    path('admin/setting/', update_setting, name='update_setting'),
     path('admin/setting/add/', add_setting, name='add_setting'),
+    path('admin/setting/', update_setting, name='update_setting'),
+
 
     ########## Banners   #########
     path('admin/banner', BannerView.as_view(), name='BannerView'),

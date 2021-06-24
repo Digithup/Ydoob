@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% extends 'admin/adminbase.html' %}
+{% load static %}
+
+
+{% block body %}
+<body>
+
+
+
+            {% block main %}
+
+
+            {% endblock %}
+
+
+
+</body>
+
+{% endblock %}
+
+{% block foot %} {% include 'admin/footer.html' %}  {% endblock %}
+{% block js %}{% include 'admin/js.html' %}{% endblock %}
