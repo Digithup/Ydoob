@@ -16,7 +16,7 @@ class ProductsView(ListView):
 
 class ProductsDetailView(DetailView):
     model = SellerProducts
-    template_name = 'admin/pages/banner-detail.html'
+    template_name = 'admin/pages/slider-detail.html'
 
 
 class ProductsCreateView(CreateView):
@@ -44,7 +44,7 @@ def Products_admin(request, id, slug):
 
                }
     # return HttpResponse('f')
-    return render(request, 'admin/pages/banner-detail.html', context)
+    return render(request, 'admin/pages/slider-detail.html', context)
 
 
 def create(request):

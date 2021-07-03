@@ -39,10 +39,7 @@ def vendor_dashboard(request ,vendor=None):
     vendor = request.user  # Access User Session information
     store = Store.objects.get(vendor=vendor)
 
-
     context = {'store': store,
-
-
                }
     return render(request, 'vendor-dashboard.html', context)
 

@@ -10,9 +10,10 @@ from haystack.query import SearchQuerySet
 from haystack.inputs import AutoQuery, Exact, Clean
 
 from DNigne import settings
-from catalog.models.models import Categories, Products
-from core.models.banners import Banners
-from core.models.models import Setting
+from catalog.models.models import Categories, Products, ProductMedia
+from catalog.models.product_options import Manufacturer
+from core.models.design import Slider, SliderMedia, Banners
+from core.models.setting import Setting
 
 from home.forms import SearchForm
 from sales.models.order import ShopCart
@@ -26,22 +27,14 @@ def index(request):
 
     setting = Setting.objects.first()
     products_latest = Products.objects.all().order_by('-id')[:4]  # last 4 products
-    # >>>>>>>>>>>>>>>> M U L T I   L A N G U G A E >>>>>> START
-    defaultlang = settings.LANGUAGE_CODE[0:2]
-    currentlang = request.LANGUAGE_CODE
-
-    if defaultlang != currentlang:
-        #setting = SettingLang.objects.filter(lang=currentlang)
-        products_latest = Products.objects.raw(
-            'SELECT p.id,p.price, l.title, l.description,l.slug  '
-            'FROM product_product as p '
-            'LEFT JOIN product_productlang as l '
-            'ON p.id = l.product_id '
-            'WHERE  l.lang=%s ORDER BY p.id DESC LIMIT 4', [currentlang])
     categories = Categories.objects.all()
     products = Products.objects.all()
+    products_media = ProductMedia.objects.all()
     store = Store.objects.all()
-    banner = Banners.objects.filter(caption="home")
+    slider = Slider.objects.all()
+    banner= Banners.objects.all()
+    slider_media = SliderMedia.objects.all()
+    manufacture =Manufacturer.objects.filter(status='True')
     current_user = request.user  # Access User Session information
     shopcart = ShopCart.objects.filter(user_id=current_user.id)
     total = 0
@@ -60,8 +53,12 @@ def index(request):
         'setting': setting,
         'categories': categories,
         'products': products,
+        'products_media':products_media,
         'store': store,
         'banner': banner,
+        'slider':slider,
+        'manufacture':manufacture,
+        #'slider_media':slider_media,
         'shopcart': shopcart,
         'top_collection': top_collection,
         'products_first': products_first,
@@ -70,8 +67,6 @@ def index(request):
         'new_random_products': new_random_products,
         'featured_products': featured_products,
         'best_products': best_products,
-        # 'category':category
-        'hllo': _('hello'),
     }
     return render(request, 'front/index.html', context)
 
@@ -85,14 +80,19 @@ def categories(request):
     # return HttpResponse(1)
     return render(request, 'front/pages/category_list.html', context)
 
-
-class ProductsView(ListView):
-    template_name = 'category-page(6-grid).html'
+class CategoriesView(ListView):
+    template_name = 'home_category.html'
     context_object_name = 'product_list'
 
     def get_queryset(self):
         return Products.objects.all()
 
+
+
+class ProductsHomeListView(ListView):
+    model = Products
+    template_name = "catalog/product/products-admin.html"
+    paginate_by = 12
 
 class ProductDetailView(DetailView):
     model = Products
@@ -101,7 +101,6 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProductDetailView, self).get_context_data(**kwargs)
         context['productlest'] = Products.objects.all()
-
         context['prodtag'] = Products.category
         return context
 

@@ -3,7 +3,7 @@ from django.forms import ModelForm
 
 from accounts.models import User
 from catalog.models.models import Products
-from catalog.models.product_options import Variants
+
 from vendors.models import Store
 
 
@@ -11,7 +11,7 @@ class ShopCart(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     store = models.ForeignKey(Store, on_delete=models.SET_NULL, null=True)
     product = models.ForeignKey(Products, on_delete=models.SET_NULL, null=True)
-    variant = models.ForeignKey(Variants, on_delete=models.SET_NULL, blank=True, null=True)  # relation with varinat
+
     quantity = models.IntegerField()
 
     def __str__(self):
@@ -83,7 +83,7 @@ class OrderProduct(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Products, on_delete=models.CASCADE)
-    variant = models.ForeignKey(Variants, on_delete=models.SET_NULL, blank=True, null=True)  # relation with varinat
+
     quantity = models.IntegerField()
     price = models.FloatField()
     amount = models.FloatField()

@@ -96,7 +96,7 @@ def Products_detail(request,id,slug):
 
 class CatList(APIView):
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'admin/pages/category-admin.html'
+    template_name = 'admin/pages/admin_manufacture.html'
 
     def get(self, request):
         queryset = Categories.objects.all()

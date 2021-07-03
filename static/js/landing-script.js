@@ -69,12 +69,16 @@ $(document).ready(function() {
         $(this).addClass('current');
         $("#" + tab_id).addClass('current');
     });
+    
+
 
     // Scrollspy initiation
-    $('body').scrollspy({
+    var scrollSpy = new bootstrap.ScrollSpy(document.body, {
         target: '#scroll-spy',
         offset: 70
-    });
+      })
+
+      
 
     // On render, adjust body padding to ensure last Scroll target can reach top of screen
     var height = $('#howto').innerHeight();

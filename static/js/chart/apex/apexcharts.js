@@ -24133,7 +24133,7 @@
         screenCTM: function screenCTM() {
           /* https://bugzilla.mozilla.org/show_bug.cgi?id=1344537
              This is needed because FF does not return the transformation matrix
-             for the inner coordinate SiteSetting when getScreenCTM() is called on nested svgs.
+             for the inner coordinate system when getScreenCTM() is called on nested svgs.
              However all other Browsers do that */
           if (this instanceof SVG.Nested) {
             var rect = this.rect(1, 1);
@@ -27706,7 +27706,7 @@
 
                       // Now we check if the new height and width still valid (> 0)
                       if (this.parameters.box.width - snap[0] > 0 && this.parameters.box.height - snap[1] > 0) {
-                          // ...if valid, we resize the this.el (which can include moving because the coord-SiteSetting starts at the left-top and this edge is moving sometimes when resized)
+                          // ...if valid, we resize the this.el (which can include moving because the coord-system starts at the left-top and this edge is moving sometimes when resized)
 
                           /*
                            * but first check if the element is text box, so we can change the font size instead of
@@ -27943,12 +27943,12 @@
       };
 
       // The flag is used to determine whether the resizing is used with a left-Point (first bit) and top-point (second bit)
-      // In this cases the templates-values are calculated differently
+      // In this cases the temp-values are calculated differently
       ResizeHandler.prototype.snapToGrid = function (diffX, diffY, flag, pointCoordsY) {
 
           var temp;
 
-          // If `pointCoordsY` is given, a single Point has to be snapped (deepSelect). That's why we need a different templates-value
+          // If `pointCoordsY` is given, a single Point has to be snapped (deepSelect). That's why we need a different temp-value
           if (typeof pointCoordsY !== 'undefined') {
               // Note that flag = pointCoordsX in this case
               temp = [(flag + diffX) % this.options.snapToGrid, (pointCoordsY + diffY) % this.options.snapToGrid];
@@ -28661,7 +28661,7 @@
         new Destroy(this.ctx).clear();
       }
       /**
-       * Allows usersaaa to update Options after the chart has rendered.
+       * Allows users to update Options after the chart has rendered.
        *
        * @param {object} options - A new config object can be passed which will be merged with the existing config object
        * @param {boolean} redraw - should redraw from beginning or should use existing paths and redraw from there
@@ -28715,7 +28715,7 @@
         return this.updateHelpers._updateOptions(options, redraw, animate, updateSyncedCharts, overwriteInitialConfig);
       }
       /**
-       * Allows usersaaa to update Series after the chart has rendered.
+       * Allows users to update Series after the chart has rendered.
        *
        * @param {array} series - New series which will override the existing
        */
@@ -28731,7 +28731,7 @@
         return this.updateHelpers._updateSeries(newSeries, animate, overwriteInitialSeries);
       }
       /**
-       * Allows usersaaa to append a new series after the chart has rendered.
+       * Allows users to append a new series after the chart has rendered.
        *
        * @param {array} newSerie - New serie which will be appended to the existing series
        */
@@ -28748,7 +28748,7 @@
         return this.updateHelpers._updateSeries(newSeries, animate, overwriteInitialSeries);
       }
       /**
-       * Allows usersaaa to append Data to series.
+       * Allows users to append Data to series.
        *
        * @param {array} newData - New data in the same format as series
        */
@@ -29078,7 +29078,7 @@
         }
       }
       /**
-       * This static method allows usersaaa to call chart methods without necessarily from the
+       * This static method allows users to call chart methods without necessarily from the
        * instance of the chart in case user has assigned chartID to the targetted chart.
        * The chartID is used for mapping the instance stored in Apex._chartInstances global variable
        *

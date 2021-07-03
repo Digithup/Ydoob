@@ -133,7 +133,7 @@
 # head Table
 # 
 # Fixed   tableVersion         // Table version number     0x00010000 for version 1.0.
-# Fixed   fontRevision         // Set by font manufacturer.
+# Fixed   fontRevision         // Set by font manufacture.
 # ULONG   checkSumAdjustment   // To compute: set it to 0, sum the entire font as ULONG, then store 0xB1B0AFBA - sum.
 # ULONG   magicNumber          // Set to 0x5F0F3CF5.
 # USHORT  flags   

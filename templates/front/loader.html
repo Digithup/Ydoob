@@ -13,7 +13,7 @@
                 <div class="col-lg-6">
                     <div class="header-contact">
                         <ul>
-                            <li>{% trans setting.title %} </li>
+                            <li>{{ setting_data.title }} </li>
                             <li><i class="fa fa-phone" aria-hidden="true"></i>Call Us: {{ setting.phone }}0</li>
                         </ul>
                         {% if messages %}
@@ -51,7 +51,7 @@
                             </div>
                             <div class="brand-logo">
 
-                                <a href="/home"><img src="{{ setting.image }}"
+                                <a href="/home"><img src="{{ setting_media.media_content }}"
                                                      class="img-fluid blur-up lazyload" width="100px" height="50px"
                                                      alt=""></a>
 

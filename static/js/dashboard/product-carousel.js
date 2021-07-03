@@ -1,5 +1,5 @@
 "use strict";
-var ecommerce_Products = {
+var ecommerce_product = {
     init: function() {
         var sync1 = $("#sync1");
         var sync2 = $("#sync2");
@@ -66,5 +66,5 @@ var ecommerce_Products = {
     }
 };
 jQuery(document).ready(function() {
-    ecommerce_Products.init();
+    ecommerce_product.init();
 });

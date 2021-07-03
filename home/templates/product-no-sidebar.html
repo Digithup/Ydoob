@@ -43,9 +43,9 @@
                         <div class="row">
                             <div class="col-12 p-0">
                                 <div class="slider-right-nav">
-                                    <div><img src="{{ product.thumbnail.url }}" width="100px" height="100px" alt=""
+                                    <div><img src="{{ products.media.media_content  }}" width="100px" height="100px" alt=""
                                               class="img-fluid blur-up lazyload"></div>
-                                    <div><img src="{{ product.image1.url }}" width="100px" height="100px" alt=""
+                                    <div><img src="{{ product.media_content }}" width="100px" height="100px" alt=""
                                               class="img-fluid blur-up lazyload"></div>
                                     <div><img src="{{ product.image2.url }}" width="100px" height="100px" alt=""
                                               class="img-fluid blur-up lazyload"></div>
@@ -57,7 +57,7 @@
                     </div>
                     <div class="col-lg-5 col-sm-10 col-xs-12 order-up">
                         <div class="product-right-slick">
-                            <div><img src="{{ product.thumbnail.url }}" width="100px" height="100px" alt=""
+                            <div><img src="{{ products_media.media_content  }}" width="100px" height="100px" alt=""
                                       class="img-fluid blur-up lazyload image_zoom_cls-0"></div>
                             <div><img src="{{ product.image1.url }}" width="100px" height="100px" alt=""
                                       class="img-fluid blur-up lazyload"></div>
@@ -70,11 +70,11 @@
                     </div>
                     <div class="col-lg-6 rtl-text">
                         <div class="product-right">
-                            <h2>{{ product.title }}</h2>
+                            <h2>{{ products.title }}</h2>
                             <h4>
-                                <del>{{ product.price }}</del>
+                                <del>{{ products.product_max_price }}</del>
                                 <span>{{ product.discount }}</span></h4>
-                            <h3>{{ product.sale_price }}</h3>
+                            <h3>{{ products.product_max_price }}</h3>
                             <ul class="color-variant">
                                 <li class="bg-light0"></li>
                                 <li class="bg-light1"></li>
@@ -110,7 +110,7 @@
                                 </div>
                                  {% if  product.variant != 'None'   %}
                                 <h6 class="product-title">quantity</h6>
-                                     <form action="{% url 'sales:addtoshopcart' product.id %}" method="post"  id="addchart-form">
+                                     <form action="" method="post"  id="addchart-form">
                                     {% csrf_token %}
                                         <div class="qty-box">
                                     <div class="input-group"><span class="input-group-prepend"><button type="button"
@@ -402,7 +402,7 @@
                                                 </h6>
                                             </a>
                                             <div class="buttons">
-                                                <a href="{% url 'sales:addtoshopcart' product.id %}" class="view-cart btn btn-solid">Your cart</a>
+                                                <a href="" class="view-cart btn btn-solid">Your cart</a>
                                                 <a href="{% url 'sales:orderproduct'  %}" class="checkout btn btn-solid">Check out</a>
                                                 <a href="{% url 'home:ProductsView'  %}" class="continue btn btn-solid">Continue shopping</a>
                                             </div>

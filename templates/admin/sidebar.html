@@ -6,13 +6,13 @@
     <div class="main-header-left d-none d-lg-block">
 
         <div class="logo-wrapper"><a href="{% url 'core:admin_index' %}"><img class="blur-up lazyloaded"
-                                                        src="{{ setting.image}}"  style="width: 200px "height="100px" alt=""></a>
+                                                        src="{{  setting_media.media_content}}"  style="width: 200px "height="100px" alt=""></a>
         </div>
 
     </div>
     <div class="sidebar custom-scrollbar">
         <div class="sidebar-user text-center">
-            <div><img class="img-60 rounded-circle blur-up lazyloaded" src="{{ setting.image }}" style="width: 20px "height="50px"
+            <div><img class="img-60 rounded-circle blur-up lazyloaded" src="{{ setting_media.media_content }}" style="width: 20px "height="50px"
                       alt="#">
             </div>
             <h6 class="mt-3 f-14">Hitham Gamal</h6>
@@ -30,7 +30,7 @@
                             <li><a href="product-detail.html"><i class="fa fa-circle"></i>Filters</a></li>
                             <li><a href="add-product.html"><i class="fa fa-circle"></i>Attributes</a></li>
                             <li><a href="add-product.html"><i class="fa fa-circle"></i>Options</a></li>
-                            <li><a href="{% url 'core:AddCategory' %}"><i class="fa fa-circle"></i>Manufacturers</a></li>
+                            <li><a href="{% url 'core:Manufacturers' %}"><i class="fa fa-circle"></i>Manufacturers</a></li>
                             <li><a href="add-product.html"><i class="fa fa-circle"></i>Downloads</a></li>
                             <li><a href="add-product.html"><i class="fa fa-circle"></i>Reviews</a></li>
                             <li><a href="add-product.html"><i class="fa fa-circle"></i>Information</a></li>
@@ -62,6 +62,7 @@
             <li><a class="sidebar-header" href="#"><i data-feather="align-left"></i><span>Design</span><i
                     class="fa fa-angle-right pull-right"></i></a>
                 <ul class="sidebar-submenu">
+                     <li><a href="{% url 'core:SliderView' %}"><i class="fa fa-circle"></i>Slider</a></li>
                      <li><a href="{% url 'core:BannerView' %}"><i class="fa fa-circle"></i>Banners</a></li>
                     <li><a href="menu-list.html"><i class="fa fa-circle"></i>Menu Lists</a></li>
                     <li><a href="create-menu.html"><i class="fa fa-circle"></i>Create Menu</a></li>

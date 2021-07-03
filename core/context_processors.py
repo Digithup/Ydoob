@@ -1,10 +1,18 @@
-from core.models.models import Setting
-from core.views.setting_views import setting
+from core.models.design import SliderMedia, Slider
+from core.models.setting import Setting, SettingMedia, SettingLang
+from core.views.setting import setting
 from localization.models import Language
 
 
-def site_profile(request):
-    return {'setting': Setting.objects.first(),
-            'index_language':Language.objects.all()
+def core_processors(request):
+    try:
+        return {
+                'setting_data': SettingLang.objects.all()
+        }
+    except:
+        return {'setting': Setting.objects.last(),
+                'setting_media': SettingMedia.objects.last(),
 
-            }
+                'index_language': Language.objects.all()
+
+                }

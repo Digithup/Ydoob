@@ -1,7 +1,7 @@
 {% extends 'admin/adminbase.html' %}
 {% load static %}
 
-
+{% load i18n %}
 {% block body %}
 
 
@@ -9,51 +9,40 @@
 
     <div class="page-body">
 
-        <!-- Container-fluid starts-->
-        <div class="container-fluid">
-            <div class="page-header">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="page-header-left">
-                            <h3>Banners
-                                <small>Multikart Admin panel</small>
-                            </h3>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <ol class="breadcrumb pull-right">
-                            <li class="breadcrumb-item"><a href="{% url 'core:index' %}"><i data-feather="home"></i></a></li>
-                            <li class="breadcrumb-item">Banners</li>
+       <!-- Container-fluid starts-->
+    <div class="container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="page-header-left">
+                        <h3>{% translate " Banners" %}
+                            <small>
+                                <ol class="breadcrumb pull-left">
+                                    <li class="breadcrumb-item"><a href="{% url 'core:admin_index' %}"><i data-feather="home"></i></a></li>
+
+                                    <li class="breadcrumb-item active">Banners </li>
+                                </ol>
+                            </small>
+                        </h3>
 
                         </ol>
                     </div>
                 </div>
+                <div class="col-lg-6">
+                    <div class="card-tools pull-right ">
+                        <a href="{% url 'core:BannerCreate' %}">
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-original-title="test" data-target="#exampleModal">Add Banner
+                            </button>
+                        </a>
+                    </div>
+
+                </div>
+
             </div>
         </div>
-        <!-- Container-fluid Ends-->
-
-        <!-- Container-fluid starts-->
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <!-- Default box -->
-
-
-                            <h5>  Banners List </h5>
-                            <div class="card-tools ">
-                                <a href="{% url 'core:add_banner' %}">
-                                    <button type="button" class="btn btn-primary" data-toggle="modal"
-                                            data-original-title="test" data-target="#exampleModal">Add Banners
-                                    </button>
-                                </a>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    </div>
+    <!-- Container-fluid Ends-->
 
             <div class="card-body p-0 ">
                 <table class="table table-striped projects">
@@ -66,7 +55,7 @@
                             Banners Name
                         </th>
                         <th style="width: 10%">
-                            Group Members
+                             Image
                         </th>
                         <th style="width: 10%">
                             Team Members
@@ -79,26 +68,26 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for rs in Banners %}
+                    {% for rs in banners %}
                         <tr>
                             <td>
                                  {{ forloop.counter }}
                             </td>
                             <td>
                                 <a>
-                                    {{ rs.caption }}
+                                    {{ rs.title }}
                                 </a>
                                 <br/>
                                 <small>
-                                    {{ rs.caption }}
+
                                 </small>
                             </td>
                             <td>
                                 <ul class="list-inline">
                                     <li class="list-inline-item">
                                         <img alt="Avatar" class="table-avatar"
-                                                {% if rs.image %}
-                                             src="{{ rs.image.url }}">
+                                                {% if rs.media_content.url %}
+                                             src="{{ rs.media_content.url }}" height="75px" width="75px">
                                                 {% endif %}
                                     </li>
 
@@ -112,7 +101,7 @@
                                     </div>
                                 </div>
                                 <small>
-                                    57% Complete
+                                    {{rs.sort_order}}
                                 </small>
                             </td>
                             <td class="project-state">

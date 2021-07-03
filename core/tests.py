@@ -1,22 +1,25 @@
 from django.contrib import messages
+from django.core.files.storage import FileSystemStorage
 from django.forms import modelformset_factory
-from django.http import request
+from django.http import request, HttpResponse
 from django.shortcuts import redirect
 from django.views import View
 
 from core.forms.banners_forms import BannerAddForm, render
-from core.models.banners import Banners
+from core.models.design import Slider
+from core.models.setting import Setting, SettingLang, SettingMedia
 from localization.models import Language
 
 
 def banner_create(request):
-    qs = Banners.objects.none()
-    BannersFormSet = modelformset_factory(Banners, form=BannerAddForm,exclude=['group','status'], extra=1,can_delete=True)
+    qs = Slider.objects.none()
+    BannersFormSet = modelformset_factory(Slider, form=BannerAddForm, exclude=['group', 'status'], extra=1,
+                                          can_delete=True)
 
     if request.method == 'POST':
         banner_form = BannerAddForm(request.POST, prefix='banner')
 
-        formset = BannersFormSet(request.POST ,request.FILES)
+        formset = BannersFormSet(request.POST, request.FILES)
 
         if formset.is_valid() and banner_form.is_valid():
             # Generate a workday object
@@ -35,31 +38,32 @@ def banner_create(request):
                 messages.add_message(request, messages.SUCCESS,
                                      "Banner add successfully " +
                                      e.banner.group +
-                                     ": " + e.caption + " (" + str(e.group) +") - "
-                )
+                                     ": " + e.caption + " (" + str(e.group) + ") - "
+                                     )
 
             return redirect('core:BannerView')
         else:
             banner_form = BannerAddForm(request.POST, prefix='banner')
-            formset = BannersFormSet(request.POST,request.FILES)
+            formset = BannersFormSet(request.POST, request.FILES)
 
             for dict in formset.errors:
                 messages.add_message(request, messages.ERROR, dict)
 
             context = {
-                       'banner_form': banner_form,
-                       'formset': formset,
-                       }
-            return render(request, 'banner/add-banners.html', context)
+                'banner_form': banner_form,
+                'formset': formset,
+            }
+            return render(request, 'banner/add-banner.html', context)
 
     else:
         banner_form = BannerAddForm(prefix='banner')
         formset = BannersFormSet(queryset=qs)
         context = {
-                   'banner_form': banner_form,
-                   'formset': formset,
-                   }
-        return render(request, 'banner/add-banners.html', context)
+            'banner_form': banner_form,
+            'formset': formset,
+        }
+        return render(request, 'banner/add-banner.html', context)
+
 
 """
 <QueryDict: {'csrfmiddlewaretoken': ['BSshEbKdZt8Rdes9kzXUSOAT16IGOgD4WE4Cjw2zp6mqEujhAkoEJWkxdykNw3PJ'], 
@@ -77,72 +81,64 @@ def banner_create(request):
 [22/Jun/2021 17:03:10] "POST /admin/setting/add/ HTTP/1.1" 200 60850
 """
 
-class SettingAddView(View):
+class SettingAddViewTest(View):
     def get(self, request, *args, **kwargs):
         print(request)
-        language = Language.objects.filter(status=True)
-        #sellers = User.objects.filter(seller=True)
+        langlist = Language.objects.filter(status=True)
 
-        return render(request, "catalog/add-product.html",
-                      {"language": language, })
+
+        return render(request, 'setting/add-setting.html',
+                      {"langlist": langlist, })
     print(request)
     def post(self, request, *args, **kwargs):
-        title = request.POST.get("title")
-        brand = request.POST.get("brand")
-        slug = request.POST.get("slug")
-        category = request.POST.get("category")
-        product_description = request.POST.get("product_description")
-        long_desc = request.POST.get("long_desc")
-        product_max_price = request.POST.get("product_max_price")
-        product_discount_price = request.POST.get("product_discount_price")
-        seller = request.POST.get("seller")
-        in_stock_total = request.POST.get("in_stock_total")
-        media_type_list = request.POST.getlist("media_type[]")
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        # image = request.POST.get('image')
+        facebook = request.POST.get('facebook')
+        instagram = request.POST.get('instagram')
+        twitter = request.POST.get('twitter')
+        youtube = request.POST.get('youtube')
+        status = request.POST.get('status')
+        setting_id = request.POST.get('setting_id')
         media_content_list = request.FILES.getlist("media_content[]")
-        title_title_list = request.POST.getlist("title_title[]")
-        title_details_list = request.POST.getlist("title_details[]")
-        about_title_list = request.POST.getlist("about_title[]")
-        product_tags = request.POST.get("product_tags")
+        media_type_list = request.POST.getlist("media_type[]")
+        setting_title_list = request.POST.getlist("title[]")
+        setting_keywords_list = request.POST.getlist("keywords[]")
+        setting_company_list = request.POST.getlist("company[]")
+        setting_about_list = request.POST.getlist("about[]")
+        setting_address_list = request.POST.getlist("address[]")
+        setting_lang_list = request.POST.getlist("lang[]")
+        print(request.POST)
 
         #status = request.POST.get("status")
 
+        langlist = Language.objects.filter(status=True)
 
-
-        product = Products(title=title, in_stock_total=in_stock_total, slug=slug, brand=brand,
-                           product_description=product_description,category=category,
-                           product_max_price=product_max_price, product_discount_price=product_discount_price,
-                           product_long_description=long_desc,)
-        product.save()
+        setting_obj = Setting.objects.create(email=email, phone=phone,
+                                             facebook=facebook, instagram=instagram,
+                                             twitter=twitter, youtube=youtube, status=status,
+                                             )  # create will create as well as save too in db.
+        setting_obj.save()
 
         i = 0
         for media_content in media_content_list:
             fs = FileSystemStorage()
             filename = fs.save(media_content.name, media_content)
             media_url = fs.url(filename)
-            product_media = ProductMedia(product_id=product, media_type=media_type_list[i], media_content=media_url)
-            product_media.save()
+
+            setting_media = SettingMedia(setting_id=setting_obj, media_type=media_type_list[i],
+                                         media_content=media_url)
+            setting_media.save()
             i = i + 1
 
         j = 0
-        for title_title in title_title_list:
-            product_details = ProductDetails(title=title_title, title_details=title_details_list[j],
-                                              product_id=product)
-            product_details.save()
+        for setting_title in setting_title_list:
+            setting_title = SettingLang(title=setting_title, keywords=setting_keywords_list[j],
+                                        about=setting_about_list[j], address=setting_address_list[j]
+                                        , lang=setting_lang_list[j], company=setting_company_list[j],
+                                        setting_id=setting_obj)
+
+            setting_title.save()
             j = j + 1
-
-        for about in about_title_list:
-            product_about = ProductAbout(title=about, product_id=product)
-            product_about.save()
-
-        product_tags_list = product_tags.split(",")
-
-        for product_tag in product_tags_list:
-            product_tag_obj = ProductTags(product_id=product, title=product_tag)
-            product_tag_obj.save()
-
-        product_transaction = ProductTransaction(product_id=product, transaction_type=1,
-                                                  transaction_product_count=in_stock_total,
-                                                  transaction_description="Intially Item Added in Stocks")
-        product_transaction.save()
-        return HttpResponse("OK")
-        #return render(request, 'catalog/products-admin.html')
+        #return HttpResponse("OK")
+        return render(request, 'setting.html')

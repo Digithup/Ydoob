@@ -53,12 +53,12 @@
                                     <div class="Products-hover">
                                         <ul>
                                             <li>
-                                                <a href=>
+                                                <a href="{% url 'core:Product_Delete' rs.product.id  %}">
                                                 <button class="btn" type="button" data-original-title="" title=""><i
                                                         class="ti-trash"></i></button>
                                                 </a></li>
                                             <li>
-                                                <a href="">
+                                                <a href="{% url 'core:ProductUpdate' rs.product.id %}">
                                                     <button class="btn" type="button" data-toggle="modal"
                                                             data-target="#exampleModalCenter" data-original-title=""
                                                             title=""><i class="ti-pencil-alt"></i></button>

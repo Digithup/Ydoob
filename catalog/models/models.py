@@ -76,7 +76,7 @@ class Products(models.Model):
     update_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.status
+        return self.title
 
 class ProductMedia(models.Model):
     id=models.AutoField(primary_key=True)

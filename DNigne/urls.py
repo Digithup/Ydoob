@@ -43,7 +43,7 @@ urlpatterns += i18n_patterns(
     path('search/', include('haystack.urls'), name='haystack'),
     # USER URL
     path('ckeditor/', include('ckeditor_uploader.urls')),
-    path('imagefit/', include('imagefit.urls')),
+
     # LOGIN URL
     # API URL
     path('api-auth/', include('rest_framework.urls')),

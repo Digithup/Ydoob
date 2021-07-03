@@ -1,6 +1,6 @@
 from accounts.models import User
 from core.models import Setting
-from core.views.setting_views import setting
+from core.views.setting import setting
 
 ''''
 def user_profile(request ):

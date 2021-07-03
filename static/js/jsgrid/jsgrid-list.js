@@ -15,7 +15,7 @@
         fields: [
             { name: "Id", type: "number", width: 30},
             {
-                name: "Products",
+                name: "Product",
                 itemTemplate: function(val, item) {
                     return $("<img>").attr("src", val).css({ height: 50, width: 50 }).on("click", function() {
                         $("#imagePreview").attr("src", item.Img);
@@ -32,7 +32,7 @@
                 align: "center",
                 width: 50
             },
-            { name: "Products Title", type: "text", width: 100},
+            { name: "Product Title", type: "text", width: 100},
             { name: "Entry Type", type: "text", width: 50},
             { name: "Quantity", type: "number", width: 50},
         { type: "control" }

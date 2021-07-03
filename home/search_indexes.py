@@ -1,6 +1,6 @@
 from haystack import indexes
 
-from catalog.models.models import Product
+from catalog.models.models import Products
 
 
 class ProductIndex(indexes.SearchIndex, indexes.Indexable):
@@ -19,7 +19,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         return obj.price
 
     def get_model(self):
-        return Product
+        return Products
 
     def prepare_url(self, obj):
         return obj.id

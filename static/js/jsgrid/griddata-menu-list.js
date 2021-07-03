@@ -33,7 +33,7 @@
     ];
     db.clients = [
         {
-            "Name": "SellerProducts Menu",
+            "Name": "Product Menu",
             "Status": "<i class=\"fa fa-circle font-success f-12\"></i>",
             "Created On": "2018-04-18T00:00:00",
         },

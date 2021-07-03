@@ -6,7 +6,7 @@
 {% load i18n %}
 
 
-{% block slider %} {% include 'front/loader.html' %} {% endblock %}
+
 
 
 <!-- header start -->
@@ -18,7 +18,12 @@
                 <div class="col-lg-6">
                     <div class="header-contact">
                         <ul>
-                            <li>{{ setting.title }} store</li>
+                            {% if  setting_data.lang  == LANGUAGE_CODE %}
+                                <li>{{ setting_data.title }} store</li>
+                                {% else %}
+                                    <li>{{ setting_data_ar.title  }} store</li>
+                            {% endif %}
+
                             <li><i class="fa fa-phone" aria-hidden="true"></i>Call Us: {{ setting.phone }}</li>
                         </ul>
                     </div>
@@ -27,7 +32,7 @@
                     <ul class="header-dropdown">
                         <li class="mobile-wishlist"><a href="#"><i class="fa fa-heart" aria-hidden="true"></i></a>
                         </li>
-                        {% if user.id is not None %}
+                        {% if user.seller is not None %}
                             <li class="onhover-dropdown mobile-account"><i class="fa fa-user" aria-hidden="true"></i>
                                 <strong class="text-uppercase">{{ user.first_name }} </strong>
                                 <ul class="onhover-show-div">
@@ -205,7 +210,7 @@
                         </div>
                         <div class="brand-logo">
 
-                            <a href="/home"><img src="{{ setting.image }}"
+                            <a href="/home"><img src="{{ setting_media.media_content }}"
                                                  class="img-fluid blur-up lazyload" width="100px" height="34px" alt=""></a>
 
                         </div>
@@ -229,7 +234,7 @@
 
                                             {% for rs in categories %}
 
-                                                <li><a href="{% url 'home:index' %}">{{ rs.title }}</a></li>
+                                                <li><a href="{% url 'home:ProductsView' %}">{{ rs.title }}</a></li>
                                             {% endfor %}
 
                                         </ul>

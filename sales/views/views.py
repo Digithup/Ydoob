@@ -5,7 +5,7 @@ from django.utils.crypto import get_random_string
 
 from accounts.models import User
 from catalog.models.models import Products, Categories
-from catalog.models.product_options import Variants
+from catalog.models.product_options import Options
 
 from sales.models.order import ShopCart, Order, OrderForm, OrderProduct, ShopCartForm
 
@@ -97,10 +97,10 @@ def orderproduct(request):
     shopcart = ShopCart.objects.filter(user_id=current_user.id)
     total = 0
     for rs in shopcart:
-        if rs.product.variant == 'None':
+        if rs.product.options == 'None':
             total += rs.product.price * rs.quantity
         else:
-            total += rs.variant.price * rs.quantity
+            total += rs.options.price * rs.quantity
 
     if request.method == 'POST':  # if there is a post
         form = OrderForm(request.POST)
@@ -137,12 +137,12 @@ def orderproduct(request):
                 detail.amount        = rs.amount
                 detail.save()
                 # ***Reduce quantity of sold product from Amount of Product
-                if  rs.product.variant=='None':
+                if  rs.product.options=='None':
                     product = Products.objects.get(id=rs.product_id)
                     product.amount -= rs.quantity
                     product.save()
                 else:
-                    variant = Variants.objects.get(id=rs.product_id)
+                    variant = Options.objects.get(id=rs.product_id)
                     variant.quantity -= rs.quantity
                     variant.save()
                 #************ <> *****************

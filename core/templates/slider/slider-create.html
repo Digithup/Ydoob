@@ -1,0 +1,384 @@
+{% extends 'admin/adminbase.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% load i18n %}
+{% block body %}
+
+    <div class="page-body">
+
+        <!-- Container-fluid starts-->
+        <div class="container-fluid">
+            <div class="page-header">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="page-header-left">
+                            <h3>{% translate "Add Slider" %}
+                                <small>Multikart Admin panel</small>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <ol class="breadcrumb pull-right">
+                            <li class="breadcrumb-item"><a href="{% url 'core:admin_index' %}"><i
+                                    data-feather="{% translate "Home" %}"></i></a>
+                            </li>
+
+                            <li class="breadcrumb-item active">{% translate "add slider " %}</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Container-fluid Ends-->
+
+
+        <!-- Container-fluid starts-->
+        <div class="container-fluid">
+            <div class="row product-adding">
+                {% if form_show_errors %}
+                {% endif %}
+                {% if form.errors %}
+                    {% for error_field, error_message in form.errors.items %}
+
+                        <div class="alert alert-danger">
+                            {{ error_field|striptags }}: {{ error_message|striptags }}
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+
+                {% endif %}</div>
+
+            <div class="col-xl-12">
+                <form class="needs-validation add-product-form" novalidate=""
+                      enctype="multipart/form-data" action="{% url 'core:SliderCreate' %}"
+                      method="post">
+                    {% csrf_token %}
+
+                    <div class="card ">
+                        <div class="card-body  ">
+                            <div class="container-fluid">
+                                <div class=" product-adding">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>{% translate "General" %}</h5>
+                                        </div>
+                                        <div class="card-body ">
+
+                                            <div class="digital-add needs-validation ">
+                                                <div class="form-group row">
+                                                    <label for="validationCustom0"
+                                                           class="col-md-4"><span>*</span>Title</label>
+                                                    <input class="form-control col-md-6 "
+                                                           placeholder="title"
+                                                           id="title" type="text"
+                                                           name="title" required="">
+                                                </div>
+
+                                                <div class="form-group row ">
+                                                    <label for="validationCustom0"
+                                                           class=" col-md-4"><span>*</span>
+                                                        sort order</label>
+                                                    <input class="form-control col-md-6"
+                                                           id="validationCustom0" type="number" min="0" max="10"
+                                                           name="sort_order" required="">
+
+                                                </div>
+
+
+                                                <div class="form-group row">
+                                                    <label for="validationCustom0"
+                                                           class=" col-md-4"><span>*</span>
+                                                        Banner Group</label>
+                                                    <select name="group" class="form-control  col-md-6">
+                                                        {% for group in groups %}
+                                                            <optgroup label={{ group.title }}>
+                                                                <option value="{{ group.id }}">{{ group.title }}</option>
+                                                            </optgroup>
+                                                        {% endfor %}
+
+                                                    </select>
+
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="validationCustom0"
+                                                           class=" col-md-4"><span>*</span>
+                                                        status </label>
+                                                    <select name="status"
+                                                            {{ status.get_choices_display }}
+                                                            class="custom-select  col-md-6" required="">
+                                                        <option value="">--Select--</option>
+                                                        <option>Enable</option>
+                                                        <option>Disable</option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                            <div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="card-header">
+                                            <h5>Image</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="media_div">
+                                                <div class="row media_div_row first_media">
+                                                    <div class="col-sm-2">
+                                                        <label>Media Type</label>
+                                                        <select name="media_type[]" class="form-control media_type">
+                                                            <option value="1">Image</option>
+                                                            <option value="2">Video</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <label>Select Media</label>
+                                                        <input type="file" name="media_content[]"
+                                                               class="form-control select_media"/>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <label>Media Link</label>
+                                                        <input type="url" name="media_link[]"
+                                                               class="form-control select_media"/>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <label>Preview</label>
+                                                        <br>
+                                                        <img style="width:70%;display:none" class="img_preview">
+                                                        <br>
+                                                        <video style="width:70%;display:none" class="video_preview"
+                                                               controls></video>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <button class="btn btn-primary btn-block add_media" type="button">
+                                                        ADD
+                                                        MEDIA CONTENT
+                                                    </button>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <button class="btn btn-danger btn-block remove_media" type="button">
+                                                        REMOVE MEDIA CONTENT
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <div class="form-group mb-0 align-content-end">
+                                        <div class="product-buttons text-center">
+                                            <button type="submit" class="btn btn-primary">Add</button>
+                                            <button type="button" class="btn btn-light">Discard</button>
+                                        </div>
+                                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Container-fluid Ends-->
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="{% static 'formset/jquery.formset.js' %}"></script>
+    <script type="text/javascript">
+        $('.formset_row').formset({
+            addText: 'add banner',
+            deleteText: 'remove',
+            prefix: 'banner'
+        });
+    </script>
+
+
+
+
+
+    {% if uploaded_file_url %}
+        <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
+    {% endif %}
+{% endblock %}
+
+<!-- Container-fluid Ends-->
+
+
+
+
+
+{% block custom_js %}
+    <script src="//cdn.tiny.cloud/1/u6oa5pnpaa1vxho1md7uk4zmq2ai7xuf5o5wfgyrc131vpj6/tinymce/5/tinymce.min.js"
+            referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: "textarea#long_desc",
+            height: 300,
+            plugins: [
+                "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+                "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime nonbreaking",
+                "save table contextmenu directionality emoticons template paste textcolor",
+            ],
+            images_upload_url: "{% url 'core:file_upload' %}",
+            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",
+            style_formats: [
+                {title: "Bold text", inline: "b"},
+                {title: "Red text", inline: "span", styles: {color: "#ff0000"}},
+                {title: "Red header", block: "h1", styles: {color: "#ff0000"}},
+                {title: "Example 1", inline: "span", classes: "example1"},
+                {title: "Example 2", inline: "span", classes: "example2"},
+                {title: "Table styles"},
+                {title: "Table row 1", selector: "tr", classes: "tablerow1"},
+            ],
+            automatic_uploads: true,
+            file_picker_types: 'image',
+            file_picker_callback: function (cb, value, meta) {
+                var input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*');
+
+                /*
+                Note: In modern browsers input[type="file"] is functional without
+                even adding it to the DOM, but that might not be the case in some older
+                or quirky browsers like IE, so you might want to add it to the DOM
+                just in case, and visually hide it. And do not forget do remove it
+                once you do not need it anymore.
+                */
+
+                input.onchange = function () {
+                    var file = this.files[0];
+
+                    var reader = new FileReader();
+                    reader.onload = function () {
+                        /*
+                        Note: Now we need to register the blob in TinyMCEs image blob
+                        registry. In the next release this part hopefully won't be
+                        necessary, as we are looking to handle it internally.
+                        */
+                        var id = 'blobid' + (new Date()).getTime();
+                        var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                        var base64 = reader.result.split(',')[1];
+                        var blobInfo = blobCache.create(id, file, base64);
+                        blobCache.add(blobInfo);
+
+                        /* call the callback and populate the Title field with the file name */
+                        cb(blobInfo.blobUri(), {title: file.name});
+                    };
+                    reader.readAsDataURL(file);
+                };
+
+                input.click();
+            },
+        });
+    </script>
+    <script>
+        $(".add_media").click(function () {
+            var media_row = $(".first_media").clone();
+            media_row.removeClass("first_media");
+            media_row.replaceAll("src", "")
+            media_row.find(".select_media").val("");
+            media_row.find(".img_preview").attr("src", "").css({"border": "none"}).css({"border-radius": "0px"}).hide();
+            media_row.find(".video_preview").attr("src", "").css({"border": "none"}).css({"border-radius": "0px"}).hide();
+            $(".media_div").append(media_row);
+        });
+        $(".remove_media").click(function () {
+            if ($(".media_div").find(".media_div_row").length > 1) {
+                $(".media_div").children().last().remove();
+            }
+        });
+
+        $(".add_details").click(function () {
+            var details_row = $(".first_details").clone();
+            details_row.removeClass("first_details");
+            details_row.find(".title_title").val("");
+            details_row.find(".title_details").val("");
+            $(".details_div").append(details_row);
+        });
+        $(".remove_details").click(function () {
+            if ($(".details_div").find(".details_div_row").length > 1) {
+                $(".details_div").children().last().remove();
+            }
+        });
+
+        $(".add_about").click(function () {
+            var about_row = $(".first_about").clone();
+            about_row.removeClass("first_about");
+            about_row.find(".about_title").val("");
+            $(".about_div").append(about_row);
+        });
+        $(".remove_about").click(function () {
+            if ($(".about_div").find(".about_div_row").length > 1) {
+                $(".about_div").children().last().remove();
+            }
+        });
+
+        $(document).on("change", ".select_media", function () {
+            var media_type = $(this).parents(".media_div_row").find(".media_type").val();
+            var img_preview = $(this).parents(".media_div_row").find(".img_preview");
+            var vid_preview = $(this).parents(".media_div_row").find(".video_preview");
+            showPreviewMedia(this, media_type, img_preview, vid_preview);
+        });
+
+        function showPreviewMedia(input, media_type, img_preview, video_preview) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    if (media_type == "1") {
+                        img_preview.attr("src", e.target.result);
+                        img_preview.show();
+                        img_preview.css({"border": "5px solid orange"});
+                        img_preview.css({"border-radius": "10px"});
+                    }
+                    if (media_type == "2") {
+                        video_preview.show();
+                        video_preview.css({"border": "5px solid orange"});
+                        video_preview.css({"border-radius": "10px"});
+                        video_preview.attr("src", e.target.result);
+                        video_preview.load();
+                        video_preview.play();
+
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+        $(".submit_btn").click(function () {
+            var form = new FormData($("#myform")[0]);
+            form.append("long_desc", tinyMCE.activeEditor.getContent());
+
+            //AJAX CODE
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.status == 200) {
+                    console.log(xhr.responseText);
+                }
+            }
+            xhr.open("POST", "{% url 'core:Product_add' %}", true);
+            $("#progressbar").show();
+
+            //UPDATING PROGRESS BAR
+            xhr.upload.addEventListener("progress", function (ev) {
+                if (ev.lengthComputable) {
+                    var percentage = (ev.loaded / ev.total * 100 | 0);
+                    $("#progressbar").css({"width": "" + percentage + "%"}).text("Uploading .." + percentage + "%");
+                    console.log(percentage);
+                }
+            });
+
+            xhr.send(form);
+        })
+
+    </script>
+    <script src="//bootstrap-tagsinput.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+{% endblock custom_js %}
+
+
+
+{% block foot %} {% include 'admin/footer.html' %}  {% endblock %}
+{% block js %} {% include 'admin/js.html' %}  {% endblock %}
+
