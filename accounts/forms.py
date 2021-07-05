@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField, UserCreationForm
-
+from django.urls import reverse_lazy
 from django.contrib.auth import (
     authenticate,
     get_user_model,
@@ -9,8 +9,6 @@ from django.contrib.auth import (
 )
 
 User = get_user_model()
-
-from django.urls import reverse_lazy
 
 first_name = forms.CharField(label=False)
 
@@ -177,6 +175,7 @@ class CustomerRegisterForm(forms.ModelForm):
 
         return user
 
+
 class SellerRegisterForm(forms.ModelForm):
     """
     Description:A form for creating new users.
@@ -207,14 +206,10 @@ class SellerRegisterForm(forms.ModelForm):
         """
         user = super(SellerRegisterForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password1"])
-        user.seller=True
+        user.seller = True
         # user.is_active = True # send confirmation email via signals
 
         if commit:
             user.save()
 
         return user
-
-
-
-

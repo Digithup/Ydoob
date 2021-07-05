@@ -22,7 +22,13 @@ def home_processors(request):
             'index_language': Language.objects.all(),
             ####### products###########
             'products_media' : ProductMedia.objects.all() , # New Products,
-            'new_products' : Products.objects.all() , # New Products
+            'side_products': ProductMedia.objects.all().order_by('id')[:3],  # New Products
+            'side_products2': ProductMedia.objects.all().order_by('product_id__title')[:3],  # New Products
+            'new_products' : ProductMedia.objects.all().order_by('id')[:6]  , # New Products
+            'new_products_updated': ProductMedia.objects.all().order_by('created_at')[:6],  # New Products Update
+            'new_products_req': ProductMedia.objects.all().order_by('-id')[:10],  # New Products add
+            'new_featured': ProductMedia.objects.all().order_by('-id')[:10],  # Featured Products
+            'best_products' : ProductMedia.objects.all().order_by('?')[:6]  # Best Sellers
         }
     except Exception as e:
         return {'setting': Setting.objects.last(),

@@ -147,120 +147,27 @@
 
 
     <!--modal popup start-->
-    <div class="modal fade bd-example-modal-lg newyear-modal" id="newyear" tabindex="-1" role="dialog"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="container-fluid p-0">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="modal-bg">
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                    <div class="content">
-                                        <h1>Happy</h1>
-                                        <h1>new year</h1>
-                                        <h2>sale</h2>
-                                        <div class="discount">get
-                                            <span>30%</span>
-                                            off
-                                            <span class="plus">+</span>
-                                            <span>FREE SHIPPING</span>
-                                        </div>
-                                        <div class="btn btn-solid">31 DEC - 10th JAN</div>
-                                        <p>*check shipping conditions in our website</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--modal popup end-->
-
-
-    <!-- Quick-view modal popup start-->
-    <div class="modal fade bd-example-modal-lg theme-modal" id="quick-view" tabindex="-1" role="dialog"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div class="modal-content quick-view-modal">
-                <div class="modal-body">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <div class="row">
-                        <div class="col-lg-6 col-xs-12">
-                            <div class="quick-view-img"><img src="{% static '' %}images/pro3/1.jpg" alt=""
-                                    class="img-fluid blur-up lazyload"></div>
-                        </div>
-                        <div class="col-lg-6 rtl-text">
-                            <div class="product-right">
-                                <h2>Women Pink Shirt</h2>
-                                <h3>$32.96</h3>
-                                <ul class="color-variant">
-                                    <li class="bg-color1"></li>
-                                    <li class="bg-color3"></li>
-                                </ul>
-                                <div class="border-product">
-                                    <h6 class="product-title">product details</h6>
-                                    <p>Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium
-                                        doloremque laudantium</p>
-                                </div>
-                                <div class="product-description border-product">
-                                    <div class="size-box">
-                                        <ul>
-                                            <li class="active"><a href="javascript:void(0)">s</a></li>
-                                            <li><a href="javascript:void(0)">m</a></li>
-                                            <li><a href="javascript:void(0)">l</a></li>
-                                            <li><a href="javascript:void(0)">xl</a></li>
-                                        </ul>
-                                    </div>
-                                    <h6 class="product-title">quantity</h6>
-                                    <div class="qty-box">
-                                        <div class="input-group"><span class="input-group-prepend"><button type="button"
-                                                    class="btn quantity-left-minus" data-type="minus" data-field=""><i
-                                                        class="ti-angle-left"></i></button> </span>
-                                            <input type="text" name="quantity" class="form-control input-number"
-                                                value="1"> <span class="input-group-prepend"><button type="button"
-                                                    class="btn quantity-right-plus" data-type="plus" data-field=""><i
-                                                        class="ti-angle-right"></i></button></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="product-buttons"><a href="#" class="btn btn-solid">add to cart</a> <a
-                                        href="#" class="btn btn-solid">view detail</a></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Quick-view modal popup end-->
 
 
     <!-- theme setting -->
     <div class="theme-settings">
         <ul>
-            <li class="demo-li">
-                <a href="javascript:void(0)" onclick="openSetting()">
-                    <div class="setting-sidebar" id="setting-icon">
-                        <h5>50+ <br>demo</h5>
-                    </div>
-                </a>
-            </li>
+           <li>
+                 <!-- cart start -->
+    <div class="shopping-cart" id="fixed_cart_icon">
+        <a href="{% url 'sales:shopcart' %}" class="fixed_cart">
+            <i class="ti-shopping-cart"></i>
+        </a>
+    </div>
+    <!-- cart end -->
+           </li>
             <li>
                 <div class="dark-btn">Dark</div>
             </li>
             <li>
                 <div class="rtl-btn">RTL</div>
             </li>
-            <li class="input-picker">
-                <input id="ColorPicker1" type="color" value="#387ef0" name="Background">
-            </li>
+
         </ul>
     </div>
     <div class="scroll-setting-box">
@@ -876,13 +783,7 @@
 
 
 
-    <!-- cart start -->
-    <div class="addcart_btm_popup" id="fixed_cart_icon">
-        <a href="{% url 'sales:shopcart' %}" class="fixed_cart">
-            <i class="ti-shopping-cart"></i>
-        </a>
-    </div>
-    <!-- cart end -->
+
 
 
     <!-- tap to top -->

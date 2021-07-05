@@ -85,6 +85,7 @@ class ProductMedia(models.Model):
     media_type=models.CharField(max_length=255)
     media_content=models.FileField()
     created_at=models.DateTimeField(auto_now_add=True)
+
     is_active=models.IntegerField(default=1)
 
 class ProductTransaction(models.Model):
