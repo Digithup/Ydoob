@@ -323,10 +323,10 @@
                 <h3>Color</h3>
             </div>
             <p>Multikart include 12 color option, You need to change style css.</p>
-            <code class="html keyword">&lt;link rel="stylesheet" type="text/css" href="../assets/css/color1.css"
+            <code class="html keyword">&lt;link rel="stylesheet" type="text/css" href="{% static '' %}css/color1.css"
             &gt;
         </code> <br>
-            <code class="html keyword">&lt;link rel="stylesheet" type="text/css" href="../assets/css/color2.css"
+            <code class="html keyword">&lt;link rel="stylesheet" type="text/css" href="{% static '' %}css/color2.css"
             &gt;
         </code> ... as on
             <p>If you want to use another color, change --theme-deafult variable in style scss</p>
@@ -380,10 +380,10 @@
             <div class="sc-image">
                 <div class="code-bg">
                     <code>
-                    <pre>&lt;!-- Brand Logo --&gt;<br />&lt;div class="brand-logo"&gt;<br />    &lt;a href="index.html"&gt; &lt;img src="../assets/images/icon/logo.png" class="img-fluid" alt=""&gt;&lt;/a&gt;<br />&lt;/div&gt;</pre>
+                    <pre>&lt;!-- Brand Logo --&gt;<br />&lt;div class="brand-logo"&gt;<br />    &lt;a href="index.html"&gt; &lt;img src="{% static '' %}images/icon/logo.png" class="img-fluid" alt=""&gt;&lt;/a&gt;<br />&lt;/div&gt;</pre>
                 </code>
                     <code>
-                    <pre>&lt;!-- footer logo --&gt;<br />&lt;div class="footer-logo"&gt;<br />    &lt;img src="../assets/images/icon/logo.png" alt=""&gt;<br />&lt;/div&gt;</pre>
+                    <pre>&lt;!-- footer logo --&gt;<br />&lt;div class="footer-logo"&gt;<br />    &lt;img src="{% static '' %}images/icon/logo.png" alt=""&gt;<br />&lt;/div&gt;</pre>
                 </code>
                 </div>
             </div>
@@ -447,8 +447,8 @@
             <div class="sc-image">
                 <div class="code-bg">
                     <code>
-                    <pre>&lt;!-- front image --&gt;<br />&lt;div class="front"&gt;<br />    &lt;a href="Products-page(no-sidebar).html"&gt;&lt;img src="../assets/images/pro3/1.jpg" class="img-fluid" alt=""&gt;&lt;/a&gt;<br />&lt;/div&gt;</pre>
-                    <pre class="bg-color">&lt;!-- hover back image --&gt;<br />&lt;div class="back"&gt;<br />    &lt;a href="Products-page(no-sidebar).html"&gt;&lt;img src="../assets/images/pro3/2.jpg" class="img-fluid" alt=""&gt;&lt;/a&gt;<br />&lt;/div&gt;</pre>
+                    <pre>&lt;!-- front image --&gt;<br />&lt;div class="front"&gt;<br />    &lt;a href="Products-page(no-sidebar).html"&gt;&lt;img src="{% static '' %}images/pro3/1.jpg" class="img-fluid" alt=""&gt;&lt;/a&gt;<br />&lt;/div&gt;</pre>
+                    <pre class="bg-color">&lt;!-- hover back image --&gt;<br />&lt;div class="back"&gt;<br />    &lt;a href="Products-page(no-sidebar).html"&gt;&lt;img src="{% static '' %}images/pro3/2.jpg" class="img-fluid" alt=""&gt;&lt;/a&gt;<br />&lt;/div&gt;</pre>
                 </code>
                 </div>
             </div>

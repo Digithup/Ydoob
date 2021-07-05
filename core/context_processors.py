@@ -7,12 +7,16 @@ from localization.models import Language
 def core_processors(request):
     try:
         return {
-                'setting_data': SettingLang.objects.all()
+                'setting_data': SettingLang.objects.all(),
+                'setting': Setting.objects.last(),
+                'setting_media': SettingMedia.objects.last(),
+                'index_language': Language.objects.all()
+
+
         }
     except:
         return {'setting': Setting.objects.last(),
                 'setting_media': SettingMedia.objects.last(),
-
                 'index_language': Language.objects.all()
 
                 }

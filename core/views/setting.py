@@ -105,7 +105,7 @@ def add_setting(request):
         setting_obj.save()  # last_modified field won't update on chaning other model field, save() trigger change
         # return reverse('core:catalog')
         return HttpResponseRedirect('/admin/setting/add', setting_created)
-        # return render(request,template_name='admin/pages/products-admin.html')
+        # return render(request,template_name='admin/pages/admin-products.html')
         # return getNoteResponseData(product_obj, tags, product_created)
     else:
         print("Form invalid, see below error msg")

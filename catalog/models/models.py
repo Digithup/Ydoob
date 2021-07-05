@@ -70,8 +70,8 @@ class Products(models.Model):
     product_long_description = models.TextField()
     seller = models.ForeignKey(User, on_delete=models.CASCADE)
     in_stock_total = models.IntegerField(default=1)
-    #status = models.CharField(max_length=10, choices=STATUS ,default='Enable')
-    slug = models.SlugField(null=False, max_length=128, unique=True)
+    status = models.CharField(max_length=10, choices=STATUS ,default='Enable')
+    slug = models.SlugField(null=False, max_length=128, )
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
 

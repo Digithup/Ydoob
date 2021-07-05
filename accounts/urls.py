@@ -22,7 +22,7 @@ urlpatterns = [
 
     path('admin/users',user_list,name='user_list'),
     path('admin/profile/<int:id>',user_profile,name='user_profile'),
-    path('admin/uprofile/', update_profile, name='update_profile'),
+    path('admin/uprofile/<int:id>/', update_profile, name='update_profile'),
     #path('admin/create-profile',AddProfile.as_view(),name='create_profile'),
     path('guest-user/',guest_user_view,name='guest_user_register'),
     path('admin/dprofile/<int:id>', user_delete, name='user_delete'),

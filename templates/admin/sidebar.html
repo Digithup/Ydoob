@@ -27,8 +27,8 @@
                             <li><a href="{% url 'core:categories' %}"><i class="fa fa-circle"></i>{% trans "Category" %}</a>
                             <li><a href="{% url 'core:Products_list' %}"><i class="fa fa-circle"></i>Products</a></li>
                             <li><a href="product-list.html"><i class="fa fa-circle"></i>Recurring Profiles</a></li>
-                            <li><a href="product-detail.html"><i class="fa fa-circle"></i>Filters</a></li>
-                            <li><a href="add-product.html"><i class="fa fa-circle"></i>Attributes</a></li>
+                            <li><a href="{% url 'core:Filters' %}"><i class="fa fa-circle"></i>Filters</a></li>
+                            <li><a href="{% url 'core:Attributes' %}"><i class="fa fa-circle"></i>Attributes</a></li>
                             <li><a href="add-product.html"><i class="fa fa-circle"></i>Options</a></li>
                             <li><a href="{% url 'core:Manufacturers' %}"><i class="fa fa-circle"></i>Manufacturers</a></li>
                             <li><a href="add-product.html"><i class="fa fa-circle"></i>Downloads</a></li>
@@ -73,7 +73,7 @@
                 <ul class="sidebar-submenu">
                     <li><a href="{% url 'accounts:user_list' %}"><i class="fa fa-circle"></i>User List</a></li>
                     <li><a href="{#% url 'accounts:user_profile' user.id %#}"><i class="fa fa-circle"></i>User Profile</a></li>
-                    <li><a href="{% url 'accounts:update_profile' %}"><i class="fa fa-circle"></i>Edit Profile</a></li>
+                    <li><a href=""><i class="fa fa-circle"></i>Edit Profile</a></li>
                     <li><a href="{% url 'accounts:user_register' %}"><i class="fa fa-circle"></i>Create User</a></li>
                 </ul>
             </li>

@@ -4,126 +4,100 @@
 {% load i18n %}
 
 <!-- Home slider -->
+ <!-- home section -->
+    <div class="container">
+        <section class="small-section pb-0 pt-res-0 small-slider">{% for rm in main_slider %}
+            <div class="slider-animate home-slider">
+                <div>
+                    <div class="home height-apply">
 
-
-<div id="myCarousel" class="carousel slide" data-ride="carousel">
-    <!-- Indicators -->
-    <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-        <li data-target="#myCarousel" data-slide-to="3"></li>
-        <li data-target="#myCarousel" data-slide-to="4"></li>
-        <li data-target="#myCarousel" data-slide-to="5"></li>
-    </ol>
-    <section class="p-0">
-
-
-        <!-- Wrapper for slides -->
-        <div class="carousel-inner" role="listbox">
-            {% for rm in main_slider %}
-                {% if forloop.counter == 1 %}
-                    <div class="item active">
-                {% else %}
-                    <div class="item">
-                {% endif %}
-            <div class="img-part">
-                <img src="{{ rm.media_content }}" height="300px" width="99%" class=" blur-up lazyload "
-                     alt="Image">
+                        <img src="{{ rm.media_content }}" alt=""
+                            class="bg-img blur-up lazyload">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="slider-contain px-padding height-apply">
+                                        <div>
+                                            <h4 class="animated" data-animation-in="fadeInUp">save 30%</h4>
+                                            <h1 class="animated" data-animation-in="fadeInUp" data-delay-in="0.3">
+                                                {{ rs.title }}</h1><a href="{{ rm.media_link }}" class="btn btn-solid animated"
+                                                data-animation-in="fadeInUp" data-delay-in="0.5">shop
+                                                now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>{% endfor %}
             </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col">
-                        <div class="">
-                            <div class="carousel-caption text-lg-left">
-                                {% for rs in slider %}
+        </section>
+    </div>
+    <!-- home section -->
 
-                                    <div>
-                                        <h4>{% trans "welcome to fashion" %}</h4>
-                                        <h1> {{ rs.title }}</h1>
-                                        <a href="{{ rm.media_link }}" class="btn btn-danger">shop now</a>
 
-                                    </div>
-                                    </div>
-                                    </div>
-                                    </div>
-                                    </div>
-                                {% endfor %}
+    <!-- banner section start -->
+    <section class="banner-goggles banner-padding ratio2_1">
+        <div class="container">
+            <div class="row partition3">
+                <div class="col-md-4">
+                     {% for rl in banner_left %}
+                    <a href="#">
+                        <div class="collection-banner">
+                            <div class="img-part">
+                                <img src="{{ rl.media_content.url }}"
+                                    class="img-fluid blur-up lazyload bg-img" alt="">
+                            </div>
+                            <div class="contain-banner banner-3">
+                                <div>
+                                    <h4>10% off</h4>
+                                    <h2>speaker</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                     {% endfor %}
+                </div>
+                <div class="col-md-4">
+                    {% for rr in banner_right %}
+                    <a href="#">
+                        <div class="collection-banner">
+                            <div class="img-part">
+                                <img src="{{ rr.media_content.url }}"
+                                    class="img-fluid blur-up lazyload bg-img" alt="">
+                            </div>
+                            <div class="contain-banner banner-3">
+                                <div>
+                                    <h4>10% off</h4>
+                                    <h2>earplug</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                <div class="col-md-4">
+                    {% for rr in banner_right %}
+                    <a href="#">
+                        <div class="collection-banner">
+                            <div class="img-part">
+                                <img src="{{ rr.media_content.url }}"
+                                    class="img-fluid blur-up lazyload bg-img" alt="">
+                            </div>
+                            <div class="contain-banner banner-3">
+                                <div>
+                                    <h4>50% off</h4>
+                                    <h2>best deal</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
             </div>
-            </div>
-            {% endfor %}
-            </div>
-
-            <!-- Left and right controls -->
-            <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
         </div>
     </section>
-</div>
-
-
-<!-- Home slider end -->
-
-<!-- collection banner -->
-<section class="pb-0 ratio2_1">
-    <div class="container">
-        <div class="row partition2">
-            <div class="col-md-6">
-                {% for rl in banner_left %}
-                <a href="#">
-                    <div class="collection-banner p-right text-center">
-                        <div class="img-part">
-                            <img src="{{ rl.media_content.url }}" class="img-fluid blur-up lazyload bg-img"
-                                 alt="">
-                        </div>
-                        <div class="contain-banner">
-                            <div>
-                                <h4>save 30%</h4>
-                                <h2>men</h2>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-                {% endfor %}
-            </div>
-
-
-            <div class="col-md-6">
-                <a href="#">
-                    <div class="collection-banner p-right text-center">
-                        <div class="img-part">
-                        {% for rr in banner_right %}
-
-                            <img src="{{ rr.media_content.url }}" class="img-fluid blur-up lazyload bg-img"
-                                 alt="image">
-
-
-
-                        </div>
-                        <div class="contain-banner">
-                            <div>
-                                <h4>save 60%</h4>
-                                <h2>women</h2>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>{% endfor %}
-        </div>
-
-
-    </div>
-
-
-</section>
-<!-- collection banner end -->
-
+    <!-- banner section end -->
 
 
 

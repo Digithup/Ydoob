@@ -21,7 +21,7 @@ Product Create
 <div class="row">
     <div class="col-lg-12">
             <div class="card">
-                <form id="myform">
+                <form id="myform" action="{% url 'core:Product_add' %}">
                 {% csrf_token %}
                 <div class="card-body">
                     <h5>Product Basic Details</h5>
@@ -29,7 +29,7 @@ Product Create
                     <div class="row">
                         <div class="col-lg-6">
                             <label>Product Name</label>
-                            <input class="form-control" name="product_name" placeholder="Product Name" id="title" />
+                            <input class="form-control" name="title" placeholder="Product Name" id="title" />
                         </div>
                         <div class="col-lg-6">
                             <label>Brand</label>
@@ -40,18 +40,16 @@ Product Create
                     <div class="row">
                         <div class="col-lg-6">
                             <label>Url Slug</label>
-                            <input class="form-control" name="url_slug" placeholder="Url Slug" id="url_slug"/>
+                            <input class="form-control" name="slug" placeholder="Url Slug" id="url_slug"/>
                         </div>
                         <div class="col-lg-6">
                             <label>Category</label>
-                            <select name="sub_category" class="form-control">
-                                {% for category in categories %}
-                                    <optgroup  label={{ category.category.title }}>
-                                    {% for sub_cat in category.sub_category   %}
-                                        <option value="{{ sub_cat.id }}">{{ sub_cat.title }}</option>
-                                    {% endfor %}
-                                     </optgroup>
-                                {% endfor %}
+                            <select name="category" class="form-control">
+                                 {% for category in categories %}
+                                                                    <optgroup label={{ category.title }}>
+                                                                        <option value="{{ category.id }}">{{ category.title }}</option>
+                                                                    </optgroup>
+                                                                {% endfor %}
                             </select>
                         </div>
                     </div>
@@ -84,10 +82,10 @@ Product Create
                     <div class="row">
                         <div class="col-lg-6">
                             <label>Merchant User</label>
-                            <select class="form-control" name="added_by_merchant">
-                            {% for merchant_user in merchant_users %}
-                                <option value="{{ merchant_user.id }}">{{ merchant_user.auth_user_id.username }}</option>
-                            {% endfor %}
+                            <select class="form-control" name="seller">
+                             {% for seller in sellers %}
+                                                                    <option value="{{ seller.id }}">{{ seller.first_name }}</option>
+                                                                {% endfor %}
                             </select>
                         </div>
                         <div class="col-lg-6">
@@ -353,7 +351,7 @@ Product Create
                 console.log(xhr.responseText);
             }
         }
-        xhr.open("POST","{% url 'core:Products_view' %}",true);
+        xhr.open("POST","{% url 'core:Product_add' %}",true);
         $("#progressbar").show();
 
         //UPDATING PROGRESS BAR

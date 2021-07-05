@@ -70,6 +70,8 @@
 
 
 
+
+
     {% block custom_css %}
     {% endblock custom_css %}
 
@@ -85,9 +87,27 @@
 </head>
 
 <body>
-
+<div class="container">
+        {% include 'admin/partials/messages.html' %}
+        {% block content %}
+        {% endblock %}
+      </div>
 <!-- page-wrapper Start-->
 <div class="page-wrapper">
+{% if messages %}
+          {% for message in messages %}
+          {% if message.tags == "success" %}
+          <div class="alert alert-success">
+          {{ message }}
+          </div>
+          {% endif %}
+          {% if message.tags == "error" %}
+          <div class="alert alert-danger">
+          {{ message }}
+          </div>
+          {% endif %}
+          {% endfor %}
+          {% endif %}
 
     <!-- Page Header Start-->
     <div class="page-main-header">
@@ -320,8 +340,9 @@
 
 </body>
 <script>
-    document.getElementById("title").onkeyup = function () {
-        document.getElementById("url_slug").value = document.getElementById("title").value.toLowerCase().replaceAll(" ", "-");
+    document.getElementById("title_en").onkeyup = function () {
+        document.getElementById("title").value = document.getElementById("title_en").value.toLowerCase().replaceAll(" ", "-");
+        document.getElementById("slug").value = document.getElementById("title_en").value.toLowerCase().replaceAll(" ", "-");
     }
 </script>
 </html>

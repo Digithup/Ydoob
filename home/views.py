@@ -29,9 +29,9 @@ def index(request):
     products_latest = Products.objects.all().order_by('-id')[:4]  # last 4 products
     categories = Categories.objects.all()
     products = Products.objects.all()
-    products_media = ProductMedia.objects.all()
+
     store = Store.objects.all()
-    slider = Slider.objects.all()
+
     banner= Banners.objects.all()
     slider_media = SliderMedia.objects.all()
     manufacture =Manufacturer.objects.filter(status='True')
@@ -43,7 +43,7 @@ def index(request):
 
     top_collection = Products.objects.all().order_by('-id')[:8]  # last 4 products
     products_first = Products.objects.all().order_by('id')[:8]  # first 4 products
-    new_products = Products.objects.all().order_by('-id')[:2]  # New Products
+
     new_sale_products = Products.objects.all().order_by('-id')[:2]  # New Products
     new_random_products = Products.objects.all().order_by('id', 'update_at')[:4]  # New Products
     featured_products = Products.objects.all().order_by('id')[:8]  # Featured Products
@@ -53,16 +53,16 @@ def index(request):
         'setting': setting,
         'categories': categories,
         'products': products,
-        'products_media':products_media,
+
         'store': store,
         'banner': banner,
-        'slider':slider,
+
         'manufacture':manufacture,
         #'slider_media':slider_media,
         'shopcart': shopcart,
         'top_collection': top_collection,
         'products_first': products_first,
-        'new_products': new_products,
+
         'new_sale_products': new_sale_products,
         'new_random_products': new_random_products,
         'featured_products': featured_products,
@@ -91,7 +91,7 @@ class CategoriesView(ListView):
 
 class ProductsHomeListView(ListView):
     model = Products
-    template_name = "catalog/product/products-admin.html"
+    template_name = "catalog/product/admin-products.html"
     paginate_by = 12
 
 class ProductDetailView(DetailView):

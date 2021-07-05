@@ -129,7 +129,8 @@
                                     </i>
                                     Edit
                                 </a>
-                                <a class="btn btn-danger btn-sm" href="">
+                                <a class="btn btn-danger btn-sm" href="{% url 'core:SliderDelete'  rs.id %}"
+                                   onclick="return confirm('Are you sure you want to delete {{ rs.title }}?')" >
                                     <i class="fas fa-trash">
                                     </i>
                                     Delete

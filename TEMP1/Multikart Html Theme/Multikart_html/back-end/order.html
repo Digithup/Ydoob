@@ -8,27 +8,27 @@
     <meta name="description" content="Multikart admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
     <meta name="keywords" content="admin template, Multikart admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="pixelstrap">
-    <link rel="icon" href="../assets/images/dashboard/favicon.png" type="image/x-icon">
-    <link rel="shortcut icon" href="../assets/images/dashboard/favicon.png" type="image/x-icon">
+    <link rel="icon" href="{% static '' %}images/dashboard/favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static '' %}images/dashboard/favicon.png" type="image/x-icon">
     <title>Multikart - Premium Admin Template</title>
     <!-- Google font-->
     <link href="https://fonts.googleapis.com/css?family=Work+Sans:100,200,300,400,500,600,700,800,900" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Font Awesome-->
-    <link rel="stylesheet" type="text/css" href="../assets/css/fontawesome.css">
+    <link rel="stylesheet" type="text/css" href="{% static '' %}css/fontawesome.css">
 
     <!-- Flag icon-->
-    <link rel="stylesheet" type="text/css" href="../assets/css/flag-icon.css">
+    <link rel="stylesheet" type="text/css" href="{% static '' %}css/flag-icon.css">
 
     <!-- Datatables css-->
-    <link rel="stylesheet" type="text/css" href="../assets/css/datatables.css">
+    <link rel="stylesheet" type="text/css" href="{% static '' %}css/datatables.css">
 
     <!-- Bootstrap css-->
-    <link rel="stylesheet" type="text/css" href="../assets/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="{% static '' %}css/bootstrap.css">
 
     <!-- App css-->
-    <link rel="stylesheet" type="text/css" href="../assets/css/admin.css">
+    <link rel="stylesheet" type="text/css" href="{% static '' %}css/admin.css">
 </head>
 <body>
 
@@ -39,7 +39,7 @@
     <div class="page-main-header">
         <div class="main-header-right row">
             <div class="main-header-left d-lg-none">
-                <div class="logo-wrapper"><a href="index.html"><img class="blur-up lazyloaded" src="../assets/images/dashboard/multikart-logo.png" alt=""></a></div>
+                <div class="logo-wrapper"><a href="index.html"><img class="blur-up lazyloaded" src="{% static '' %}images/dashboard/multikart-logo.png" alt=""></a></div>
             </div>
             <div class="mobile-sidebar">
                 <div class="media-body text-right switch-sm">
@@ -97,7 +97,7 @@
                     </li>
                     <li><a href="#"><i class="right_side_toggle" data-feather="message-square"></i><span class="dot"></span></a></li>
                     <li class="onhover-dropdown">
-                        <div class="media align-items-center"><img class="align-self-center pull-right img-50 rounded-circle blur-up lazyloaded" src="../assets/images/dashboard/man.png" alt="header-user">
+                        <div class="media align-items-center"><img class="align-self-center pull-right img-50 rounded-circle blur-up lazyloaded" src="{% static '' %}images/dashboard/man.png" alt="header-user">
                             <div class="dotted-animation"><span class="animate-circle"></span><span class="main-circle"></span></div>
                         </div>
                         <ul class="profile-dropdown onhover-show-div p-20">
@@ -121,11 +121,11 @@
         <!-- Page Sidebar Start-->
         <div class="page-sidebar">
             <div class="main-header-left d-none d-lg-block">
-                <div class="logo-wrapper"><a href="index.html"><img class="blur-up lazyloaded" src="../assets/images/dashboard/multikart-logo.png" alt=""></a></div>
+                <div class="logo-wrapper"><a href="index.html"><img class="blur-up lazyloaded" src="{% static '' %}images/dashboard/multikart-logo.png" alt=""></a></div>
             </div>
             <div class="sidebar custom-scrollbar">
                 <div class="sidebar-user text-center">
-                    <div><img class="img-60 rounded-circle blur-up lazyloaded" src="../assets/images/dashboard/man.png" alt="#">
+                    <div><img class="img-60 rounded-circle blur-up lazyloaded" src="{% static '' %}images/dashboard/man.png" alt="#">
                     </div>
                     <h6 class="mt-3 f-14">JOHN</h6>
                     <p>general manager.</p>
@@ -236,49 +236,49 @@
                     <div class="chat-box">
                         <div class="people-list friend-list">
                             <ul class="list">
-                                <li class="clearfix"><img class="rounded-circle user-image blur-up lazyloaded" src="../assets/images/dashboard/user.png" alt="">
+                                <li class="clearfix"><img class="rounded-circle user-image blur-up lazyloaded" src="{% static '' %}images/dashboard/user.png" alt="">
                                     <div class="status-circle online"></div>
                                     <div class="about">
                                         <div class="name">Vincent Porter</div>
                                         <div class="status"> Online</div>
                                     </div>
                                 </li>
-                                <li class="clearfix"><img class="rounded-circle user-image blur-up lazyloaded" src="../assets/images/dashboard/user1.jpg" alt="">
+                                <li class="clearfix"><img class="rounded-circle user-image blur-up lazyloaded" src="{% static '' %}images/dashboard/user1.jpg" alt="">
                                     <div class="status-circle away"></div>
                                     <div class="about">
                                         <div class="name">Ain Chavez</div>
                                         <div class="status"> 28 minutes ago</div>
                                     </div>
                                 </li>
-                                <li class="clearfix"><img class="rounded-circle user-image blur-up lazyloaded" src="../assets/images/dashboard/user2.jpg" alt="">
+                                <li class="clearfix"><img class="rounded-circle user-image blur-up lazyloaded" src="{% static '' %}images/dashboard/user2.jpg" alt="">
                                     <div class="status-circle online"></div>
                                     <div class="about">
                                         <div class="name">Kori Thomas</div>
                                         <div class="status"> Online</div>
                                     </div>
                                 </li>
-                                <li class="clearfix"><img class="rounded-circle user-image blur-up lazyloaded" src="../assets/images/dashboard/user3.jpg" alt="">
+                                <li class="clearfix"><img class="rounded-circle user-image blur-up lazyloaded" src="{% static '' %}images/dashboard/user3.jpg" alt="">
                                     <div class="status-circle online"></div>
                                     <div class="about">
                                         <div class="name">Erica Hughes</div>
                                         <div class="status"> Online</div>
                                     </div>
                                 </li>
-                                <li class="clearfix"><img class="rounded-circle user-image blur-up lazyloaded" src="../assets/images/dashboard/man.png" alt="">
+                                <li class="clearfix"><img class="rounded-circle user-image blur-up lazyloaded" src="{% static '' %}images/dashboard/man.png" alt="">
                                     <div class="status-circle offline"></div>
                                     <div class="about">
                                         <div class="name">Ginger Johnston</div>
                                         <div class="status"> 2 minutes ago</div>
                                     </div>
                                 </li>
-                                <li class="clearfix"><img class="rounded-circle user-image blur-up lazyloaded" src="../assets/images/dashboard/user5.jpg" alt="">
+                                <li class="clearfix"><img class="rounded-circle user-image blur-up lazyloaded" src="{% static '' %}images/dashboard/user5.jpg" alt="">
                                     <div class="status-circle away"></div>
                                     <div class="about">
                                         <div class="name">Prasanth Anand</div>
                                         <div class="status"> 2 hour ago</div>
                                     </div>
                                 </li>
-                                <li class="clearfix"><img class="rounded-circle user-image blur-up lazyloaded" src="../assets/images/dashboard/designer.jpg" alt="">
+                                <li class="clearfix"><img class="rounded-circle user-image blur-up lazyloaded" src="{% static '' %}images/dashboard/designer.jpg" alt="">
                                     <div class="status-circle online"></div>
                                     <div class="about">
                                         <div class="name">Hileri Jecno</div>
@@ -344,9 +344,9 @@
                                         <td>#51240</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/25.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/13.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/16.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/25.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/13.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/16.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-secondary">Cash On Delivery</span></td>
@@ -359,8 +359,8 @@
                                         <td>#51241</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/12.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/3.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/12.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/3.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
@@ -371,7 +371,7 @@
                                     </tr>
                                     <tr>
                                         <td>#51242</td>
-                                        <td><img src="../assets/images/electronics/product/14.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded"></td>
+                                        <td><img src="{% static '' %}images/electronics/product/14.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded"></td>
                                         <td><span class="badge badge-warning">Awaiting Authentication</span></td>
                                         <td>Debit Card</td>
                                         <td><span class="badge badge-warning">Processing</span></td>
@@ -382,8 +382,8 @@
                                         <td>#51243</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/6.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/furniture/8.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/6.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/furniture/8.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-danger">Payment Failed</span></td>
@@ -396,8 +396,8 @@
                                         <td>#51244</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/jewellery/pro/18.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/fashion/pro/06.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/jewellery/pro/18.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/fashion/pro/06.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
@@ -410,9 +410,9 @@
                                         <td>#51245</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/20.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/23.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/20.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/23.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
@@ -423,7 +423,7 @@
                                     </tr>
                                     <tr>
                                         <td>#51246</td>
-                                        <td><img src="../assets/images/electronics/product/24.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded"></td>
+                                        <td><img src="{% static '' %}images/electronics/product/24.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded"></td>
                                         <td><span class="badge badge-warning">Awaiting Authentication</span></td>
                                         <td>Credit Card</td>
                                         <td><span class="badge badge-warning">Processing</span></td>
@@ -434,8 +434,8 @@
                                         <td>#51247</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/21.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/8.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/21.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/8.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-danger">Payment Failed</span></td>
@@ -446,7 +446,7 @@
                                     </tr>
                                     <tr>
                                         <td>#51248</td>
-                                        <td><img src="../assets/images/electronics/product/18.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded"></td>
+                                        <td><img src="{% static '' %}images/electronics/product/18.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded"></td>
                                         <td><span class="badge badge-secondary">Cash On Delivery</span></td>
                                         <td>Paypal</td>
                                         <td><span class="badge badge-primary">Shipped</span></td>
@@ -455,7 +455,7 @@
                                     </tr>
                                     <tr>
                                         <td>#51249</td>
-                                        <td><img src="../assets/images/electronics/product/17.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded"></td>
+                                        <td><img src="{% static '' %}images/electronics/product/17.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded"></td>
                                         <td><span class="badge badge-success">Paid</span></td>
                                         <td>Master Card</td>
                                         <td><span class="badge badge-secondary">Processing</span></td>
@@ -466,8 +466,8 @@
                                         <td>#51250</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/7.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/4.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/7.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/4.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
@@ -480,8 +480,8 @@
                                         <td>#51251</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/22.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/20.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/22.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/20.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-secondary">Cash On Delivered</span></td>
@@ -493,7 +493,7 @@
                                     <tr>
                                         <td>#51252</td>
                                         <td>
-                                            <img src="../assets/images/electronics/product/3.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                            <img src="{% static '' %}images/electronics/product/3.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                         </td>
                                         <td><span class="badge badge-danger">Payment Failed</span></td>
                                         <td>Credit Card</td>
@@ -505,9 +505,9 @@
                                         <td>#51253</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/11.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/2.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/9.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/11.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/2.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/9.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
@@ -520,8 +520,8 @@
                                         <td>#51254</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/pro/4.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/pro/5.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/pro/4.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/pro/5.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-warning">Awaiting Authentication</span></td>
@@ -534,8 +534,8 @@
                                         <td>#51255</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/fashion/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/fashion/product/14.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/fashion/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/fashion/product/14.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-secondary">Cash On Delivered</span></td>
@@ -548,9 +548,9 @@
                                         <td>#51256</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/furniture/6.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/furniture/product/4.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/furniture/7.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/furniture/6.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/furniture/product/4.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/furniture/7.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-danger">Payment Failed</span></td>
@@ -562,7 +562,7 @@
                                     <tr>
                                         <td>#51257</td>
                                         <td>
-                                            <img src="../assets/images/furniture/product/16.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                            <img src="{% static '' %}images/furniture/product/16.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
                                         <td>Credit Card</td>
@@ -574,8 +574,8 @@
                                         <td>#51258</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/furniture/product/6.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/furniture/product/19.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/furniture/product/6.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/furniture/product/19.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
@@ -586,7 +586,7 @@
                                     </tr>
                                     <tr>
                                         <td>#51259</td>
-                                        <td><img src="../assets/images/flower/blog/insta/8.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded"></td>
+                                        <td><img src="{% static '' %}images/flower/blog/insta/8.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded"></td>
                                         <td><span class="badge badge-warning">Awaiting Authentication</span></td>
                                         <td>Credit Card</td>
                                         <td><span class="badge badge-warning">processing</span></td>
@@ -597,8 +597,8 @@
                                         <td>#51260</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/22.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/20.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/22.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/20.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-secondary">Cash On Delivery</span></td>
@@ -611,9 +611,9 @@
                                         <td>#51261</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/20.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/23.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/20.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/23.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
@@ -624,7 +624,7 @@
                                     </tr>
                                     <tr>
                                         <td>#51262</td>
-                                        <td><img src="../assets/images/electronics/product/24.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded"></td>
+                                        <td><img src="{% static '' %}images/electronics/product/24.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded"></td>
                                         <td><span class="badge badge-danger">Payment Failed</span></td>
                                         <td>Master Card</td>
                                         <td><span class="badge badge-danger">Cancelled</span></td>
@@ -635,8 +635,8 @@
                                         <td>#51263</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/furniture/product/6.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/furniture/product/19.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/furniture/product/6.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/furniture/product/19.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
@@ -649,8 +649,8 @@
                                         <td>#51264</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/pro/4.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/pro/5.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/pro/4.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/pro/5.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-warning">Awaiting Authentication</span></td>
@@ -663,9 +663,9 @@
                                         <td>#51265</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/furniture/6.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/furniture/product/4.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/furniture/7.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/furniture/6.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/furniture/product/4.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/furniture/7.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
@@ -678,8 +678,8 @@
                                         <td>#51266</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/7.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/4.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/7.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/4.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-secondary">Cash On Delivery</span></td>
@@ -692,9 +692,9 @@
                                         <td>#51267</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/20.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/23.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/20.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/23.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">paid</span></td>
@@ -707,8 +707,8 @@
                                         <td>#51268</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/fashion/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/fashion/product/14.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/fashion/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/fashion/product/14.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-danger">Payment Failed</span></td>
@@ -721,9 +721,9 @@
                                         <td>#51269</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/11.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/2.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/9.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/11.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/2.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/9.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
@@ -736,8 +736,8 @@
                                         <td>#51270</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/fashion/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/fashion/product/14.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/fashion/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/fashion/product/14.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
@@ -750,9 +750,9 @@
                                         <td>#51271</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/20.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/23.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/20.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/23.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-warning">Awaiting Authentication</span></td>
@@ -765,8 +765,8 @@
                                         <td>#51272</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/furniture/product/6.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/furniture/product/19.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/furniture/product/6.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/furniture/product/19.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-danger">Payment Failed</span></td>
@@ -777,7 +777,7 @@
                                     </tr>
                                     <tr>
                                         <td>#51273</td>
-                                        <td><img src="../assets/images/flower/blog/insta/8.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded"></td>
+                                        <td><img src="{% static '' %}images/flower/blog/insta/8.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded"></td>
                                         <td><span class="badge badge-success">Paid</span></td>
                                         <td>Master Card</td>
                                         <td><span class="badge badge-success">Delivered</span></td>
@@ -788,9 +788,9 @@
                                         <td>#51274</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/11.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/2.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/9.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/11.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/2.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/9.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
@@ -803,9 +803,9 @@
                                         <td>#51275</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/20.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/23.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/20.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/23.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
@@ -818,8 +818,8 @@
                                         <td>#51276</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/pro/4.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/pro/5.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/pro/4.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/pro/5.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-warning">Awaiting Authentication</span></td>
@@ -831,7 +831,7 @@
                                     <tr>
                                         <td>#51277</td>
                                         <td>
-                                            <img src="../assets/images/electronics/product/24.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                            <img src="{% static '' %}images/electronics/product/24.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
                                         <td>Paypal</td>
@@ -843,8 +843,8 @@
                                         <td>#51278</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/7.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/4.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/7.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/4.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-danger">Payment Failed</span></td>
@@ -857,9 +857,9 @@
                                         <td>#51279</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/20.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/23.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/20.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/23.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-warning">Awaiting Authentication</span></td>
@@ -872,8 +872,8 @@
                                         <td>#51280</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/fashion/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/fashion/product/14.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/fashion/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/fashion/product/14.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
@@ -886,9 +886,9 @@
                                         <td>#51281</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/11.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/2.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/9.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/11.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/2.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/9.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
@@ -901,8 +901,8 @@
                                         <td>#51282</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/furniture/product/6.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/furniture/product/19.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/furniture/product/6.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/furniture/product/19.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-danger">Payment Failed</span></td>
@@ -915,9 +915,9 @@
                                         <td>#51283</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/20.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/23.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/20.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/23.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-warning">Awaiting Authentication</span></td>
@@ -928,7 +928,7 @@
                                     </tr>
                                     <tr>
                                         <td>#51284</td>
-                                        <td><img src="../assets/images/flower/blog/insta/8.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded"></td>
+                                        <td><img src="{% static '' %}images/flower/blog/insta/8.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded"></td>
                                         <td><span class="badge badge-success">Paid</span></td>
                                         <td>Credit Card</td>
                                         <td><span class="badge badge-success">Delivered</span></td>
@@ -939,8 +939,8 @@
                                         <td>#51285</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/furniture/product/6.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/furniture/product/19.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/furniture/product/6.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/furniture/product/19.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
@@ -953,9 +953,9 @@
                                         <td>#51286</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/20.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/23.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/20.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/23.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-danger">Payment Failed</span></td>
@@ -968,8 +968,8 @@
                                         <td>#51287</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/furniture/product/6.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/furniture/product/19.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/furniture/product/6.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/furniture/product/19.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
@@ -982,8 +982,8 @@
                                         <td>#51288</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/pro/4.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/pro/5.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/pro/4.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/pro/5.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
@@ -995,7 +995,7 @@
                                     <tr>
                                         <td>#51289</td>
                                         <td>
-                                            <img src="../assets/images/electronics/product/24.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                            <img src="{% static '' %}images/electronics/product/24.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                         </td>
                                         <td><span class="badge badge-warning">Awaiting Authentication</span></td>
                                         <td>Master Card</td>
@@ -1007,9 +1007,9 @@
                                         <td>#51290</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/20.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/23.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/20.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/23.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-warning">Awaiting Authentication</span></td>
@@ -1022,8 +1022,8 @@
                                         <td>#51291</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/7.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/4.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/7.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/4.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
@@ -1036,8 +1036,8 @@
                                         <td>#51292</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/furniture/product/6.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/furniture/product/19.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/furniture/product/6.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/furniture/product/19.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-danger">Payment Failed</span></td>
@@ -1050,9 +1050,9 @@
                                         <td>#51293</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/25.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/13.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/16.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/25.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/13.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/16.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
@@ -1065,8 +1065,8 @@
                                         <td>#51294</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/electronics/product/11.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/electronics/product/9.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/11.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/electronics/product/9.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
@@ -1078,7 +1078,7 @@
                                     <tr>
                                         <td>#51294</td>
                                         <td>
-                                            <img src="../assets/images/flower/blog/insta/8.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                            <img src="{% static '' %}images/flower/blog/insta/8.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
                                         </td>
                                         <td><span class="badge badge-danger">Payment Failed</span></td>
                                         <td>Master Card</td>
@@ -1090,8 +1090,8 @@
                                         <td>#51295</td>
                                         <td>
                                             <div class="d-flex">
-                                                <img src="../assets/images/fashion/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
-                                                <img src="../assets/images/fashion/product/14.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/fashion/product/19.jpg" alt="" class="img-fluid img-30 mr-2 blur-up lazyloaded">
+                                                <img src="{% static '' %}images/fashion/product/14.jpg" alt="" class="img-fluid img-30 blur-up lazyloaded">
                                             </div>
                                         </td>
                                         <td><span class="badge badge-success">Paid</span></td>
@@ -1131,34 +1131,34 @@
 </div>
 
 <!-- latest jquery-->
-<script src="../assets/js/jquery-3.3.1.min.js"></script>
+<script src="{% static '' %}js/jquery-3.3.1.min.js"></script>
 
 <!-- Bootstrap js-->
-<script src="../assets/js/popper.min.js"></script>
-<script src="../assets/js/bootstrap.js"></script>
+<script src="{% static '' %}js/popper.min.js"></script>
+<script src="{% static '' %}js/bootstrap.js"></script>
 
 <!-- feather icon js-->
-<script src="../assets/js/icons/feather-icon/feather.min.js"></script>
-<script src="../assets/js/icons/feather-icon/feather-icon.js"></script>
+<script src="{% static '' %}js/icons/feather-icon/feather.min.js"></script>
+<script src="{% static '' %}js/icons/feather-icon/feather-icon.js"></script>
 
 <!-- Sidebar jquery-->
-<script src="../assets/js/sidebar-menu.js"></script>
+<script src="{% static '' %}js/sidebar-menu.js"></script>
 
 <!-- Datatable js-->
-<script src="../assets/js/datatables/jquery.dataTables.min.js"></script>
-<script src="../assets/js/datatables/custom-basic.js"></script>
+<script src="{% static '' %}js/datatables/jquery.dataTables.min.js"></script>
+<script src="{% static '' %}js/datatables/custom-basic.js"></script>
 
 <!--Customizer admin-->
-<script src="../assets/js/admin-customizer.js"></script>
+<script src="{% static '' %}js/admin-customizer.js"></script>
 
 <!-- lazyload js-->
-<script src="../assets/js/lazysizes.min.js"></script>
+<script src="{% static '' %}js/lazysizes.min.js"></script>
 
 <!--right sidebar js-->
-<script src="../assets/js/chat-menu.js"></script>
+<script src="{% static '' %}js/chat-menu.js"></script>
 
 <!--script admin-->
-<script src="../assets/js/admin-script.js"></script>
+<script src="{% static '' %}js/admin-script.js"></script>
 
 </body>
 </html>

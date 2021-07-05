@@ -5,8 +5,8 @@ from django.contrib import messages
 from django.core import serializers
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect, request, HttpResponseForbidden
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect, request
+from django.shortcuts import render
 # Create your views here.
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
@@ -19,7 +19,7 @@ from accounts.admin import User
 from catalog.forms.forms import ProductsFullForm, CategoryAddForm
 from catalog.models.models import Categories, Image, Products, ProductMedia, ProductDetails, ProductAbout, ProductTags, \
     ProductTransaction
-from catalog.models.product_options import Manufacturer
+from catalog.models.product_options import Manufacturer, FiltersGroup, Filters, AttributesGroup, Attributes
 from core.forms.forms import SearchForm
 from core.models.setting import Setting
 from localization.models import Language
@@ -97,9 +97,12 @@ def AddCategory(request):
             category_obj.slug = slug
             category_obj.status = status
             print(request.POST)
+            messages.error(request, "SUCCESS")
             category_obj.save()  # last_modified field won't update on changing other model field, save() trigger change
             # return reverse('core:catalog')
+
             return HttpResponseRedirect('/admin/category', category_created)
+
             # return render(request,template_name='admin/pages/Products-admin.html')
             # return getNoteResponseData(Products_obj, tags, Products_created)
         else:
@@ -109,7 +112,7 @@ def AddCategory(request):
             messages.error(request, "Error")
     # if GET method form, or anything wrong then we will create blank form
     else:
-        form = ProductsFullForm()
+        form = CategoryAddForm()
     # return HttpResponseRedirect('/')
     return render(request, 'catalog/category/add-category.html', {'form': form})
 
@@ -124,8 +127,11 @@ class EditCategory(UpdateView):
 class DeleteCategory(DeleteView):
     model = Categories
     fields = '__all__'
-    template_name = 'admin/pages/message/category_confirm_delete.html'
+
     success_url = reverse_lazy('core:categories')
+
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)
 
 
 def Products_admin(request):
@@ -147,52 +153,34 @@ class ProductsDetailView(DetailView):
 class ProductsDeleted(DeleteView):
     model = Products
     fields = '__all__'
-    template_name = 'admin/pages/message/category_confirm_delete.html'
     success_url = reverse_lazy('core:Products_list')
 
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)
 
-def getNoteResponseData(Products_obj, tags, Products_created):
+
+def getNoteResponseData(Product, tags, Products_created):
     date = datetime.datetime.now().strftime('%B') + " " + datetime.datetime.now().strftime(
         '%d') + ", " + datetime.datetime.now().strftime('%Y')
-    Products_obj.refresh_from_db()
+    Product.refresh_from_db()
     response_data = {
-        "id": Products_obj.id,
-        "title": Products_obj.title,
-        "keywords": Products_obj.keywords,
-        "price": Products_obj.price,
+        "id": Product.id,
+        "title": Product.title,
+        "keywords": Product.product_description,
+        "price": Products.product_max_price,
         "tags": tags,
         "last_mod": date,
-        "note_created": Products_created
+
     }
     # return JsonResponse(response_data)
     # template_name = 'admin/pages/message/category_confirm_delete.html'
     # success_url = reverse_lazy('core:category_admin')
-    return render(Products_created, 'admin/pages/../templates/catalog/admin_manufacture.html')
-
-
-def tagsInDic(tags):
-    """Convert comma separated tags into dictionary"""
-    last_ind = 0
-    res = {}
-    for i, c in enumerate(tags):
-        if c == ',':
-            res[tags[last_ind:i]] = 1
-            last_ind = i + 1
-    res[tags[last_ind:]] = 1
-    return res
-
-
-##################################################
-#
-#
-#
-#################################################
-
+    return render(Products_created, 'catalog/product/admin-products.html')
 
 ############## Products   ################
 class ProductsListView(ListView):
     model = Products
-    template_name = "catalog/product/products-admin.html"
+    template_name = "catalog/product/admin-products.html"
     paginate_by = 12
 
     def get_queryset(self):
@@ -295,28 +283,24 @@ class ProductAddView(View):
 class ProductsEdit(View):
 
     def get(self, request, *args, **kwargs):
-        Products_id = kwargs["Products_id"]
-        products = Products.objects.get(id=Products_id)
-        Products_details = ProductDetails.objects.filter(id=Products_id)
-        Products_about = ProductAbout.objects.filter(id=Products_id)
-        Products_tags = ProductTags.objects.filter(id=Products_id)
-
+        product_id = kwargs["id"]
+        products = Products.objects.get(id=id)
+        Products_details = ProductDetails.objects.filter(id=product_id)
+        Products_about = ProductAbout.objects.filter(id=product_id)
+        Products_tags = ProductTags.objects.filter(id=product_id)
         categories = Categories.objects.filter(status=True)
-        categories_list = []
-        for category in categories:
-            sub_category = Categories.objects.filter(status=True, id=category.id)
-            categories_list.append({"category": category, "sub_category": sub_category})
+
+
 
         return render(request, "catalog/product/edit-product.html",
-                      {"categories": categories_list, "Products": Products, "Products_details": Products_details,
+                      {"categories": categories, "products": products, "Products_details": Products_details,
                        "Products_about": Products_about, "Products_tags": Products_tags})
 
     def post(self, request, *args, **kwargs):
 
-        Products_name = request.POST.get("Products_name")
+        title = request.POST.get("title")
         brand = request.POST.get("brand")
         url_slug = request.POST.get("url_slug")
-        sub_category = request.POST.get("sub_category")
         Products_max_price = request.POST.get("Products_max_price")
         Products_discount_price = request.POST.get("Products_discount_price")
         Products_description = request.POST.get("Products_description")
@@ -327,14 +311,13 @@ class ProductsEdit(View):
         about_ids = request.POST.getlist("about_id[]")
         Products_tags = request.POST.get("Products_tags")
         long_desc = request.POST.get("long_desc")
-        subcat_obj = Categories.objects.get(id=Categories)
+        categories = Categories.objects.get(id=Categories)
 
         Products_id = kwargs["id"]
-        products = Products.objects.get(id=Products_id)
-        Products.Products_name = Products_name
+        products = Products.objects.get(id=id)
+        Products.title = title
         Products.url_slug = url_slug
         Products.brand = brand
-        Products.subcategories_id = subcat_obj
         Products.Products_description = Products_description
         Products.Products_max_price = Products_max_price
         Products.Products_discount_price = Products_discount_price
@@ -346,7 +329,7 @@ class ProductsEdit(View):
             detail_id = details_ids[j]
             if detail_id == "blank" and title_title != "":
                 Products_details = ProductDetails(title=title_title, title_details=title_details_list[j],
-                                                  Products_id=Products)
+                                                  Product=Products)
                 Products_details.save()
             else:
                 if title_title != "":
@@ -379,7 +362,7 @@ class ProductsEdit(View):
             Products_tag_obj = ProductTags(Products_id=Products, title=Products_tag)
             Products_tag_obj.save()
 
-        return HttpResponse("OK")
+        return HttpResponseRedirect(reverse_lazy('core:Products_list'))
 
 
 class ProductsAddMedia(View):
@@ -403,7 +386,7 @@ class ProductsAddMedia(View):
             Products_media.save()
             i = i + 1
 
-        return render(request, "catalog/product/products-admin.html",
+        return render(request, "catalog/product/admin-products.html",
                       )
 
 
@@ -454,102 +437,7 @@ class ProductsAddStocks(View):
         return HttpResponseRedirect(reverse("Products_add_stocks", kwargs={"Products_id": Products_id}))
 
 
-def AddProductView(request):
-    if request.method == "POST":
-        form = ProductsFullForm(request.POST or None, request.FILES or None)
-        files = request.FILES.getlist('images')
-        if form.is_valid():
-            print(request.POST)
-            product_created = True
-            title = form.cleaned_data['title']
-            keywords = form.cleaned_data['keywords']
-            description = form.cleaned_data['description']
-            thumbnail = form.cleaned_data['thumbnail']
-            image1 = form.cleaned_data['image1']
-            image2 = form.cleaned_data['image2']
-            image3 = form.cleaned_data['image3']
-            image4 = form.cleaned_data['image4']
-            image5 = form.cleaned_data['image5']
-            image6 = form.cleaned_data['image6']
-            category = form.cleaned_data['category']
-            variant = form.cleaned_data['variant']
-            price = form.cleaned_data['price']
-            sale_price = form.cleaned_data['sale_price']
-            discount = form.cleaned_data['discount']
-            amount = form.cleaned_data['amount']
-            min_amount = form.cleaned_data['min_amount']
-            detail = form.cleaned_data['detail']
-            slug = form.cleaned_data['slug']
-            status = form.cleaned_data['status']
-            product_id = form.cleaned_data['product_id']
-            tags = tagsInDic(form.cleaned_data['tags'].strip())
-            tags_dic = tags.copy()
-            if not product_id:
-                print(request)
-                product_obj = Products.objects.create(title=title, keywords=keywords, category=category,
-                                                      description=description, variant=variant,
-                                                      image1=image1, image2=image2, image3=image3, image4=image4,
-                                                      image5=image5, image6=image6,
-                                                      thumbnail=thumbnail, price=price, sale_price=sale_price,
-                                                      discount=discount,
-                                                      amount=amount, min_amount=min_amount, detail=detail,
-                                                      slug=slug, status=status
-                                                      )  # create will create as well as save too in db.
-                for k in tags.keys():
-                    tag_obj, created = Products.objects.get_or_create(name=k)
-                    product_obj.tags.add(tag_obj)  # it won't add duplicated as stated in django docs
-            else:
-                # handling all cases of the tags
-                print(request)
-                product_obj = Products.objects.get(id=product_id)
-                for t in product_obj.tags.all():
-                    if t.name not in tags_dic:
-                        product_obj.tags.remove(t)
-                    else:  # deleting pre-existing element so that we could know what's new tags are
-                        del tags_dic[t.name]
-                for k, v in tags_dic.items():
-                    tag_obj, created = Products.objects.get_or_create(name=k)
-                    product_obj.tags.add(tag_obj)
-                product_created = False
-            for f in files:
-                print(request)
-                Image.objects.create(product=product_obj, image=f)
-            product_obj.category = category
-            product_obj.variant = variant
-            product_obj.title = title
-            product_obj.keywords = keywords
-            product_obj.description = description
-            product_obj.thumbnail = thumbnail
-            product_obj.image1 = image1
-            product_obj.image2 = image2
-            product_obj.image3 = image3
-            product_obj.image4 = image4
-            product_obj.image5 = image5
-            product_obj.image6 = image6
-            product_obj.price = price
-            product_obj.sale_price = sale_price
-            product_obj.discount = discount
-            product_obj.amount = amount
-            product_obj.min_amount = min_amount
-            product_obj.detail = detail
-            product_obj.slug = slug
-            product_obj.status = status
-            print(request.POST)
-            product_obj.save()  # last_modified field won't update on chaning other model field, save() trigger change
-            # return reverse('core:catalog')
-            return HttpResponseRedirect('/admin/products', product_created)
-            # return render(request,template_name='admin/pages/products-admin.html')
-            # return getNoteResponseData(product_obj, tags, product_created)
-        else:
-            print("Form invalid, see below error msg")
-            print(request.POST)
-            print(form.errors)
-            messages.error(request, "Error")
-    # if GET method form, or anything wrong then we will create blank form
-    else:
-        form = ProductsFullForm()
-    # return HttpResponseRedirect('/')
-    return render(request, 'catalog/product/add-product.html', {'form': form})
+
 
 
 def to_json(self, objects):
@@ -604,7 +492,7 @@ def search_auto(request):
     return HttpResponse(data, mimetype)
 
 
-############## #######################
+############## Manufacturer #######################
 
 class ManufacturerListView(ListView):
     model = Manufacturer
@@ -645,3 +533,225 @@ class DeleteManufacture(DeleteView):
     fields = '__all__'
     template_name = 'admin/pages/message/category_confirm_delete.html'
     success_url = reverse_lazy('core:Manufacturers')
+
+
+############## Filters #######################
+
+class FiltersGroupListView(ListView):
+    model = FiltersGroup
+    template_name = 'catalog/filter/admin-filter.html'
+    paginate_by = 100  # if pagination is desired
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+
+class FiltersGroupDetailView(DetailView):
+    model = FiltersGroup
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+
+class AddFiltersGroup(CreateView):
+    model = FiltersGroup
+    fields = '__all__'
+    template_name = 'catalog/manufacture/add-manufacture.html'
+    success_url = reverse_lazy('core:Filters')
+
+
+class EditFiltersGroup(UpdateView):
+    model = FiltersGroup
+    fields = '__all__'
+    template_name = 'catalog/manufacture/edit-manufacture.html'
+    success_url = reverse_lazy('core:Filters')
+
+
+class DeleteFiltersGroup(DeleteView):
+    model = FiltersGroup
+    fields = '__all__'
+    template_name = 'admin/pages/message/category_confirm_delete.html'
+    success_url = reverse_lazy('core:Filters')
+
+
+class FiltersListView(ListView):
+    model = Filters
+    template_name = 'catalog/filter/admin-filter.html'
+    paginate_by = 100  # if pagination is desired
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+
+class FilterDetailView(DetailView):
+    model = Filters
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+
+class AddFilter(View):
+    def get(self, request, *args, **kwargs):
+        print(request)
+        filters_group = FiltersGroup.objects.all()
+
+        return render(request, "catalog/filter/add-filter.html",
+                      {"filters_group": filters_group, })
+
+    print(request)
+
+    def post(self, request, *args, **kwargs):
+
+            title = request.POST.get("title")
+            sort_order = request.POST.get("sort_order")
+            title_list = request.POST.getlist("title[]")
+            sort_order_list = request.POST.getlist("sort[]")
+            print(request.POST)
+
+            filters_group = FiltersGroup(title=title, sort_order=sort_order)
+            filters_group.save()
+
+            j = 0
+            for title_title in title_list:
+                filter = Filters(title=title_title, sort_order=sort_order_list[j],
+                                 filter_group=filters_group)
+                filter.save()
+                j = j + 1
+
+            # return HttpResponse("OK")
+            return HttpResponseRedirect(reverse_lazy('core:Filters'))
+
+
+
+
+
+
+
+class EditFilter(UpdateView):
+    model = Filters
+    fields = '__all__'
+    template_name = 'catalog/filter/edit-filter.html'
+    success_url = reverse_lazy('core:Filters')
+
+
+class DeleteFilter(DeleteView):
+    model = Filters
+    fields = '__all__'
+    template_name = 'admin/pages/message/category_confirm_delete.html'
+    success_url = reverse_lazy('core:Filters')
+
+
+############## Attribute  #######################
+
+class AttributesGroupListView(ListView):
+    model = AttributesGroup
+    template_name = 'catalog/attribute/admin-attribute.html'
+    paginate_by = 100  # if pagination is desired
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+
+class AttributesGroupDetailView(DetailView):
+    model = AttributesGroup
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+
+class AddAttributesGroup(CreateView):
+    model = AttributesGroup
+    fields = '__all__'
+    template_name = 'catalog/attribute/add-attribute-group.html'
+    success_url = reverse_lazy('core:Attributes')
+
+
+class EditAttributesGroup(UpdateView):
+    model = AttributesGroup
+    fields = '__all__'
+    template_name = 'catalog/manufacture/edit-manufacture.html'
+    success_url = reverse_lazy('core:Attributes')
+
+
+class DeleteAttributesGroup(DeleteView):
+    model = AttributesGroup
+    fields = '__all__'
+    template_name = 'admin/pages/message/category_confirm_delete.html'
+    success_url = reverse_lazy('core:Attributes')
+
+
+class AttributeListView(ListView):
+    model = Attributes
+    template_name = 'catalog/attribute/admin-attribute.html'
+    paginate_by = 100  # if pagination is desired
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+
+class AttributeDetailView(DetailView):
+    model = Filters
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+
+class AddAttribute(View):
+    def get(self, request, *args, **kwargs):
+        print(request)
+        attributes_group = AttributesGroup.objects.all()
+
+        return render(request, "catalog/attribute/add-attribute.html",
+                      {"attributes_group": attributes_group, })
+
+    print(request)
+
+    def post(self, request, *args, **kwargs):
+        title_group = request.POST.get("title")
+        sort_order = request.POST.get("sort_order")
+        title_list = request.POST.getlist("title[]")
+        sort_order_list = request.POST.getlist("sort[]")
+        print(request.POST)
+
+        attribute_group = AttributesGroup(title=title_group, sort_order=sort_order)
+        attribute_group.save()
+
+        j = 0
+        for title_title in title_list:
+            attribute = Attributes(title=title_title, sort_order=sort_order_list[j],
+                                   attributes_group=attribute_group)
+            attribute.save()
+            j = j + 1
+
+        # return HttpResponse("OK")
+        return HttpResponseRedirect(reverse_lazy('core:Attributes'))
+
+
+class EditAttribute(UpdateView):
+    model = Attributes
+    fields = '__all__'
+    template_name = 'catalog/attribute/edit-attribute.html'
+    success_url = reverse_lazy('core:Attributes')
+
+
+class DeleteAttribute(DeleteView):
+    model = Attributes
+    fields = '__all__'
+    template_name = 'admin/pages/message/category_confirm_delete.html'
+    success_url = reverse_lazy('core:Attributes')

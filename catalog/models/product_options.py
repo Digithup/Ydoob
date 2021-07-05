@@ -13,14 +13,13 @@ class FiltersGroup(models.Model):
 class Filters(models.Model):
     title = models.CharField(max_length=100, unique=True)
     filter_group = models.ForeignKey(FiltersGroup, on_delete=models.CASCADE ,null=True)
-    product = models.ForeignKey(Products, on_delete=models.CASCADE)
     sort_order = models.IntegerField(default=0 )
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
 
 
 class AttributesGroup(models.Model):
-    title = models.CharField(max_length=100, unique=True )
+    title = models.CharField(max_length=100,  )
     sort_order = models.IntegerField(default=0 )
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
@@ -28,7 +27,6 @@ class AttributesGroup(models.Model):
 class Attributes(models.Model):
     title = models.CharField(max_length=100,unique=True )
     attributes_group = models.ForeignKey(AttributesGroup, on_delete=models.CASCADE , null=True)
-    product = models.ForeignKey(Products, on_delete=models.CASCADE)
     sort_order = models.IntegerField(default=0 )
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
@@ -41,7 +39,7 @@ class OptionsType(models.Model):
 
 class Options(models.Model):
     title = models.CharField(max_length=100,unique=True )
-    product = models.ForeignKey(Products, on_delete=models.CASCADE)
+
     sort_order = models.IntegerField(default=0 )
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)

@@ -20,7 +20,6 @@ from catalog.models.models import Categories, Products, Image
 class CategoryAddForm(forms.ModelForm):
     title = forms.CharField(widget=CKEditorWidget())
     category_id = forms.IntegerField(required=False)
-
     class Meta:
         model = Categories
         fields = '__all__'

@@ -112,7 +112,8 @@
                                     </i>
                                     Edit
                                 </a>
-                                <a class="btn btn-danger btn-sm" href="{% url 'core:delete_category' rs.id %}">
+                                <a class="btn btn-danger btn-sm" href="{% url 'core:DeleteCategory'  rs.id %}"
+                                   onclick="return confirm('Are you sure you want to delete {{ rs.title }}?')" >
                                     <i class="fas fa-trash">
                                     </i>
                                     Delete
@@ -127,12 +128,10 @@
                 {% endif %}
             </div>
             <!-- /.card-body -->
-        </div>
+
         <!-- /.card -->
-
-    </div>
-
     <!-- Container-fluid Ends-->
+
 
 
 {% endblock %}

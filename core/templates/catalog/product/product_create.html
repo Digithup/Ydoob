@@ -81,7 +81,7 @@ width:100%;
                             {% endfor %}
                             </select>
                         </div>
-                        div cass="col-lg-6">
+                        <div class="col-lg-6">
                             <label>In Stock Total</label>
                             <input class="form-control" name="in_stock_total" placeholder="In Stock Total" />
                         </div>
@@ -342,7 +342,7 @@ width:100%;
                 console.log(xhr.responseText);
             }
         }
-        xhr.open("POST","{% url 'core:Products_view' %}",true);
+        xhr.open("POST","{% url 'core:Product_add' %}",true);
         $("#progressbar").show();
 
         //UPDATING PROGRESS BAR

@@ -52,8 +52,10 @@
                                                      alt=""></a>
                                     <div class="Products-hover">
                                         <ul>
+
                                             <li>
-                                                <a href="{% url 'core:Product_Delete' rs.product.id  %}">
+                                                <a href="{% url 'core:Product_Delete' rs.product.id  %}"
+                                                   onclick="return confirm('Are you sure you want to delete {{ rs.title }}?')">
                                                 <button class="btn" type="button" data-original-title="" title=""><i
                                                         class="ti-trash"></i></button>
                                                 </a></li>

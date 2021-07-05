@@ -3,7 +3,7 @@ from datetime import datetime
 from django.core.files.storage import FileSystemStorage
 from django.db import transaction
 from django.forms import formset_factory
-from django.http import request, HttpResponse
+from django.http import request, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
@@ -36,13 +36,14 @@ class SliderGroupCreate(CreateView):
 class SliderDelete(DeleteView):
     model = Slider
     fields = '__all__'
-    template_name = 'slider/confirm_delete.html'
     success_url = reverse_lazy('core:SliderView')
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)
 
 
 class SliderCreate(View):
     def get(self, request, *args, **kwargs):
-        print(request)
+
         groups = SliderGroup.objects.filter(status=True)
 
         return render(request, "slider/slider-create.html",
@@ -80,8 +81,10 @@ class SliderCreate(View):
             i = i + 1
 
         # return HttpResponse("OK")
-        return render(request, 'slider/sliders-admin.html')
+        return HttpResponseRedirect(reverse_lazy('core:SliderView'))
 
+
+###################Banners#############
 
 class BannersView(TemplateView):
     template_name = "banner/banners-admin.html"
@@ -98,18 +101,15 @@ class BannerDetailView(DetailView):
     template_name = 'banner/banner-detail.html'
 
 
-class BajnnerCreate(CreateView):
-    model = Banners
-    fields = '__all__'
-    template_name = 'banner/add-banner.html'
-    success_url = reverse_lazy('core:BannerView')
+
 
 
 class BannerDelete(DeleteView):
     model = Banners
     fields = '__all__'
-    template_name = 'banner/confirm_delete.html'
     success_url = reverse_lazy('core:BannerView')
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)
 
 
 class BannerCreate(View):
@@ -135,7 +135,7 @@ class BannerCreate(View):
                      )
         banner.save()
         # return HttpResponse("OK")
-        return render(request, 'banner/banners-admin.html')
+        return HttpResponseRedirect(reverse_lazy('core:BannerView'))
 
 
 ############ Menu ##############
