@@ -10,7 +10,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
-from accounts.models import User
+from user.models import User
 from localization.models import Language
 
 
@@ -33,14 +33,6 @@ class Setting(models.Model):
     def __str__(self):
         return self.email
 
-        ## method to create a fake table field in read only mode
-
-    def image_tag(self):
-        if self.image.url is not None:
-            return mark_safe('<img src="{}" height="50"/>'.format(self.image.url))
-        else:
-            return ""
-
 
 llist = Language.objects.filter(status=True)
 list1 = []
@@ -51,7 +43,7 @@ langlist = (list1)
 
 class SettingLang(models.Model):
     setting_id = models.ForeignKey(Setting, on_delete=models.CASCADE)  # many to one relation with Category
-    lang = models.CharField(max_length=6, choices=langlist)
+    lang = models.CharField(max_length=6, choices=langlist , default='en')
     title = models.CharField(max_length=150, null=True, default='Nigne')
     keywords = models.CharField(max_length=255, default=' ', null=True)
     company = models.CharField(max_length=50, default=' ', null=True)

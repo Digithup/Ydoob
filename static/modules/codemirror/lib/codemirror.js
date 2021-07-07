@@ -156,7 +156,7 @@ function copyObj(obj, target, overwrite) {
   return target
 }
 
-// Counts the column offset in a string, taking tabs into account.
+// Counts the column offset in a string, taking tabs into users.
 // Used mostly to find indentation.
 function countColumn(string, end, tabSize, startIndex, startValue) {
   if (end == null) {
@@ -863,7 +863,7 @@ function heightAtLine(lineObj) {
   return h
 }
 
-// Compute the character length of a line, taking into account
+// Compute the character length of a line, taking into users
 // collapsed ranges (see markText) that might hide parts, and join
 // other lines onto it.
 function lineLength(line) {
@@ -1065,7 +1065,7 @@ var bidiOrdering = (function() {
     // Here we depart from the documented algorithm, in order to avoid
     // building up an actual levels array. Since there are only three
     // levels (0, 1, 2) in an implementation that doesn't take
-    // explicit embedding into account, we can build up the order on
+    // explicit embedding into users, we can build up the order on
     // the fly, without following the level-based algorithm.
     var order = [], m
     for (var i$7 = 0; i$7 < len;) {
@@ -1983,7 +1983,7 @@ function buildCollapsedSpan(builder, size, marker, ignoreWidget) {
 }
 
 // Outputs a number of spans to make up a line, taking highlighting
-// and marked text into account.
+// and marked text into users.
 function insertLineContent(line, builder, styles) {
   var spans = line.markedSpans, allText = line.text, at = 0
   if (!spans) {

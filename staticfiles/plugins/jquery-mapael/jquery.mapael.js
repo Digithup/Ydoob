@@ -246,7 +246,7 @@
             // Create the legends for areas
             self.createLegends("area", self.areas, 1);
 
-            // Create the legends for plots taking into account the scale of the map
+            // Create the legends for plots taking into users the scale of the map
             self.createLegends("plot", self.plots, self.paper.width / self.mapConf.width);
 
             // Attach update event
@@ -340,7 +340,7 @@
                     // Set new size
                     self.paper.setSize(containerWidth, self.mapConf.height * newScale);
 
-                    // Create plots legend again to take into account the new scale
+                    // Create plots legend again to take into users the new scale
                     // Do not do this on init (it will be done later)
                     if (isInit !== true && self.options.legend.redrawOnResize) {
                         self.createLegends("plot", self.plots, newScale);
@@ -758,12 +758,12 @@
          * Map a mouse position to a map position
          *      Transformation principle:
          *          ** start with (pageX, pageY) absolute mouse coordinate
-         *          - Apply translation: take into accounts the map offset in the page
+         *          - Apply translation: take into users the map offset in the page
          *          ** from this point, we have relative mouse coordinate
-         *          - Apply homothetic transformation: take into accounts initial factor of map sizing (fullWidth / actualWidth)
-         *          - Apply homothetic transformation: take into accounts the zoom factor
+         *          - Apply homothetic transformation: take into users initial factor of map sizing (fullWidth / actualWidth)
+         *          - Apply homothetic transformation: take into users the zoom factor
          *          ** from this point, we have relative map coordinate
-         *          - Apply translation: take into accounts the current panning of the map
+         *          - Apply translation: take into users the current panning of the map
          *          ** from this point, we have absolute map coordinate
          * @param pageX: mouse client coordinate on X
          * @param pageY: mouse client coordinate on Y

@@ -15,7 +15,7 @@ from mptt.models import MPTTModel
 from six import BytesIO
 
 from DNigne.utils import unique_slug_generator
-from accounts.models import User
+from user.models import User
 from vendors.models import Store
 
 STATUS = (

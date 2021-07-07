@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.utils.crypto import get_random_string
 
-from accounts.models import User
+from user.models import User
 from catalog.models.models import Products, Categories
 from catalog.models.product_options import Options
 

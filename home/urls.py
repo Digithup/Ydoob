@@ -1,5 +1,4 @@
-from django.urls import path, include
-
+from django.urls import path
 from . import views
 from .views import ProductDetailView, autocomplete, ProductsHomeListView, categories
 
@@ -9,7 +8,6 @@ urlpatterns = [
     path('home/', views.index, name='index'),
     path('search/autocomplete', autocomplete, name='autocomplete'),
     #path('search/', SearchView(), name='search'),
-
     #path('search_auto/', views.search_auto, name='search_auto'),
 
     ############ Category Product ##############

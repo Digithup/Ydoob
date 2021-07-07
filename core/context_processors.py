@@ -14,7 +14,7 @@ def core_processors(request):
 
 
         }
-    except:
+    except Exception as e:
         return {'setting': Setting.objects.last(),
                 'setting_media': SettingMedia.objects.last(),
                 'index_language': Language.objects.all()

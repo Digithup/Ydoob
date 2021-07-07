@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+from django.conf import settings
 from django.contrib import messages
 
 STRIPE_API_KEY_PUBLISHABLE = "pk_test_51HIHiuKBJV2qfWbD2gQe6aqanfw6Eyul5P02KeOuSR1UMuaV4TxEtaQyzr9DbLITSZweL7XjK3p74swcGYrE2qEX00Hz7GmhMI"
@@ -49,7 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'home.apps.HomeConfig',
+    'django.contrib.sites',
 
     # Admin APPS
     # 'debug_toolbar',
@@ -57,15 +58,16 @@ INSTALLED_APPS = [
     'coupons.apps.CouponsConfig',
     'invoice.apps.InvoiceConfig',
     'localization.apps.LocalizationConfig',
+    'home.apps.HomeConfig',
     'media.apps.MediaConfig',
     'reports.apps.ReportsConfig',
     'sales.apps.SalesConfig',
     'vendors.apps.VendorsConfig',
+    'user.apps.UserConfig',
+    'core.apps.CoreConfig',
     # internal apps
-    'accounts',
-    'core',
-    'billing',
 
+    'billing',
     # internal apps
     'widget_tweaks',
     'ckeditor',
@@ -93,9 +95,10 @@ INSTALLED_APPS = [
     'jquery',
     'djangoformsetjs',
 
+
+
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-AUTH_USER_MODEL = 'accounts.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -109,7 +112,6 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.locale.LocaleMiddleware',
 
-
 ]
 
 REST_FRAMEWORK = {
@@ -120,18 +122,6 @@ REST_FRAMEWORK = {
 
     ]
 }
-
-WHOOSH_INDEX = os.path.join(BASE_DIR, 'whoosh/')
-
-HAYSTACK_CONNECTIONS = {
-    'default': {
-        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
-    },
-}
-
-ROOT_URLCONF = 'DNigne.urls'
-# JET_INDEX_DASHBOARD = 'dashboard.CustomIndexDashboard'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -150,13 +140,11 @@ TEMPLATES = [
                 # 'vendors.context_processors.user_profile',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
             ],
         },
     },
 ]
-
-WSGI_APPLICATION = 'DNigne.wsgi.application'
-LOGOUT_REDIRECT_URL = '/admin'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -203,6 +191,14 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
+
+WHOOSH_INDEX = os.path.join(BASE_DIR, 'whoosh/')
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+    },
+}
 
 # dynamic data translate
 LANGUAGE_CODE = 'en'
@@ -270,8 +266,7 @@ IMAGEFIT_PRESETS = {
     'my_preset2': {'width': 100},
 }
 # ...
-SITE_ID = 1
-BASE_URL = "http://127.0.0.1:8000"
+
 
 ####################################
 ##  CKEDITOR CONFIGURATION ##
@@ -287,19 +282,6 @@ CKEDITOR_IMAGE_BACKEND = "pillow"
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-# email stuff
-EMAIL_HOST = os.environ.get('EMAIL_HOST')
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER')
-EMAIL_PORT = 587
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-
-# Cart
-CART_SESSION_ID = 'cart'
-SESSION_COOKIE_AGE = 86400
-
-
 MESSAGE_LEVEL = message_constants.DEBUG
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-info',
@@ -308,3 +290,28 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
+
+SITE_ID = 1
+BASE_URL = "http://127.0.0.1:8000"
+SESSION_COOKIE_SECURE = True
+LOGIN_URL = '/admin/login'
+LOGOUT_URL = '/admin/logout'
+# Cart
+CART_SESSION_ID = 'cart'
+SESSION_COOKIE_AGE = 85555
+SESSION_COOKIE_SECURE = False
+AUTH_USER_MODEL = 'user.User'
+ROOT_URLCONF = 'DNigne.urls'
+WSGI_APPLICATION = 'DNigne.wsgi.application'
+LOGOUT_REDIRECT_URL = '/'
+
+# JET_INDEX_DASHBOARD = 'dashboard.CustomIndexDashboard'
+
+# email stuff
+EMAIL_USE_SSL = False
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'nigneegypt@gmail.com'
+EMAIL_HOST_PASSWORD = 'Hitham5320826*'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

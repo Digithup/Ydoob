@@ -199,11 +199,12 @@
                                 <div class="tab-pane fade show active" id="top-profile" role="tabpanel"
                                      aria-labelledby="top-profile-tab">
                                     <form class="form-horizontal auth-form" method="POST" action="
-                                            {% if action_url %}{{ action_url }}{% else %}{% url 'accounts:user_login' %}  {% endif %}">
+                                            {% if action_url %}{{ action_url }}{% else %}{% url 'core:AdminLogin' %}  {% endif %}">
                                         {% csrf_token %}
 
                                         {% if next_url %}
                                             <input type="hidden" name="next" value='{{ next_url }}'>
+
                                         {% endif %}
                                         <div class="form-group">
                                             <input required="" name="email" type="email" class="form-control"

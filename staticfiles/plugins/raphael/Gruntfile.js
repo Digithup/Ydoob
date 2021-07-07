@@ -12,7 +12,7 @@ module.exports = function(grunt) {
         // Task configuration.
         uglify: {
             options: {
-                banner: "<%= banner %>"
+                banner: "<%= design %>"
             },
             dist: {
                 src: "<%= concat.dist.dest %>",

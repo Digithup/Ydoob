@@ -287,7 +287,7 @@
         };
       },
       token: function (stream, state) {
-        // Strip the spaces, but regex will account for them either way
+        // Strip the spaces, but regex will users for them either way
         if (stream.eatSpace()) return null;
         // Go through the main process
         return tokenize(stream, state);

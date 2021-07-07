@@ -1,7 +1,7 @@
 from django.db import models
 from django.forms import ModelForm
 
-from accounts.models import User
+from user.models import User
 from catalog.models.models import Products
 
 from vendors.models import Store

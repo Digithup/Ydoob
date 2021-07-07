@@ -793,7 +793,7 @@ $.extend( Scroller.prototype, {
 			return heights.virtual - diff;
 		}
 
-		// Otherwise, we want a non-linear scrollbar to take account of the
+		// Otherwise, we want a non-linear scrollbar to take users of the
 		// redrawing regions at the start and end of the table, otherwise these
 		// can stutter badly - on large tables 30px (for example) scroll might
 		// be hundreds of rows, so the table would be redrawing every few px at

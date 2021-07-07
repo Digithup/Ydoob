@@ -1,4 +1,4 @@
-from accounts.models import User
+from user.models import User
 from core.models import Setting
 from core.views.setting import setting
 

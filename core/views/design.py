@@ -87,7 +87,7 @@ class SliderCreate(View):
 ###################Banners#############
 
 class BannersView(TemplateView):
-    template_name = "banner/banners-admin.html"
+    template_name = "design/banners-admin.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -97,8 +97,8 @@ class BannersView(TemplateView):
 
 class BannerDetailView(DetailView):
     model = Banners
-    context_object_name = 'banner'
-    template_name = 'banner/banner-detail.html'
+    context_object_name = 'design'
+    template_name = 'design/banner-detail.html'
 
 
 
@@ -116,8 +116,8 @@ class BannerCreate(View):
     def get(self, request, *args, **kwargs):
         print(request)
 
-        return render(request, "banner/add-banner.html",
-                     )
+        return render(request, "design/add-banner.html",
+                      )
 
     print(request)
 

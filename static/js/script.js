@@ -1681,7 +1681,7 @@
         $('.sidebar-popup').trigger('click');
     });
 
-    $('.account-sidebar').on('click', function (e) {
+    $('.users-sidebar').on('click', function (e) {
         $('.dashboard-left').css("left", "0");
     });
     $('.filter-back').on('click', function (e) {

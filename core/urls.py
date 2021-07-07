@@ -1,20 +1,20 @@
 from django.urls import path
 
-from core.tests import SettingAddViewTest, ProductAddViewTest
-from core.views.design import BannerDetailView, BannerDelete, \
-    SliderView, SliderDelete, SliderGroupCreate, SliderDetailView, BannersView, BannerCreate, \
-    SliderCreate
-
+from core.tests import SettingAddViewTest
 from core.views.catalog import AddCategory, categories, EditCategory, DeleteCategory, ProductsListView, \
     ProductsEdit, ProductsAddMedia, ProductsEditMedia, ProductsMediaDelete, ProductsAddStocks, file_upload, index, \
     ProductAddView, ProductsDeleted, DeleteManufacture, EditManufacture, AddManufacture, ManufacturerListView, \
     DeleteFilter, AddFilter, EditFilter, DeleteFiltersGroup, AddFiltersGroup, EditFiltersGroup, FiltersGroupListView, \
     FiltersListView, AttributesGroupListView, EditAttributesGroup, AddAttributesGroup, DeleteAttributesGroup, \
     AttributeListView, EditAttribute, AddAttribute, DeleteAttribute
+from core.views.design import BannerDetailView, BannerDelete, \
+    SliderView, SliderDelete, SliderGroupCreate, SliderDetailView, BannersView, BannerCreate, \
+    SliderCreate
 from core.views.setting import update_setting
+from core.views.users import AdminLogin, AdminLogout, AdminUserCreate, \
+    AdminUserDetail, AdminUserEdit, AdminUserDelete, AdminUsersList
 
 app_name = 'core'
-
 
 urlpatterns = [
 
@@ -33,11 +33,12 @@ urlpatterns = [
     path('admin/products/Products_edit/<str:Products_id>', ProductsEdit.as_view(), name="ProductUpdate"),
     path('admin/products/Products_delete/<int:pk>/', ProductsDeleted.as_view(), name="Product_Delete"),
     path('admin/products/Products_add_media/<str:Products_id>', ProductsAddMedia.as_view(), name="Products_add_media"),
-    path('admin/products/Products_edit_media/<str:Products_id>', ProductsEditMedia.as_view(), name="Products_edit_media"),
+    path('admin/products/Products_edit_media/<str:Products_id>', ProductsEditMedia.as_view(),
+         name="Products_edit_media"),
     path('admin/products/Products_media_delete/<str:id>', ProductsMediaDelete.as_view(), name="Products_media_delete"),
-    path('admin/products/Products_add_stocks/<str:Products_id>', ProductsAddStocks.as_view(), name="Products_add_stocks"),
+    path('admin/products/Products_add_stocks/<str:Products_id>', ProductsAddStocks.as_view(),
+         name="Products_add_stocks"),
     path('admin/products/file_upload', file_upload, name="file_upload"),
-
 
     ########## Filters  #########
     path('admin/FiltersGroup/', FiltersGroupListView.as_view(), name='FiltersGroup'),
@@ -49,8 +50,7 @@ urlpatterns = [
     path('admin/Filter/add/', AddFilter.as_view(), name='AddFilter'),
     path('admin/Filter/delete/<int:pk>/', DeleteFilter.as_view(), name='DeleteFilter'),
 
-
-########## Attributes  #########
+    ########## Attributes  #########
     path('admin/AttributesGroup/', AttributesGroupListView.as_view(), name='AttributesGroup'),
     path('admin/AttributesGroup/edit/<int:pk>/', EditAttributesGroup.as_view(), name='EditAttributesGroup'),
     path('admin/AttributesGroup/add/', AddAttributesGroup.as_view(), name='AddAttributesGroup'),
@@ -66,8 +66,6 @@ urlpatterns = [
     # path('admin/options/add/', AddCategory, name='AddOptions'),
     # path('admin/options/delete/<int:id>/<slug:slug>/', DeleteCategory.as_view(), name='delete_options'),
 
-
-
     ########## Manufacturer   #########
     path('admin/manufacture/', ManufacturerListView.as_view(), name='Manufacturers'),
     path('admin/manufacture/edit/<int:pk>/', EditManufacture.as_view(), name='EditManufacturer'),
@@ -82,18 +80,24 @@ urlpatterns = [
     path('admin/slider/delete//<int:pk>/', SliderDelete.as_view(), name='SliderDelete'),
 
     ########## Banners   #########
-    path('admin/banner', BannersView.as_view(), name='BannerView'),
-    path('admin/banner/<int:pk>/', BannerDetailView.as_view(), name='BannerDetailView'),
-    path('admin/banner/create/', BannerCreate.as_view(), name='BannerCreate'),
-    path('admin/banner/delete//<int:pk>/', BannerDelete.as_view(), name='BannerDelete'),
+    path('admin/design', BannersView.as_view(), name='BannerView'),
+    path('admin/design/<int:pk>/', BannerDetailView.as_view(), name='BannerDetailView'),
+    path('admin/design/create/', BannerCreate.as_view(), name='BannerCreate'),
+    path('admin/design/delete//<int:pk>/', BannerDelete.as_view(), name='BannerDelete'),
 
+    ################ Users ################
+    path('login/', AdminLogin.as_view(), name='AdminLogin'),
+    path('logout/', AdminLogout, name='AdminLogout'),
 
+    path('admin/users/', AdminUsersList.as_view(), name='AdminUsersList'),
+    path('admin/users/create/', AdminUserCreate.as_view(), name='AdminUserCreate'),
+    path('admin/users/profile/<int:pk>', AdminUserDetail.as_view(), name='AdminUserDetail'),
+    path('admin/users/uprofile/<int:id>/', AdminUserEdit.as_view(), name='AdminUserEdit'),
+    path('admin/users/dprofile/<int:id>', AdminUserDelete.as_view(), name='AdminUserDelete'),
 
-
-
-########## setting   #########
+    ########## setting   #########
     # path('admin/setting/add/', SettingAddViewTest.as_view(), name='add_setting'),
-    path('admin/setting/add/', SettingAddViewTest.as_view(), name='add_setting'),
+    path('admin/setting/add/', SettingAddViewTest.as_view(), name='AdminSiteSetting'),
     path('admin/setting/', update_setting, name='update_setting'),
 
 ]

@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from django.utils.text import slugify
 
-from accounts.models import User
+from user.models import User
 from vendors.models import Store
 
 

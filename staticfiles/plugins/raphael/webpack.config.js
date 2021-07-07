@@ -25,7 +25,7 @@ module.exports = function (env) {
     
     plugins: [
       new webpack.BannerPlugin({
-        banner: fs.readFileSync('./dev/banner.txt', 'utf8'),
+        banner: fs.readFileSync('./dev/design.txt', 'utf8'),
         raw: true,
         entryOnly: true
       })

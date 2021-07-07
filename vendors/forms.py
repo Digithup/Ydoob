@@ -1,24 +1,62 @@
 from django import forms
 from django.contrib import messages
+from django.core.exceptions import ValidationError
 from django.shortcuts import render
+from django.utils.text import slugify
 from requests import request
 
-from accounts.forms import UserRegisterForm
-from accounts.models import User
+from user.forms import UserRegisterForm
+from user.models import User
 from vendors.models import Store
+
+
+class SellerRegisterForm(forms.ModelForm):
+    """
+    Description:A form for creating new users.
+    Includes all the required fields, plus a repeated password
+    """
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
+
+    class Meta:
+        model = User
+        fields = ['email', 'phone', 'password1', 'password2']
+
+    def clean_password2(self):
+        """
+        Description:Check that the two password entries match.\n
+        """
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Passwords don't match")
+
+        return password2
+
+    def save(self, commit=True):
+        """
+        Description:Save the provided password in hashed format.\n
+        """
+        user = super(SellerRegisterForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password1"])
+        user.seller = True
+        user.active = False  # send confirmation email via signals
+
+        if commit:
+            user.save()
+
+        return user
 
 
 class StoreAddForm(forms.ModelForm):
     class Meta:
         model = Store
         # fields = '__all__'
-        fields = ['email', 'phone']
+        fields = ['title', 'email', 'phone', 'image']
         exclude = ['vendor']
 
         def clean_title(self, title):
-            from django.utils.text import slugify
-            from django.core.exceptions import ValidationError
-
             email = slugify(title)
             if Store.objects.filter(email=email).exists():
                 raise ValidationError('Store with this Email already exists.')
@@ -40,7 +78,7 @@ class StoreAddFormm(forms.ModelForm):
         if user is None:
             messages.error(
                 request, 'Account is not active,please check your email')
-            return render(request, 'front/UsersAccount/../accounts/templates/accounts/CustomerRegister.html', context={
+            return render(request, 'front/UsersAccount/../users/templates/users/CustomerRegister.html', context={
                 "title": "Register",
                 "form": UserRegisterForm
             })

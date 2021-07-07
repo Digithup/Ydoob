@@ -1889,7 +1889,7 @@ Buffer.prototype.write = function write (string, offset, length, encoding) {
         return latin1Write(this, string, offset, length)
 
       case 'base64':
-        // Warning: maxLength not taken into account in base64Write
+        // Warning: maxLength not taken into users in base64Write
         return base64Write(this, string, offset, length)
 
       case 'ucs2':
@@ -8315,7 +8315,7 @@ WritableState.prototype.getBuffer = function getBuffer() {
   } catch (_) {}
 })();
 
-// Test _writableState for inheritance to account for Duplex streams,
+// Test _writableState for inheritance to users for Duplex streams,
 // whose prototype chain only points to Readable.
 var realHasInstance;
 if (typeof Symbol === 'function' && Symbol.hasInstance && typeof Function.prototype[Symbol.hasInstance] === 'function') {
@@ -15112,7 +15112,7 @@ function _deepEqual(actual, expected, strict, memos) {
   // with Object.prototype.hasOwnProperty.call), the same set of keys
   // (although not necessarily the same order), equivalent values for every
   // corresponding key, and an identical 'prototype' property. Note: this
-  // accounts for both named and indexed properties on Arrays.
+  // users for both named and indexed properties on Arrays.
   } else if (isBuffer(actual) !== isBuffer(expected)) {
     return false;
   } else {
@@ -48008,7 +48008,7 @@ var Glyph = (_class$8 = function () {
    * The glyph’s control box.
    * This is often the same as the bounding box, but is faster to compute.
    * Because of the way bezier curves are defined, some of the control points
-   * can be outside of the bounding box. Where `bbox` takes this into account,
+   * can be outside of the bounding box. Where `bbox` takes this into users,
    * `cbox` does not. Thus, cbox is less accurate, but faster to compute.
    * See [here](http://www.freetype.org/freetype2/docs/glyphs/glyphs-6.html#section-2)
    * for a more detailed description.
@@ -56469,7 +56469,7 @@ function deepEqual(actual, expected, options) {
    * with Object.prototype.hasOwnProperty.call), the same set of keys
    * (although not necessarily the same order), equivalent values for every
    * corresponding key, and an identical 'prototype' property. Note: this
-   * accounts for both named and indexed properties on Arrays.
+   * users for both named and indexed properties on Arrays.
    */
   // eslint-disable-next-line no-use-before-define
   return objEquiv(actual, expected, opts);

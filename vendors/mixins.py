@@ -8,7 +8,7 @@ from catalog.models.models import Product
 from .models import SellerAccount
 
 
-# Seller account mixins
+# Seller users mixins
 
 class SellerAccountMixin(LoginRequiredMixin, object):
 	account = None

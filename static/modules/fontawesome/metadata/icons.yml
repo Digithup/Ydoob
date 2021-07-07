@@ -13776,7 +13776,7 @@ user:
   label: User
   search:
     terms:
-      - account
+      - users
       - avatar
       - head
       - human
@@ -13795,7 +13795,7 @@ user-alt:
   label: Alternate User
   search:
     terms:
-      - account
+      - users
       - avatar
       - head
       - human
@@ -13846,7 +13846,7 @@ user-circle:
   label: User Circle
   search:
     terms:
-      - account
+      - users
       - avatar
       - head
       - human

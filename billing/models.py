@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import models
 
-from accounts.models import User
+from user.models import User
 from catalog.models.seller_models import SellerProducts
 
 

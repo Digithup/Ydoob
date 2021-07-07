@@ -16,9 +16,9 @@
                     <div class="header-contact">
                         <ul> {% if  setting_data.lang  == LANGUAGE_CODE %}
                             <li>Welcome to Our store {{ setting_data.title }}</li>
-                            {% else %}
-                                    <li>{% translate 'Welcome to Our store' %} {{ setting_data_ar.title  }} </li>
-                            {% endif %}
+                        {% else %}
+                            <li>{% translate 'Welcome to Our store' %} {{ setting_data_ar.title }} </li>
+                        {% endif %}
 
                             <li><i class="fa fa-phone" aria-hidden="true"></i>Call Us: {{ setting.phone }}</li>
                         </ul>
@@ -29,26 +29,40 @@
                         <li class="mobile-wishlist"><a href="#"><i class="fa fa-heart" aria-hidden="true"></i></a>
                         </li>
                         <li class="onhover-dropdown mobile-account"><i class="fa fa-user" aria-hidden="true"></i>
-                            {% if user.is_authenticated %}
-                                {{ user.first_name }}
+                            {% if user.is_authenticated %} {{ user.first_name }}
                                 <ul class="onhover-show-div">
-                                    <li><a href="">Profile</a></li>
-                                    {% if user.seller %}
-                                        <ul class="onhover-show-div">
-                                            <li><a href="{% url 'vendors:vendor_dashboard' %}">{%  translate 'Dashboard' %}</a></li>
-                                            {% else %}
-                                            <li><a href="{% url 'vendors:become_seller' %}">{% translate 'Start Selling Now' %}</a>
-                                            </li>
-                                        </ul>
-                                    {% endif %}
-                                    <li><a href="{% url 'accounts:customer_logout' %}">{% translate 'Logout' %}</a></li>
+                                <li><a href="">Profile</a><li>
+                                <li><li class="onhover-show">
+                                    {% if  user.seller   %}
+                                        {% for rs in store %}
+                                          {% if rs.activation %}
+                                              <li><a href="{% url 'vendors:VendorDashboard' %}">{% translate 'Dashboard' %}</a></li>
+                                              {% else %}{% if rs.status %}
+
+                                             <li><a href="{% url 'vendors:StoreWaiting' %}"><h6>{% translate 'Store need action' %}</h6></a></li>
+                                                  {% else %}
+                                                   <li><a href="{% url 'vendors:CreateStore' %}">{% translate 'Create Store' %}</a></li>
+                                                  {% endif %}
+                                              {% endif %}{% endfor %}
+
+
+                                        {% else %}
+
+
+                                                 <li><a href="{% url 'vendors:SellerRegister' %}">{% translate 'Start Selling ' %}</a> </li>
+
+
+                                         {% endif %}
+
+                                 <li><a href="{% url 'user:CustomerLogout' %}">{% translate 'Logout' %}</a></li>
                                 </ul>
-                            {% else %}
+
+                                    {% else %}
                                 <ul class="onhover-show-div">
-                                    <li><a href="{% url 'accounts:customer_login' %}">{% translate 'Login' %}</a></li>
-                                    <li><a href="{% url 'accounts:customer_register' %}">{% translate 'register' %}</a></li>
-                                </ul>
-                            {% endif %}
+                                    <li><a href="{% url 'user:CustomerLogin' %}">{% translate 'Login' %}</a></li>
+                                    <li><a href="{% url 'user:CustomerRegister' %}">{% translate 'Signup' %}</a></li>
+                                </ul> {% endif %}
+
                         </li>
                     </ul>
                 </div>
@@ -68,7 +82,8 @@
                         </div>
                         <div class="brand-logo">
                             <a href="{% url 'home:index' %}"><img src="{{ setting_media.media_content }}"
-                                     height="100px"    width="100px"             class="img-fluid blur-up lazyload" alt=""></a>
+                                                                  height="100px" width="100px"
+                                                                  class="img-fluid blur-up lazyload" alt=""></a>
                         </div>
                     </div>
                     <div>
@@ -129,11 +144,12 @@
                                         </div>
                                     </li>
                                     <li class="onhover-div mobile-cart">
-                                    {% load myapptags %}
+                                        {% load myapptags %}
                                         {% shopcartcount user.id as count %}
                                         <div></span><img src="{% static '' %}images/icon/cart.png"
                                                          class="img-fluid blur-up lazyload" alt=""> <i
-                                                class="ti-shopping-cart"></i><span class="cart_qty_cls">{{ count }}</span></div>
+                                                class="ti-shopping-cart"></i><span
+                                                class="cart_qty_cls">{{ count }}</span></div>
 
                                         <ul class="show-div shopping-cart">
                                             <li>

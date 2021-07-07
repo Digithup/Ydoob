@@ -2,6 +2,7 @@ import datetime
 import json
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
@@ -15,27 +16,33 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DeleteView, DetailView, UpdateView, CreateView
 
 from DNigne.settings import BASE_URL
-from accounts.admin import User
-from catalog.forms.forms import ProductsFullForm, CategoryAddForm
+from catalog.forms.forms import CategoryAddForm
 from catalog.models.models import Categories, Image, Products, ProductMedia, ProductDetails, ProductAbout, ProductTags, \
     ProductTransaction
 from catalog.models.product_options import Manufacturer, FiltersGroup, Filters, AttributesGroup, Attributes
 from core.forms.forms import SearchForm
 from core.models.setting import Setting
 from localization.models import Language
+from user.admin import User
 from vendors.models import Store
+
+
 
 
 def index(request):
     categories = Categories.objects.all()
-    category = Categories.objects.filter(id)
+
     products = Products.objects.all()
     store = Store.objects.all()
     setting = Setting.objects.all()
-    index_language = Language.objects.filter(status=True)
+    index_language =[]
+    if index_language is not None:
+        index_language = Language.objects.filter(status=True)
+    else:
+        pass
     context = {
         'categories': categories,
-        'category': category,
+
         'catalog': Products,
         'store': store,
         'setting': setting,
@@ -52,7 +59,7 @@ def categories(request):
         'categories': categories,
 
     }
-    return render(request, 'catalog/category/category-admin.html', context)
+    return render(request, 'catalog/category/admin-category.html', context)
 
 
 def AddCategory(request):
@@ -97,7 +104,7 @@ def AddCategory(request):
             category_obj.slug = slug
             category_obj.status = status
             print(request.POST)
-            messages.error(request, "SUCCESS")
+            messages.success(request, "SUCCESS")
             category_obj.save()  # last_modified field won't update on changing other model field, save() trigger change
             # return reverse('core:catalog')
 
@@ -134,6 +141,7 @@ class DeleteCategory(DeleteView):
         return self.post(*args, **kwargs)
 
 
+############## Products   ################
 def Products_admin(request):
     products = Products.objects.filter(status='True')
 
@@ -177,7 +185,6 @@ def getNoteResponseData(Product, tags, Products_created):
     # success_url = reverse_lazy('core:category_admin')
     return render(Products_created, 'catalog/product/admin-products.html')
 
-############## Products   ################
 class ProductsListView(ListView):
     model = Products
     template_name = "catalog/product/admin-products.html"
@@ -276,8 +283,8 @@ class ProductAddView(View):
                                                  transaction_product_count=in_stock_total,
                                                  transaction_description="Intially Item Added in Stocks")
         product_transaction.save()
-        return HttpResponse("OK")
-        # return render(request, 'catalog/products-admin.html')
+        #return HttpResponse("OK")
+        return HttpResponseRedirect(reverse_lazy('core:Products_list'))
 
 
 class ProductsEdit(View):
@@ -531,8 +538,10 @@ class EditManufacture(UpdateView):
 class DeleteManufacture(DeleteView):
     model = Manufacturer
     fields = '__all__'
-    template_name = 'admin/pages/message/category_confirm_delete.html'
     success_url = reverse_lazy('core:Manufacturers')
+
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)
 
 
 ############## Filters #######################
@@ -574,8 +583,10 @@ class EditFiltersGroup(UpdateView):
 class DeleteFiltersGroup(DeleteView):
     model = FiltersGroup
     fields = '__all__'
-    template_name = 'admin/pages/message/category_confirm_delete.html'
     success_url = reverse_lazy('core:Filters')
+
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)
 
 
 class FiltersListView(ListView):
@@ -630,11 +641,6 @@ class AddFilter(View):
             return HttpResponseRedirect(reverse_lazy('core:Filters'))
 
 
-
-
-
-
-
 class EditFilter(UpdateView):
     model = Filters
     fields = '__all__'
@@ -645,8 +651,10 @@ class EditFilter(UpdateView):
 class DeleteFilter(DeleteView):
     model = Filters
     fields = '__all__'
-    template_name = 'admin/pages/message/category_confirm_delete.html'
     success_url = reverse_lazy('core:Filters')
+
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)
 
 
 ############## Attribute  #######################
@@ -688,8 +696,10 @@ class EditAttributesGroup(UpdateView):
 class DeleteAttributesGroup(DeleteView):
     model = AttributesGroup
     fields = '__all__'
-    template_name = 'admin/pages/message/category_confirm_delete.html'
     success_url = reverse_lazy('core:Attributes')
+
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)
 
 
 class AttributeListView(ListView):
@@ -753,5 +763,7 @@ class EditAttribute(UpdateView):
 class DeleteAttribute(DeleteView):
     model = Attributes
     fields = '__all__'
-    template_name = 'admin/pages/message/category_confirm_delete.html'
     success_url = reverse_lazy('core:Attributes')
+
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)

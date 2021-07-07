@@ -1,8 +1,8 @@
 from catalog.models.models import Products, ProductMedia
 from catalog.models.product_options import Manufacturer
-from core.models.design import SliderMedia, Slider, Banners
+from core.models.design import SliderMedia, Banners
 from core.models.setting import Setting, SettingMedia, SettingLang
-from core.views.setting import setting
+
 from localization.models import Language
 
 
@@ -17,8 +17,8 @@ def home_processors(request):
             'banner_down': Banners.objects.filter(title='down'),
             'manufacture': Manufacturer.objects.filter(status='True'),
             'setting_data': SettingLang.objects.all(),
-            'setting_data': SettingLang.objects.get(lang='en'),
-            'setting_data_ar': SettingLang.objects.get(lang='ar'),
+            #'setting_data_en': SettingLang.objects.get(lang='en'),
+            #'setting_data_ar': SettingLang.objects.get(lang='ar'),
             'index_language': Language.objects.all(),
             ####### products###########
             'products_media' : ProductMedia.objects.all() , # New Products,
@@ -30,7 +30,7 @@ def home_processors(request):
             'new_featured': ProductMedia.objects.all().order_by('-id')[:10],  # Featured Products
             'best_products' : ProductMedia.objects.all().order_by('?')[:6]  # Best Sellers
         }
-    except Exception as e:
+    except BaseException as e:
         return {'setting': Setting.objects.last(),
                 'setting_media': SettingMedia.objects.last(),
                 'main_slider': SliderMedia.objects.filter(slider_id__group__title='home'),
@@ -38,9 +38,7 @@ def home_processors(request):
                 'banner_right': Banners.objects.filter(title='right'),
                 'banner_down': Banners.objects.filter(title='down'),
                 'manufacture': Manufacturer.objects.filter(status='True'),
-                # 'banner': Banners.objects.all(),
-                'setting_data': SettingLang.objects.get(lang='en'),
-                'setting_data_ar': SettingLang.objects.get(lang='ar'),
-                'index_language': Language.objects.all()
 
-                }
+
+                },print(e);
+

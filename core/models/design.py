@@ -8,7 +8,7 @@ from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 from pilkit.processors import ResizeToFill
 
-from accounts.models import User
+from user.models import User
 
 import os
 

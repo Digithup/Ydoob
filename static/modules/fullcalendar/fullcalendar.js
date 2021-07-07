@@ -9201,7 +9201,7 @@ var DateComponent = /** @class */ (function (_super) {
         return classes;
     };
     // Utility for formatting a range. Accepts a range object, formatting string, and optional separator.
-    // Displays all-day ranges naturally, with an inclusive end. Takes the current isRTL into account.
+    // Displays all-day ranges naturally, with an inclusive end. Takes the current isRTL into users.
     // The timezones of the dates within `range` will be respected.
     DateComponent.prototype.formatRange = function (range, isAllDay, formatStr, separator) {
         var end = range.end;

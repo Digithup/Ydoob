@@ -58,7 +58,7 @@ def Products_list(request, category_slug=None):
                 'category':category,
                'catdata': catdata}
     #return HttpResponse(1)
-    return render(request, 'catalog/category/category-admin.html', context)
+    return render(request, 'catalog/category/admin-category.html', context)
 
 
 def user_list(request, id, slug):

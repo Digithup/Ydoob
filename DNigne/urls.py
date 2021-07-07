@@ -29,21 +29,23 @@ urlpatterns = [
     # path('selectcurrency', views.selectcurrency, name='selectcurrency'),
     #path('savelangcur', views.savelangcur, name='savelangcur'),
 
+
+
 ]
 
 urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls ),
-    path('', include('home.urls'), name='home'),
+    path('', include('user.urls'), name='user'),
     path('', include('core.urls'), name='core'),
-    path('', include('catalog.urls'), name='catalog'),
-    path('', include('accounts.urls'), name='accounts'),
     path('', include('localization.urls'), name='localization'),
+    path('', include('home.urls'), name='home'),
+    path('', include('catalog.urls'), name='catalog'),
     path('', include('sales.urls'), name='sales'),
     path('', include('vendors.urls'), name='vendors'),
+
     path('search/', include('haystack.urls'), name='haystack'),
     # USER URL
     path('ckeditor/', include('ckeditor_uploader.urls')),
-
     # LOGIN URL
     # API URL
     path('api-auth/', include('rest_framework.urls')),
@@ -58,3 +60,4 @@ if 'rosetta' in settings.INSTALLED_APPS:
     urlpatterns += [
         path('admin/lang/rosetta/', include('rosetta.urls') )
     ]
+

@@ -357,7 +357,7 @@ $.extend( Responsive.prototype, {
 
 		// Control column needs to always be included. This makes it sub-
 		// optimal in terms of using the available with, but to stop layout
-		// thrashing or overflow. Also we need to account for the control column
+		// thrashing or overflow. Also we need to users for the control column
 		// width first so we know how much width is available for the other
 		// columns, since the control column might not be the first one shown
 		for ( i=0, ien=display.length ; i<ien ; i++ ) {
@@ -862,7 +862,7 @@ $.extend( Responsive.prototype, {
 			.css( 'display', 'table-cell' )
 			.css( 'min-width', 0 );
 
-		// Body rows - we don't need to take account of DataTables' column
+		// Body rows - we don't need to take users of DataTables' column
 		// visibility since we implement our own here (hence the `display` set)
 		$(clonedBody)
 			.append( $(dt.rows( { page: 'current' } ).nodes()).clone( false ) )

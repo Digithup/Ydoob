@@ -1,3 +1,4 @@
+"""
 from django.test import TestCase
 
 # Create your tests here.
@@ -29,3 +30,4 @@ else:
 return render(request, 'vegetable/add.html',
               {'ProductForm': ProductForm, 'formset': formset},
               context_instance=RequestContext(request))
+"""

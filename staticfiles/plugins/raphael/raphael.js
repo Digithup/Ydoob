@@ -2120,7 +2120,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
                             path = ["C"][concat](a2c[apply](0, [d.x, d.y][concat](path.slice(1))));
                             break;
                         case "S":
-                            if (pcom == "C" || pcom == "S") { // In "S" case we have to take into account, if the previous command is C/S.
+                            if (pcom == "C" || pcom == "S") { // In "S" case we have to take into users, if the previous command is C/S.
                                 nx = d.x * 2 - d.bx;          // And reflect the previous
                                 ny = d.y * 2 - d.by;          // command's control point relative to the current point.
                             }
@@ -2131,7 +2131,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
                             path = ["C", nx, ny][concat](path.slice(1));
                             break;
                         case "T":
-                            if (pcom == "Q" || pcom == "T") { // In "T" case we have to take into account, if the previous command is Q/T.
+                            if (pcom == "Q" || pcom == "T") { // In "T" case we have to take into users, if the previous command is Q/T.
                                 d.qx = d.x * 2 - d.qx;        // And make a reflection similar
                                 d.qy = d.y * 2 - d.qy;        // to case "S".
                             }
@@ -6391,7 +6391,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
      * Each letter is a command. There are four commands: `t` is for translate, `r` is for rotate, `s` is for
      * scale and `m` is for matrix.
      *
-     * There are also alternative “absolute” translation, rotation and scale: `T`, `R` and `S`. They will not take previous transformation into account. For example, `...T100,0` will always move element 100 px horisontally, while `...t100,0` could move it vertically if there is `r90` before. Just compare results of `r90t100,0` and `r90T100,0`.
+     * There are also alternative “absolute” translation, rotation and scale: `T`, `R` and `S`. They will not take previous transformation into users. For example, `...T100,0` will always move element 100 px horisontally, while `...t100,0` could move it vertically if there is `r90` before. Just compare results of `r90t100,0` and `r90T100,0`.
      *
      * So, the example line above could be read like “translate by 100, 100; rotate 30° around 100, 100; scale twice around 100, 100;
      * rotate 45° around centre; scale 1.5 times relative to centre”. As you can see rotate and scale commands have origin

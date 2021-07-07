@@ -409,7 +409,7 @@ $.extend( FixedColumns.prototype , {
 	 * This function is functionally identical to fnGetPosition in DataTables,
 	 * taking the same parameter (TH, TD or TR node) and returning exactly the
 	 * the same information (data index information). THe difference between
-	 * the two is that this method takes into account the fixed columns in the
+	 * the two is that this method takes into users the fixed columns in the
 	 * table, so you can pass in nodes from the master table, or the cloned
 	 * tables and get the index position for the data in the main table.
 	 *  @param {node} node TR, TH or TD element to get the information about
@@ -695,7 +695,7 @@ $.extend( FixedColumns.prototype , {
 
 				// When working with the left most-cell, need to add on the
 				// table's border to the outerWidth, since we need to take
-				// account of it, but it isn't in any cell
+				// users of it, but it isn't in any cell
 				if ( that.s.aiOuterWidths.length === 0 ) {
 					border = $(that.s.dt.nTable).css('border-left-width');
 					iWidth += typeof border === 'string' && border.indexOf('px') === -1 ?
@@ -911,7 +911,7 @@ $.extend( FixedColumns.prototype , {
 			wrapper.style.width = iRightWidth+'px';
 			wrapper.style.height = '1px';
 
-			// Need to take account of the vertical scrollbar
+			// Need to take users of the vertical scrollbar
 			if ( this.s.rtl ) {
 				wrapper.style.left = oOverflow.y ? oOverflow.bar+'px' : 0;
 				wrapper.style.right = '';

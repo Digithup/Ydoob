@@ -1,0 +1,52 @@
+{% extends "front/homebase.html" %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Sign Out" %}{% endblock %}
+{% block body %}
+{% block content %}
+     <!-- breadcrumb start -->
+        <div class="breadcrumb-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="page-title">
+                            <h2>customer's login</h2>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <nav aria-label="breadcrumb" class="theme-breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                                <li class="breadcrumb-item active">login</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- breadcrumb End -->
+    <section class="login-page section-b-space">
+            <div class="container">
+                <h3>{% trans "Sign Out" %}</h3>
+                <div class="theme-card row ">
+                    <div class="card-columns col-md-6">
+                                            <div class="row-cols-auto center">
+
+
+                    <p>{% trans 'Are you sure you want to sign out?' %}</p>
+
+                    <form method="post" action="{% url 'account_logout' %}">
+                      {% csrf_token %}
+                      {% if redirect_field_value %}
+                      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                      {% endif %}
+                      <button type="submit">{% trans 'Sign Out' %}</button>
+                    </form>
+                                            </div>
+                    </div></div></div></section>
+
+
+{% endblock %}{% endblock %}
+{% block foot %} {% include 'front/footer.html' %}  {% endblock %}
+{% block js %} {% include 'front/js.html' %}  {% endblock %}
+

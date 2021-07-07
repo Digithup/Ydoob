@@ -224,3 +224,50 @@
         </div>
     </div>
     <!-- Quick-view modal popup end-->
+
+
+
+<p>{% blocktrans with site.name as site_name %}Please sign in with one
+                                    of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
+                                    for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
+
+
+
+
+
+{% extends "account/base.html" %} {% load i18n custom_tags account %} {% block head_title %}{% trans "Sign In" %}{% endblock %} {% block common_scripts %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script type="text/javascript">
+  // Load jquery straight from the cdn for this page.
+  $(function() {
+    // We need some mappings for Providers names from AllAuth to the icon class names.
+    $('.btn-google').addClass('btn-google-plus');
+    $('.btn-linkedin_oauth2').addClass('btn-linkedin');
+    $('.fa-linkedin_oauth2').addClass('fa-linkedin');
+    $('#id_login').addClass('form-control').removeAttr('autofocus').blur();
+    $('#id_password').addClass('form-control');
+  });
+</script>
+{% endblock %} {% block content %}
+<div class="container col-md-12">
+  <div class="well login-well">
+    <div class="socialaccount_ballot">
+      <ul class="socialaccount_providers">
+        {% load socialaccount %} {% for provider in socialaccount.providers %} {% if provider.id == "openid" %}
+          {% for brand in provider.get_brands %}
+        <li>
+          <a title="{{ brand.name }}" class="btn btn-block btn-social btn-md btn-{{ provider.id }}
+          socialaccount_provider {{ brand.id }}" href="{% provider_login_url provider.id openid=brand.openid_url process=" login " %}">
+            <i class="fa fa-{{ provider.id }}"></i>Log in with {{ brand.name }}
+          </a>
+        </li>
+        {% endfor %} {% endif %}
+        <li>
+          <a title="{{ provider.name }}" class="btn btn-block btn-social btn-md socialaccount_provider btn-{{ provider.id }}"
+             href="{% provider_login_url provider.id process=" login " %}">
+            <i class="fa fa-{{ provider.id }}"></i>Log in with {{ provider.name }}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+      <hr>

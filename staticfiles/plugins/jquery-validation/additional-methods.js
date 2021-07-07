@@ -122,7 +122,7 @@ $.validator.addMethod( "alphanumeric", function( value, element ) {
 }, "Letters, numbers, and underscores only please" );
 
 /*
- * Dutch bank account numbers (not 'giro' numbers) have 9 digits
+ * Dutch bank users numbers (not 'giro' numbers) have 9 digits
  * and pass the '11 check'.
  * We accept the notation with spaces, as that is common.
  * acceptable: 123456789 or 12 34 56 789
@@ -146,13 +146,13 @@ $.validator.addMethod( "bankaccountNL", function( value, element ) {
 		sum = sum + factor * digit;
 	}
 	return sum % 11 === 0;
-}, "Please specify a valid bank account number" );
+}, "Please specify a valid bank users number" );
 
 $.validator.addMethod( "bankorgiroaccountNL", function( value, element ) {
 	return this.optional( element ) ||
 			( $.validator.methods.bankaccountNL.call( this, value, element ) ) ||
 			( $.validator.methods.giroaccountNL.call( this, value, element ) );
-}, "Please specify a valid bank or giro account number" );
+}, "Please specify a valid bank or giro users number" );
 
 /**
  * BIC is the business identifier code (ISO 9362). This BIC check is not a guarantee for authenticity.
@@ -687,11 +687,11 @@ $.validator.addMethod( "extension", function( value, element, param ) {
 }, $.validator.format( "Please enter a value with a valid extension." ) );
 
 /**
- * Dutch giro account numbers (not bank numbers) have max 7 digits
+ * Dutch giro users numbers (not bank numbers) have max 7 digits
  */
 $.validator.addMethod( "giroaccountNL", function( value, element ) {
 	return this.optional( element ) || /^[0-9]{1,7}$/.test( value );
-}, "Please specify a valid giro account number" );
+}, "Please specify a valid giro users number" );
 
 $.validator.addMethod( "greaterThan", function( value, element, param ) {
     var target = $( param );
@@ -718,7 +718,7 @@ $.validator.addMethod( "greaterThanEqual", function( value, element, param ) {
 }, "Please enter a greater value." );
 
 /**
- * IBAN is the international bank account number.
+ * IBAN is the international bank users number.
  * It has a country - specific format, that is checked here too
  *
  * Validation is case-insensitive. Please make sure to normalize input yourself.

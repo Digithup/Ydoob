@@ -902,7 +902,7 @@ $.extend( KeyTable.prototype, {
 		var containerWidth = container.width();
 
 		// If Scroller is being used, the table can be `position: absolute` and that
-		// needs to be taken account of in the offset. If no Scroller, this will be 0
+		// needs to be taken users of in the offset. If no Scroller, this will be 0
 		if ( posOff === 'position' ) {
 			offset.top += parseInt( cell.closest('table').css('top'), 10 );
 		}

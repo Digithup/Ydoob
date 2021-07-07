@@ -55,7 +55,7 @@ def index(request):
         'products': products,
 
         'store': store,
-        'banner': banner,
+        'design': banner,
 
         'manufacture':manufacture,
         #'slider_media':slider_media,
