@@ -5,10 +5,10 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.template.context_processors import request
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.html import format_html
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 from django.views.generic.base import RedirectView, View
 
 from catalog.models.models import Products
@@ -47,10 +47,10 @@ class SellerRegister(CreateView):
 class CreateStore(View):
     def get(self, request, *args, **kwargs):
         print(request)
-       # vendor = Store.objects.get_or_create()
-        #seller = request.user
+        # vendor = Store.objects.get_or_create()
+        # seller = request.user
 
-        return render(request, "store-page/create-store.html",)
+        return render(request, "store-page/create-store.html", )
 
     print(request)
 
@@ -64,38 +64,20 @@ class CreateStore(View):
         vendor = User.objects.filter(seller=True)
         status = Store.objects.filter(status='Disable')
 
-
         if vendor and status:
-            messages.error( request,
-                format_html('''You already have a store wait for activate &nbsp; &nbsp;  or learn how to sell &nbsp; 
+            messages.error(request,
+                           format_html('''You already have a store wait for activate &nbsp; &nbsp;  or learn how to sell &nbsp; 
                 <a href=""> Edit</a> ''',
-                            reverse('home:index', )))
+                                       reverse('home:index', )))
 
             return render(request, "store-page/create-store.html", )
 
         else:
-            store = Store(title=title_group, address=address, phone=phone, email=email,vendor_id=vendor_id)
+            store = Store(title=title_group, address=address, phone=phone, email=email, vendor_id=vendor_id)
             store.save()
             # return HttpResponse("OK")
             return render(request, 'store-page/create-success.html', )
-            #return HttpResponseRedirect(reverse_lazy('home:index'))
-
-
-@login_required(login_url='/home/login/')  # Check login
-def vendor_dashboard(request, vendor=None):
-    vendor = request.user  # Access User Session information
-    owner = Store.objects.get(vendor=vendor)
-
-    context = {'owner': owner,
-               }
-    return render(request, 'vendor-dashboard.html', context)
-
-def StoreWaiting(request):
-    status = Store.objects.filter(status='Disable')
-
-    context = {'status': status,
-               }
-    return render(request, 'store-page/store-waiting.html', context)
+            # return HttpResponseRedirect(reverse_lazy('home:index'))
 
 
 def CreateSuccess(request, id):
@@ -106,30 +88,35 @@ def CreateSuccess(request, id):
     return render(request, 'store-page/create-success.html', context)
 
 
+def StoreWaiting(request):
+    status = Store.objects.filter(status='Disable')
+
+    context = {'status': status,
+               }
+    return render(request, 'store-page/store-waiting.html', context)
 
 
+@login_required(login_url='/home/login/')  # Check login
+def VendorDashboard(request, vendor=None):
+    vendor = request.user  # Access User Session information
+    owner = Store.objects.get(vendor=vendor)
+    store=Store.objects.filter(vendor=vendor)
 
-def become_sellers(request, id):
-    forms = StoreAddForm
-    if request.method == 'POST':
+    context = {'owner': owner,
+               'store':store,
+               }
+    return render(request, 'vendor/vendor-dashboard.html', context)
 
-        print(request.POST)
-        forms = StoreAddForm(request.POST, request.FILES)
-        if forms.is_valid():
-            store = forms.save(commit=False)
-            store.vendor = request.user
-            store.save()
-            # Add this to check if the email already exists in your database or not
-            # store.save()
-            return render(request, 'store-page/create-success.html', )
-    else:
-        forms = StoreAddForm(request.POST, request.FILES)
-        return render(request, 'store-page/create-store.html', {'forms': forms})
-    return render(request, 'store-page/create-store.html', {'forms': forms})
+class EditStoret(UpdateView):
+    model = Store
+    fields = '__all__'
+    template_name = 'catalog/category/edit-category.html'
+    success_url = reverse_lazy('core:categories')
 
 
 @method_decorator([login_required, seller_required], name='dispatch')
-def edit_store(request):
+def EditStore(request):
+
     store = Store.objects.get(id=request.store.id)
     forms = StoreEditForm(instance=store)
     if request.method == 'POST':
@@ -140,7 +127,7 @@ def edit_store(request):
         'user': store,
         'forms': forms
     }
-    return render(request, 'store_page.html', context)
+    return render(request, 'vendor/vendor-edit-store-profile.html', context)
 
 
 def store_delete(request, user_id):

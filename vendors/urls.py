@@ -3,9 +3,9 @@ from django.conf.urls import url
 from django.contrib.auth.views import LogoutView
 from django.urls import path
 
-from vendors.tests import CreateStoreTest
-from vendors.views import store_list, edit_store, store_delete, \
-    vendor_dashboard, SellerRegister, CreateStore,  CreateSuccess, StoreWaiting
+from vendors.tests import CreateStoreTest, EditStoreTest
+from vendors.views import store_list, store_delete, \
+    SellerRegister, CreateStore, CreateSuccess, StoreWaiting, VendorDashboard, EditStore
 
 app_name = 'vendors'
 
@@ -15,10 +15,10 @@ urlpatterns = [
     #path('v/register/',SellerRegisterView.as_view(),name='seller_register'),
 
     ###############Adminn Seller Url##############
-    path('admin/vendors/',store_list,name='store_list'),
+    #path('admin/vendors/',store_list,name='store_list'),
     #path('admin/s/<int:id>',admin_dashboard,name='store_page'),
-    path('admin/s/edit/', edit_store, name='edit_store'),
-    path('admin/s/<int:id>', store_delete, name='store_delete'),
+    #path('admin/s/edit/', EditStore, name='EditStore'),
+    #path('admin/s/<int:id>', store_delete, name='store_delete'),
 
 
 
@@ -27,7 +27,8 @@ urlpatterns = [
     path('startselling/',CreateStore.as_view(),name='CreateStore'),
     path('CreateSuccess/',CreateSuccess,name='CreateSuccess'),
     path('StoreWaiting/',StoreWaiting,name='StoreWaiting'),
-    path('store/',vendor_dashboard,name='VendorDashboard'),
+    path('store/<int:vendor>',VendorDashboard,name='VendorDashboard'),
+    path('store/edit/<int:vendor>', EditStoreTest.as_view(), name='EditStore'),
 
 
 

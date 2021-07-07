@@ -4,23 +4,20 @@
 
 {% block body %}
 
-
-
-
     <!-- breadcrumb start -->
     <div class="breadcrumb-section">
         <div class="container">
             <div class="row">
                 <div class="col-sm-6">
                     <div class="page-title">
-                        <h2>{{ store.title }} dashboard</h2>
+                        <h2>vendor dashboard</h2>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <nav aria-label="breadcrumb" class="theme-breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{% url 'home:index' %}">Home</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ store.title }}</li>
+                            <li class="breadcrumb-item active" aria-current="page">vendor dashboard</li>
                         </ol>
                     </nav>
                 </div>
@@ -29,7 +26,7 @@
     </div>
     <!-- breadcrumb End -->
 
-
+{% for rs in store %}
     <!--  dashboard section start -->
     <section class="dashboard-section section-b-space">
         <div class="container">
@@ -38,28 +35,31 @@
                     <div class="dashboard-sidebar">
                         <div class="profile-top">
                             <div class="profile-image">
-                                <img src="{{ store.image.url }}" alt="" class="img-fluid">
+
+                                <img src="{% static '' %}images/logos/17.png" alt="" class="img-fluid">
                             </div>
                             <div class="profile-detail">
-
-                                <h5>{{ store.title }}</h5>
+                                <h5>{{ rs.title}}</h5>
                                 <h6>750 followers | 10 review</h6>
-                                <h6>{{ store.email }}</h6>
+                                <h6>{{ rs.email}}</h6>
                             </div>
                         </div>
                         <div class="faq-tab">
                             <ul class="nav nav-tabs" id="top-tab" role="tablist">
-                                <li class="nav-item"><a data-toggle="tab" class="nav-link active"
+                                <li class="nav-item"><a data-bs-toggle="tab" class="nav-link active"
                                                         href="#dashboard">dashboard</a></li>
-                                <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#products">products</a>
+                                <li class="nav-item"><a data-bs-toggle="tab" class="nav-link"
+                                                        href="#products">products</a>
                                 </li>
-                                <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#orders">orders</a>
+                                <li class="nav-item"><a data-bs-toggle="tab" class="nav-link" href="#orders">orders</a>
                                 </li>
-                                <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#profile">profile</a>
+                                <li class="nav-item"><a data-bs-toggle="tab" class="nav-link"
+                                                        href="#profile">profile</a>
                                 </li>
-                                <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#settings">settings</a>
+                                <li class="nav-item"><a data-bs-toggle="tab" class="nav-link"
+                                                        href="#settings">settings</a>
                                 </li>
-                                <li class="nav-item"><a class="nav-link" data-toggle="modal" data-target="#logout"
+                                <li class="nav-item"><a class="nav-link" data-toggle="modal" data-bs-target="#logout"
                                                         href="">logout</a>
                                 </li>
                             </ul>
@@ -210,12 +210,12 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="card dashboard-table mt-0">
-                                        <div class="card-body">
+                                        <div class="card-body table-responsive-md">
                                             <div class="top-sec">
                                                 <h3>all products</h3>
                                                 <a href="#" class="btn btn-sm btn-solid">add product</a>
                                             </div>
-                                            <table class="table-responsive-md table mb-0">
+                                            <table class="table mb-0">
                                                 <thead>
                                                 <tr>
                                                     <th scope="col">image</th>
@@ -237,8 +237,8 @@
                                                     <td>$205</td>
                                                     <td>1000</td>
                                                     <td>2000</td>
-                                                    <td><i class="fa fa-pencil-square-o mr-1"
-                                                           aria-hidden="true"></i><i class="fa fa-trash-o ml-1"
+                                                    <td><i class="fa fa-pencil-square-o me-1"
+                                                           aria-hidden="true"></i><i class="fa fa-trash-o ms-1"
                                                                                      aria-hidden="true"></i></td>
                                                 </tr>
                                                 <tr>
@@ -250,8 +250,8 @@
                                                     <td>$350</td>
                                                     <td>800</td>
                                                     <td>350</td>
-                                                    <td><i class="fa fa-pencil-square-o mr-1"
-                                                           aria-hidden="true"></i><i class="fa fa-trash-o ml-1"
+                                                    <td><i class="fa fa-pencil-square-o me-1"
+                                                           aria-hidden="true"></i><i class="fa fa-trash-o ms-1"
                                                                                      aria-hidden="true"></i></td>
                                                 </tr>
                                                 <tr>
@@ -262,8 +262,8 @@
                                                     <td>$150</td>
                                                     <td>750</td>
                                                     <td>150</td>
-                                                    <td><i class="fa fa-pencil-square-o mr-1"
-                                                           aria-hidden="true"></i><i class="fa fa-trash-o ml-1"
+                                                    <td><i class="fa fa-pencil-square-o me-1"
+                                                           aria-hidden="true"></i><i class="fa fa-trash-o ms-1"
                                                                                      aria-hidden="true"></i></td>
                                                 </tr>
                                                 <tr>
@@ -274,8 +274,8 @@
                                                     <td>$150</td>
                                                     <td>750</td>
                                                     <td>150</td>
-                                                    <td><i class="fa fa-pencil-square-o mr-1"
-                                                           aria-hidden="true"></i><i class="fa fa-trash-o ml-1"
+                                                    <td><i class="fa fa-pencil-square-o me-1"
+                                                           aria-hidden="true"></i><i class="fa fa-trash-o ms-1"
                                                                                      aria-hidden="true"></i></td>
                                                 </tr>
                                                 <tr>
@@ -286,8 +286,8 @@
                                                     <td>$150</td>
                                                     <td>750</td>
                                                     <td>150</td>
-                                                    <td><i class="fa fa-pencil-square-o mr-1"
-                                                           aria-hidden="true"></i><i class="fa fa-trash-o ml-1"
+                                                    <td><i class="fa fa-pencil-square-o me-1"
+                                                           aria-hidden="true"></i><i class="fa fa-trash-o ms-1"
                                                                                      aria-hidden="true"></i></td>
                                                 </tr>
                                                 <tr>
@@ -298,8 +298,8 @@
                                                     <td>$150</td>
                                                     <td>750</td>
                                                     <td>150</td>
-                                                    <td><i class="fa fa-pencil-square-o mr-1"
-                                                           aria-hidden="true"></i><i class="fa fa-trash-o ml-1"
+                                                    <td><i class="fa fa-pencil-square-o me-1"
+                                                           aria-hidden="true"></i><i class="fa fa-trash-o ms-1"
                                                                                      aria-hidden="true"></i></td>
                                                 </tr>
                                                 </tbody>
@@ -313,12 +313,12 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="card dashboard-table mt-0">
-                                        <div class="card-body">
+                                        <div class="card-body table-responsive-sm">
                                             <div class="top-sec">
                                                 <h3>orders</h3>
                                                 <a href="#" class="btn btn-sm btn-solid">add product</a>
                                             </div>
-                                            <table class="table table-responsive-sm mb-0">
+                                            <table class="table mb-0">
                                                 <thead>
                                                 <tr>
                                                     <th scope="col">order id</th>
@@ -395,19 +395,22 @@
                                     <div class="card mt-0">
                                         <div class="card-body">
                                             <div class="dashboard-box">
-                                                <div class="dashboard-title">
-                                                    <h4>profile</h4>
-                                                    <span data-toggle="modal" data-target="#edit-profile">edit</span>
+                                                <div class="dashboard-title row">
+                                                    <h4 class="col-md-4">profile</h4>
+                                                    <div class="col-md-6 pull-right">
+
+                                                        <a href="{% url 'vendors:EditStore' rs.id %}"
+                                                                class="btn btn-solid">Edit Store Information</a></div>
                                                 </div>
                                                 <div class="dashboard-detail">
                                                     <ul>
                                                         <li>
                                                             <div class="details">
                                                                 <div class="left">
-                                                                    <h6>company name</h6>
+                                                                    <h6>company nadme</h6>
                                                                 </div>
                                                                 <div class="right">
-                                                                    <h6>{{ store.company }}</h6>
+                                                                    <h6>{{ rs.company}}</h6>
                                                                 </div>
                                                             </div>
                                                         </li>
@@ -417,17 +420,17 @@
                                                                     <h6>email address</h6>
                                                                 </div>
                                                                 <div class="right">
-                                                                    <h6>{{ store.email }}</h6>
+                                                                    <h6>mark.enderess@mail.com</h6>
                                                                 </div>
                                                             </div>
                                                         </li>
                                                         <li>
                                                             <div class="details">
                                                                 <div class="left">
-                                                                    <h6>Store Phone Number</h6>
+                                                                    <h6>Country / Region</h6>
                                                                 </div>
                                                                 <div class="right">
-                                                                    <h6>{{ store.phone }}</h6>
+                                                                    <h6>Downers Grove, IL</h6>
                                                                 </div>
                                                             </div>
                                                         </li>
@@ -437,17 +440,17 @@
                                                                     <h6>Year Established</h6>
                                                                 </div>
                                                                 <div class="right">
-                                                                    <h6>{{ store.create_at }}</h6>
+                                                                    <h6>2018</h6>
                                                                 </div>
                                                             </div>
                                                         </li>
                                                         <li>
                                                             <div class="details">
                                                                 <div class="left">
-                                                                    <h6>Total Product</h6>
+                                                                    <h6>Total Employees</h6>
                                                                 </div>
                                                                 <div class="right">
-                                                                    <h6>{{ store.product }}</h6>
+                                                                    <h6>101 - 200 People</h6>
                                                                 </div>
                                                             </div>
                                                         </li>
@@ -457,7 +460,7 @@
                                                                     <h6>category</h6>
                                                                 </div>
                                                                 <div class="right">
-                                                                    <h6>{{ store.category }}</h6>
+                                                                    <h6>clothing</h6>
                                                                 </div>
                                                             </div>
                                                         </li>
@@ -467,7 +470,7 @@
                                                                     <h6>street address</h6>
                                                                 </div>
                                                                 <div class="right">
-                                                                    <h6>{{ store.address }}</h6>
+                                                                    <h6>549 Sulphur Springs Road</h6>
                                                                 </div>
                                                             </div>
                                                         </li>
@@ -648,7 +651,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Logging Out</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -656,51 +659,22 @@
                     Do you want to log out?
                 </div>
                 <div class="modal-footer">
-                    <a href="#" class="btn btn-dark btn-custom" data-dismiss="modal">no</a>
-                    <a href="{% url 'home:index' %}" class="btn btn-solid btn-custom">yes</a>
+                    <a href="#" class="btn btn-dark btn-custom" data-bs-dismiss="modal">no</a>
+                    <a href="index.html" class="btn btn-solid btn-custom">yes</a>
                 </div>
             </div>
         </div>
     </div>
     <!-- modal end -->
+    {% endfor %}
 
 
 {% endblock %}
 
 
 
+
+
+
 {% block foot %} {% include 'front/footer.html' %}  {% endblock %}
 {% block js %} {% include 'front/js.html' %}  {% endblock %}
-
-<!-- latest jquery-->
-<script src="{% static '' %}js/jquery-3.3.1.min.js"></script>
-
-<!-- menu js-->
-<script src="{% static '' %}js/menu.js"></script>
-
-<!-- lazyload js-->
-<script src="{% static '' %}js/lazysizes.min.js"></script>
-
-<!-- popper js-->
-<script src="{% static '' %}js/popper.min.js"></script>
-
-<!-- slick js-->
-<script src="{% static '' %}js/slick.js"></script>
-
-<!-- dare picker js -->
-<script src="{% static '' %}js/date-picker.js"></script>
-
-<!-- Bootstrap js-->
-<script src="{% static '' %}js/bootstrap.js"></script>
-
-<!-- chart js -->
-<script src="{% static '' %}js/chart/apex/apexcharts.js"></script>
-<script src="{% static '' %}js/chart/apex/custom-chart.js"></script>
-
-<!-- Bootstrap Notification js-->
-<script src="{% static '' %}js/bootstrap-notify.min.js"></script>
-
-<!-- Theme js-->
-<script src="{% static '' %}js/script.js"></script>
-
-  

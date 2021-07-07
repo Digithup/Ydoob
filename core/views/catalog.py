@@ -287,21 +287,20 @@ class ProductAddView(View):
         return HttpResponseRedirect(reverse_lazy('core:Products_list'))
 
 
-class ProductsEdit(View):
+class ProductUpdate(View):
 
-    def get(self, request, *args, **kwargs):
-        product_id = kwargs["id"]
-        products = Products.objects.get(id=id)
-        Products_details = ProductDetails.objects.filter(id=product_id)
-        Products_about = ProductAbout.objects.filter(id=product_id)
-        Products_tags = ProductTags.objects.filter(id=product_id)
-        categories = Categories.objects.filter(status=True)
+    def get(self,request,*args,**kwargs):
+        product_id = kwargs["product_id"]
+        product = Products.objects.get(id=product_id)
+        product_details = ProductDetails.objects.filter(product_id=product_id)
+        product_about = ProductAbout.objects.filter(product_id=product_id)
+        product_tags = ProductTags.objects.filter(product_id=product_id)
 
 
 
         return render(request, "catalog/product/edit-product.html",
-                      {"categories": categories, "products": products, "Products_details": Products_details,
-                       "Products_about": Products_about, "Products_tags": Products_tags})
+                      {"categories": categories, "product": product, "Products_details": product_details,
+                       "Product_about": product_about, "Product_tags": product_tags})
 
     def post(self, request, *args, **kwargs):
 
@@ -320,7 +319,7 @@ class ProductsEdit(View):
         long_desc = request.POST.get("long_desc")
         categories = Categories.objects.get(id=Categories)
 
-        Products_id = kwargs["id"]
+        Products_id = kwargs["product_id"]
         products = Products.objects.get(id=id)
         Products.title = title
         Products.url_slug = url_slug

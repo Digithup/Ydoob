@@ -47,7 +47,7 @@
             <div class="col-xl-12">
                 <div class="card">
                     <form class="needs-validation" id="myform" enctype="multipart/form-data"
-                          action="{% url 'core:Product_add' %}"
+                          action="{% url 'core:ProductUpdate' product.id %}"
                           method="post">
                         {% csrf_token %}
 

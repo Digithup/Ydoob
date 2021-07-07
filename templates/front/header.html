@@ -4,8 +4,6 @@
 {% load imagefit %}
 {% load myapptags %}
 {% load i18n %}
-
-
 <!-- header start -->
 <header class="header-style-5 border-style" id="sticky-header">
     <div class="mobile-fix-option"></div>
@@ -36,7 +34,7 @@
                                     {% if  user.seller   %}
                                         {% for rs in store %}
                                           {% if rs.activation %}
-                                              <li><a href="{% url 'vendors:VendorDashboard' %}">{% translate 'Dashboard' %}</a></li>
+                                              <li><a href="{% url 'vendors:VendorDashboard' rs.id %}">{% translate 'Dashboard' %}</a></li>
                                               {% else %}{% if rs.status %}
 
                                              <li><a href="{% url 'vendors:StoreWaiting' %}"><h6>{% translate 'Store need action' %}</h6></a></li>
@@ -82,7 +80,7 @@
                         </div>
                         <div class="brand-logo">
                             <a href="{% url 'home:index' %}"><img src="{{ setting_media.media_content }}"
-                                                                  height="100px" width="100px"
+                                                                  height="10px" width="10px"
                                                                   class="img-fluid blur-up lazyload" alt=""></a>
                         </div>
                     </div>
