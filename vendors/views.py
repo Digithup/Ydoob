@@ -97,16 +97,7 @@ def StoreWaiting(request):
 
 
 
-@login_required(login_url='/home/login/')  # Check login
-def VendorDashboardk(request, vendor=None):
-    #vendor = request.user  # Access User Session information
-    #owner = Store.objects.get(vendor=vendor)
-    store=Store.objects.all()
 
-    context = {
-               'store':store,
-               }
-    return render(request, 'vendor/vendor-dashboard.html', context)
 
 class VendorDashboard(ListView):
     model = Store
@@ -135,30 +126,6 @@ class VendorDashboard(ListView):
         context["orderby"] = self.request.GET.get("orderby", "id")
         context["all_table_fields"] = Store._meta.get_fields()
         return context
-
-
-
-class EditStoret(UpdateView):
-    model = Store
-    fields = '__all__'
-    template_name = 'catalog/category/edit-category.html'
-    success_url = reverse_lazy('core:categories')
-
-
-@method_decorator([login_required, seller_required], name='dispatch')
-def EditStore(request):
-
-    store = Store.objects.get(id=request.store.id)
-    forms = StoreEditForm(instance=store)
-    if request.method == 'POST':
-        forms = StoreEditForm(request.POST, request.FILES, instance=store)
-        if forms.is_valid():
-            forms.save()
-    context = {
-        'user': store,
-        'forms': forms
-    }
-    return render(request, 'vendor/vendor-edit-store-profile.html', context)
 
 
 def store_delete(request, user_id):

@@ -61,7 +61,7 @@ def image_directory_path(instance, filename):
         sub_folder = "avatar"
     if ext.lower() in ["pdf", "docx"]:
         sub_folder = "document"
-    return os.path.join(instance.store.id, sub_folder, filename)
+    return os.path.join(instance.store_id.title, sub_folder, filename)
 
 class StoreMedia(models.Model):
     id=models.AutoField(primary_key=True)

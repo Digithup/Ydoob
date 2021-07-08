@@ -134,7 +134,7 @@ def crop_image(file, uid):
     return cropped_avatar
 
 
-class CreateStoreTest(View):
+class EditStoreTestt(View):
 
     def get(self, request, *args, **kwargs, ):
         store_id = kwargs["store_id"]
@@ -223,6 +223,7 @@ class EditStoreTest(View):
         company = request.POST.get("company")
         media_type_list = request.POST.getlist("media_type[]")
         media_content_list = request.FILES.getlist("media_content[]")
+        media_content_ids = request.POST.getlist("media_content_id[]")
         about = request.POST.get("about")
         keywords = request.POST.get("keywords")
         slug = request.POST.get("slug")
@@ -258,14 +259,22 @@ class EditStoreTest(View):
         store.youtube = youtube
 
         store.save()
-
         i = 0
         for media_content in media_content_list:
             fs = FileSystemStorage()
             filename = fs.save(media_content.name, media_content)
             media_url = fs.url(filename)
-            product_media = StoreMedia(store_id=store, media_type=media_type_list[i], media_content=media_url)
-            product_media.save()
+            media_content_id = media_content_ids[i]
+            if media_content_id == "blank" and media_content != "":
+                store_media = StoreMedia(store_id=store_id, media_type=media_type_list[i], media_content=media_url)
+                store_media.save()
+            else:
+                if media_content != "":
+                    store_media = StoreMedia.objects.get(id=media_content_id)
+                    store_media.media_content = media_content
+                    #store_media.store_id = store.id
+                    store_media.save()
+
             i = i + 1
 
             print(request.POST)

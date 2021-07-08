@@ -95,62 +95,52 @@
                                                 <option value="2">Video</option>
                                             </select>
                                         </div>
-
                                         <div class="col-lg-4">
                                             <label>Select Media</label>
-                                            <input type="" name="media_content_id[]"
-                                                   value="{{ store_medias.media_content }}">
+                                            <input hidden  type="" name="media_content_id[]"
+                                                   value="{{ store_medias.id }}">
                                             <input type="file" name="media_content[]"
                                                    class="form-control select_media"/>
                                         </div>
-                                        <div class="col-lg-4">
-                                            <div class="bag-product ratio_square">
-                                                <div class="product-box product-wrap">
+
+                                        <div class="col-lg-4 pull-left">
+                                            <div class="gym-product ratio_square">
+                                                <div class="product-wrap">
                                                     <div class="img-wrapper">
-                                                        <div class="img_preview">
-                                                        </div>{% if  not store_medias.media_content  %}
+                                                        <div class="">
+                                                        </div>{% if  not store_medias.media_content %}
                                                         <div class="front">
-                                                             <img style="width:50%;height:100%;display:compact" class="img_preview ">
-                                                        {% else %}
-
+                                                            <img style="width:150px;height:150px;display:compact"
+                                                                 class="img_preview ">
+                                                            {% else %}
                                                         </div>
-                                                        <div class="back">
-
-                                                            <img alt="" src="{{ store_medias.media_content }}"
-                                                                 style='width:50%;height:100%;'
-                                                                 class="img_preview">
-                                                             {% endif %}
-
-                                                        </div>
-                                                        <div class="cart-detail">
-                                                            <a href="javascript:void(0)" title="Add to Wishlist">
-                                                                <i class="ti-heart" aria-hidden="true"></i>
-                                                            </a>
+                                                        <div class="front">
+                                                        <img alt="" src="{{ store_medias.media_content.url }}"
+                                                             style='width:150px;height:150px;'
+                                                             class="img_preview"></div>
+                                                        <div class="cart-info cart-wrap">
+                                                            <button data-bs-toggle="modal" data-bs-target="#addtocart"
+                                                                    title="Add to cart"><i
+                                                                    class="ti-shopping-cart"></i></button>
+                                                            <a href="javascript:void(0)" title="Add to Wishlist"><i
+                                                                    class="ti-heart"
+                                                                    aria-hidden="true"></i></a>
                                                             <a href="#" data-bs-toggle="modal"
                                                                data-bs-target="#quick-view"
-                                                               title="Quick View">
-                                                                <i class="ti-search" aria-hidden="true"></i>
-                                                            </a>
-
+                                                               title="Quick View"><i class="ti-search"
+                                                                                     aria-hidden="true"></i></a>
+                                                            <a href="compare.html" title="Compare"><i class="ti-reload"
+                                                                                                      aria-hidden="true"></i></a>
                                                         </div>
-                                                    </div>
 
+                                                    {% endif %}
+
+
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <label>Preview</label>
-                                            {% if  not store_medias.media_content %}
-                                                <img style="width:70%;display:none" class="img_preview">
-
-
-                                            {% elif not  store_medias.media_content %}
-                                                <img src="{{ store_medias.media_content }}"
-                                                     style='width:50%;height:30px;object-fit:cover'/><br>
-                                            {% endif %}
-
-                                            <video style="width:70%;display:none" class="video_preview"
-                                                   controls></video>
                                         </div>
-                                    </div>
+                                    </div></div>
                                 </div>
                                 <br>
                                 <div class="row">
@@ -166,6 +156,9 @@
                                     </div>
                                 </div>
                             </div>
+                        <section class="contact-page register-page section-b-space">
+                            <div class="container">
+                <div class="row">
                             <div class="col-md-12">
                                 <label for="review">about</label>
                                 <textarea class="form-control mb-0" placeholder="Write Your Message" name="about"
@@ -173,7 +166,8 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="email">keywords</label>
-                                <input type="text" class="form-control" name="keywords" value="{{ stores.keywords }}"
+                                <input type="text" class="form-control" name="keywords"
+                                       value="{{ stores.keywords }}"
                                        placeholder="company" required="">
                             </div>
                             <div class="col-md-6">
@@ -181,6 +175,9 @@
                                 <input type="text" class="form-control" name="slug" value="{{ stores.slug }}"
                                        placeholder="company" required="">
                             </div>
+                </div></div>
+                         </section>
+
                         </div>
 
                     </div>
@@ -241,18 +238,21 @@
                             </div>
 
 
-                            <div class="col-md-12">
-                                <button class="btn btn-sm btn-solid" type="submit">Save setting</button>
-                            </div>
+
                         </div>
 
                     </div>
                 </div>
             </div>
+            <div class="col-md-6 pull-right">
+                                <button class="btn btn-sm btn-solid" type="submit">Save setting</button>
+                            </div>
         </section>
         <!-- Section ends -->
 
     </form>
+
+
 
 {% endblock %}
 
