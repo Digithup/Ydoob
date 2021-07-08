@@ -1,3 +1,6 @@
+import os
+import uuid
+
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.auth.base_user import AbstractBaseUser
 from ckeditor_uploader.fields import RichTextUploadingField
@@ -13,32 +16,24 @@ class Store(models.Model):
         ('True', 'Enable'),
         ('False', 'Disable'),
     )
-
-    vendor = models.OneToOneField(to=User, on_delete=models.CASCADE, blank=True ,related_name='Vendor')
+    id = models.AutoField(primary_key=True)
+    vendor = models.ForeignKey(User, on_delete=models.CASCADE, blank=True ,)
     title = models.CharField(max_length=150 , null=True ,default='Nigne' ,)
-    email = models.EmailField(blank=True, max_length=50, default='', null=True, unique=True, verbose_name='Store Email')
+    email = models.EmailField( max_length=50,  null=True, unique=True, verbose_name='Store Email')
     phone = models.IntegerField(blank=True, default='510', verbose_name='Store Phone')
     company = models.CharField(max_length=50, default=' ', null=True)
-    image = models.ImageField(upload_to='images/store/', default='images/store/nigne.png')
     about = RichTextUploadingField(blank=True, default='', null=True)
     keywords = models.CharField(max_length=255 , default=' ' , null=True)
     slug = models.SlugField(null=False)
     country = models.CharField(blank=True, max_length=100, default=' ', null=True)
     city = models.CharField(blank=True, max_length=100, default=' ', null=True)
-
     address = models.CharField(blank=True, max_length=100 , default=' ', null=True)
-
-
-
     facebook = models.URLField(blank=True, max_length=50 , default='', null=True)
     instagram = models.URLField(blank=True, max_length=50 , default='', null=True)
     twitter = models.URLField(blank=True, max_length=50 , default='', null=True)
     youtube = models.URLField(blank=True, max_length=50 , default='', null=True)
-
-
     status = models.BooleanField(default=False)
     activation = models.BooleanField(default=False)
-
     create_at = models.DateTimeField(auto_now=True ,null=False)
     update_at = models.DateTimeField(auto_now=True)
 
@@ -58,9 +53,24 @@ class Store(models.Model):
         return reverse(view_name, kwargs={"slug": self.slug})
 
 
+def image_directory_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = '{}.{}'.format(uuid.uuid4().hex[:8], ext)
+    sub_folder = 'file'
+    if ext.lower() in ["jpg", "png", "gif"]:
+        sub_folder = "avatar"
+    if ext.lower() in ["pdf", "docx"]:
+        sub_folder = "document"
+    return os.path.join(instance.store.id, sub_folder, filename)
 
-
-
+class StoreMedia(models.Model):
+    id=models.AutoField(primary_key=True)
+    store_id=models.ForeignKey(Store,on_delete=models.CASCADE ,)
+    media_type_choice=((1,"Image"),(2,"Video"))
+    media_type=models.CharField(max_length=255)
+    media_content=models.FileField(upload_to=image_directory_path ,verbose_name="Store Logo" )
+    created_at=models.DateTimeField(auto_now_add=True)
+    is_active=models.IntegerField(default=1)
 
 
 

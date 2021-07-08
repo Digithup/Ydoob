@@ -1,18 +1,22 @@
+import os
+import uuid
+
+from PIL import Image
 from django.contrib import messages
 from django.core.exceptions import ValidationError
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render, get_object_or_404
 from django.test import TestCase
 
 # Create your tests here.
 from django.urls import reverse, reverse_lazy
 from django.utils.html import format_html
 from django.views import View
+from django.views.generic import ListView
 from requests import request
-
 from user.models import User
-from vendors import forms
-from vendors.models import Store
+from vendors.models import Store, StoreMedia
 
 
 def clean(self):
@@ -77,6 +81,7 @@ class CreateStoreTest(View):
             # return HttpResponseRedirect(reverse_lazy('home:index'))
 
 
+"""
 def become_sellers(request, id):
     forms = StoreAddForm
     if request.method == 'POST':
@@ -96,34 +101,177 @@ def become_sellers(request, id):
     return render(request, 'store-page/create-store.html', {'forms': forms})
 
 
-class EditStoreTest(View  ):
+@login_required
+def ajax_avatar_upload(request):
+    user = request.user
+    user_profile = get_object_or_404(UserProfile, user=user)
 
-    def get(self, request , *args, **kwargs , ):
-        vendor_id = kwargs["vendor"]
-        vendor = Store.objects.get(id=vendor_id)
+    if request.method == "POST":
+        form = AvatarUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            img = request.FILES['avatar_file']  # Get upload pictures
+            cropped_avatar = crop_image(img, user.id)
+            user_profile.avatar = cropped_avatar  # The path to the image changes to the current membership database
+         user_profile.save()
+    return HttpResponseRedirect(reverse('myaccount:profile'))
+"""
+
+
+def crop_image(file, uid):
+    # Randomly generated new image name, custom path.
+    ext = file.name.split('.')[-1]
+    file_name = '{}.{}'.format(uuid.uuid4().hex[:10], ext)
+    cropped_avatar = os.path.join(uid, "avatar", file_name)
+    # Relative root directory path
+
+    file_path = os.path.join("media", uid, "avatar", file_name)
+
+    # Crop picture,With compact dimensions200*200。
+    img = Image.open(file)
+    crop_im = img.crop((50, 50, 300, 300)).resize((200, 200), Image.ANTIALIAS)
+    crop_im.save(file_path)
+
+    return cropped_avatar
+
+
+class CreateStoreTest(View):
+
+    def get(self, request, *args, **kwargs, ):
+        store_id = kwargs["store_id"]
+        stores = Store.objects.get(id=store_id)
+        store_media = StoreMedia.objects.filter(store_id=store_id)
 
         return render(request, "vendor/vendor-edit-store-profile.html",
-                      {"vendor": vendor, })
+                      {"stores": stores, "store_media": store_media, })
 
     def post(self, request, *args, **kwargs):
-
+        store_id = kwargs["store_id"]
+        stores = Store.objects.get(id=store_id)
         title = request.POST.get("title")
-        brand = request.POST.get("brand")
-        url_slug = request.POST.get("url_slug")
-        Products_max_price = request.POST.get("Products_max_price")
-        Products_discount_price = request.POST.get("Products_discount_price")
-        Products_description = request.POST.get("Products_description")
-        title_title_list = request.POST.getlist("title_title[]")
-        details_ids = request.POST.getlist("details_id[]")
-        title_details_list = request.POST.getlist("title_details[]")
-        about_title_list = request.POST.getlist("about_title[]")
-        about_ids = request.POST.getlist("about_id[]")
-        Products_tags = request.POST.get("Products_tags")
-        long_desc = request.POST.get("long_desc")
+        phone = request.POST.get("phone")
+        company = request.POST.get("company")
+        media_type_list = request.POST.getlist("media_type[]")
+        media_content_list = request.POST.getlist("media_content_list[]")
+        media_content_ids = request.POST.getlist("media_content_id[]")
+        about = request.POST.get("about")
+        keywords = request.POST.get("keywords")
+        slug = request.POST.get("slug")
+        country = request.POST.get("country")
+        city = request.POST.get("city")
+        address = request.POST.get("address")
+        facebook = request.POST.get("facebook")
+        instagram = request.POST.get("instagram")
+        twitter = request.POST.get("twitter")
+        youtube = request.POST.get("youtube")
+        print(request.POST)
+        # status = request.POST.get("status")
+        seller = request.user.id
+        vendor = User.objects.get(id=seller)
+
+        # vendor = seller
+        # vendor =Store.objects.get(vendor=owner)
+        # vendor_id = Store.objects.filter(vendor_id=request.user.id)
+
+        store_obj = Store(title=title, phone=phone, company=company, about=about,
+                          keywords=keywords, slug=slug, country=country, city=city, address=address,
+                          facebook=facebook, instagram=instagram, twitter=twitter, youtube=youtube, vendor=vendor)
+        store_obj.save()
+
+        i = 0
+        for media_content in media_content_list:
+            fs = FileSystemStorage()
+            filename = fs.save(media_content.name, media_content)
+            media_url = fs.url(filename)
+            media_content_id = media_content_ids[i]
+            if media_content_id == "blank" and media_content != "":
+                store_media = StoreMedia(store_id=store_obj, media_type=media_type_list[i], media_content=media_url)
+                store_media.save()
+            else:
+                if media_content != "":
+                    store_media = StoreMedia.objects.get(id=media_content_id)
+                    store_media.media_content = media_content
+                    store_media.store_id = store_obj
+                    store_media.save()
+
+            i = i + 1
+
+            print(request.POST)
+            print(request)
+            messages.error(request, "Error")
+
+        return HttpResponse("OK")
+
+        # return HttpResponseRedirect(reverse_lazy('vendors:VendorDashboard' ))
 
 
+class EditStoreTest(View):
 
+    def get(self, request, *args, **kwargs, ):
+        store_id = kwargs["store_id"]
 
+        stores = Store.objects.get(id=store_id)
+        store_medias = StoreMedia.objects.get(store_id=store_id)
+        #media_id = kwargs["store_medias"]
+        #media_store = StoreMedia.objects.filter(id=media_id)
 
+        return render(request, "vendor/vendor-edit-store-profile.html",
+                      {"stores": stores, 'store_medias': store_medias })
 
-        return HttpResponseRedirect(reverse_lazy('vendors:VendorDashboard'))
+    def post(self, request, *args, **kwargs):
+        title = request.POST.get("title")
+        phone = request.POST.get("phone")
+        company = request.POST.get("company")
+        media_type_list = request.POST.getlist("media_type[]")
+        media_content_list = request.FILES.getlist("media_content[]")
+        about = request.POST.get("about")
+        keywords = request.POST.get("keywords")
+        slug = request.POST.get("slug")
+        country = request.POST.get("country")
+        city = request.POST.get("city")
+        address = request.POST.get("address")
+        facebook = request.POST.get("facebook")
+        instagram = request.POST.get("instagram")
+        twitter = request.POST.get("twitter")
+        youtube = request.POST.get("youtube")
+        print(request.POST)
+        # status = request.POST.get("status")
+
+        store_id = kwargs["store_id"]
+        # vendor = User.objects.get(id=User.id)
+        vendor = request.user.id
+
+        store_id = kwargs["store_id"]
+        store = Store.objects.get(id=store_id)
+        # store.vendor=stores
+        store.title = title
+        store.phone = phone
+        store.company = company
+        store.about = about
+        store.keywords = keywords
+        store.slug = slug
+        store.country = country
+        store.city = city
+        store.address = address
+        store.facebook = facebook
+        store.instagram = instagram
+        store.twitter = twitter
+        store.youtube = youtube
+
+        store.save()
+
+        i = 0
+        for media_content in media_content_list:
+            fs = FileSystemStorage()
+            filename = fs.save(media_content.name, media_content)
+            media_url = fs.url(filename)
+            product_media = StoreMedia(store_id=store, media_type=media_type_list[i], media_content=media_url)
+            product_media.save()
+            i = i + 1
+
+            print(request.POST)
+            print(request)
+            messages.error(request, "Error")
+
+        return HttpResponse("OK")
+
+        # return HttpResponseRedirect(reverse_lazy('vendors:VendorDashboard' ))

@@ -14,14 +14,14 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="page-title">
-                        <h2>{{ vendor.title }}</h2>
+                        <h2>{{ stores.title }}</h2>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <nav aria-label="breadcrumb" class="theme-breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{% url 'home:index' %}">Home</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ vendor.title }}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ stores.title }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -30,127 +30,214 @@
     </div>
     <!-- breadcrumb End -->
 
+    <form class="needs-validation" id="myform" enctype="multipart/form-data"
+          action="{% url 'vendors:EditStore' stores.id %}"
+          method="post">
 
-    <!-- personal deatail section start -->
-    <section class="contact-page register-page">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12">
-                    <h3>Store DETAIL</h3>
-                    <form class="theme-form" id="myform">
+        {% csrf_token %}
+        <!-- personal deatail section start -->
+        <section class="contact-page register-page">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h3>Store DETAIL</h3>
+                        <div class="error-message">
+                            {% if messages %}
+                                <ul class="messages">
+                                    {% for message in messages %}
+                                        <li {% if message.tags %}
+                                            class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {% if form.errors %}
+                                {% for error_field, error_message in form.errors.items %}
+                                    <div class="alert alert-danger">
+                                        {{ error_field|striptags }}: {{ error_message|striptags }}
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+
+                            {% endif %}
+                        </div>
+
                         <div class="form-row row">
-
-                {% csrf_token %}
                             <div class="col-md-6">
                                 <label for="name">Store Name</label>
-                                <input type="text" class="form-control" id="name" placeholder="Enter Your name"
-                                  name="title"  required="">
+                                <input type="text" class="form-control" placeholder="Enter Your name"
+                                       name="title" value="{{ stores.title }}" required="">
                             </div>
                             <div class="col-md-6">
                                 <label for="email">Email</label>
-                                <input type="text" class="form-control" id="last-name" placeholder="Email" required="">
+                                <input type="text" class="form-control" id="last-name" name="email"
+                                       value="{{ stores.email }}" placeholder="Email" required="">
                             </div>
                             <div class="col-md-6">
                                 <label for="review">Phone number</label>
-                                <input type="number" class="form-control" id="review" placeholder="Enter your number"
-                                    required="">
+                                <input type="number" class="form-control" id="review" name="phone"
+                                       value="{{ stores.phone }}" placeholder="Enter your number"
+                                       required="">
                             </div>
                             <div class="col-md-6">
                                 <label for="email">company</label>
-                                <input type="text" class="form-control" name="company" id="email" placeholder="company" required="">
+                                <input type="text" class="form-control" name="company"
+                                       value="{{ stores.company }}" placeholder="company" required="">
                             </div>
                             <div class="col-md-12">
+                                <hr>
 
-                                        <div class="row media_div_row first_media">
-                                            <div class="col-md-4">
-                                                <label>Media Type</label>
-                                                <select name="media_type[]" class="form-control media_type">
-                                                    <option value="1">Image</option>
-                                                    <option value="2">Video</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label>Select Media</label>
-                                                <input type="file" name="media_content[]"
-                                                       class="form-control select_media" required=""/>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label>Preview</label>
-                                                <br>
-                                                <img style="width:30%; display:none" class="img_preview">
-                                                <br>
-                                                <video style="width:70%;display:none" class="video_preview"
-                                                       controls></video>
-                                            </div>
+                                <div class="media_div">
+                                    <div class="row media_div_row first_media">
+                                        <div class="col-lg-4">
+                                            <label>Media Type</label>
+                                            <select name="media_type[]" class="form-control media_type">
+                                                <option value="1">Image</option>
+                                                <option value="2">Video</option>
+                                            </select>
+                                        </div>
 
+                                        <div class="col-lg-4">
+                                            <label>Select Media</label>
+                                            <input type="" name="media_content_id[]"
+                                                   value="{{ store_medias.media_content }}">
+                                            <input type="file" name="media_content[]"
+                                                   class="form-control select_media"/>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="bag-product ratio_square">
+                                                <div class="product-box product-wrap">
+                                                    <div class="img-wrapper">
+                                                        <div class="img_preview">
+                                                        </div>{% if  not store_medias.media_content  %}
+                                                        <div class="front">
+                                                             <img style="width:50%;height:100%;display:compact" class="img_preview ">
+                                                        {% else %}
+
+                                                        </div>
+                                                        <div class="back">
+
+                                                            <img alt="" src="{{ store_medias.media_content }}"
+                                                                 style='width:50%;height:100%;'
+                                                                 class="img_preview">
+                                                             {% endif %}
+
+                                                        </div>
+                                                        <div class="cart-detail">
+                                                            <a href="javascript:void(0)" title="Add to Wishlist">
+                                                                <i class="ti-heart" aria-hidden="true"></i>
+                                                            </a>
+                                                            <a href="#" data-bs-toggle="modal"
+                                                               data-bs-target="#quick-view"
+                                                               title="Quick View">
+                                                                <i class="ti-search" aria-hidden="true"></i>
+                                                            </a>
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <label>Preview</label>
+                                            {% if  not store_medias.media_content %}
+                                                <img style="width:70%;display:none" class="img_preview">
+
+
+                                            {% elif not  store_medias.media_content %}
+                                                <img src="{{ store_medias.media_content }}"
+                                                     style='width:50%;height:30px;object-fit:cover'/><br>
+                                            {% endif %}
+
+                                            <video style="width:70%;display:none" class="video_preview"
+                                                   controls></video>
+                                        </div>
                                     </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <button class="btn btn-success btn-block add_media" type="button">ADD
+                                            MEDIA CONTENT
+                                        </button>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <button class="btn btn-danger btn-block remove_media" type="button">
+                                            REMOVE MEDIA CONTENT
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-12">
                                 <label for="review">about</label>
                                 <textarea class="form-control mb-0" placeholder="Write Your Message" name="about"
-                                    id="exampleFormControlTextarea1" rows="6"></textarea>
+                                          id="exampleFormControlTextarea1" rows="6"></textarea>
                             </div>
                             <div class="col-md-6">
                                 <label for="email">keywords</label>
-                                <input type="text" class="form-control" name="keywords" id="email" placeholder="company" required="">
+                                <input type="text" class="form-control" name="keywords" value="{{ stores.keywords }}"
+                                       placeholder="company" required="">
                             </div>
                             <div class="col-md-6">
                                 <label for="email">slug</label>
-                                <input type="text" class="form-control" name="slug" id="email" placeholder="company" required="">
+                                <input type="text" class="form-control" name="slug" value="{{ stores.slug }}"
+                                       placeholder="company" required="">
                             </div>
                         </div>
-                    </form>
+
+                    </div>
                 </div>
+
             </div>
-        </div>
-    </section>
-    <!-- Section ends -->
+        </section>
+        <!-- Section ends -->
 
 
-    <!-- address section start -->
-    <section class="contact-page register-page section-b-space">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12">
-                    <h3> ADDRESS</h3>
-                    <form class="theme-form">
+        <!-- address section start -->
+        <section class="contact-page register-page section-b-space">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h3> ADDRESS</h3>
+
                         <div class="form-row row">
-                            <div class="col-md-6 select_input">
-                                <label for="review">Country *</label>
-                                <select class="form-control" size="1">
-                                    {% for country in countries %}
-                                    <option value="{{ country.code }}">{{ country.name }}</option>
-                                    {% endfor %}
-                                </select>
+                            <div class="col-md-6">
+                                <label for="review">country *</label>
+                                <input type="text" class="form-control" name="country" value="{{ stores.country }}"
+                                       placeholder="City" required="">
                             </div>
                             <div class="col-md-6">
                                 <label for="review">City *</label>
-                                <input type="text" class="form-control" id="city" placeholder="City" required="">
+                                <input type="text" class="form-control" name="city" value="{{ stores.city }}"
+                                       placeholder="City" required="">
                             </div>
                             <div class="col-md-6">
                                 <label for="name">Address *</label>
-                                <input type="text" class="form-control" id="address-two"  name="address" placeholder="Address"
-                                    required="">
+                                <input type="text" class="form-control" name="address" value="{{ stores.address }}"
+                                       placeholder="Address"
+                                       required="">
                             </div>
                             <div class="col-md-6">
                                 <label for="name">facebook</label>
-                                <input type="url" class="form-control" name="facebook" id="home-ploat" placeholder="country"
-                                    required="">
+                                <input type="url" class="form-control" name="facebook" value="{{ stores.facebook }}"
+                                       placeholder="country"
+                                       required="">
                             </div>
                             <div class="col-md-6">
                                 <label for="name">instagram</label>
-                                <input type="url" class="form-control" name="instagram" id="home-ploat" placeholder="country"
-                                    required="">
+                                <input type="url" class="form-control" name="instagram" value="{{ stores.instagram }}"
+                                       placeholder="country"
+                                       required="">
                             </div>
                             <div class="col-md-6">
                                 <label for="name">twitter</label>
-                                <input type="url" class="form-control" name="twitter" id="home-ploat" placeholder="country"
-                                    required="">
+                                <input type="url" class="form-control" name="twitter" value="{{ stores.twitter }}"
+                                       placeholder="country"
+                                       required="">
                             </div>
                             <div class="col-md-6">
                                 <label for="name">youtube</label>
-                                <input type="url" class="form-control" name="youtube" id="home-ploat" placeholder="country"
-                                    required="">
+                                <input type="url" class="form-control" name="youtube" value="{{ stores.youtube }}"
+                                       placeholder="country"
+                                       required="">
                             </div>
 
 
@@ -158,18 +245,18 @@
                                 <button class="btn btn-sm btn-solid" type="submit">Save setting</button>
                             </div>
                         </div>
-                    </form>
+
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-    <!-- Section ends -->
+        </section>
+        <!-- Section ends -->
 
-
+    </form>
 
 {% endblock %}
 
-   {% block custom_js %}
+{% block custom_js %}
     <script src="//cdn.tiny.cloud/1/u6oa5pnpaa1vxho1md7uk4zmq2ai7xuf5o5wfgyrc131vpj6/tinymce/5/tinymce.min.js"
             referrerpolicy="origin"></script>
     <script>

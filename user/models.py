@@ -73,6 +73,7 @@ class User(AbstractBaseUser):
     """
     Description:This is going to be the main User Model
     """
+    id = models.AutoField(primary_key=True)
     email = models.EmailField(verbose_name='email address', max_length=255, unique=True)
     # user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=200, blank=True, null=True)

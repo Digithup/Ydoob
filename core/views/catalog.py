@@ -396,29 +396,28 @@ class ProductsAddMedia(View):
                       )
 
 
-class ProductsEditMedia(View):
-    def get(self, request, *args, **kwargs):
-        Products_id = kwargs["Products_id"]
-        products = Products.objects.get(id=Products_id)
-        Products_medias = ProductMedia.objects.filter(Products_id=Products_id)
-        return render(request, "catalog/product/product_edit_media.html",
-                      {"Products": Products, "Products_medias": Products_medias})
+class ProductEditMedia(View):
+    def get(self,request,*args,**kwargs):
+        product_id=kwargs["product_id"]
+        product=Products.objects.get(id=product_id)
+        product_medias=ProductMedia.objects.filter(product_id=product_id)
+        return render(request,"admin_templates/product_edit_media.html",{"product":product,"product_medias":product_medias})
 
 
-class ProductsMediaDelete(View):
+class ProductMediaDelete(View):
     def get(self, request, *args, **kwargs):
         media_id = kwargs["id"]
-        Products_media = ProductMedia.objects.get(id=media_id)
+        product_media = ProductMedia.objects.get(id=media_id)
         import os
         from DNigne import settings
 
         # It will work too Sometimes
-        # Products_media.media_content.delete()
-        os.remove(settings.MEDIA_ROOT.replace("\media", "") + str(Products_media.media_content).replace("/", "\\"))
+        # product_media.media_content.delete()
+        os.remove(settings.MEDIA_ROOT.replace("\media", "") + str(product_media.media_content).replace("/", "\\"))
 
-        Products_id = Products_media.Products_id.id
-        Products_media.delete()
-        return HttpResponseRedirect(reverse("Products_edit_media", kwargs={"Products_id": Products_id}))
+        product_id = product_media.product_id.id
+        product_media.delete()
+        return HttpResponseRedirect(reverse("product_edit_media", kwargs={"product_id": product_id}))
 
 
 class ProductsAddStocks(View):

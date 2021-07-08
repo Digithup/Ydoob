@@ -1,31 +1,31 @@
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.template.context_processors import request
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.html import format_html
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, ListView
 from django.views.generic.base import RedirectView, View
 
 from catalog.models.models import Products
 from user.models import User
 from vendors.decorators import seller_required, admin_required
-from vendors.forms import StoreEditForm, StoreAddForm, SellerRegisterForm
-from vendors.models import Store
+from vendors.forms import StoreEditForm, SellerRegisterForm
+from vendors.models import Store, StoreMedia
 
 
 @admin_required
 # @method_decorator([login_required, admin_required], name='dispatch')
 def store_list(request):
-    store = Store.objects.all()
+    stores = Store.objects.all()
     current_user = request.user  # Access User Session information
     # setting = Store.objects.get(pk=1)
     # profile = User.objects.get(user.id)
-    context = {'store': store, }
+    context = {'stores': stores, }
     return render(request, 'stores-list.html', context)
 
 
@@ -96,16 +96,47 @@ def StoreWaiting(request):
     return render(request, 'store-page/store-waiting.html', context)
 
 
-@login_required(login_url='/home/login/')  # Check login
-def VendorDashboard(request, vendor=None):
-    vendor = request.user  # Access User Session information
-    owner = Store.objects.get(vendor=vendor)
-    store=Store.objects.filter(vendor=vendor)
 
-    context = {'owner': owner,
+@login_required(login_url='/home/login/')  # Check login
+def VendorDashboardk(request, vendor=None):
+    #vendor = request.user  # Access User Session information
+    #owner = Store.objects.get(vendor=vendor)
+    store=Store.objects.all()
+
+    context = {
                'store':store,
                }
     return render(request, 'vendor/vendor-dashboard.html', context)
+
+class VendorDashboard(ListView):
+    model = Store
+    template_name = "vendor/vendor-dashboard.html"
+    paginate_by = 3
+
+    def get_queryset(self):
+        filter_val = self.request.GET.get("filter", "")
+        order_by = self.request.GET.get("orderby", "id")
+        if filter_val != "":
+            stores = Store.objects.filter(
+                Q(store_name__contains=filter_val) | Q(store_description__contains=filter_val)).order_by(order_by)
+        else:
+            stores = Store.objects.all().order_by(order_by)
+
+        stores_list = []
+        for store in stores:
+            store_media = StoreMedia.objects.filter(store_id=store.id, media_type=1, is_active=1).first()
+            stores_list.append({"store": store, "media": store_media})
+
+        return stores_list
+
+    def get_context_data(self, **kwargs):
+        context = super(VendorDashboard, self).get_context_data(**kwargs)
+        context["filter"] = self.request.GET.get("filter", "")
+        context["orderby"] = self.request.GET.get("orderby", "id")
+        context["all_table_fields"] = Store._meta.get_fields()
+        return context
+
+
 
 class EditStoret(UpdateView):
     model = Store

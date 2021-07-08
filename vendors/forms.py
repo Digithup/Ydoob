@@ -53,7 +53,7 @@ class StoreAddForm(forms.ModelForm):
     class Meta:
         model = Store
         # fields = '__all__'
-        fields = ['title', 'email', 'phone', 'image']
+        fields = ['title', 'email', 'phone', ]
         exclude = ['vendor']
 
         def clean_title(self, title):

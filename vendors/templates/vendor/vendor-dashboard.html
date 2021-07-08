@@ -26,7 +26,7 @@
     </div>
     <!-- breadcrumb End -->
 
-{% for rs in store %}
+{% for rs in page_obj %}
     <!--  dashboard section start -->
     <section class="dashboard-section section-b-space">
         <div class="container">
@@ -35,13 +35,14 @@
                     <div class="dashboard-sidebar">
                         <div class="profile-top">
                             <div class="profile-image">
-
-                                <img src="{% static '' %}images/logos/17.png" alt="" class="img-fluid">
+                                        <img src="{{ rs.media.media_content}}" alt="" class="img-fluid">
                             </div>
+
                             <div class="profile-detail">
-                                <h5>{{ rs.title}}</h5>
+                                <h5>{{ rs.store.title}} </h5>
+
                                 <h6>750 followers | 10 review</h6>
-                                <h6>{{ rs.email}}</h6>
+                                <h6>{{ rs.store.email}}</h6>
                             </div>
                         </div>
                         <div class="faq-tab">
@@ -399,7 +400,7 @@
                                                     <h4 class="col-md-4">profile</h4>
                                                     <div class="col-md-6 pull-right">
 
-                                                        <a href="{% url 'vendors:EditStore' rs.id %}"
+                                                        <a href="{% url 'vendors:EditStore' rs.store.id %}"
                                                                 class="btn btn-solid">Edit Store Information</a></div>
                                                 </div>
                                                 <div class="dashboard-detail">

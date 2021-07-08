@@ -2,7 +2,7 @@ from django.urls import path
 
 from core.tests import SettingAddViewTest
 from core.views.catalog import AddCategory, categories, EditCategory, DeleteCategory, ProductsListView, \
-    ProductsAddMedia, ProductsEditMedia, ProductsMediaDelete, ProductsAddStocks, file_upload, index, \
+    ProductsAddMedia, ProductEditMedia, ProductMediaDelete, ProductsAddStocks, file_upload, index, \
     ProductAddView, ProductsDeleted, DeleteManufacture, EditManufacture, AddManufacture, ManufacturerListView, \
     DeleteFilter, AddFilter, EditFilter, DeleteFiltersGroup, AddFiltersGroup, EditFiltersGroup, FiltersGroupListView, \
     FiltersListView, AttributesGroupListView, EditAttributesGroup, AddAttributesGroup, DeleteAttributesGroup, \
@@ -33,9 +33,9 @@ urlpatterns = [
     path('admin/products/Product_edit/<str:product_id>', ProductUpdate.as_view(), name="ProductUpdate"),
     path('admin/products/Products_delete/<int:pk>/', ProductsDeleted.as_view(), name="Product_Delete"),
     path('admin/products/Products_add_media/<str:Products_id>', ProductsAddMedia.as_view(), name="Products_add_media"),
-    path('admin/products/Products_edit_media/<str:Products_id>', ProductsEditMedia.as_view(),
+    path('admin/products/Products_edit_media/<str:Products_id>', ProductEditMedia.as_view(),
          name="Products_edit_media"),
-    path('admin/products/Products_media_delete/<str:id>', ProductsMediaDelete.as_view(), name="Products_media_delete"),
+    path('admin/products/Products_media_delete/<str:id>', ProductMediaDelete.as_view(), name="Products_media_delete"),
     path('admin/products/Products_add_stocks/<str:Products_id>', ProductsAddStocks.as_view(),
          name="Products_add_stocks"),
     path('admin/products/file_upload', file_upload, name="file_upload"),
