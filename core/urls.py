@@ -87,7 +87,7 @@ urlpatterns = [
 
     ################ Users ################
     path('login/', AdminLogin.as_view(), name='AdminLogin'),
-    path('logout/', AdminLogout, name='AdminLogout'),
+    path('admin/logout/', AdminLogout, name='AdminLogout'),
 
     path('admin/users/', AdminUsersList.as_view(), name='AdminUsersList'),
     path('admin/users/create/', AdminUserCreate.as_view(), name='AdminUserCreate'),

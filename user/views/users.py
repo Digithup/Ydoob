@@ -77,7 +77,7 @@ class CustomerLogin(View):
                     return redirect(redirect_path)
 
                 else:
-                    return redirect("/home/")
+                    return redirect("/")
 
             else:
                 print("error")

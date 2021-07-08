@@ -1,41 +1,4 @@
-{% extends 'admin/adminbase.html' %}
-{% load crispy_forms_filters %}
-{% load static %}
-
-
-{% load widget_tweaks %}
-{% block body %}
-
-    <div class="page-body">
-
-    <!-- Container-fluid starts-->
-    <div class="container-fluid">
-        <div class="page-header">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="page-header-left">
-                        <h3>Add Products
-                            <small>
-                                {% if not edit %}🆕 Add a new Learned Language {% else %} ✏ Edit a
-                                    Language{% endif %}</small>
-                        </h3>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <ol class="breadcrumb pull-right">
-                        <li class="breadcrumb-item"><a href="{% url 'core:admin_index' %}"><i
-                                data-feather="home"></i></a></li>
-                        <li class="breadcrumb-item">Physical</li>
-                        <li class="breadcrumb-item active">Add Product</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Container-fluid Ends-->
-
-
-    <!-- Container-fluid starts-->
+ <!-- Container-fluid starts-->
     <div class="container-fluid">
         <div class="row product-adding">
             <div class="col-xl-12">
@@ -55,8 +18,8 @@
                                     </ul>
                                 {% endif %}
                             </div>
-
-                            <ul class="nav nav-tabs tab-coupon" id="myTab" role="tablist">
+                             <div class="faq-tab">
+                            <ul class="nav nav-tabs tab-coupon" id="top-tab" role="tablist">
                                 <li class="nav-item"><a class="nav-link active show" id="general-tab"
                                                         data-toggle="tab"
                                                         href="#general" role="tab" aria-controls="general"
@@ -81,6 +44,8 @@
                                                         role="tab" aria-controls="seo" aria-selected="false"
                                                         data-original-title="" title="">SEO</a></li>
                             </ul>
+                             </div>
+                        <div class="col-lg-9">
                             <div class="tab-content" id="myTabContent">
                                 <div class=" card tab-pane fade active show" id="general" role="tabpanel"
                                      aria-labelledby="general-tab">
@@ -389,6 +354,7 @@
                                 </div>
                             </div>
                         </div>
+                        </div>
                     </form>
                 </div>
 
@@ -397,183 +363,58 @@
         </div>
     </div>
 
-    {% if uploaded_file_url %}
-        <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
-    {% endif %}
 
 
 
 
-{% endblock %}
-
-{% block custom_js %}
-    <script src="//cdn.tiny.cloud/1/u6oa5pnpaa1vxho1md7uk4zmq2ai7xuf5o5wfgyrc131vpj6/tinymce/5/tinymce.min.js"
-            referrerpolicy="origin"></script>
-    <script>
-        tinymce.init({
-            selector: "textarea#long_desc",
-            height: 300,
-            plugins: [
-                "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
-                "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime nonbreaking",
-                "save table contextmenu directionality emoticons template paste textcolor",
-            ],
-            images_upload_url: "{% url 'core:file_upload' %}",
-            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",
-            style_formats: [
-                {title: "Bold text", inline: "b"},
-                {title: "Red text", inline: "span", styles: {color: "#ff0000"}},
-                {title: "Red header", block: "h1", styles: {color: "#ff0000"}},
-                {title: "Example 1", inline: "span", classes: "example1"},
-                {title: "Example 2", inline: "span", classes: "example2"},
-                {title: "Table styles"},
-                {title: "Table row 1", selector: "tr", classes: "tablerow1"},
-            ],
-            automatic_uploads: true,
-            file_picker_types: 'image',
-            file_picker_callback: function (cb, value, meta) {
-                var input = document.createElement('input');
-                input.setAttribute('type', 'file');
-                input.setAttribute('accept', 'image/*');
-
-                /*
-                Note: In modern browsers input[type="file"] is functional without
-                even adding it to the DOM, but that might not be the case in some older
-                or quirky browsers like IE, so you might want to add it to the DOM
-                just in case, and visually hide it. And do not forget do remove it
-                once you do not need it anymore.
-                */
-
-                input.onchange = function () {
-                    var file = this.files[0];
-
-                    var reader = new FileReader();
-                    reader.onload = function () {
-                        /*
-                        Note: Now we need to register the blob in TinyMCEs image blob
-                        registry. In the next release this part hopefully won't be
-                        necessary, as we are looking to handle it internally.
-                        */
-                        var id = 'blobid' + (new Date()).getTime();
-                        var blobCache = tinymce.activeEditor.editorUpload.blobCache;
-                        var base64 = reader.result.split(',')[1];
-                        var blobInfo = blobCache.create(id, file, base64);
-                        blobCache.add(blobInfo);
-
-                        /* call the callback and populate the Title field with the file name */
-                        cb(blobInfo.blobUri(), {title: file.name});
-                    };
-                    reader.readAsDataURL(file);
-                };
-
-                input.click();
-            },
-        });
-    </script>
-    <script>
-        $(".add_media").click(function () {
-            var media_row = $(".first_media").clone();
-            media_row.removeClass("first_media");
-            media_row.replaceAll("src", "")
-            media_row.find(".select_media").val("");
-            media_row.find(".img_preview").attr("src", "").css({"border": "none"}).css({"border-radius": "0px"}).hide();
-            media_row.find(".video_preview").attr("src", "").css({"border": "none"}).css({"border-radius": "0px"}).hide();
-            $(".media_div").append(media_row);
-        });
-        $(".remove_media").click(function () {
-            if ($(".media_div").find(".media_div_row").length > 1) {
-                $(".media_div").children().last().remove();
-            }
-        });
-
-        $(".add_details").click(function () {
-            var details_row = $(".first_details").clone();
-            details_row.removeClass("first_details");
-            details_row.find(".title_title").val("");
-            details_row.find(".title_details").val("");
-            $(".details_div").append(details_row);
-        });
-        $(".remove_details").click(function () {
-            if ($(".details_div").find(".details_div_row").length > 1) {
-                $(".details_div").children().last().remove();
-            }
-        });
-
-        $(".add_about").click(function () {
-            var about_row = $(".first_about").clone();
-            about_row.removeClass("first_about");
-            about_row.find(".about_title").val("");
-            $(".about_div").append(about_row);
-        });
-        $(".remove_about").click(function () {
-            if ($(".about_div").find(".about_div_row").length > 1) {
-                $(".about_div").children().last().remove();
-            }
-        });
-
-        $(document).on("change", ".select_media", function () {
-            var media_type = $(this).parents(".media_div_row").find(".media_type").val();
-            var img_preview = $(this).parents(".media_div_row").find(".img_preview");
-            var vid_preview = $(this).parents(".media_div_row").find(".video_preview");
-            showPreviewMedia(this, media_type, img_preview, vid_preview);
-        });
-
-        function showPreviewMedia(input, media_type, img_preview, video_preview) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    if (media_type == "1") {
-                        img_preview.attr("src", e.target.result);
-                        img_preview.show();
-                        img_preview.css({"border": "5px solid orange"});
-                        img_preview.css({"border-radius": "10px"});
-                    }
-                    if (media_type == "2") {
-                        video_preview.show();
-                        video_preview.css({"border": "5px solid orange"});
-                        video_preview.css({"border-radius": "10px"});
-                        video_preview.attr("src", e.target.result);
-                        video_preview.load();
-                        video_preview.play();
-
-                    }
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-
-        $(".submit_btn").click(function () {
-            var form = new FormData($("#myform")[0]);
-            form.append("long_desc", tinyMCE.activeEditor.getContent());
-
-            //AJAX CODE
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function () {
-                if (xhr.status == 200) {
-                    console.log(xhr.responseText);
-                }
-            }
-            xhr.open("POST", "{% url 'core:Product_add' %}", true);
-            $("#progressbar").show();
-
-            //UPDATING PROGRESS BAR
-            xhr.upload.addEventListener("progress", function (ev) {
-                if (ev.lengthComputable) {
-                    var percentage = (ev.loaded / ev.total * 100 | 0);
-                    $("#progressbar").css({"width": "" + percentage + "%"}).text("Uploading .." + percentage + "%");
-                    console.log(percentage);
-                }
-            });
-
-            xhr.send(form);
-        })
-
-    </script>
-    <script src="//bootstrap-tagsinput.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
-{% endblock custom_js %}
-
-{% block foot %} {% include 'admin/footer.html' %}  {% endblock %}
-{% block js %}{% include 'admin/js.html' %}{% endblock %}
-
-</div>
+<!-- address section start -->
+    <section class="contact-page register-page section-b-space">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>SHIPPING ADDRESS</h3>
+                    <form class="theme-form">
+                        <div class="form-row row">
+                            <div class="col-md-6">
+                                <label for="name">flat / plot</label>
+                                <input type="text" class="form-control" id="home-ploat" placeholder="company name"
+                                    required="">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="name">Address *</label>
+                                <input type="text" class="form-control" id="address-two" placeholder="Address"
+                                    required="">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email">Zip Code *</label>
+                                <input type="text" class="form-control" id="zip-code" placeholder="zip-code"
+                                    required="">
+                            </div>
+                            <div class="col-md-6 select_input">
+                                <label for="review">Country *</label>
+                                <select class="form-control" size="1">
+                                    <option value="India">India</option>
+                                    <option value="UAE">UAE</option>
+                                    <option value="U.K">U.K</option>
+                                    <option value="US">US</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="review">City *</label>
+                                <input type="text" class="form-control" id="city" placeholder="City" required="">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="review">Region/State *</label>
+                                <input type="text" class="form-control" id="region-state" placeholder="Region/state"
+                                    required="">
+                            </div>
+                            <div class="col-md-12">
+                                <button class="btn btn-sm btn-solid" type="submit">Save setting</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Section ends -->

@@ -94,6 +94,7 @@ INSTALLED_APPS = [
     # 'django_database_translation',
     'jquery',
     'djangoformsetjs',
+    'django_countries',
 
 
 
@@ -293,9 +294,9 @@ MESSAGE_TAGS = {
 
 SITE_ID = 1
 BASE_URL = "http://127.0.0.1:8000"
-SESSION_COOKIE_SECURE = True
-LOGIN_URL = '/admin/login'
-LOGOUT_URL = '/admin/logout'
+#SESSION_COOKIE_SECURE = True
+#LOGIN_URL = '/admin/login'
+#LOGOUT_URL = '/admin/logout'
 # Cart
 CART_SESSION_ID = 'cart'
 SESSION_COOKIE_AGE = 85555
