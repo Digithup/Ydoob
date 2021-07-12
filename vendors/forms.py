@@ -22,6 +22,14 @@ class SellerRegisterForm(forms.ModelForm):
         model = User
         fields = ['email', 'phone', 'password1', 'password2']
 
+    def already_user(self):
+        user=User.objects.all()
+        if user.is_authenticated:
+            email=user.email
+        else:
+            email = self.cleaned_data.get("email")
+        return email
+
     def clean_password2(self):
         """
         Description:Check that the two password entries match.\n
@@ -40,6 +48,7 @@ class SellerRegisterForm(forms.ModelForm):
         """
         user = super(SellerRegisterForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password1"])
+
         user.seller = True
         user.active = False  # send confirmation email via signals
 

@@ -1,0 +1,139 @@
+{% extends 'vendor/dashboard-base/vendorbase.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block body %}
+
+    <!-- Container-fluid starts-->
+    <div class="container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="page-header-left">
+                        <h3>Products List
+                            <small>
+                                <ol class="breadcrumb pull-left">
+                                    <li class="breadcrumb-item"><a href="{% url 'vendors:VendorIndex' %}"><i data-feather="home"></i></a></li>
+
+                                    <li class="breadcrumb-item active">{% translate 'Products List' %}</li>
+                                </ol>
+                            </small>
+                        </h3>
+
+                        </ol>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card-tools pull-right ">
+                        <a href="{% url 'vendors:ProductCreate' %}">
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-original-title="test" data-target="#exampleModal">Add Products
+                            </button>
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Container-fluid Ends-->
+
+
+    <!-- Container-fluid starts-->
+    <div class="container-fluid">
+        <div class="row Products-admin ratio_asos">
+            {% for rs in vendor_products_list  %}
+                <div class="col-xl-3 col-sm-6">
+                    <div class="card">
+                        <div class="card-body Products-box">
+                            <div class="img-wrapper">
+                                <div class="front">
+                                    <a href="#"><img src="{{ rs.product_media.media_content }}" class="img-fluid blur-up lazyload bg-img"
+                                                     alt=""></a>
+                                    <div class="Products-hover">
+                                        <ul>
+
+                                            <li>
+                                                <a href="{% url 'vendors:Product_Delete' rs.product.id  %}"
+                                                   onclick="return confirm('Are you sure you want to delete {{ rs.title }}?')">
+                                                <button class="btn" type="button" data-original-title="" title=""><i
+                                                        class="ti-trash"></i></button>
+                                                </a></li>
+                                            <li>
+                                                <a href="{% url 'vendors:ProductUpdate' rs.product.id %}">
+                                                    <button class="btn" type="button" data-toggle="modal"
+                                                            data-target="#exampleModalCenter" data-original-title=""
+                                                            title=""><i class="ti-pencil-alt"></i></button>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="Products-detail">
+                                <div class="rating"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i
+                                        class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>
+                                </div>
+                                <a href="">
+                                    <h6>{{ rs.product.title }}</h6>
+                                </a>
+                                <h4>{{ rs.product.product_max_price }}
+                                    <del>{{ rs.product.product_max_price }}</del>
+                                </h4>
+                                <ul class="color-variant">
+                                    <li class="bg-light0"></li>
+                                    <li class="bg-light1"></li>
+                                    <li class="bg-light2"></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                     <div class="empty-languages">You haven't learned any Programming Language yet 😥</div>
+
+            {% endfor %}
+
+
+        </div>
+    </div>
+    <!-- Container-fluid Ends-->
+ {% if page_obj.has_previous or page_obj.has_next %}
+        <nav class="mt-4">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">First</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                {% endif %}
+                <li class="page-item disabled"><a class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a></li>
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+
+{% endblock %}
+
+
+{% block foot %} {% include 'vendor/dashboard-base/footer.html' %}  {% endblock %}
+{% block js %} {% include 'vendor/dashboard-base/js.html' %}  {% endblock %}
+
+

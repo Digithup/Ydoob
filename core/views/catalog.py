@@ -2,7 +2,6 @@ import datetime
 import json
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
@@ -17,7 +16,7 @@ from django.views.generic import ListView, DeleteView, DetailView, UpdateView, C
 
 from DNigne.settings import BASE_URL
 from catalog.forms.forms import CategoryAddForm
-from catalog.models.models import Categories, Image, Products, ProductMedia, ProductDetails, ProductAbout, ProductTags, \
+from catalog.models.models import Categories, Products, ProductMedia, ProductTags, \
     ProductTransaction
 from catalog.models.product_options import Manufacturer, FiltersGroup, Filters, AttributesGroup, Attributes
 from core.forms.forms import SearchForm
@@ -27,22 +26,20 @@ from user.admin import User
 from vendors.models import Store
 
 
-
-
 def index(request):
-    categories = Categories.objects.all()
 
+    categories = Categories.objects.all()
     products = Products.objects.all()
     store = Store.objects.all()
     setting = Setting.objects.all()
-    index_language =[]
+    index_language = []
     if index_language is not None:
         index_language = Language.objects.filter(status=True)
     else:
         pass
     context = {
         'categories': categories,
-
+        'products': products,
         'catalog': Products,
         'store': store,
         'setting': setting,
@@ -80,6 +77,7 @@ def AddCategory(request):
             slug = form.cleaned_data['slug']
             status = form.cleaned_data['status']
             category_id = form.cleaned_data['category_id']
+            category_obj = None
             if not category_id:
                 print(request)
                 category_obj = Categories.objects.create(title=title, title_ar=title_ar, title_en=title_en,
@@ -91,9 +89,6 @@ def AddCategory(request):
                 # handling all cases of the tags
                 print(request)
 
-            for f in files:
-                print(request)
-                Image.objects.create(Products=category_obj, image=f)
             category_obj.title = title
             category_obj.title_en = title_en
             category_obj.title_ar = title_ar
@@ -175,7 +170,7 @@ def getNoteResponseData(Product, tags, Products_created):
         "id": Product.id,
         "title": Product.title,
         "keywords": Product.product_description,
-        "price": Products.product_max_price,
+        "price": Products.price,
         "tags": tags,
         "last_mod": date,
 
@@ -184,6 +179,7 @@ def getNoteResponseData(Product, tags, Products_created):
     # template_name = 'admin/pages/message/category_confirm_delete.html'
     # success_url = reverse_lazy('core:category_admin')
     return render(Products_created, 'catalog/product/admin-products.html')
+
 
 class ProductsListView(ListView):
     model = Products
@@ -262,17 +258,6 @@ class ProductAddView(View):
             product_media.save()
             i = i + 1
 
-        j = 0
-        for title_title in title_title_list:
-            product_details = ProductDetails(title=title_title, title_details=title_details_list[j],
-                                             product_id=product)
-            product_details.save()
-            j = j + 1
-
-        for about in about_title_list:
-            product_about = ProductAbout(title=about, product_id=product)
-            product_about.save()
-
         product_tags_list = product_tags.split(",")
 
         for product_tag in product_tags_list:
@@ -283,27 +268,23 @@ class ProductAddView(View):
                                                  transaction_product_count=in_stock_total,
                                                  transaction_description="Intially Item Added in Stocks")
         product_transaction.save()
-        #return HttpResponse("OK")
+        # return HttpResponse("OK")
         return HttpResponseRedirect(reverse_lazy('core:Products_list'))
 
 
 class ProductUpdate(View):
 
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         product_id = kwargs["product_id"]
         product = Products.objects.get(id=product_id)
-        product_details = ProductDetails.objects.filter(product_id=product_id)
-        product_about = ProductAbout.objects.filter(product_id=product_id)
+
         product_tags = ProductTags.objects.filter(product_id=product_id)
 
-
-
         return render(request, "catalog/product/edit-product.html",
-                      {"categories": categories, "product": product, "Products_details": product_details,
-                       "Product_about": product_about, "Product_tags": product_tags})
+                      {"categories": categories, "product": product,
+                       "Product_tags": product_tags})
 
     def post(self, request, *args, **kwargs):
-
         title = request.POST.get("title")
         brand = request.POST.get("brand")
         url_slug = request.POST.get("url_slug")
@@ -329,36 +310,6 @@ class ProductUpdate(View):
         Products.Products_discount_price = Products_discount_price
         Products.Products_long_description = long_desc
         Products.save()
-
-        j = 0
-        for title_title in title_title_list:
-            detail_id = details_ids[j]
-            if detail_id == "blank" and title_title != "":
-                Products_details = ProductDetails(title=title_title, title_details=title_details_list[j],
-                                                  Product=Products)
-                Products_details.save()
-            else:
-                if title_title != "":
-                    Products_details = ProductDetails.objects.get(id=detail_id)
-                    Products_details.title = title_title
-                    Products_details.title_details = title_details_list[j]
-                    Products_details.Products_id = Products
-                    Products_details.save()
-            j = j + 1
-
-        k = 0
-        for about in about_title_list:
-            about_id = about_ids[k]
-            if about_id == "blank" and about != "":
-                Products_about = ProductAbout(title=about, Products_id=Products)
-                Products_about.save()
-            else:
-                if about != "":
-                    Products_about = ProductAbout.objects.get(id=about_id)
-                    Products_about.title = about
-                    Products_about.Products_id = Products
-                    Products_about.save()
-            k = k + 1
 
         ProductTags.objects.filter(Products_id=Products_id).delete()
 
@@ -397,11 +348,12 @@ class ProductsAddMedia(View):
 
 
 class ProductEditMedia(View):
-    def get(self,request,*args,**kwargs):
-        product_id=kwargs["product_id"]
-        product=Products.objects.get(id=product_id)
-        product_medias=ProductMedia.objects.filter(product_id=product_id)
-        return render(request,"admin_templates/product_edit_media.html",{"product":product,"product_medias":product_medias})
+    def get(self, request, *args, **kwargs):
+        product_id = kwargs["product_id"]
+        product = Products.objects.get(id=product_id)
+        product_medias = ProductMedia.objects.filter(product_id=product_id)
+        return render(request, "admin_templates/product_edit_media.html",
+                      {"product": product, "product_medias": product_medias})
 
 
 class ProductMediaDelete(View):
@@ -442,9 +394,6 @@ class ProductsAddStocks(View):
         return HttpResponseRedirect(reverse("Products_add_stocks", kwargs={"Products_id": Products_id}))
 
 
-
-
-
 def to_json(self, objects):
     return serializers.serialize('json', objects)
 
@@ -475,7 +424,7 @@ def search(request):
             category = Categories.objects.all()
             context = {'products': products, 'query': query,
                        'category': category}
-            return render(request, 'front/pages/search.html', context)
+            return render(request, 'search/search.html', context)
 
     return HttpResponseRedirect('/')
 
@@ -618,25 +567,24 @@ class AddFilter(View):
     print(request)
 
     def post(self, request, *args, **kwargs):
+        title = request.POST.get("title")
+        sort_order = request.POST.get("sort_order")
+        title_list = request.POST.getlist("title[]")
+        sort_order_list = request.POST.getlist("sort[]")
+        print(request.POST)
 
-            title = request.POST.get("title")
-            sort_order = request.POST.get("sort_order")
-            title_list = request.POST.getlist("title[]")
-            sort_order_list = request.POST.getlist("sort[]")
-            print(request.POST)
+        filters_group = FiltersGroup(title=title, sort_order=sort_order)
+        filters_group.save()
 
-            filters_group = FiltersGroup(title=title, sort_order=sort_order)
-            filters_group.save()
+        j = 0
+        for title_title in title_list:
+            filter = Filters(title=title_title, sort_order=sort_order_list[j],
+                             filter_group=filters_group)
+            filter.save()
+            j = j + 1
 
-            j = 0
-            for title_title in title_list:
-                filter = Filters(title=title_title, sort_order=sort_order_list[j],
-                                 filter_group=filters_group)
-                filter.save()
-                j = j + 1
-
-            # return HttpResponse("OK")
-            return HttpResponseRedirect(reverse_lazy('core:Filters'))
+        # return HttpResponse("OK")
+        return HttpResponseRedirect(reverse_lazy('core:Filters'))
 
 
 class EditFilter(UpdateView):

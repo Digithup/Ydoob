@@ -14,14 +14,14 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="page-title">
-                        <h2>{{ stores.title }}</h2>
+                        <h2>{{ store.title }}</h2>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <nav aria-label="breadcrumb" class="theme-breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{% url 'home:index' %}">Home</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ stores.title }}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ store.title }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -31,7 +31,7 @@
     <!-- breadcrumb End -->
 
     <form class="needs-validation" id="myform" enctype="multipart/form-data"
-          action="{% url 'vendors:EditStore' stores.id %}"
+          action="{% url 'vendors:EditStore' store.id %}"
           method="post">
 
         {% csrf_token %}
@@ -65,23 +65,23 @@
                             <div class="col-md-6">
                                 <label for="name">Store Name</label>
                                 <input type="text" class="form-control" placeholder="Enter Your name"
-                                       name="title" value="{{ stores.title }}" required="">
+                                       name="title" value="{{ store.title }}" required="">
                             </div>
                             <div class="col-md-6">
                                 <label for="email">Email</label>
                                 <input type="text" class="form-control" id="last-name" name="email"
-                                       value="{{ stores.email }}" placeholder="Email" required="">
+                                       value="{{ store.email }}" placeholder="Email" required="">
                             </div>
                             <div class="col-md-6">
                                 <label for="review">Phone number</label>
                                 <input type="number" class="form-control" id="review" name="phone"
-                                       value="{{ stores.phone }}" placeholder="Enter your number"
+                                       value="{{ store.phone }}" placeholder="Enter your number"
                                        required="">
                             </div>
                             <div class="col-md-6">
                                 <label for="email">company</label>
                                 <input type="text" class="form-control" name="company"
-                                       value="{{ stores.company }}" placeholder="company" required="">
+                                       value="{{ store.company }}" placeholder="company" required="">
                             </div>
                             <div class="col-md-12">
                                 <hr>
@@ -108,14 +108,17 @@
                                                 <div class="product-wrap">
                                                     <div class="img-wrapper">
                                                         <div class="">
-                                                        </div>{% if  not store_medias.media_content %}
+                                                        </div>{% if  not store_media.media_content %}
                                                         <div class="front">
                                                             <img style="width:150px;height:150px;display:compact"
                                                                  class="img_preview ">
                                                             {% else %}
                                                         </div>
+
                                                         <div class="front">
-                                                        <img alt="" src="{{ store_medias.media_content.url }}"
+                                                         <input hidden  type="" name="media_content_id[]"
+                                                   value="{{ store_media.id }}">
+                                                        <img alt="" src="{{ store_media.media_content }}"
                                                              style='width:150px;height:150px;'
                                                              class="img_preview"></div>
                                                         <div class="cart-info cart-wrap">
@@ -131,9 +134,9 @@
                                                                                      aria-hidden="true"></i></a>
                                                             <a href="compare.html" title="Compare"><i class="ti-reload"
                                                                                                       aria-hidden="true"></i></a>
-                                                        </div>
+                                                        </div>  {% endif %}
 
-                                                    {% endif %}
+
 
 
                                                     </div>
@@ -246,6 +249,8 @@
             </div>
             <div class="col-md-6 pull-right">
                                 <button class="btn btn-sm btn-solid" type="submit">Save setting</button>
+
+
                             </div>
         </section>
         <!-- Section ends -->

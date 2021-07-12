@@ -32,24 +32,21 @@
                                 <li><a href="">Profile</a><li>
                                 <li><li class="onhover-show">
                                     {% if  user.seller   %}
-                                        {% for rs in store %}
+                                        {% if store_owner %}
+                                        {% for rs in store_owner %}
                                           {% if rs.activation %}
                                               <li><a href="{% url 'vendors:VendorDashboard' rs.id %}">{% translate 'Dashboard' %}</a></li>
                                               {% else %}{% if rs.status %}
+                                                  <li><a href="{% url 'vendors:StoreWaiting' %}"><h6>{% translate 'Store need action' %}</h6></a></li>
 
-                                             <li><a href="{% url 'vendors:StoreWaiting' %}"><h6>{% translate 'Store need action' %}</h6></a></li>
-                                                  {% else %}
-                                                   <li><a href="{% url 'vendors:CreateStore' %}">{% translate 'Create Store' %}</a></li>
+
                                                   {% endif %}
-                                              {% endif %}{% endfor %}
+                                              {% endif %}{% endfor %}{% else %}
+                                             <li><a href="{% url 'vendors:CreateStore' %}">{% translate 'Create Store' %}</a></li>
 
-
+                                            {% endif %}
                                         {% else %}
-
-
                                                  <li><a href="{% url 'vendors:SellerRegister' %}">{% translate 'Start Selling ' %}</a> </li>
-
-
                                          {% endif %}
 
                                  <li><a href="{% url 'user:CustomerLogout' %}">{% translate 'Logout' %}</a></li>

@@ -9,7 +9,7 @@ from haystack.query import SearchQuerySet
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from catalog.models.models import Categories, Products, Image
+from catalog.models.models import Categories, Products
 
 
 
@@ -70,25 +70,7 @@ def user_list(request, id, slug):
 # return render(request,'admin/stores-list.html')
 
 
-def Products_detail(request,id,slug):
-    query = request.GET.get('q')
-    # >>>>>>>>>>>>>>>> M U L T I   L A N G U G A E >>>>>> START
 
-    category = Categories.objects.all()
-
-    products = get_object_or_404(Products, id=id, slug=slug, available=True)
-
-    images = Image.objects.filter(Products_id=id)
-    paginator = Paginator(images, 1)  # Show 25 contacts per page.
-
-
-    context = {
-        'Products': Products,
-
-        'paginator':paginator,
-    }
-    #return HttpResponse('f')
-    return render(request, 'add-Productstest.html', context)
 
 
 

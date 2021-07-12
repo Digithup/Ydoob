@@ -19,14 +19,14 @@ var Dashboard = function($dashboard) {
 
 Dashboard.prototype = {
     initTools: function($dashboard) {
-        $dashboard.find('.dashboard-tools-toggle').on('click', function (e) {
+        $dashboard.find('.dashboard-bases-tools-toggle').on('click', function (e) {
             e.preventDefault();
-            $dashboard.find('.dashboard-tools').toggleClass('visible');
+            $dashboard.find('.dashboard-bases-tools').toggleClass('visible');
         });
 
-        var $form = $dashboard.find('#add-dashboard-module-form');
+        var $form = $dashboard.find('#add-dashboard-bases-module-form');
 
-        $form.find('.add-dashboard-link').on('click', function (e) {
+        $form.find('.add-dashboard-bases-link').on('click', function (e) {
             var $typeInput = $form.find('[name="type"]');
             var type = $form.find('[name="module"] option:selected').data('type');
 
@@ -51,10 +51,10 @@ Dashboard.prototype = {
             e.preventDefault();
         });
 
-        $dashboard.find('.reset-dashboard-link').on('click', function(e) {
+        $dashboard.find('.reset-dashboard-bases-link').on('click', function(e) {
             var buttons = {};
             var resetDashboard = function () {
-                var $form = $dashboard.find('#reset-dashboard-form');
+                var $form = $dashboard.find('#reset-dashboard-bases-form');
 
                 $.ajax({
                     url: $form.attr('action'),
@@ -80,7 +80,7 @@ Dashboard.prototype = {
                 $(this).dialog('close');
             };
 
-            $dashboard.find('#reset-dashboard-dialog').dialog({
+            $dashboard.find('#reset-dashboard-bases-dialog').dialog({
                 resizable: false,
                 modal: true,
                 buttons: buttons
@@ -90,14 +90,14 @@ Dashboard.prototype = {
         });
     },
     updateDashboardModules: function($dashboard) {
-        var $form = $dashboard.find('#update-dashboard-modules-form');
+        var $form = $dashboard.find('#update-dashboard-bases-modules-form');
         var modules = [];
 
-        $dashboard.find('.dashboard-column').each(function () {
+        $dashboard.find('.dashboard-bases-column').each(function () {
             var $column = $(this);
-            var column = $column.closest('.dashboard-column-wrapper').index();
+            var column = $column.closest('.dashboard-bases-column-wrapper').index();
 
-            $column.find('.dashboard-item').each(function () {
+            $column.find('.dashboard-bases-item').each(function () {
                 var $item = $(this);
                 var order = $item.index();
                 var id = $item.data('module-id');
@@ -122,18 +122,18 @@ Dashboard.prototype = {
     initModulesDragAndDrop: function($dashboard) {
         var self = this;
 
-        $dashboard.find('.dashboard-column').droppable({
+        $dashboard.find('.dashboard-bases-column').droppable({
             activeClass: 'active',
             hoverClass: 'hovered',
             tolerance: 'pointer',
-            accept: '.dashboard-item'
+            accept: '.dashboard-bases-item'
         }).sortable({
-            items: '.dashboard-item.draggable',
-            handle: '.dashboard-item-header',
+            items: '.dashboard-bases-item.draggable',
+            handle: '.dashboard-bases-item-header',
             tolerance: 'pointer',
-            connectWith: '.dashboard-column',
+            connectWith: '.dashboard-bases-column',
             cursor: 'move',
-            placeholder: 'dashboard-item placeholder',
+            placeholder: 'dashboard-bases-item placeholder',
             forcePlaceholderSize: true,
             update: function (event, ui) {
                 self.updateDashboardModules($dashboard);
@@ -141,12 +141,12 @@ Dashboard.prototype = {
         });
     },
     initCollapsibleModules: function($dashboard) {
-        var $form = $dashboard.find('#update-dashboard-module-collapse-form');
+        var $form = $dashboard.find('#update-dashboard-bases-module-collapse-form');
 
-        $dashboard.find('.dashboard-item.collapsible').each(function () {
+        $dashboard.find('.dashboard-bases-item.collapsible').each(function () {
             var $item = $(this);
-            var $link = $item.find('.dashboard-item-collapse');
-            var $collapsible = $item.find('.dashboard-item-content');
+            var $link = $item.find('.dashboard-bases-item-collapse');
+            var $collapsible = $item.find('.dashboard-bases-item-content');
             var moduleId = $item.data('module-id');
 
             $link.on('click', function (e) {
@@ -175,11 +175,11 @@ Dashboard.prototype = {
         });
     },
     initDeletableModules: function($dashboard) {
-        var $form = $dashboard.find('#remove-dashboard-module-form');
+        var $form = $dashboard.find('#remove-dashboard-bases-module-form');
 
-        $dashboard.find('.dashboard-item.deletable').each(function () {
+        $dashboard.find('.dashboard-bases-item.deletable').each(function () {
             var $item = $(this);
-            var $link = $item.find('.dashboard-item-remove');
+            var $link = $item.find('.dashboard-bases-item-remove');
             var moduleId = $item.data('module-id');
 
             $link.on('click', function (e) {
@@ -218,9 +218,9 @@ Dashboard.prototype = {
         });
     },
     initAjaxModules: function($dashboard) {
-        $dashboard.find('.dashboard-item.ajax').each(function () {
+        $dashboard.find('.dashboard-bases-item.ajax').each(function () {
             var $item = $(this);
-            var $content = $item.find('.dashboard-item-content');
+            var $content = $item.find('.dashboard-bases-item-content');
             var url = $item.data('ajax-url');
 
             $.ajax({
@@ -337,7 +337,7 @@ Dashboard.prototype = {
 };
 
 $(document).ready(function() {
-    $('.dashboard.jet').each(function() {
+    $('.dashboard-bases.jet').each(function() {
         new Dashboard($(this)).run();
     });
 });

@@ -20,6 +20,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.utils.translation import gettext_lazy as _
 
+
 import core
 from localization import views
 
@@ -52,6 +53,8 @@ urlpatterns += i18n_patterns(
     prefix_default_language=True,
 )
 
+#handler404 = error.error_handler
+#handler500 = error.error_handler
 # ... the rest of your URLconf goes here ...
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

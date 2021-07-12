@@ -1,35 +1,39 @@
 from django.urls import path
 
-from vendors.tests import EditStoreTest
-from vendors.views import SellerRegister, CreateStore, CreateSuccess, StoreWaiting, VendorDashboard
+from vendors.tets2 import ProductCreateTest2
+from vendors.views.catalog import VendorIndex, ProductsList, ProductCreate, ProductsDeleted, file_upload, \
+    ProductsAddStocks, ProductMediaDelete, ProductEditMedia, ProductsAddMedia, ProductUpdate
+from vendors.views.views import SellerRegister, CreateStore, CreateSuccess, StoreWaiting, VendorDashboard, EditStore
 
 app_name = 'vendors'
 
-
 urlpatterns = [
-    #path('v/login/',SellerLoginView.as_view(),name='seller_login'),
-    #path('v/register/',SellerRegisterView.as_view(),name='seller_register'),
-
-    ###############Adminn Seller Url##############
-    #path('admin/vendors/',store_list,name='store_list'),
-    #path('admin/s/<int:id>',admin_dashboard,name='store_page'),
-    #path('admin/s/edit/', EditStore, name='EditStore'),
-    #path('admin/s/<int:id>', store_delete, name='store_delete'),
 
 
 
     ###############Front Seller Url##############
     path('register/seller/', SellerRegister.as_view(), name='SellerRegister'),
-    path('startselling/',CreateStore.as_view(),name='CreateStore'),
-    path('CreateSuccess/',CreateSuccess,name='CreateSuccess'),
-    path('StoreWaiting/',StoreWaiting,name='StoreWaiting'),
-    path('store/<int:vendor>',VendorDashboard.as_view(),name='VendorDashboard'),
-    path('store/edit/<str:store_id>', EditStoreTest.as_view(), name='EditStore'),
+    path('startselling/', CreateStore.as_view(), name='CreateStore'),
+    path('CreateSuccess/', CreateSuccess, name='CreateSuccess'),
+    path('StoreWaiting/', StoreWaiting, name='StoreWaiting'),
+    path('store/<str:store_id>', VendorDashboard.as_view(), name='VendorDashboard'),
+    path('store/edit/<str:store_id>', EditStore.as_view(), name='EditStore'),
 
+############## Back ######################
 
+    ########## Products   #########
+    path('store/dashboard/', VendorIndex, name='VendorIndex'),
+    path('store/dashboard/products/', ProductsList.as_view(), name="ProductsList"),
+    path('store/dashboard/productcreate', ProductCreateTest2.as_view(), name="ProductCreate"),
 
-
-
-
+    path('store/dashboard/products/Product_edit/<str:product_id>', ProductUpdate.as_view(), name="ProductUpdate"),
+    path('store/dashboard/products/Products_delete/<int:pk>/', ProductsDeleted.as_view(), name="Product_Delete"),
+    path('store/dashboard/products/Products_add_media/<str:Products_id>', ProductsAddMedia.as_view(), name="Products_add_media"),
+    path('store/dashboard/products/Products_edit_media/<str:Products_id>', ProductEditMedia.as_view(),
+         name="Products_edit_media"),
+     path('store/dashboard/products/Products_media_delete/<str:id>', ProductMediaDelete.as_view(), name="Products_media_delete"),
+    path('store/dashboard/products/Products_add_stocks/<str:Products_id>', ProductsAddStocks.as_view(),
+         name="Products_add_stocks"),
+    path('store/dashboard/products/file_upload', file_upload, name="file_upload"),
 
 ]

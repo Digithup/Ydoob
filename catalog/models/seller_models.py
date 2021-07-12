@@ -9,7 +9,7 @@ from django.utils.text import slugify
 from user.models import User
 from vendors.models import Store
 
-
+"""
 def download_media_location(instance, filename):
     return "%s/%s" % (instance.slug, filename)
 
@@ -23,9 +23,9 @@ class SellerProducts(models.Model):
     title = models.CharField(max_length=30)
     slug = models.SlugField(blank=True, unique=True)
     description = models.TextField()
-    price = models.DecimalField(max_digits=100, decimal_places=2, default=9.99, null=True)  # 100.00
+    price = models.DecimalField(max_digits=65, decimal_places=2, default=9.99, null=True)  # 100.00
     sale_active = models.BooleanField(default=False)
-    sale_price = models.DecimalField(max_digits=100, decimal_places=2, default=6.99, null=True, blank=True)  # 100.00
+    sale_price = models.DecimalField(max_digits=65, decimal_places=2, default=6.99, null=True, blank=True)  # 100.00
 
     def __unicode__(self):
         return self.title
@@ -195,3 +195,4 @@ class CuratedProducts(models.Model):
 
     def __unicode__(self):
         return self.section_name
+"""

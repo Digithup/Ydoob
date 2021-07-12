@@ -34,16 +34,11 @@ class Setting(models.Model):
         return self.email
 
 
-llist = Language.objects.filter(status=True)
-list1 = []
-for rs in llist:
-    list1.append((rs.code, rs.name))
-langlist = (list1)
 
 
 class SettingLang(models.Model):
     setting_id = models.ForeignKey(Setting, on_delete=models.CASCADE)  # many to one relation with Category
-    lang = models.CharField(max_length=6, choices=langlist , default='en')
+    lang = models.CharField(max_length=6 , default='en')
     title = models.CharField(max_length=150, null=True, default='Nigne')
     keywords = models.CharField(max_length=255, default=' ', null=True)
     company = models.CharField(max_length=50, default=' ', null=True)

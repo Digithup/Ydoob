@@ -82,7 +82,7 @@ class User(AbstractBaseUser):
     address = models.CharField(blank=True, null=True, max_length=150)
     city = models.CharField(blank=True, null=True, max_length=20)
     country = models.CharField(blank=True, null=True, max_length=50)
-    image = models.ImageField(blank=True, null=True, upload_to='images/users/', default='images/dashboard/man.png')
+    image = models.ImageField(blank=True, null=True, upload_to='images/users/', default='images/dashboard-bases/man.png')
     facebook = models.URLField(blank=True, max_length=50)
     instagram = models.URLField(blank=True, max_length=50)
     twitter = models.URLField(blank=True, max_length=50)

@@ -1,20 +1,10 @@
 import datetime
-from urllib import request
 
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Row, Column, Field, Submit
-from easy_select2.widgets import Select2
-from ckeditor.fields import RichTextField
 from ckeditor.widgets import CKEditorWidget
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django.contrib.auth.models import User
-from django.forms import TextInput, EmailInput, Select, FileInput, Textarea, ImageField
 from haystack import indexes
 
-from catalog.models.models import Categories, Products, Image
-
-
+from catalog.models.models import Categories, Products, ProductMedia
 
 
 class CategoryAddForm(forms.ModelForm):
@@ -85,7 +75,7 @@ class ProductsFullForm(ProductsAddForm):
         image = super(ProductsFullForm, self).save(*args, **kwargs)
         if hasattr(self.files, 'getlist'):
             for f in self.files.getlist('image'):
-                Image.objects.create(Products=image, image=f)
+                ProductMedia.objects.create(Products=image, image=f)
         return image
 
 

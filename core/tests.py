@@ -1,17 +1,11 @@
-from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
-from django.forms import modelformset_factory
-from django.http import request, HttpResponse
-from django.shortcuts import redirect
+from django.http import request
 from django.views import View
 
-from user.admin import User
-from catalog.models.models import Categories, Products, ProductMedia, ProductDetails, ProductAbout, ProductTags, \
-    ProductTransaction
-from core.forms.banners_forms import BannerAddForm, render
-from core.models.design import Slider
+from core.forms.banners_forms import render
 from core.models.setting import Setting, SettingLang, SettingMedia
 from localization.models import Language
+
 """
 
 def banner_create(request):
@@ -156,7 +150,7 @@ def AddProductVielw(request):
             product_obj.save()  # last_modified field won't update on chaning other model field, save() trigger change
             # return reverse('core:catalog')
             return HttpResponseRedirect('/admin/products', product_created)
-            # return render(request,template_name='admin/pages/admin-products.html')
+            # return render(request,template_name='admin/pages/vendor-products.html')
             # return getNoteResponseData(product_obj, tags, product_created)
         else:
             print("Form invalid, see below error msg")
@@ -242,7 +236,7 @@ class ProductAddViewTest(View):
             product_transaction.save()
             # return HttpResponse("OK")
             print(request)
-            return render(request, 'catalog/product/admin-products.html')
+            return render(request, 'catalog/product/vendor-products.html')
 
             # return render(request,template_name='admin/pages/Products-admin.html')
             # return getNoteResponseData(Products_obj, tags, Products_created)
@@ -323,3 +317,6 @@ class SettingAddViewTest(View):
             j = j + 1
         # return HttpResponse("OK")
         return render(request, 'setting.html')
+
+
+

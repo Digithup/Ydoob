@@ -1682,10 +1682,10 @@
     });
 
     $('.users-sidebar').on('click', function (e) {
-        $('.dashboard-left').css("left", "0");
+        $('.dashboard-bases-left').css("left", "0");
     });
     $('.filter-back').on('click', function (e) {
-        $('.dashboard-left').css("left", "-365px");
+        $('.dashboard-bases-left').css("left", "-365px");
     });
 
     $(function () {

@@ -1,0 +1,96 @@
+{% extends 'admin/adminbase.html' %}
+{% load static %}
+
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+
+{% block body %}
+
+    <!-- Container-fluid starts-->
+    <div class="container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="page-header-left">
+                        <h3>Add Category
+                            <small>Multikart Admin panel</small>
+                        </h3>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <ol class="breadcrumb pull-right">
+                        <li class="breadcrumb-item"><a href="{%  url 'core:admin_index' %}"><i data-feather="home"></i></a></li>
+                        <li class="breadcrumb-item">Physical</li>
+                        <li class="breadcrumb-item active">Add Products</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Container-fluid Ends-->
+
+
+    <!-- Container-fluid starts-->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Add Category</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row Products-adding">
+                            <div class="col-xl-5">
+                                <div class="add-Products">
+                                    <div class="row">
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="">
+                                <form class="needs-validation add-Products-form" novalidate=""
+                                      enctype="multipart/form-data" action="" href="{%  url 'core:EditManufacturer' object.id %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <div class="row-cols-1">
+
+  {% crispy form %}
+                                         {% if field.errors %}
+                                        <div class="alert alert-danger" style="margin:10px">
+                                            {{ field.errors }}
+
+                                    {% endif %}
+
+                                    </div>
+
+                                    <div class="offset-xl-3 offset-sm-4">
+                                        <button type="submit" class="btn btn-primary">Add</button>
+                                         <a href="{% url 'core:Manufacturers' %}">
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-original-title="test" data-target="#exampleModal">Discard
+                            </button>
+                        </a>
+                                    </div>
+                            </div>
+                                         </div></div></form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Container-fluid Ends-->
+
+
+{% endblock %}
+
+
+
+
+
+{% block foot %} {% include 'admin/footer.html' %}  {% endblock %}
+{% block js %} {% include 'admin/js.html' %}  {% endblock %}

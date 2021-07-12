@@ -34,6 +34,8 @@ def profile(request):
                'profile':profile}
     return render(request, 'users/CustomerProfile.html', context)
 
+
+
 class CustomerLogin(View):
     """
     Description:Will be used to login and logout users.\n

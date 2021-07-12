@@ -2,9 +2,9 @@ from django.conf import settings
 from django.db import models
 
 from user.models import User
-from catalog.models.seller_models import SellerProducts
 
 
+"""
 class Transaction(models.Model):
     user = models.ForeignKey(User , on_delete=models.CASCADE)
     Products = models.ForeignKey(SellerProducts , on_delete=models.CASCADE)
@@ -14,3 +14,4 @@ class Transaction(models.Model):
 
     def __unicode__(self):
         return "%s" %(self.id)
+"""

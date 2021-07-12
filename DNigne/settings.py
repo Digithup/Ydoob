@@ -73,7 +73,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     "bootstrap4",
-    # 'jet.dashboard',
+    # 'jet.dashboard-bases',
     # 'jet',
     'easy_thumbnails',
     'filer',
@@ -95,8 +95,6 @@ INSTALLED_APPS = [
     'jquery',
     'djangoformsetjs',
     'django_countries',
-
-
 
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -138,7 +136,7 @@ TEMPLATES = [
                 'core.context_processors.core_processors',
                 'home.context_processors.home_processors',
                 'sales.context_processors.cart',
-                # 'vendors.context_processors.user_profile',
+                'vendors.context_processors.vendor_processors',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
 
@@ -150,7 +148,18 @@ TEMPLATES = [
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'dnigne',
+        'USER': 'root',
+        'PASSWORD': 'Hitham5320826*',
+        'PORT': '3306',
+        'HOST': '127.0.0.100'
+    }
+}
 
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -158,7 +167,6 @@ DATABASES = {
     }
 }
 
-'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -294,9 +302,10 @@ MESSAGE_TAGS = {
 
 SITE_ID = 1
 BASE_URL = "http://127.0.0.1:8000"
-#SESSION_COOKIE_SECURE = True
-#LOGIN_URL = '/admin/login'
-#LOGOUT_URL = '/admin/logout'
+# SESSION_COOKIE_SECURE = True
+# LOGIN_URL = '/admin/login'
+# LOGOUT_URL = '/admin/logout'
+LOGIN_REDIRECT_URL = '/login'
 # Cart
 CART_SESSION_ID = 'cart'
 SESSION_COOKIE_AGE = 85555
@@ -306,7 +315,7 @@ ROOT_URLCONF = 'DNigne.urls'
 WSGI_APPLICATION = 'DNigne.wsgi.application'
 LOGOUT_REDIRECT_URL = '/'
 
-# JET_INDEX_DASHBOARD = 'dashboard.CustomIndexDashboard'
+# JET_INDEX_DASHBOARD = 'dashboard-bases.CustomIndexDashboard'
 
 # email stuff
 EMAIL_USE_SSL = False

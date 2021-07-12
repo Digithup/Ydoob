@@ -33,7 +33,7 @@
     ];
     db.clients = [
         {
-            "Avatar": "{% static '' %}images/dashboard/user5.jpg",
+            "Avatar": "{% static '' %}images/dashboard-bases/user5.jpg",
             "First Name": "Rowan",
             "Last Name": "Torres",
             "Email": "Rowan.torres@gmail.com",
@@ -41,7 +41,7 @@
             "Role": "Customer",
         },
         {
-            "Avatar": "{% static '' %}images/dashboard/user3.jpg",
+            "Avatar": "{% static '' %}images/dashboard-bases/user3.jpg",
             "First Name": "Alonzo",
             "Last Name": "Perez",
             "Email": "Perez.Alonzo@gmail.com",
@@ -49,7 +49,7 @@
             "Role": "Customer",
         },
         {
-            "Avatar": "{% static '' %}images/dashboard/user1.jpg",
+            "Avatar": "{% static '' %}images/dashboard-bases/user1.jpg",
             "First Name": "Skylar",
             "Last Name": "Lane",
             "Email": "Lane.Skylar@gmail.com",
@@ -57,7 +57,7 @@
             "Role": "Customer",
         },
         {
-            "Avatar": "{% static '' %}images/dashboard/boy-2.png",
+            "Avatar": "{% static '' %}images/dashboard-bases/boy-2.png",
             "First Name": "Brody",
             "Last Name": "Gray",
             "Email": "Gray.Brody@gmail.com",
@@ -65,7 +65,7 @@
             "Role": "Admin",
         },
         {
-            "Avatar": "{% static '' %}images/dashboard/designer.jpg",
+            "Avatar": "{% static '' %}images/dashboard-bases/designer.jpg",
             "First Name": "Colton",
             "Last Name": "Clay",
             "Email": "Colton.Clay@gmail.com",
@@ -73,7 +73,7 @@
             "Role": "Customer",
         },
         {
-            "Avatar": "{% static '' %}images/dashboard/user.png",
+            "Avatar": "{% static '' %}images/dashboard-bases/user.png",
             "First Name": "Maxine",
             "Last Name": "Woters",
             "Email": "woters.maxine@gmail.com",
@@ -81,7 +81,7 @@
             "Role": "Customer",
         },
         {
-            "Avatar": "{% static '' %}images/dashboard/user3.jpg",
+            "Avatar": "{% static '' %}images/dashboard-bases/user3.jpg",
             "First Name": "Alonzo",
             "Last Name": "Perez",
             "Email": "Perez.Alonzo@gmail.com",
@@ -89,7 +89,7 @@
             "Role": "Customer",
         },
         {
-            "Avatar": "{% static '' %}images/dashboard/user1.jpg",
+            "Avatar": "{% static '' %}images/dashboard-bases/user1.jpg",
             "First Name": "Skylar",
             "Last Name": "Lane",
             "Email": "Lane.Skylar@gmail.com",
@@ -97,7 +97,7 @@
             "Role": "Customer",
         },
         {
-            "Avatar": "{% static '' %}images/dashboard/boy-2.png",
+            "Avatar": "{% static '' %}images/dashboard-bases/boy-2.png",
             "First Name": "Brody",
             "Last Name": "Gray",
             "Email": "Gray.Brody@gmail.com",
@@ -105,7 +105,7 @@
             "Role": "Customer",
         },
         {
-            "Avatar": "{% static '' %}images/dashboard/designer.jpg",
+            "Avatar": "{% static '' %}images/dashboard-bases/designer.jpg",
             "First Name": "Colton",
             "Last Name": "Clay",
             "Email": "Colton.Clay@gmail.com",
@@ -113,7 +113,7 @@
             "Role": "Admin",
         },
         {
-            "Avatar": "{% static '' %}images/dashboard/user.png",
+            "Avatar": "{% static '' %}images/dashboard-bases/user.png",
             "First Name": "Maxine",
             "Last Name": "Woters",
             "Email": "woters.maxine@gmail.com",
@@ -121,7 +121,7 @@
             "Role": "Customer",
         },
         {
-            "Avatar": "{% static '' %}images/dashboard/user3.jpg",
+            "Avatar": "{% static '' %}images/dashboard-bases/user3.jpg",
             "First Name": "Alonzo",
             "Last Name": "Perez",
             "Email": "Perez.Alonzo@gmail.com",
@@ -129,7 +129,7 @@
             "Role": "Customer",
         },
         {
-            "Avatar": "{% static '' %}images/dashboard/user1.jpg",
+            "Avatar": "{% static '' %}images/dashboard-bases/user1.jpg",
             "First Name": "Skylar",
             "Last Name": "Lane",
             "Email": "Lane.Skylar@gmail.com",
@@ -137,7 +137,7 @@
             "Role": "Customer",
         },
         {
-            "Avatar": "{% static '' %}images/dashboard/boy-2.png",
+            "Avatar": "{% static '' %}images/dashboard-bases/boy-2.png",
             "First Name": "Brody",
             "Last Name": "Gray",
             "Email": "Gray.Brody@gmail.com",
@@ -145,7 +145,7 @@
             "Role": "Customer",
         },
         {
-            "Avatar": "{% static '' %}images/dashboard/designer.jpg",
+            "Avatar": "{% static '' %}images/dashboard-bases/designer.jpg",
             "First Name": "Colton",
             "Last Name": "Clay",
             "Email": "Colton.Clay@gmail.com",
@@ -153,7 +153,7 @@
             "Role": "Customer",
         },
         {
-            "Avatar": "{% static '' %}images/dashboard/user5.jpg",
+            "Avatar": "{% static '' %}images/dashboard-bases/user5.jpg",
             "First Name": "Rowan",
             "Last Name": "Torres",
             "Email": "Rowan.torres@gmail.com",
@@ -161,7 +161,7 @@
             "Role": "Customer",
         },
         {
-            "Avatar": "{% static '' %}images/dashboard/user3.jpg",
+            "Avatar": "{% static '' %}images/dashboard-bases/user3.jpg",
             "First Name": "Alonzo",
             "Last Name": "Perez",
             "Email": "Perez.Alonzo@gmail.com",
@@ -169,7 +169,7 @@
             "Role": "Admin",
         },
         {
-            "Avatar": "{% static '' %}images/dashboard/user1.jpg",
+            "Avatar": "{% static '' %}images/dashboard-bases/user1.jpg",
             "First Name": "Skylar",
             "Last Name": "Lane",
             "Email": "Lane.Skylar@gmail.com",
@@ -177,7 +177,7 @@
             "Role": "Customer",
         },
         {
-            "Avatar": "{% static '' %}images/dashboard/boy-2.png",
+            "Avatar": "{% static '' %}images/dashboard-bases/boy-2.png",
             "First Name": "Brody",
             "Last Name": "Gray",
             "Email": "Gray.Brody@gmail.com",
@@ -185,7 +185,7 @@
             "Role": "Admin",
         },
         {
-            "Avatar": "{% static '' %}images/dashboard/designer.jpg",
+            "Avatar": "{% static '' %}images/dashboard-bases/designer.jpg",
             "First Name": "Colton",
             "Last Name": "Clay",
             "Email": "Colton.Clay@gmail.com",
@@ -193,7 +193,7 @@
             "Role": "Customer",
         },
         {
-            "Avatar": "{% static '' %}images/dashboard/user.png",
+            "Avatar": "{% static '' %}images/dashboard-bases/user.png",
             "First Name": "Maxine",
             "Last Name": "Woters",
             "Email": "woters.maxine@gmail.com",
@@ -201,7 +201,7 @@
             "Role": "Customer",
         },
         {
-            "Avatar": "{% static '' %}images/dashboard/user3.jpg",
+            "Avatar": "{% static '' %}images/dashboard-bases/user3.jpg",
             "First Name": "Alonzo",
             "Last Name": "Perez",
             "Email": "Perez.Alonzo@gmail.com",

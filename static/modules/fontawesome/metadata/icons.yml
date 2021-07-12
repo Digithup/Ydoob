@@ -2319,7 +2319,7 @@ chart-line:
     terms:
       - activity
       - analytics
-      - dashboard
+      - dashboard-bases
       - graph
       - line-chart
   styles:
@@ -3022,7 +3022,7 @@ columns:
   label: Columns
   search:
     terms:
-      - dashboard
+      - dashboard-bases
       - panes
       - split
   styles:
@@ -12691,7 +12691,7 @@ tachometer-alt:
   label: Alternate Tachometer
   search:
     terms:
-      - dashboard
+      - dashboard-bases
       - tachometer
   styles:
     - solid

@@ -1,6 +1,7 @@
 import datetime
 import json
 from django.core import serializers
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, request
 from django.utils.translation import gettext as _
 from django.shortcuts import render, get_object_or_404
@@ -29,9 +30,6 @@ def index(request):
     products_latest = Products.objects.all().order_by('-id')[:4]  # last 4 products
     categories = Categories.objects.all()
     products = Products.objects.all()
-
-    store = Store.objects.all()
-
     banner= Banners.objects.all()
     slider_media = SliderMedia.objects.all()
     manufacture =Manufacturer.objects.filter(status='True')
@@ -40,10 +38,8 @@ def index(request):
     total = 0
     for rs in shopcart:
         total += rs.product.price * rs.quantity
-
     top_collection = Products.objects.all().order_by('-id')[:8]  # last 4 products
     products_first = Products.objects.all().order_by('id')[:8]  # first 4 products
-
     new_sale_products = Products.objects.all().order_by('-id')[:2]  # New Products
     new_random_products = Products.objects.all().order_by('id', 'update_at')[:4]  # New Products
     featured_products = Products.objects.all().order_by('id')[:8]  # Featured Products
@@ -53,16 +49,12 @@ def index(request):
         'setting': setting,
         'categories': categories,
         'products': products,
-
-        'store': store,
         'design': banner,
-
         'manufacture':manufacture,
         #'slider_media':slider_media,
         'shopcart': shopcart,
         'top_collection': top_collection,
         'products_first': products_first,
-
         'new_sale_products': new_sale_products,
         'new_random_products': new_random_products,
         'featured_products': featured_products,
@@ -87,6 +79,33 @@ class CategoriesView(ListView):
     def get_queryset(self):
         return Products.objects.all()
 
+
+class ProductsListView(ListView):
+    model = Products
+    template_name = "front/index.html"
+    paginate_by = 12
+
+    def get_queryset(self):
+        filter_val = self.request.GET.get("filter", "")
+        order_by = self.request.GET.get("orderby", "id")
+        if filter_val != "":
+            products = Products.objects.filter(
+                Q(Products_name__contains=filter_val) | Q(Products_description__contains=filter_val)).order_by(order_by)
+        else:
+            products = Products.objects.all().order_by(order_by)
+        product_list = []
+        for product in products:
+            product_media = ProductMedia.objects.filter(product_id=product.id, media_type=1, is_active=1).first()
+            product_list.append({"product": product, "media": product_media})
+
+        return product_list
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductsListView, self).get_context_data(**kwargs)
+        context["filter"] = self.request.GET.get("filter", "")
+        context["orderby"] = self.request.GET.get("orderby", "id")
+        context["all_table_fields"] = Products._meta.get_fields()
+        return context
 
 
 class ProductsHomeListView(ListView):
