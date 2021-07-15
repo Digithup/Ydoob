@@ -113,7 +113,9 @@
 <script type="text/javascript" src="{% static 'js/toastr.min.js' %}"></script>
 
 
-
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'css/toastr.css' %}" media="all">
+<script type="text/javascript" src="{% static 'js/toastr.min.js' %}"></script>
 
 <script>
     $(window).on('load', function () {
@@ -137,6 +139,7 @@
         document.getElementById("title").value = document.getElementById("title_en").value;
         document.getElementById("slug").value = document.getElementById("title_en").value.toLowerCase().replaceAll(" ", "-");
     }
+
 
 
 

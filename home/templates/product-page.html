@@ -1,0 +1,211 @@
+{% extends 'front/homebase.html' %}
+{% load static %}
+
+
+
+
+{% block body %}
+
+    <!-- breadcrumb start -->
+    <div class="breadcrumb-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="page-title">
+                        <h2>product</h2>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <nav aria-label="breadcrumb" class="theme-breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'home:index' %}">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ products.title }}</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- breadcrumb End -->
+
+  <!-- section start -->
+    <section>
+        <div class="collection-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-sm-10 col-xs-12">
+
+                        <div class="product-right-slick">
+                            <div><img src="{{ product.media_content.url }}" alt=""
+                                    class="img-fluid blur-up lazyload image_zoom_cls-0"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-sm-2 col-xs-12">
+                        <div class="row">
+                            <div class="col-12 p-0">
+                                <div class="slider-right-nav">
+                                    {% for rs in images %}
+
+                                    <div> {{ rs.0 }}<img src="{{rs.image.url}}" alt=""
+                                            class="img-fluid blur-up lazyload"></div>
+
+
+
+
+                                {% endfor %}
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="product-right product-description-box">
+                            <h2>{{ product.title }}</h2>
+                            <div class="border-product">
+                                <h6 class="product-title">product details</h6>
+                                <p>Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium
+                                    doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore
+                                    veritatis et quasi architecto beatae vitae dicta sunt, explicabo. Nemo enim ipsam
+                                    voluptatem,</p>
+                            </div>
+                            <div class="single-product-tables border-product detail-section">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>Febric:</td>
+                                            <td>Chiffon</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Color:</td>
+                                            <td>Red</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Material:</td>
+                                            <td>Crepe printed</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="border-product">
+                                <h6 class="product-title">share it</h6>
+                                <div class="product-icon">
+                                    <ul class="product-social">
+                                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-rss"></i></a></li>
+                                    </ul>
+                                    <form class="d-inline-block">
+                                        <button class="wishlist-btn"><i class="fa fa-heart"></i><span
+                                                class="title-font">Add To WishList</span></button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="border-product">
+                                <h6 class="product-title">100% SECURE PAYMENT</h6>
+                                <div class="payment-card-bottom">
+                                    <ul>
+                                        <li>
+                                            <a href="#"><img src="{% static 'product-page.html' %}images/icon/visa.png" alt=""></a>
+                                        </li>
+                                        <li>
+                                            <a href="#"><img src="{% static 'product-page.html' %}images/icon/mastercard.png" alt=""></a>
+                                        </li>
+                                        <li>
+                                            <a href="#"><img src="{% static 'product-page.html' %}images/icon/paypal.png" alt=""></a>
+                                        </li>
+                                        <li>
+                                            <a href="#"><img src="{% static 'product-page.html' %}images/icon/american-express.png"
+                                                    alt=""></a>
+                                        </li>
+                                        <li>
+                                            <a href="#"><img src="{% static 'product-page.html' %}images/icon/discover.png" alt=""></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="product-right product-form-box">
+                            <h4><del>$459.00</del><span>55% off</span></h4>
+                            <h3>$32.96</h3>
+                            <ul class="color-variant">
+                                <li class="bg-light0"></li>
+                                <li class="bg-light1"></li>
+                                <li class="bg-light2"></li>
+                            </ul>
+                            <div class="product-description border-product">
+                                <h6 class="product-title">Time Reminder</h6>
+                                <div class="timer">
+                                    <p id="demo"><span>25 <span class="padding-l">:</span> <span
+                                                class="timer-cal">Days</span> </span><span>22 <span
+                                                class="padding-l">:</span> <span class="timer-cal">Hrs</span>
+                                        </span><span>13 <span class="padding-l">:</span> <span
+                                                class="timer-cal">Min</span> </span><span>57 <span
+                                                class="timer-cal">Sec</span></span>
+                                    </p>
+                                </div>
+                                <h6 class="product-title">select size</h6>
+                                <div class="modal fade" id="sizemodal" tabindex="-1" role="dialog"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Sheer Straight Kurta</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            </div>
+                                            <div class="modal-body"><img src="{% static 'product-page.html' %}images/size-chart.jpg" alt=""
+                                                                         class="img-fluid blur-up lazyload"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="size-box">
+                                    <ul>
+                                        <li class="active"><a href="#">s</a></li>
+                                        <li><a href="#">m</a></li>
+                                        <li><a href="#">l</a></li>
+                                        <li><a href="#">xl</a></li>
+                                    </ul>
+                                </div>
+                                <h6 class="product-title">quantity</h6>
+                                <div class="qty-box">
+                                    <div class="input-group"><span class="input-group-prepend"><button type="button"
+                                                class="btn quantity-left-minus" data-type="minus" data-field=""><i
+                                                    class="ti-angle-left"></i></button> </span>
+                                        <input type="text" name="quantity" class="form-control input-number" value="1">
+                                        <span class="input-group-prepend"><button type="button"
+                                                class="btn quantity-right-plus" data-type="plus" data-field=""><i
+                                                    class="ti-angle-right"></i></button></span></div>
+                                </div>
+                            </div>
+                            <div class="product-buttons"><a href="#" data-toggle="modal" data-target="#addtocart"
+                                    class="btn btn-solid">add to cart</a> <a href="#" class="btn btn-solid">buy now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Section ends -->
+
+
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+{% block foot %} {% include 'front/footer.html' %}  {% endblock %}
+{% block js %} {% include 'front/js.html' %}  {% endblock %}
+
+
+

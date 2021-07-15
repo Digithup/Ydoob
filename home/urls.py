@@ -1,22 +1,22 @@
 from django.urls import path
 from . import views
-from .views import ProductDetailView, autocomplete, ProductsHomeListView, categories
+from .views import ProductDetailView, autocomplete, categories, CategoryDetail, ProductsListView
 
 app_name = 'home'
 urlpatterns = [
     path('', views.index, name='index'),
     path('home/', views.index, name='index'),
     path('search/autocomplete', autocomplete, name='autocomplete'),
-    #path('search/', SearchView(), name='search'),
-    #path('search_auto/', views.search_auto, name='search_auto'),
+    # path('search/', SearchView(), name='search'),
+    # path('search_auto/', views.search_auto, name='search_auto'),
 
     ############ Category Product ##############
-    path('categories/', categories, name='CategoriesView'),
-    path('products/', ProductsHomeListView.as_view(), name='ProductsView'),
-
+    path('categories/', categories, name='Categories'),
+    path('categories/<slug:slug>', CategoryDetail.as_view(), name='Category'),
+    path('products/', ProductsListView.as_view(), name='ProductsView'),
 
     ############ Product ##############
-    path('product/<int:pk>/', ProductDetailView.as_view(), name='ProductDetail'),
+    path('product/<slug:slug>/', ProductDetailView.as_view(), name='ProductDetail'),
     #path('search/<int:pk>/', ProductDetailView.as_view(), name='ProductDetail'),
 
 ]

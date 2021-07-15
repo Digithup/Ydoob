@@ -53,10 +53,13 @@
                         <tbody>
                         {% for rs in shopcart %}
                     {% with product=rs.product  %}
+                        {% for rm in product.productmedia_set.all  %}
                             <tr>
                                 <td>
-                                    <img src="{% if product.image %} {{ product.thumbnail.url }} {% else %} {% static 'img/default.jpg' %} {% endif %}" alt="..." style="height: 130px; width: auto">
+
+                                    <img src="{% if rm.Image %} {{ rm.Image.url }} {% else %} {% static 'img/default.jpg' %} {% endif %}" alt="..." style="height: 50px; width: 90px">
                                 </td>
+                            {% endfor %}
                                 <td><a href="#">{{ product.title }}</a>
                                     <div class="mobile-cart-content row">
                                         <div class="col-xs-3">
@@ -86,7 +89,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td><a href="{% url 'sales:deletefromcart'  rs.id %}" class="icon"><i class="ti-close"></i></a></td>
+                                <td><a href="{% url 'sales:DeleteFromCart'  rs.id %}" class="icon"><i class="ti-close"></i></a></td>
                                 <td>
                                     <h2 class="td-color">{{ rs.amount }}</h2>
                                 </td>
@@ -110,7 +113,7 @@
             </div>
             <div class="row cart-buttons">
                 <div class="col-6"><a href="{% url "home:ProductsView" %}" class="btn btn-solid">continue shopping</a></div>
-                <div class="col-6"><a href="{% url 'sales:orderproduct'  %}" class="btn btn-solid">check out</a></div>
+                <div class="col-6"><a href="{% url 'sales:OrderProduct'  %}" class="btn btn-solid">check out</a></div>
             </div>
         </div>
     </section>

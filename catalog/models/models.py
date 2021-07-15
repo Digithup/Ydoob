@@ -4,6 +4,7 @@ import uuid
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 # Create your models here.
+from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from mptt.fields import TreeForeignKey
@@ -56,34 +57,45 @@ class Categories(MPTTModel, Translatable):
     def __str__(self):
         return self.title
 
-    def __str__(self):
-        return self.title
+
 
 
 class Products(models.Model):
     id = models.AutoField(primary_key=True)
     seller = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Categories, on_delete=models.CASCADE, null=False)
-    title = models.CharField(max_length=255, null=False, verbose_name='Product Name'),
-    description = models.TextField(null=False),
+    title = models.CharField(max_length=255, null=False, blank=False)
+    keyword = models.CharField(max_length=255, null=False, blank=False)
+    long_desc = models.TextField(null=True)
     model = models.CharField(max_length=65, null=True)
     brand = models.CharField(max_length=255, null=True)
     price = models.CharField(max_length=255, null=False)
     quantity = models.CharField(max_length=255, default=0)
     minimum_quantity = models.CharField(max_length=255, default=1)
-    subtract_stock = models.CharField(max_length=255, choices=STATUS, default='Enable')
+    subtract_stock = models.CharField(max_length=255, choices=STATUS, default='Yes', null=True)
     out_of_stock_status = models.CharField(max_length=255, choices=OutStock, default='2')
-    requires_shipping = models.BooleanField(default=False)
+    requires_shipping = models.CharField(max_length=65,default=False,choices=STATUS, null=True)
     weight = models.IntegerField(default=0, null=True, blank=True)
     length = models.IntegerField(default=0, null=True, blank=True)
-    status = models.CharField(max_length=10, choices=STATUS, default='Yes')
-    sort_order = models.BooleanField(default=0)
-    slug = models.SlugField(null=False, max_length=128, unique=True)
+    status = models.CharField(max_length=10, choices=STATUS, default='Yes', null=True)
+    sort_order = models.SmallIntegerField(default=0, null=True)
+    slug = models.SlugField(unique=True,null=False,max_length=128)
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
+
+
+    def get_absolute_url(self):
+        return reverse('ProductDetail', args=[str(self.id)])
+
+    def save(self, *args, **kwargs):  # new
+        if not self.slug:
+            self.slug = slugify(self.title)
+        return super().save(*args, **kwargs)
+
+
 
 
 def image_directory_path(instance, filename):
@@ -94,18 +106,18 @@ def image_directory_path(instance, filename):
         sub_folder = "avatar"
     if ext.lower() in ["pdf", "docx"]:
         sub_folder = "document"
-    return os.path.join(instance.product_id, sub_folder, filename)
+    return os.path.join(instance.product, sub_folder, filename)
 
 
 class ProductMedia(models.Model):
-    id = models.AutoField(primary_key=True)
-    product_id = models.ForeignKey(Products, on_delete=models.CASCADE)
-    media_type_choice = ((1, "Image"), (2, "Video"))
-    media_type = models.CharField(max_length=255)
-    media_content = models.FileField(upload_to=image_directory_path, verbose_name="Store Logo")
+    product = models.ForeignKey(Products, on_delete=models.CASCADE)
+    image = models.FileField(verbose_name='Product Image',name='Image' )
     created_at = models.DateTimeField(auto_now_add=True)
 
-    is_active = models.IntegerField(default=1)
+    class Meta:
+        ordering = ["product"]
+        verbose_name_plural = "Product Image"
+
 
 
 class ProductTransaction(models.Model):
@@ -121,7 +133,7 @@ class ProductTransaction(models.Model):
 class ProductDiscount(models.Model):
     id = models.AutoField(primary_key=True)
     product_id = models.ForeignKey(Products, on_delete=models.CASCADE)
-    title = models.CharField(max_length=255, null=True, blank=True)
+    discount_title = models.CharField(max_length=255, null=True, blank=True)
     quantity = models.IntegerField(null=True, blank=True)
     priority = models.CharField(max_length=255, null=True, blank=True)
     price = models.IntegerField(null=True, blank=True)
@@ -171,15 +183,15 @@ class ProductReviewVoting(models.Model):
     status = models.CharField(max_length=10, choices=STATUS)
 
 
-class ProductVarient(models.Model):
+class ProductVariant(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
 
 
-class ProductVarientItems(models.Model):
+class ProductVariantItems(models.Model):
     id = models.AutoField(primary_key=True)
-    product_varient_id = models.ForeignKey(ProductVarient, on_delete=models.CASCADE)
+    product_variant_id = models.ForeignKey(ProductVariant, on_delete=models.CASCADE)
     product_id = models.ForeignKey(Products, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)

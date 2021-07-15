@@ -2,7 +2,7 @@ from django.db import models
 from django.forms import ModelForm
 
 from user.models import User
-from catalog.models.models import Products
+from catalog.models.models import Products, ProductVariantItems
 
 from vendors.models import Store
 
@@ -11,6 +11,7 @@ class ShopCart(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     store = models.ForeignKey(Store, on_delete=models.SET_NULL, null=True)
     product = models.ForeignKey(Products, on_delete=models.SET_NULL, null=True)
+    variant = models.ForeignKey(ProductVariantItems , on_delete=models.SET_NULL,null=True)
 
     quantity = models.IntegerField()
 

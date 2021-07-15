@@ -1,21 +1,25 @@
 from django.core.files.storage import FileSystemStorage
-from django.http import request
+from django.http import request, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
+from django.views.generic import CreateView
 
 from catalog.models.models import Categories, Products, ProductMedia, ProductTags, ProductTransaction
 from user.models import User
 
 
-class ProductCreateTest2(View):
+class ProductCreateTest3(CreateView):
     def get(self, request, *args, **kwargs):
         print(request)
         category = Categories.objects.filter(status=True)
         sellers = request.user.id
 
-        return render(request, "vendor/catalog/product/add-product.html",
-                      {"categories": category, "sellers": sellers})
+
+        return render(request, "vendor/catalog/product/add-product.html", {"categories": category, "sellers": sellers})
+
+        #return render(request, "catalog/product/add-product.html", {"categories": category,"sellers": sellers })
+
 
     print(request)
 
@@ -37,13 +41,14 @@ class ProductCreateTest2(View):
         media_type_list = request.POST.getlist("media_type[]")
         media_content_list = request.FILES.getlist("media_content[]")
         product_tags = request.POST.get("product_tags")
-        print(request.POST)
-        # status = request.POST.get("status")
         category = Categories.objects.get(id=category)
         seller = User.objects.get(id=seller)
-        product = Products(seller=seller,category=category,title=title,description=description,
-                           model=model,brand=brand,price=price,quantity=quantity,out_of_stock_status=out_of_stock_status,
-                           requires_shipping=requires_shipping,weight=weight,length=length,status=status,
+        print(request.POST)
+
+        product = Products(seller=seller, category=category, title=title, description=description,
+                           model=model, brand=brand, price=price, quantity=quantity,
+                           out_of_stock_status=out_of_stock_status,
+                           requires_shipping=requires_shipping, weight=weight, length=length, status=status,
                            slug=slug)
         product.save()
 
@@ -67,7 +72,8 @@ class ProductCreateTest2(View):
         product_transaction = ProductTransaction(product_id=product, transaction_type=1,
                                                  transaction_product_count=quantity,
                                                  transaction_description="Initially Item Added in Stocks")
+        print(request.POST)
         product_transaction.save()
-        # return HttpResponse("OK")
-        return redirect(reverse('vendors:ProductsList')
-                        )
+        return HttpResponse("OK")
+        #return redirect(reverse('vendors:ProductsList'))
+

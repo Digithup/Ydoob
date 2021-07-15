@@ -516,10 +516,10 @@ body {
             }
         }
     }
-    .product-box,
-    .product-wrap {
-        .product-detail,
-        .product-info {
+    .Products-box,
+    .Products-wrap {
+        .Products-detail,
+        .Products-info {
             h4 {
                 color: $white-3;
             }
@@ -685,10 +685,10 @@ body {
             }
         }
     }
-    .collection-product-wrapper {
-        .product-top-filter {
+    .collection-Products-wrapper {
+        .Products-top-filter {
             border-color: $dark-border;
-            .product-filter-content,
+            .Products-filter-content,
             .popup-filter {
                 .search-count,
                 .sidebar-popup {
@@ -697,7 +697,7 @@ body {
                 .collection-grid-view {
                     border-color: $dark-border;
                 }
-                .product-page-per-view {
+                .Products-page-per-view {
                     select {
                         border-color: $dark-border;
                     }
@@ -712,7 +712,7 @@ body {
             }
         }
     }
-    .product-pagination {
+    .Products-pagination {
         border-color: $dark-border;
         .pagination {
             .page-item {
@@ -725,7 +725,7 @@ body {
                 }
             }
         }
-        .product-search-count-bottom {
+        .Products-search-count-bottom {
             border-color: $dark-border;
             h5 {
                 color: $white-4;
@@ -734,8 +734,8 @@ body {
     }
     .portfolio-section {
         &.metro-section {
-            .product-box {
-                .product-detail {
+            .Products-box {
+                .Products-detail {
                     background-color: $dark-body;
                     transition: all 0.3s ease;
                     h4 {
@@ -1079,8 +1079,8 @@ body {
     .full-box {
         .theme-card {
             .offer-slider {
-                .product-box2 {
-                    +.product-box2 {
+                .Products-box2 {
+                    +.Products-box2 {
                         border-top: none;
                     }
                 }
@@ -1097,11 +1097,11 @@ body {
     }
     .theme-tab {
         .tab-content {
-            .product-tab {
+            .Products-tab {
                 .tab-box {
                     background-color: $dark-body;
                     transition: all 0.3s ease;
-                    .product-box2 {
+                    .Products-box2 {
                         .media {
                             .media-body {
                                 h4 {
@@ -1184,9 +1184,9 @@ body {
         }
     }
     .j-box {
-        .product-box {
+        .Products-box {
             border-color: $dark-border;
-            .product-detail {
+            .Products-detail {
                 background-color: $dark-top;
                 transition: all 0.3s ease;
             }
@@ -1370,8 +1370,8 @@ body {
         background-color: $dark-body !important;
         transition: all 0.3s ease;
     }
-    .product-box,
-    .product-wrap {
+    .Products-box,
+    .Products-wrap {
         .img-wrapper {
             .cart-box {
                 background-color: $dark-body;
@@ -1390,7 +1390,7 @@ body {
         background-color: $dark-top;
         transition: all 0.3s ease;
     }
-    .product-order {
+    .Products-order {
         .total-sec {
             border-color: $dark-border;
         }
@@ -1410,15 +1410,15 @@ body {
             }
         }
     }
-    .product-right {
-        .product-title {
+    .Products-right {
+        .Products-title {
             color: $white-5;
         }
-        .border-product {
+        .border-Products {
             border-color: $dark-border;
         }
-        .product-icon {
-            .product-social {
+        .Products-icon {
+            .Products-social {
                 li {
                     a {
                         color: $dark-link;
@@ -1432,7 +1432,7 @@ body {
                 }
             }
         }
-        &.product-form-box {
+        &.Products-form-box {
             border-color: $dark-border;
             .timer {
                 background-color: $dark-top;
@@ -1499,7 +1499,7 @@ body {
             }
         }
     }
-    .tab-product {
+    .tab-Products {
         .nav-material {
             &.nav-tabs {
                 .nav-item {
@@ -1515,7 +1515,7 @@ body {
             }
         }
     }
-    .product-full-tab {
+    .Products-full-tab {
         .nav-material {
             &.nav-tabs {
                 .nav-link {
@@ -1526,8 +1526,8 @@ body {
             }
         }
     }
-    .tab-product,
-    .product-full-tab {
+    .tab-Products,
+    .Products-full-tab {
         .theme-form {
             input,
             textarea {
@@ -1535,12 +1535,12 @@ body {
             }
         }
     }
-    .product-related {
+    .Products-related {
         h2 {
             border-color: $dark-border;
         }
     }
-    .product-accordion {
+    .Products-accordion {
         .btn-link {
             color: $white-3;
         }
@@ -1563,7 +1563,7 @@ body {
     }
     .bundle {
         .bundle_detail {
-            .price_product {
+            .price_Products {
                 color: $white;
             }
         }
@@ -1581,7 +1581,7 @@ body {
         border-color: $dark-border;
     }
     .collection-filter-block {
-        .product-service {
+        .Products-service {
             .media {
                 border-color: $dark-border;
             }
@@ -1678,8 +1678,8 @@ body {
         }
     }
     .tools-grey {
-        .product-box {
-            .product-info {
+        .Products-box {
+            .Products-info {
                 background-color: $dark-top;
                 transition: all 0.3s ease;
                 border-color: rgba($dark-border, 0.2);
@@ -1747,7 +1747,7 @@ body {
                     color: white;
                 }
             }
-            &.product-pagination {
+            &.Products-pagination {
                 .pagination {
                     .page-item {
                         border-color: $dark-border;
@@ -1772,11 +1772,11 @@ body {
             }
         }
     }
-    .absolute-product {
-        .product-box {
+    .absolute-Products {
+        .Products-box {
             background-color: $dark-top;
             transition: all 0.3s ease;
-            .product-detail {
+            .Products-detail {
                 .cart-bottom {
                     border-color: $dark-border;
                     i {
@@ -1789,11 +1789,11 @@ body {
             }
         }
     }
-    .box-product {
+    .box-Products {
         .full-box {
             .theme-card {
                 .offer-slider {
-                    .product-box2 {
+                    .Products-box2 {
                         box-shadow: none;
                         .media {
                             background-color: $dark-top;
@@ -1911,7 +1911,7 @@ body {
     }
     .border-box {
         &.tools-grey {
-            .product-box {
+            .Products-box {
                 border-color: $dark-border;
             }
         }
@@ -1986,9 +1986,9 @@ body {
                     .modal-body {
                         .modal-bg {
                             &.addtocart {
-                                #upsell_product {
-                                    .product-box {
-                                        .product-detail {
+                                #upsell_Products {
+                                    .Products-box {
+                                        .Products-detail {
                                             h6 {
                                                 a {
                                                     color: $dark-link;
@@ -2070,8 +2070,8 @@ body {
             filter: invert(100);
         }
     }
-    .game-product {
-        .product-box {
+    .game-Products {
+        .Products-box {
             .cart-info {
                 a {
                     i {
@@ -2128,12 +2128,12 @@ body {
                 }
             }
         }
-        .collection-product-wrapper {
-            .product-top-filter {
+        .collection-Products-wrapper {
+            .Products-top-filter {
                 background-color: $dark-top;
             }
         }
-        .product-pagination {
+        .Products-pagination {
             background-color: $dark-top;
         }
         .page-link {

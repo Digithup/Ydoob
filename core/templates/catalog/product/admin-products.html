@@ -1,6 +1,6 @@
 {% extends 'admin/adminbase.html' %}
 {% load static %}
-
+{% load i18n %}
 {% block body %}
 
     <!-- Container-fluid starts-->
@@ -22,9 +22,10 @@
                         </ol>
                     </div>
                 </div>
+
                 <div class="col-lg-6">
                     <div class="card-tools pull-right ">
-                        <a href="{% url 'core:Product_add' %}">
+                        <a href="{% url 'core:ProductAdd' %}">
                             <button type="button" class="btn btn-primary" data-toggle="modal"
                                     data-original-title="test" data-target="#exampleModal">Add Products
                             </button>
@@ -48,13 +49,13 @@
                         <div class="card-body Products-box">
                             <div class="img-wrapper">
                                 <div class="front">
-                                    <a href="#"><img src="{{ rs.media.media_content }}" class="img-fluid blur-up lazyload bg-img"
+                                    <a href="#"><img src="{{ rs.media.Image.url }}" class="img-fluid blur-up lazyload bg-img"
                                                      alt=""></a>
                                     <div class="Products-hover">
                                         <ul>
 
                                             <li>
-                                                <a href="{% url 'core:Product_Delete' rs.product.id  %}"
+                                                <a href="{% url 'core:ProductDelete' rs.product.id  %}"
                                                    onclick="return confirm('Are you sure you want to delete {{ rs.title }}?')">
                                                 <button class="btn" type="button" data-original-title="" title=""><i
                                                         class="ti-trash"></i></button>
@@ -78,8 +79,8 @@
                                 <a href="">
                                     <h6>{{ rs.product.title }}</h6>
                                 </a>
-                                <h4>{{ rs.product.product_max_price }}
-                                    <del>{{ rs.product.product_max_price }}</del>
+                                <h4>{{ rs.product.price }}
+                                    <del>{{ rs.product.price }}</del>
                                 </h4>
                                 <ul class="color-variant">
                                     <li class="bg-light0"></li>

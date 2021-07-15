@@ -20,9 +20,11 @@ from core.forms.forms import SearchForm
 from core.models.setting import Setting
 from localization.models import Language
 from user.admin import User
+from vendors.models import Store
 
 
 def VendorIndex(request):
+
     categories = Categories.objects.all()
     setting = Setting.objects.all()
     index_language =[]
@@ -39,8 +41,12 @@ def VendorIndex(request):
         'index_language': index_language
 
     }
-    return render(request, 'vendor/dashboard-base/index.html', context)
+    return render(request, 'vendor/vendor-base/index.html', context)
 
+class Vendorindexx(DetailView):
+    model = Store
+    context_object_name = 'store'
+    template_name = 'vendor/vendor-base/index.html'
 
 
 ############## Products   ################

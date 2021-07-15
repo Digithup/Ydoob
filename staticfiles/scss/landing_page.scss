@@ -1,4 +1,4 @@
-@import "theme/variables";
+@import "utils/variables";
 
 
 
@@ -990,7 +990,7 @@ ul.tabs {
             margin: 0 auto;
         }
     }
-    .mr-auto, .mx-auto {
+    .me-auto, .mx-auto {
         margin-right: 15px !important;
     }
     ul.tabs{

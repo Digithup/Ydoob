@@ -1,4 +1,4 @@
-{% extends 'vendor/dashboard-base/vendorbase.html' %}
+{% extends 'vendor/vendor-base/vendorbase.html' %}
 {% load crispy_forms_filters %}
 {% load static %}
 {% load  i18n %}
@@ -38,11 +38,10 @@
         <div class="row product-adding">
             <div class="col-xl-12">
                 <div class="card">
-                    <form class="needs-validation" id="myform" enctype="multipart/form-data"
-                          action="{% url 'vendors:ProductCreate' %}"
+                    <form class="needs-validation add-product-form" novalidate="" id="myform"
+                          enctype="multipart/form-data" action="{% url 'vendors:ProductCreate' %}"
                           method="post">
                         {% csrf_token %}
-
                         <div class="card-body">
                             <div>
                                 {% if messages %}
@@ -70,7 +69,7 @@
                                                         href="#data"
                                                         role="tab" aria-controls="data" aria-selected="false"
                                                         data-original-title="" title="">{% translate 'Data' %}</a></li>
-                                <li class="nav-item"><a class="nav-link" id="image-tabs" data-toggle="tab"
+                                <li class="nav-item"><a class="nav-link " id="image-tabs" data-toggle="tab"
                                                         href="#image"
                                                         role="tab" aria-controls="image" aria-selected="false"
                                                         data-original-title="" title="">{% translate 'Image' %}</a></li>
@@ -86,36 +85,39 @@
                                     <!-- Container-fluid starts-->
                                     <div class="container-fluid">
                                         <div class=" product-adding">
-                                            <div class="card">
+                                            <div class="card ">
                                                 <div class="card-header">
                                                     <h5>{% translate 'General' %}</h5>
                                                 </div>
-                                                <div class="card-body  ">
+                                                <div class="card-body form ">
                                                     <div class="digital-add needs-validation ">
 
 
-                                                        <div class="form-group row">
-                                                            <label for="validationCustom0"
+                                                        <div class="form-group mb-3 row">
+                                                            <label for="validationCustom01"
                                                                    class="col-md-4"><span>*</span>{% translate 'Product Name' %}
                                                             </label>
                                                             <input class="form-control col-sm-4 "
                                                                    placeholder="title"
-                                                                   id="validationCustom02" type="text"
-                                                                   name="title" required="required">
+                                                                   id="validationCustom01" type="text"
+                                                                   name="title" required="">
                                                         </div>
                                                         <div class="valid-feedback">Looks good!</div>
+                                                        <div class="invalid-feedback offset-sm-4 offset-xl-3">Please
+                                                            choose Valid Code.
+                                                        </div>
 
 
-                                                        <div class="digital-add needs-validation ">
+
                                                             <div class="form-group row">
                                                                 <label for="validationCustom0"
-                                                                       class=" col-sm-4"><span>*</span>Detail
+                                                                       class=" col-sm-4"><span>*</span>{% translate 'Description' %}
                                                                 </label>
                                                                 <textarea class="col-md-push-12 middle" content=""
-                                                                          name="product_long_description" id="long_desc"
+                                                                          name="description" id="editor1"
                                                                           cols="4"
                                                                           rows="4"></textarea>
-                                                            </div>
+
                                                         </div>
 
                                                     </div>
@@ -136,7 +138,7 @@
                                                 </div>
                                                 <div class="card-body ">
                                                     <div class="col-xl-8">
-                                                        <div class="digital-add needs-validation ">
+
                                                             <div class="form-group row ">
                                                                 <label for="validationCustom0"
                                                                        class=" col-md-4"><span>*</span>
@@ -146,9 +148,9 @@
                                                                        name="model" value="5"
                                                                        required="">
 
-                                                            </div>
+
                                                         </div>
-                                                        <div class="digital-add needs-validation ">
+
                                                             <div class="form-group row ">
                                                                 <label for="validationCustom0"
                                                                        class=" col-md-4"><span>*</span>
@@ -158,27 +160,23 @@
                                                                        name="brand" value="5"
                                                                        required="">
 
-                                                            </div>
+
                                                         </div>
 
-                                                        <div class="digital-add needs-validation ">
+
                                                             <div class="form-group row">
                                                                 <label for="validationCustom0"
                                                                        class="col-md-4">{% translate 'Category' %}</label>
-                                                                <select name="category" class="form-control  col-md-6"
-                                                                        required=""
-                                                                        id="validationCustom0">
+                                                                <select name="category" class="form-control  col-md-6">
 
                                                                     {% for category in categories %}
                                                                         <optgroup label={{ category.title }}>
                                                                             <option value="{{ category.id }}">{{ category.title }}</option>
                                                                         </optgroup>
                                                                     {% endfor %}
-
                                                                 </select>
-                                                            </div>
                                                         </div>
-                                                        <div class="digital-add needs-validation ">
+
                                                             <div class="form-group row ">
                                                                 <label for="validationCustom0"
                                                                        class=" col-md-4"><span>*</span>
@@ -188,7 +186,7 @@
                                                                        name="seller" value="{{ request.user.id }}"
                                                                        required="">
 
-                                                            </div>
+
                                                         </div>
 
                                                         <div class="form-group row">
@@ -221,7 +219,7 @@
                                                         </div>
 
 
-                                                        <div class="digital-add needs-validation ">
+
                                                             <div class="form-group row">
                                                                 <label for="validationCustom0"
                                                                        class=" col-md-4"><span>*</span>
@@ -233,10 +231,10 @@
                                                                     <option value="{{ False }}">{{ 'NO' }}</option>
 
                                                                 </select>
-                                                            </div>
+
                                                         </div>
 
-                                                        <div class="digital-add needs-validation ">
+
                                                             <div class="form-group row">
                                                                 <label for="validationCustom0"
                                                                        class=" col-md-4"><span>*</span>
@@ -250,9 +248,9 @@
                                                                     <option value="{{ 4 }}">{{ 'Pre-order' }}</option>
                                                                 </select>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="digital-add needs-validation ">
+
+
                                                             <div class="form-group row">
                                                                 <label for="validationCustom0"
                                                                        class=" col-md-4"><span>*</span>
@@ -264,7 +262,7 @@
                                                                     <option value="{{ False }}">{{ 'NO' }}</option>
 
                                                                 </select>
-                                                            </div>
+
                                                         </div>
 
 
@@ -289,7 +287,7 @@
                                                         </div>
 
 
-                                                        <div class="digital-add needs-validation ">
+
                                                             <div class="form-group row">
                                                                 <label for="validationCustom0"
                                                                        class=" col-md-4"><span>*</span>
@@ -300,7 +298,7 @@
                                                                     <option>{% translate 'Yes' %}</option>
                                                                     <option>{% translate 'Yes' %}</option>
                                                                 </select>
-                                                            </div>
+
                                                         </div>
 
                                                         <div class="form-group row">
@@ -320,8 +318,9 @@
 
 
                                 </div>
-                                <div class="tab-pane fade" id="data" role="tabpanel" aria-labelledby="data-tabs">
-                                    <h4>Data</h4>
+                                <div class="tab-pane fade " id="data" role="tabpanel" aria-labelledby="data-tabs">
+
+
                                 </div>
                                 <div class="tab-pane fade" id="option" role="tabpanel"
                                      aria-labelledby="option-tabs">
@@ -340,46 +339,76 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="image" role="tabpanel" aria-labelledby="image-tabs">
-                                    <h4>Image</h4>
-                                    <br>
-                                    <h5>Product Media</h5>
-                                    <hr>
-
-                                    <div class="media_div">
-                                        <div class="row media_div_row first_media">
-                                            <div class="col-lg-4">
-                                                <label>Media Type</label>
-                                                <select name="media_type[]" class="form-control media_type">
-                                                    <option value="1">Image</option>
-                                                    <option value="2">Video</option>
-                                                </select>
+                                    <div class="add-product">
+                                        <div class="row media_div_row ">
+                                            <div class="col-xl-4 xl-50 col-sm-12 col-12">
+                                                <img alt=""
+                                                     class="img-fluid image_zoom_1 blur-up lazyloaded img_preview">
                                             </div>
-                                            <div class="col-lg-4">
-                                                <label>Select Media</label>
-                                                <input type="file" name="media_content[]"
-                                                       class="form-control select_media"/>
+                                            <div class="col-xl-3 xl-50 col-sm-6 col-3">
+                                                <ul class="file-upload-product">
+                                                    <li>
+                                                        <div class="box-input-file"><input class="upload select_media"
+                                                                                           type="file"
+                                                                                           name="media_content[]">
+                                                            <i class="fa fa-plus "><select hidden name="media_type[]"
+                                                                                           class="form-control media_type">
+                                                                <option value="1">Image</option>
+                                                                <option value="2">Video</option>
+                                                            </select></i></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="box-input-file"><input class="upload select_media"
+                                                                                           type="file"
+                                                                                           name="media_content[]">
+                                                            <i class="fa fa-plus "><select hidden name="media_type[]"
+                                                                                           class="form-control media_type">
+                                                                <option value="1">Image</option>
+                                                                <option value="2">Video</option>
+                                                            </select></i></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="box-input-file"><input class="upload select_media"
+                                                                                           type="file"
+                                                                                           name="media_content[]">
+                                                            <i class="fa fa-plus "><select hidden name="media_type[]"
+                                                                                           class="form-control media_type">
+                                                                <option value="1">Image</option>
+                                                                <option value="2">Video</option>
+                                                            </select></i></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="box-input-file"><input class="upload select_media"
+                                                                                           type="file"
+                                                                                           name="media_content[]">
+                                                            <i class="fa fa-plus "><select hidden name="media_type[]"
+                                                                                           class="form-control media_type">
+                                                                <option value="1">Image</option>
+                                                                <option value="2">Video</option>
+                                                            </select></i></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="box-input-file"><input class="upload select_media"
+                                                                                           type="file"
+                                                                                           name="media_content[]">
+                                                            <i class="fa fa-plus "><select hidden name="media_type[]"
+                                                                                           class="form-control media_type">
+                                                                <option value="1">Image</option>
+                                                                <option value="2">Video</option>
+                                                            </select></i></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="box-input-file"><input class="upload select_media"
+                                                                                           type="file"
+                                                                                           name="media_content[]">
+                                                            <i class="fa fa-plus "><select hidden name="media_type[]"
+                                                                                           class="form-control media_type">
+                                                                <option value="1">Image</option>
+                                                                <option value="2">Video</option>
+                                                            </select></i></div>
+                                                    </li>
+                                                </ul>
                                             </div>
-                                            <div class="col-lg-4">
-                                                <label>Preview</label>
-                                                <br>
-                                                <img style="width:70%;display:none" class="img_preview">
-                                                <br>
-                                                <video style="width:70%;display:none" class="video_preview"
-                                                       controls></video>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <button class="btn btn-success btn-block add_media" type="button">ADD
-                                                MEDIA CONTENT
-                                            </button>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <button class="btn btn-danger btn-block remove_media" type="button">
-                                                REMOVE MEDIA CONTENT
-                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -395,7 +424,7 @@
                                         <div class="valid-feedback">Looks good!</div>
                                     </div>
 
-                                    <div class="digital-add needs-validation ">
+
                                         <div class="form-group row ">
                                             <label for="validationCustom0"
                                                    class=" col-md-4"><span>*</span>
@@ -404,9 +433,9 @@
                                                    id="validationCustom0" type="text"
                                                    name="meta_title" value="5" required="">
 
-                                        </div>
+
                                     </div>
-                                    <div class="digital-add needs-validation ">
+
                                         <div class="form-group row ">
                                             <label for="validationCustom0"
                                                    class=" col-md-4"><span>*</span>
@@ -415,9 +444,9 @@
                                                    id="validationCustom0" type="text"
                                                    name="meta_description" value="5" required="">
 
-                                        </div>
+
                                     </div>
-                                    <div class="digital-add needs-validation ">
+
                                         <div class="form-group row ">
                                             <label for="validationCustom0"
                                                    class=" col-md-4"><span>*</span>
@@ -426,9 +455,9 @@
                                                    id="validationCustom0" type="text"
                                                    name="meta_keywords" value="5" required="">
 
-                                        </div>
+
                                     </div>
-                                    <div class="digital-add needs-validation ">
+
                                         <div class="form-group row ">
 
                                             <label for="validationCustom0"
@@ -438,30 +467,27 @@
                                                    id="validationCustom0" type="text"
                                                    name="tags" value="5" data-role="tagsinput"
                                                    required="">
-                                        </div>
+
                                     </div>
                                 </div>
+                            </div>
+                        <div class="product-buttons text-center">
+                             <a href="{% url 'vendors:ProductsList' %}">
+                                    <button type="submit" class="btn btn-primary  submit_btn">Add</button> </a>
 
-                                <div class="product-buttons text-center">
-
-                                    <a href="{% url 'vendors:ProductsList' %}">
-                                        <button type="submit" class="btn btn-primary submit_btn" data-toggle="modal"
-                                                data-original-title="test" data-target="#exampleModal">Add
-                                        </button>
-                                    </a>
-
-                                    <a href="{% url 'vendors:ProductsList' %}">
+                                    <a href="{% url 'core:Products_list' %}">
                                         <button type="button" class="btn btn-light" data-toggle="modal"
                                                 data-original-title="test" data-target="#exampleModal">Discard
                                         </button>
                                     </a>
 
                                 </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
 
+                        </div>
+
+
+
+                    </form>
                 <!-- Container-fluid Ends-->
             </div>
         </div>
@@ -637,7 +663,6 @@
     <script src="//bootstrap-tagsinput.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
 {% endblock custom_js %}
 
-{% block foot %} {% include 'vendor/dashboard-base/footer.html' %}  {% endblock %}
-{% block js %}{% include 'vendor/dashboard-base/js.html' %}{% endblock %}
+{% block foot %} {% include 'vendor/vendor-base/footer.html' %}  {% endblock %}
+{% block js %}{% include 'vendor/vendor-base/js.html' %}{% endblock %}
 
-</div>

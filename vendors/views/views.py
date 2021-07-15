@@ -214,7 +214,7 @@ def store_delete(request, user_id):
 
 class VendorAdminDashboard(ListView):
     model = Store
-    template_name = "vendor/dashboard-bases/../templates/vendor/dashboard-base/index.html"
+    template_name = "vendor/dashboard-bases/../templates/vendor/vendor-base/index.html"
     paginate_by = 3
 
     def get_queryset(self):

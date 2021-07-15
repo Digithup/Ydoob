@@ -15,7 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DeleteView, DetailView, UpdateView, CreateView
 
 from DNigne.settings import BASE_URL
-from catalog.forms.forms import CategoryAddForm
+from catalog.forms.forms import CategoryAddForm, ProductsForm, ProductMediaForm
 from catalog.models.models import Categories, Products, ProductMedia, ProductTags, \
     ProductTransaction
 from catalog.models.product_options import Manufacturer, FiltersGroup, Filters, AttributesGroup, Attributes
@@ -181,7 +181,7 @@ def getNoteResponseData(Product, tags, Products_created):
     return render(Products_created, 'catalog/product/admin-products.html')
 
 
-class ProductsListView(ListView):
+class ProductsList(ListView):
     model = Products
     template_name = "catalog/product/admin-products.html"
     paginate_by = 12
@@ -196,81 +196,99 @@ class ProductsListView(ListView):
             products = Products.objects.all().order_by(order_by)
         product_list = []
         for product in products:
-            product_media = ProductMedia.objects.filter(product_id=product.id, media_type=1, is_active=1).first()
+            product_media = ProductMedia.objects.filter(product=product.id,).first()
             product_list.append({"product": product, "media": product_media})
 
         return product_list
 
     def get_context_data(self, **kwargs):
-        context = super(ProductsListView, self).get_context_data(**kwargs)
+        context = super(ProductsList, self).get_context_data(**kwargs)
         context["filter"] = self.request.GET.get("filter", "")
         context["orderby"] = self.request.GET.get("orderby", "id")
         context["all_table_fields"] = Products._meta.get_fields()
         return context
 
 
-class ProductAddView(View):
-    def get(self, request, *args, **kwargs):
+
+def ProductAdd(request):
+    # 'extra' means the number of photos that you can upload   ^
+    if request.method == "POST":
+
         print(request)
-        category = Categories.objects.filter(status=True)
-        sellers = User.objects.filter(seller=True)
+        product_form = ProductsForm(request.POST or None, request.FILES or None)
+        media_form = ProductMediaForm(request.POST or None, request.FILES or None)
 
-        return render(request, "catalog/product/add-product.html",
-                      {"categories": category, "sellers": sellers})
+        if product_form.is_valid() and media_form.is_valid():
+            print(request.POST)
+            product_created = True
+            seller = request.user.id
+            category = product_form.cleaned_data['category']
+            title = product_form.cleaned_data['title']
+            long_desc = product_form.cleaned_data['long_desc']
+            keyword = product_form.cleaned_data['keyword']
+            model = product_form.cleaned_data['model']
+            brand = product_form.cleaned_data['brand']
+            price = product_form.cleaned_data['price']
+            quantity = product_form.cleaned_data['quantity']
+            out_of_stock_status = product_form.cleaned_data['out_of_stock_status']
+            requires_shipping = product_form.cleaned_data['requires_shipping']
+            weight = product_form.cleaned_data['weight']
+            length = product_form.cleaned_data['length']
+            status = product_form.cleaned_data['status']
+            slug = product_form.cleaned_data['slug']
+            media_content_list = request.FILES.getlist("image")
 
-    print(request)
+            category = Categories.objects.get(title=category)
+            seller = User.objects.get(id=seller)
 
-    def post(self, request, *args, **kwargs):
-        title = request.POST.get("title")
-        brand = request.POST.get("brand")
-        slug = request.POST.get("slug")
-        category = request.POST.get("category")
-        product_description = request.POST.get("product_description")
-        long_desc = request.POST.get("long_desc")
-        product_max_price = request.POST.get("product_max_price")
-        product_discount_price = request.POST.get("product_discount_price")
-        seller = request.POST.get("seller")
-        in_stock_total = request.POST.get("in_stock_total")
-        media_type_list = request.POST.getlist("media_type[]")
-        media_content_list = request.FILES.getlist("media_content[]")
-        title_title_list = request.POST.getlist("title_title[]")
-        title_details_list = request.POST.getlist("title_details[]")
-        about_title_list = request.POST.getlist("about_title[]")
-        product_tags = request.POST.get("product_tags")
-        print(request.POST)
+            product_form = None
 
-        # status = request.POST.get("status")
+            if not product_form:
 
-        category = Categories.objects.get(id=category)
-        seller = User.objects.get(id=seller)
-        product = Products(title=title, in_stock_total=in_stock_total, slug=slug, brand=brand,
-                           product_description=product_description, category=category,
-                           product_max_price=product_max_price, product_discount_price=product_discount_price,
-                           product_long_description=long_desc, seller=seller)
-        product.save()
+                print(request)
+                print(request.POST)
 
-        i = 0
-        for media_content in media_content_list:
-            fs = FileSystemStorage()
-            filename = fs.save(media_content.name, media_content)
-            media_url = fs.url(filename)
-            product_media = ProductMedia(product_id=product, media_type=media_type_list[i], media_content=media_url)
-            product_media.save()
-            i = i + 1
+                product_form = Products(seller=seller, category=category, title=title,
+                                        long_desc=long_desc,
+                                        model=model, brand=brand, price=price, quantity=quantity,
+                                        out_of_stock_status=out_of_stock_status, keyword=keyword,
 
-        product_tags_list = product_tags.split(",")
+                                        requires_shipping=requires_shipping, weight=weight, length=length,
+                                        status=status,
+                                        slug=slug)
 
-        for product_tag in product_tags_list:
-            product_tag_obj = ProductTags(product_id=product, title=product_tag)
-            product_tag_obj.save()
+                product_form.save()
+                i = 0
 
-        product_transaction = ProductTransaction(product_id=product, transaction_type=1,
-                                                 transaction_product_count=in_stock_total,
-                                                 transaction_description="Intially Item Added in Stocks")
-        product_transaction.save()
-        # return HttpResponse("OK")
-        return HttpResponseRedirect(reverse_lazy('core:Products_list'))
+                for image in media_content_list:
+                    media_form = ProductMedia(product=product_form,
+                                              Image=image)
+                    media_form.save()
+                    i = i + 1
+                    print(request.POST)
+                    # use django messages framework
+                messages.success(request,
+                                 "Yeeew, check it out on the home page!")
 
+                return HttpResponseRedirect("/admin/products/")
+
+            else:
+                print("Form invalid, see below error msg")
+                print(request.POST)
+                messages.error(request, "Error")
+
+    else:
+
+        product_form = ProductsForm()
+
+        media_form = ProductMediaForm()
+        # return redirect(reverse('core:ProductAdd'))
+
+    return render(request, 'catalog/product/add-product.html',
+                  {'product_form': product_form, 'media_form': media_form})
+
+    # return HttpResponse("OK")
+    # return redirect(reverse('vendors:ProductsList'))
 
 class ProductUpdate(View):
 
@@ -400,11 +418,12 @@ def to_json(self, objects):
 
 @csrf_exempt
 def file_upload(request):
-    file = request.FILES["file"]
-    fs = FileSystemStorage()
-    filename = fs.save(file.name, file)
-    file_url = fs.url(filename)
-    return HttpResponse('{"location":"' + BASE_URL + '' + file_url + '"}')
+    file=request.FILES["file"]
+    fs=FileSystemStorage()
+    filename=fs.save(file.name,file)
+    file_url=fs.url(filename)
+    return HttpResponse('{"location":"'+BASE_URL+''+file_url+'"}')
+
 
 
 ############## Search   ################

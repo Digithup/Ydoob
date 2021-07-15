@@ -1,22 +1,19 @@
-from functools import partial
 
-from django.contrib.auth.decorators import login_required
 from django.urls import path
 
-from core.decorators import required, admin_required
 from core.tests import SettingAddViewTest
-from core.views.catalog import AddCategory, categories, EditCategory, DeleteCategory, ProductsListView, \
-    ProductsAddMedia, ProductEditMedia, ProductMediaDelete, ProductsAddStocks, file_upload, index, \
-    ProductAddView, ProductsDeleted, DeleteManufacture, EditManufacture, AddManufacture, ManufacturerListView, \
-    DeleteFilter, AddFilter, EditFilter, DeleteFiltersGroup, AddFiltersGroup, EditFiltersGroup, FiltersGroupListView, \
-    FiltersListView, AttributesGroupListView, EditAttributesGroup, AddAttributesGroup, DeleteAttributesGroup, \
-    AttributeListView, EditAttribute, AddAttribute, DeleteAttribute, ProductUpdate
+from core.views.catalog import AddCategory, categories, EditCategory, DeleteCategory, \
+     ProductsAddMedia, ProductEditMedia, ProductMediaDelete, ProductsAddStocks, file_upload, index, \
+     ProductsDeleted, DeleteManufacture, EditManufacture, AddManufacture, ManufacturerListView, \
+     DeleteFilter, AddFilter, EditFilter, DeleteFiltersGroup, AddFiltersGroup, EditFiltersGroup, FiltersGroupListView, \
+     FiltersListView, AttributesGroupListView, EditAttributesGroup, AddAttributesGroup, DeleteAttributesGroup, \
+     AttributeListView, EditAttribute, AddAttribute, DeleteAttribute, ProductUpdate, ProductAdd, ProductsList
 from core.views.design import BannerDetailView, BannerDelete, \
-    SliderView, SliderDelete, SliderGroupCreate, SliderDetailView, BannersView, BannerCreate, \
-    SliderCreate
+     SliderView, SliderDelete, SliderGroupCreate, SliderDetailView, BannersView, BannerCreate, \
+     SliderCreate
 from core.views.setting import update_setting
 from core.views.users import AdminLogin, AdminLogout, AdminUserCreate, \
-    AdminUserDetail, AdminUserEdit, AdminUserDelete, AdminUsersList
+     AdminUserDetail, AdminUserEdit, AdminUserDelete, AdminUsersList
 
 app_name = 'core'
 """
@@ -36,10 +33,11 @@ path('admin/', index, name='admin_index'),
 
      ########## Products   #########
      # Products
-     path('admin/products/Products_create', ProductAddView.as_view(), name="Product_add"),
-     path('admin/products/Products_list', ProductsListView.as_view(), name="Products_list"),
+
+     path('admin/products/', ProductsList.as_view(), name="ProductsList"),
+     path('admin/products/ProductAdd', ProductAdd, name="ProductAdd"),
      path('admin/products/Product_edit/<str:product_id>', ProductUpdate.as_view(), name="ProductUpdate"),
-     path('admin/products/Products_delete/<int:pk>/', ProductsDeleted.as_view(), name="Product_Delete"),
+     path('admin/products/Products_delete/<int:pk>/', ProductsDeleted.as_view(), name="ProductDelete"),
      path('admin/products/Products_add_media/<str:Products_id>', ProductsAddMedia.as_view(), name="Products_add_media"),
      path('admin/products/Products_edit_media/<str:Products_id>', ProductEditMedia.as_view(),
           name="Products_edit_media"),

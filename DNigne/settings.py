@@ -78,8 +78,8 @@ INSTALLED_APPS = [
     'easy_thumbnails',
     'filer',
     'mptt',
-    'whoosh',
-    'haystack',
+    #'whoosh',
+    #'haystack',
     'rest_framework',
     'corsheaders',
     'crispy_forms',
@@ -199,8 +199,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
-
-
+HAYSTACK_DOCUMENT_FIELD = 'text'
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 WHOOSH_INDEX = os.path.join(BASE_DIR, 'whoosh/')
 HAYSTACK_CONNECTIONS = {
     'default': {

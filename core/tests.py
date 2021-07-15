@@ -1,10 +1,15 @@
+from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
-from django.http import request
+from django.forms import modelformset_factory
+from django.http import request, HttpResponse, HttpResponseRedirect
 from django.views import View
 
+from catalog.forms.forms import ProductsForm, ProductMediaForm
+from catalog.models.models import Categories, Products, ProductMedia, ProductTransaction
 from core.forms.banners_forms import render
 from core.models.setting import Setting, SettingLang, SettingMedia
 from localization.models import Language
+from user.models import User
 
 """
 
@@ -256,6 +261,7 @@ class ProductAddViewTest(View):
         
 """
 
+
 class SettingAddViewTest(View):
     def get(self, request, *args, **kwargs):
         print(request)
@@ -293,6 +299,7 @@ class SettingAddViewTest(View):
                                              facebook=facebook, instagram=instagram,
                                              twitter=twitter, youtube=youtube, status=status,
                                              )  # create will create as well as save too in db.
+
         setting_obj.save()
 
         i = 0
@@ -319,4 +326,272 @@ class SettingAddViewTest(View):
         return render(request, 'setting.html')
 
 
+# https://stackoverflow.com/questions/569468/django-multiple-models-in-one-template-using-forms
 
+class ProductCreateTest2(View):
+    def get(self, request, *args, **kwargs):
+        category = Categories.objects.filter(status=True)
+        sellers = request.user.id
+
+        return render(request, "catalog/product/add-product.html", {"categories": category, "sellers": sellers})
+
+        # return render(request, "vendor/catalog/product/add-product.html", {"categories": category, "sellers": sellers})
+
+    print(request)
+
+    def post(self, request, *args, **kwargs):
+        seller = request.POST.get("seller")
+        category = request.POST.get("category")
+        title = request.POST.get("title")
+        long_desc = request.POST.get("long_desc")
+        keyword = request.POST.get("keyword")
+        model = request.POST.get("model")
+        brand = request.POST.get("brand")
+        price = request.POST.get("price")
+        quantity = request.POST.get("quantity")
+        out_of_stock_status = request.POST.get("out_of_stock_status")
+        requires_shipping = request.POST.get("requires_shipping")
+        weight = request.POST.get("weight")
+        length = request.POST.get("length")
+        status = request.POST.get("status")
+        slug = request.POST.get("slug")
+        image = request.POST.getlist("image")
+        media_type_list = request.POST.getlist("media_type[]")
+        media_content_list = request.FILES.getlist("media_content[]")
+        product_tags = request.POST.get("product_tags")
+        category = Categories.objects.get(id=category)
+        seller = User.objects.get(id=seller)
+        print(request.POST)
+        if title == '' or slug == "":
+            messages.error(request, ['please fill'])
+            category = Categories.objects.filter(status=True)
+            sellers = request.user.id
+
+            return render(request, "catalog/product/add-product.html", {"categories": category, "sellers": sellers})
+        else:
+
+            product = Products(seller=seller, category=category, title=title, long_desc=long_desc,
+                               model=model, brand=brand, price=price, quantity=quantity,
+                               out_of_stock_status=out_of_stock_status, keyword=keyword, image=image,
+                               requires_shipping=requires_shipping, weight=weight, length=length, status=status,
+                               slug=slug)
+
+            product.save()
+
+        i = 0
+        for media_content in media_content_list:
+            fs = FileSystemStorage()
+            filename = fs.save(media_content.name, media_content)
+            media_url = fs.url(filename)
+            product_media = ProductMedia(product_id=product, media_type=media_type_list[i], media_content=media_url)
+            product_media.save()
+            i = i + 1
+
+        product_transaction = ProductTransaction(product_id=product, transaction_type=1,
+                                                 transaction_product_count=quantity,
+                                                 transaction_description="Initially Item Added in Stocks")
+        print(request.POST)
+        product_transaction.save()
+        return HttpResponse("OK")
+        # return redirect(reverse('vendors:ProductsList'))
+
+
+#################################################################
+####################################
+#####################
+
+
+class ProductCreateTestNe(View):
+
+    def get(self, request, *args, **kwargs):
+        product_form = ProductsForm()
+        ImageFormSet = modelformset_factory(ProductMedia,
+                                            form=ProductMediaForm, extra=6)
+        formset = ImageFormSet(queryset=ProductMedia.objects.none())
+        category = Categories.objects.filter(status=True)
+        sellers = request.user.id
+        print(request)
+        return render(request, 'catalog/product/addnew.html',
+                      {"categories": category, "sellers": sellers, 'product_form': product_form,
+                       'formset': formset, })
+
+    def post(self, request, *args, **kwargs):
+        ImageFormSet = modelformset_factory(ProductMedia,
+                                            form=ProductMediaForm, extra=6)
+        # 'extra' means the number of photos that you can upload   ^
+        if request.method == "POST":
+
+            print(request)
+            product_form = ProductsForm(request.POST or None, request.FILES or None)
+            formset = ImageFormSet(request.POST, request.FILES,
+                                   queryset=ProductMedia.objects.none())
+            if product_form.is_valid() and formset.is_valid():
+                print(request.POST)
+                product_created = True
+                seller = product_form.cleaned_data['seller']
+                category = product_form.cleaned_data['category']
+                title = product_form.cleaned_data['title']
+                long_desc = product_form.cleaned_data['long_desc']
+                keyword = product_form.cleaned_data['keyword']
+                model = product_form.cleaned_data['model']
+                brand = product_form.cleaned_data['brand']
+                price = product_form.cleaned_data['price']
+                quantity = product_form.cleaned_data['quantity']
+                out_of_stock_status = product_form.cleaned_data['out_of_stock_status']
+                requires_shipping = product_form.cleaned_data['requires_shipping']
+                weight = product_form.cleaned_data['weight']
+                length = product_form.cleaned_data['length']
+                status = product_form.cleaned_data['status']
+                slug = product_form.cleaned_data['slug']
+
+                category = Categories.objects.get(title=category)
+                seller = User.objects.get(email=seller)
+                product = None
+                product_obj = None
+
+                if not product:
+                    print(request)
+                print(request.POST)
+
+                product_obj = Products.objects.create(seller=seller, category=category, title=title,
+                                                      long_desc=long_desc,
+                                                      model=model, brand=brand, price=price, quantity=quantity,
+                                                      out_of_stock_status=out_of_stock_status, keyword=keyword,
+
+                                                      requires_shipping=requires_shipping, weight=weight, length=length,
+                                                      status=status,
+                                                      slug=slug)
+
+                print(request.POST)
+                product_obj.seller = seller
+                product_obj.category = category
+                product_obj.title = title
+                product_obj.long_desc = long_desc
+                product_obj.model = model
+                product_obj.brand = brand
+                product_obj.price = price
+                product_obj.quantity = quantity
+                product_obj.out_of_stock_status = out_of_stock_status
+                product_obj.keyword = keyword
+
+                product_obj.requires_shipping = requires_shipping
+                product_obj.weight = weight
+                product_obj.length = length
+                product_obj.status = status
+                product_obj.slug = slug
+
+                messages.success(request, "SUCCESS")
+                product_obj.save()
+
+                for form in formset.cleaned_data:
+                    # this helps to not crash if the user
+                    # do not upload all the photos
+                    if form:
+                        media_content = form['media_content']
+                        photo = ProductMedia(product=product_obj, media_content=media_content)
+                        photo.save()
+                    # use django messages framework
+                messages.success(request,
+                                 "Yeeew, check it out on the home page!")
+                return HttpResponseRedirect('/')
+                return HttpResponse("wrong")
+                # return HttpResponseRedirect("/admin/products/Products_list")
+
+            else:
+                print("Form invalid, see below error msg")
+                print(request.POST)
+                print(product_form.errors, formset.errors)
+                messages.error(request, "Error")
+
+        else:
+
+            product_form = ProductsForm()
+            formset = ImageFormSet(queryset=ProductMedia.objects.none())
+            # media_form = ProductMediaForm()
+            return HttpResponse("OK")
+
+            # return render(request, 'catalog/product/addnew.html', {'product_form': product_form, 'formset': formset, })
+
+            # return HttpResponse("OK")
+            # return redirect(reverse('vendors:ProductsList'))
+
+
+def ProductCreateTestNew(request):
+    # 'extra' means the number of photos that you can upload   ^
+    if request.method == "POST":
+
+        print(request)
+        product_form = ProductsForm(request.POST or None, request.FILES or None)
+        media_form = ProductMediaForm(request.POST or None, request.FILES or None)
+
+        if product_form.is_valid() and media_form.is_valid():
+            print(request.POST)
+            product_created = True
+            seller = request.user.id
+            category = product_form.cleaned_data['category']
+            title = product_form.cleaned_data['title']
+            long_desc = product_form.cleaned_data['long_desc']
+            keyword = product_form.cleaned_data['keyword']
+            model = product_form.cleaned_data['model']
+            brand = product_form.cleaned_data['brand']
+            price = product_form.cleaned_data['price']
+            quantity = product_form.cleaned_data['quantity']
+            out_of_stock_status = product_form.cleaned_data['out_of_stock_status']
+            requires_shipping = product_form.cleaned_data['requires_shipping']
+            weight = product_form.cleaned_data['weight']
+            length = product_form.cleaned_data['length']
+            status = product_form.cleaned_data['status']
+            slug = product_form.cleaned_data['slug']
+            media_content_list = request.FILES.getlist("image")
+
+            category = Categories.objects.get(title=category)
+            seller = User.objects.get(id=seller)
+
+            product_form = None
+
+            if not product_form:
+
+                print(request)
+                print(request.POST)
+
+                product_form = Products(seller=seller, category=category, title=title,
+                                        long_desc=long_desc,
+                                        model=model, brand=brand, price=price, quantity=quantity,
+                                        out_of_stock_status=out_of_stock_status, keyword=keyword,
+
+                                        requires_shipping=requires_shipping, weight=weight, length=length,
+                                        status=status,
+                                        slug=slug)
+
+                product_form.save()
+                i = 0
+
+                for image in media_content_list:
+                    media_form = ProductMedia(product=product_form,
+                                              Image=image)
+                    media_form.save()
+                    i = i + 1
+                    print(request.POST)
+                    # use django messages framework
+                messages.success(request,
+                                 "Yeeew, check it out on the home page!")
+
+                return HttpResponseRedirect("/admin/products/Products_list")
+
+            else:
+                print("Form invalid, see below error msg")
+                print(request.POST)
+                messages.error(request, "Error")
+
+    else:
+
+        product_form = ProductsForm()
+
+        media_form = ProductMediaForm()
+        # return redirect(reverse('core:ProductAdd'))
+
+    return render(request, 'catalog/product/add-producttest.html',
+                  {'product_form': product_form, 'media_form': media_form})
+
+    # return HttpResponse("OK")
+    # return redirect(reverse('vendors:ProductsList'))

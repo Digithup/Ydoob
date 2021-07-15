@@ -29,30 +29,39 @@
                         <li class="onhover-dropdown mobile-account"><i class="fa fa-user" aria-hidden="true"></i>
                             {% if user.is_authenticated %} {{ user.first_name }}
                                 <ul class="onhover-show-div">
-                                <li><a href="">Profile</a><li>
-                                <li><li class="onhover-show">
-                                    {% if  user.seller   %}
-                                        {% if store_owner %}
-                                        {% for rs in store_owner %}
-                                          {% if rs.activation %}
-                                              <li><a href="{% url 'vendors:VendorDashboard' rs.id %}">{% translate 'Dashboard' %}</a></li>
-                                              {% else %}{% if rs.status %}
-                                                  <li><a href="{% url 'vendors:StoreWaiting' %}"><h6>{% translate 'Store need action' %}</h6></a></li>
+                                    <li><a href="">Profile</a>
+                                    <li>
+                                    <li>
+                                    <li class="onhover-show">
+                                        {% if  user.seller %}
+                                            {% if store_owner %}
+                                                {% for rs in store_owner %}
+                                                    {% if rs.activation %}
+                                                        <li>
+                                                            <a href="{% url 'vendors:VendorDashboard' rs.id %}">{% translate 'Dashboard' %}</a>
+                                                        </li>
+                                                        {% else %}{% if rs.status %}
+                                                            <li><a href="{% url 'vendors:StoreWaiting' %}">
+                                                                <h6>{% translate 'Store need action' %}</h6></a></li>
 
 
-                                                  {% endif %}
-                                              {% endif %}{% endfor %}{% else %}
-                                             <li><a href="{% url 'vendors:CreateStore' %}">{% translate 'Create Store' %}</a></li>
+                                                        {% endif %}
+                                                    {% endif %}{% endfor %}{% else %}
+                                                <li>
+                                                    <a href="{% url 'vendors:CreateStore' %}">{% translate 'Create Store' %}</a>
+                                                </li>
 
                                             {% endif %}
                                         {% else %}
-                                                 <li><a href="{% url 'vendors:SellerRegister' %}">{% translate 'Start Selling ' %}</a> </li>
-                                         {% endif %}
+                                            <li>
+                                                <a href="{% url 'vendors:SellerRegister' %}">{% translate 'Start Selling ' %}</a>
+                                            </li>
+                                        {% endif %}
 
-                                 <li><a href="{% url 'user:CustomerLogout' %}">{% translate 'Logout' %}</a></li>
+                                    <li><a href="{% url 'user:CustomerLogout' %}">{% translate 'Logout' %}</a></li>
                                 </ul>
 
-                                    {% else %}
+                            {% else %}
                                 <ul class="onhover-show-div">
                                     <li><a href="{% url 'user:CustomerLogin' %}">{% translate 'Login' %}</a></li>
                                     <li><a href="{% url 'user:CustomerRegister' %}">{% translate 'Signup' %}</a></li>
@@ -82,9 +91,12 @@
                         </div>
                     </div>
                     <div>
-                        <form class="form_search" role="form">
+                        <form class="form_search" role="form" action="/search/" method="get"
+                              class="autocomplete-me">
+                            {% csrf_token %}
                             <input id="query search-autocomplete" type="search"
-                                   placeholder="Search anything here..." class="nav-search nav-search-field"
+                                   placeholder="Search anything here..."
+                                   id="id_q" name="q" class="nav-search nav-search-field"
                                    aria-expanded="true">
                             <button type="submit" name="nav-submit-button" class="btn-search">
                                 <i class="ti-search"></i>
@@ -151,13 +163,14 @@
                                                 {% for rs in shopcart %}
                                                     {% with product=rs.product %}
                                                         <div class="media">
-
-                                                            <a href="#"><img alt="" height="60px" width="80px"
-                                                                             class="mr-3"
-                                                                             src="{{ product.image.url }}"></a>
+                                                            {% for rm in product.productmedia_set.all %}
+                                                                <a href="#"><img alt="" height="60px" width="80px"
+                                                                                 class="mr-3"
+                                                                                 src="{{ rm.Image.url }}"></a>
+                                                            {% endfor %}
                                                             <div class="media-body">
                                                                 <a href="#">
-                                                                    <h4>{{ product.title }}</h4>
+                                                                    <h4>{{ products.title }}</h4>
                                                                 </a>
                                                                 <h4>
                                                                     <span>{{ rs.quantity }} x $ {{ product.price }}</span>
@@ -171,13 +184,13 @@
                                                 {% endfor %}
                                             <li>
                                                 <div class="total">
-                                                    <h5>subtotal : <span>{{ total }}</span></h5>
+                                                    <h5>subtotal : <span>{{ rs.total }}</span></h5>
                                                 </div>
                                             </li>
                                             <li>
-                                                <div class="buttons"><a href="{% url 'sales:shopcart' %}"
+                                                <div class="buttons"><a href="{% url 'sales:ShopCart' %}"
                                                                         class="view-cart">view
-                                                    cart</a> <a href="{% url 'sales:orderproduct' %}" class="checkout">checkout</a>
+                                                    cart</a> <a href="{% url 'sales:OrderProduct' %}" class="checkout">checkout</a>
                                                 </div>
                                             </li>
                                         </ul>
@@ -204,7 +217,7 @@
                                 </li>
                                 <li><a href="{% url 'home:index' %}">Home</a></li>
                                 <li class="mega" id="hover-cls">
-                                    <a href="#">feature
+                                    <a href="{% url 'home:Categories' %}">{% translate 'Category' %}
                                         <div class="lable-nav">new</div>
                                     </a>
                                     <ul class="mega-menu full-mega-menu">

@@ -1,25 +1,19 @@
-import datetime
 import json
+
 from django.core import serializers
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, request
-from django.utils.translation import gettext as _
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
+from django.shortcuts import render
 from django.views.generic import ListView, DetailView
-from haystack import indexes
 from haystack.query import SearchQuerySet
-from haystack.inputs import AutoQuery, Exact, Clean
 
 from DNigne import settings
 from catalog.models.models import Categories, Products, ProductMedia
 from catalog.models.product_options import Manufacturer
-from core.models.design import Slider, SliderMedia, Banners
+from core.models.design import SliderMedia, Banners
 from core.models.setting import Setting
-
 from home.forms import SearchForm
 from sales.models.order import ShopCart
-
-from vendors.models import Store
 
 
 def index(request):
@@ -29,15 +23,15 @@ def index(request):
     setting = Setting.objects.first()
     products_latest = Products.objects.all().order_by('-id')[:4]  # last 4 products
     categories = Categories.objects.all()
-    products = Products.objects.all()
-    banner= Banners.objects.all()
+    product = Products.objects.all()
+    banner = Banners.objects.all()
     slider_media = SliderMedia.objects.all()
-    manufacture =Manufacturer.objects.filter(status='True')
+    manufacture = Manufacturer.objects.filter(status='True')
     current_user = request.user  # Access User Session information
     shopcart = ShopCart.objects.filter(user_id=current_user.id)
     total = 0
     for rs in shopcart:
-        total += rs.product.price * rs.quantity
+        total += int(rs.product.price) * int(rs.quantity)
     top_collection = Products.objects.all().order_by('-id')[:8]  # last 4 products
     products_first = Products.objects.all().order_by('id')[:8]  # first 4 products
     new_sale_products = Products.objects.all().order_by('-id')[:2]  # New Products
@@ -48,10 +42,10 @@ def index(request):
     context = {
         'setting': setting,
         'categories': categories,
-        'products': products,
+        'product': product,
         'design': banner,
-        'manufacture':manufacture,
-        #'slider_media':slider_media,
+        'manufacture': manufacture,
+        # 'slider_media':slider_media,
         'shopcart': shopcart,
         'top_collection': top_collection,
         'products_first': products_first,
@@ -70,14 +64,25 @@ def categories(request):
         'categories': categories
     }
     # return HttpResponse(1)
-    return render(request, 'front/pages/category_list.html', context)
+    return render(request, 'categories.html', context)
 
-class CategoriesView(ListView):
-    template_name = 'home_category.html'
-    context_object_name = 'product_list'
 
-    def get_queryset(self):
-        return Products.objects.all()
+class CategoryDetail(DetailView):
+    model = Categories
+    template_name = 'category.html'
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
+    def get_context_data(self, **kwargs):
+        #slug = kwargs["slug"]
+        context = super(CategoryDetail, self).get_context_data(**kwargs)
+        context['categories'] = Categories.objects.all()
+        #context['CategoryChilled'] = Categories.objects.filter(slug='slug')
+        context['productlest'] = Products.objects.all()
+        context['prodtag'] = Products.category
+        return context
+
+
+
 
 
 class ProductsListView(ListView):
@@ -95,7 +100,7 @@ class ProductsListView(ListView):
             products = Products.objects.all().order_by(order_by)
         product_list = []
         for product in products:
-            product_media = ProductMedia.objects.filter(product_id=product.id, media_type=1, is_active=1).first()
+            product_media = ProductMedia.objects.filter(product_id=product.id,  ).first()
             product_list.append({"product": product, "media": product_media})
 
         return product_list
@@ -108,20 +113,15 @@ class ProductsListView(ListView):
         return context
 
 
-class ProductsHomeListView(ListView):
-    model = Products
-    template_name = "catalog/product/admin-products.html"
-    paginate_by = 12
+
+
 
 class ProductDetailView(DetailView):
     model = Products
-    template_name = 'product-no-sidebar.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(ProductDetailView, self).get_context_data(**kwargs)
-        context['productlest'] = Products.objects.all()
-        context['prodtag'] = Products.category
-        return context
+    template_name = 'product-details.html'
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
+    #context_object_name = 'productsmedia'
 
 
 def search(request):
@@ -139,9 +139,9 @@ def search(request):
             category = Categories.objects.all()
             context = {'products': products, 'query': query,
                        'category': category}
-            return render(request, 'front/pages/search.html', context)
+            return render(request, 'search/search.html', context)
 
-    return render(request, 'front/pages/search.html')
+    return render(request, 'search/search.html')
 
 
 def search_auto(request):
@@ -172,7 +172,7 @@ def search_titles(request):
 
     print(request.POST)
 
-    return render(request, 'search/search.html', {'product_search': product_search, 'sqs': sqs})
+    return render(request, 'search/indexes/catalog/product_text.txt', {'product_search': product_search, 'sqs': sqs})
 
 
 def autocomplete(request):

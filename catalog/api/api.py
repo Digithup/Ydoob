@@ -40,14 +40,14 @@ class CategoryApi(generics.RetrieveUpdateDestroyAPIView):
 
 class ProductsListApi(generics.ListCreateAPIView):
     model = Products
-    queryset = Products.objects.all()
+    #queryset = Products.objects.all()
     serializer_class = Productserializer
 
 
 
 class ProductsApi(generics.RetrieveUpdateDestroyAPIView):
     model = Products
-    queryset = Products.objects.all()
+    #queryset = Products.objects.all()
     serializer_class = Productserializer
     lookup_field = 'id'
 

@@ -43,7 +43,7 @@ def category_list(request):
                # 'category':category,
                'catdata': catdata}
     #return HttpResponse(1)
-    return render(request, 'front/pages/category_list.html', context)
+    return render(request, 'front/pages/../../home/templates/categories.html', context)
 
 
 def Products_list(request, category_slug=None):

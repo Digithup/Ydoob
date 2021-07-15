@@ -187,14 +187,14 @@
                                     <div>
                                         {% for sp in side_products %}
                                         <div class="media">
-                                                <a href=""><img class="img-fluid blur-up lazyload"
-                                                                src="{{ sp.media_content }}" height="70px" width="100px"></a>
+                                                <a href="{% url 'home:ProductDetail' sp.product.slug %}"><img class="img-fluid blur-up lazyload"
+                                                                src="{{ sp.Image.url }}" height="70px" width="100px"></a>
                                                 <div class="media-body align-self-center">
                                                     <div class="rating"><i class="fa fa-star"></i> <i
                                                             class="fa fa-star"></i> <i class="fa fa-star"></i> <i
                                                             class="fa fa-star"></i> <i class="fa fa-star"></i></div>
-                                                    <a href="product-page(no-sidebar).html">
-                                                        <h6>{{ sp.product_id.title }}</h6>
+                                                    <a href="{% url 'home:ProductDetail' sp.id %}">
+                                                        <h6>{{ sp.product.title }}</h6>
                                                     </a>
                                                     <h4>{{ sp.product_id.product_max_price }}</h4>
                                                 </div>
@@ -247,8 +247,8 @@
 
                                                     <div class="img-wrapper">
                                                         <div class="front">
-                                                            <a href="product-page(no-sidebar).html"><img
-                                                                    src="{{ dod.media_content }}"
+                                                            <a href="{% url 'home:ProductDetail'  dod.product.slug %}"><img
+                                                                    src="{{ dod.media.Image.url }}"
                                                                     class="img-fluid blur-up lazyload bg-img"
                                                                     alt=""></a>
                                                         </div>
@@ -269,10 +269,10 @@
                                                                 class="fa fa-star"></i> <i class="fa fa-star"></i> <i
                                                                 class="fa fa-star"></i> <i class="fa fa-star"></i>
                                                         </div>
-                                                        <a href="product-page(no-sidebar).html">
-                                                            <h6>{{ dod.product_id.title }}</h6>
+                                                        <a href="">
+                                                            <h6>{{ dod.product.title }}5</h6>
                                                         </a>
-                                                        <h4>{{ dod.product_id.product_max_price }}</h4>
+                                                        <h4>{{ dod.product.price }}</h4>
                                                         <ul class="color-variant">
                                                             <li class="bg-color1"></li>
                                                             <li class="bg-color3"></li>
@@ -290,7 +290,7 @@
                                                     <div class="img-wrapper">
                                                         <div class="front">
                                                             <a href="product-page(no-sidebar).html"><img
-                                                                    src="{{ dod.media_content }}"
+                                                                    src="{{ dod.media.image.url }}"
                                                                     class="img-fluid blur-up lazyload bg-img"
                                                                     alt=""></a>
                                                         </div>
@@ -391,7 +391,7 @@
                                                 <div id="tab-4" class="tab-content active default">
                                                     <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-5 row-cols-md-4 row-cols-2 gy-4">
                                                         {% for dod in new_products_req %}
-                                            <div class="product-box">
+                                                        <div class="product-box">
 
                                                     <div class="img-wrapper">
                                                         <div class="front">

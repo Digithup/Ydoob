@@ -1,0 +1,632 @@
+{% extends 'admin/adminbase.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% load i18n %}
+
+
+{% load widget_tweaks %}
+{% block body %}
+
+    <div class="page-body">
+
+    <!-- Container-fluid starts-->
+    <div class="container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="page-header-left">
+                        <h3>Add Products
+                            <small>
+                                {% if not edit %}🆕 Add a new Learned Language {% else %} ✏ Edit a
+                                    Language{% endif %}</small>
+                        </h3>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <ol class="breadcrumb pull-right">
+                        <li class="breadcrumb-item"><a href="{% url 'core:admin_index' %}"><i
+                                data-feather="home"></i></a></li>
+                        <li class="breadcrumb-item">Physical</li>
+                        <li class="breadcrumb-item active">Add Product</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Container-fluid Ends-->
+
+
+    <!-- Container-fluid starts-->
+    <div class="container-fluid">
+        <div class="row product-adding">
+            <div class="col-xl-12">
+
+                <div class="card">
+                    <div class="card-header"><h4 class="text-danger" id="errorHeader"></h4></div>
+                    <form class="needs-validation" enctype="multipart/form-data"
+                          action="{% url 'core:ProductAdd' %}" name="ProductForm" id="ProductForm"
+                          method="post">
+                        {% csrf_token %}
+
+
+
+
+                        <div class="card-body">
+                            <div>
+                                {% if product_form.errors %}
+
+                                    {% for error_field, error_message in product_form.errors.items %}
+
+                                        <div class="alert alert-danger">
+                                            {{ error_field|striptags }}: {{ error_message|striptags }}
+                                            <strong>{{ error|escape }}</strong>
+                                        </div>
+                                    {% endfor %}
+
+                                {% endif %}
+                                {% if media_form.errors %}
+                                    {% for error_field, error_message in media_form.errors.items %}
+
+                                        <div class="alert alert-danger">
+                                            {{ error_field|striptags }}: {{ error_message|striptags }}
+                                            <strong>{{ error|escape }}</strong>
+                                        </div>
+                                    {% endfor %}
+
+                                {% endif %}
+
+
+                            </div>
+
+                            <ul class="nav nav-tabs tab-coupon" id="myTab" role="tablist">
+                                <li class="nav-item"><a class="nav-link active show" id="general-tab"
+                                                        data-toggle="tab"
+                                                        href="#general" role="tab" aria-controls="general"
+                                                        aria-selected="true" data-original-title=""
+                                                        title="">General</a>
+                                </li>
+                                <li class="nav-item"><a class="nav-link" id="data-tabs" data-toggle="tab"
+                                                        href="#description"
+                                                        role="tab" aria-controls="description" aria-selected="false"
+                                                        data-original-title="" title="">description</a></li>
+                                <li class="nav-item"><a class="nav-link" id="description-tabs" data-toggle="tab"
+                                                        href="#data"
+                                                        role="tab" aria-controls="data" aria-selected="false"
+                                                        data-original-title="" title="">Data</a></li>
+                                <li class="nav-item"><a class="nav-link" id="image-tabs" data-toggle="tab"
+                                                        href="#image"
+                                                        role="tab" aria-controls="image" aria-selected="false"
+                                                        data-original-title="" title="">Image</a></li>
+
+
+                                <li class="nav-item"><a class="nav-link" id="seo-tabs" data-toggle="tab" href="#seo"
+                                                        role="tab" aria-controls="seo" aria-selected="false"
+                                                        data-original-title="" title="">SEO</a></li>
+                            </ul>
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade active show" id="general" role="tabpanel"
+                                     aria-labelledby="general-tab">
+                                    <!-- Container-fluid starts-->
+                                    <div class="container-fluid">
+                                        <div class=" product-adding">
+                                            <div class="card ">
+                                                <div class="card-header">
+                                                    <h5>{% translate 'General' %}</h5>
+                                                </div>
+                                                <div class="card-body form ">
+                                                    <div class="digital-add needs-validation ">
+
+
+                                                        <div class="form-group mb-3 row">
+                                                            <label for="validationCustom01"
+                                                                   class="col-md-4"><span>*</span>{% translate 'Product Name' %}
+                                                            </label>
+                                                            <input class="form-control col-sm-4 "
+                                                                   placeholder="title"
+                                                                   id="title" type="text"
+                                                                   name="title" value=" test" required
+                                                                   oninvalid="invalidFunction(event,'title not empty')">
+                                                        </div>
+                                                        <div class="valid-feedback">Looks good!</div>
+                                                        <div class="invalid-feedback offset-sm-4 offset-xl-3">Please
+                                                            choose Valid Code.
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="validationCustom0"
+                                                                   class=" col-sm-4"><span>*</span>{% translate 'Description' %}
+                                                            </label>
+                                                            <textarea class="col-md-push-12 middle" content=""
+                                                                      name="long_desc" id="editor1"
+                                                                      cols="2" onemptied=""
+                                                                      rows="2"></textarea>
+
+                                                        </div>
+
+                                                        <div class="form-group row">
+                                                            <label for="validationCustom0"
+                                                                   class=" col-sm-4"><span>*</span>{% translate 'Keyword' %}
+                                                            </label>
+                                                            <textarea class="col-md-push-12 middle" content=""
+                                                                      name="keyword" id="editor1"
+                                                                      cols="2"
+                                                                      rows="2" required="required"></textarea>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Container-fluid Ends-->
+                                </div>
+                                <div class="tab-pane fade" id="description" role="tabpanel"
+                                     aria-labelledby="description-tabs">
+                                    <h4>description</h4>
+                                    <div class="col-xl-8">
+                                        <input class="form-control col-md-6"
+                                               id="title" type="text"
+                                               name="seller" value="{{ request.user.id }}"
+                                               required="">
+
+                                        <div class="form-group row ">
+                                            <label for="validationCustom0"
+                                                   class=" col-md-4"><span>*</span>
+                                                {% translate 'Model' %}</label>
+                                            <input class="form-control col-md-6"
+                                                   id="validationCustom0" type="text"
+                                                   name="model" value="5"
+                                                   required="">
+
+
+                                        </div>
+
+                                        <div class="form-group row ">
+                                            <label for="validationCustom0"
+                                                   class=" col-md-4"><span>*</span>
+                                                {% translate 'Brand' %}</label>
+                                            <input class="form-control col-md-6"
+                                                   id="validationCustom0" type="text"
+                                                   name="brand" value="5"
+                                                   required="">
+
+
+                                        </div>
+
+
+                                        <div class="form-group row">
+                                            <label for="validationCustom0"
+                                                   class="col-md-4"><span>*</span>Category</label>
+                                            <label for="title_ar"></label>
+                                            <select name="category"
+                                                    class="custom-select  col-md-6">
+
+                                                {% for value, text in product_form.category.field.choices %}
+                                                    <option value="{{ value }}">{{ text }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+
+                                        <div class="form-group row">
+                                            <label for="validationCustom0"
+                                                   class=" col-md-4"><span>*</span>
+                                                {% translate 'Price' %}</label>
+                                            <input class="form-control col-md-6"
+                                                   id="price" type="number"
+                                                   name="price" value="5" min="0"
+                                                   required="required">
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label for="validationCustom0"
+                                                   class=" col-md-4"><span>*</span>
+                                                {% translate 'Quantity' %}</label>
+                                            <input class="form-control col-md-6"
+                                                   id="validationCustom0" type="text"
+                                                   name="quantity" value="5" min="0"
+                                                   required="required">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="validationCustom0"
+                                                   class=" col-md-4"><span>*</span>
+                                                {% translate 'Minimum Quantity' %}</label>
+                                            <input class="form-control col-md-6"
+                                                   id="validationCustom0" type="number"
+                                                   name="minimum_quantity" value="5" min="0"
+                                                   required="required">
+                                        </div>
+
+
+                                        <div class="form-group row">
+                                            <label for="validationCustom0"
+                                                   class=" col-md-4"><span>*</span>
+                                                {% translate 'Subtract Stock' %} </label>
+                                            <select name="subtract_stock"
+                                                    class="custom-select  col-md-6">
+
+                                                {% for value, text in product_form.subtract_stock.field.choices %}
+                                                    <option value="{{ value }}">{{ text }}</option>
+                                                {% endfor %}
+                                            </select>
+
+                                        </div>
+
+
+                                        <div class="form-group row">
+                                            <label for="validationCustom0"
+                                                   class=" col-md-4"><span>*</span>
+                                                {% translate 'Out Of Stock Status' %} </label>
+                                            <select name="out_of_stock_status"
+                                                    class="custom-select  col-md-6">
+
+                                                {% for value, text in product_form.out_of_stock_status.field.choices %}
+                                                    <option value="{{ value }}">{{ text }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+
+                                        <div class="form-group row">
+                                            <label for="validationCustom0"
+                                                   class=" col-md-4"><span>*</span>
+                                                {% translate 'Requires Shipping' %} </label>
+                                            <select name="requires_shipping"
+                                                    class="custom-select  col-md-6">
+
+                                                {% for value, text in product_form.requires_shipping.field.choices %}
+                                                    <option value="{{ value }}">{{ text }}</option>
+                                                {% endfor %}
+                                            </select>
+
+                                        </div>
+
+
+                                        <div class="form-group row">
+                                            <label for="validationCustom0"
+                                                   class=" col-md-4"><span>*</span>
+                                                {% translate 'Weight' %}</label>
+                                            <input class="form-control col-md-6"
+                                                   id="validationCustom0" type="number"
+                                                   name="weight" value="5" min="0"
+                                                   required="required">
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label for="validationCustom0"
+                                                   class=" col-md-4"><span>*</span>
+                                                {% translate 'Length' %}</label>
+                                            <input class="form-control col-md-6"
+                                                   id="validationCustom0" type="number"
+                                                   name="length" value="5" min="0"
+                                                   required="required">
+                                        </div>
+
+
+                                        <div class="form-group row">
+                                            <label for="validationCustom0"
+                                                   class=" col-md-4"><span>*</span>
+                                                {% translate 'status' %} </label>
+                                            <select name="status"
+                                                    class="custom-select  col-md-6">
+                                                {% for value, text in product_form.status.field.choices %}
+                                                    <option value="{{ value }}">{{ text }}</option>
+                                                {% endfor %}
+                                            </select>
+
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label for="validationCustom0"
+                                                   class=" col-md-4"><span>*</span>
+                                                {% translate 'Sort Order' %}</label>
+                                            <input class="form-control col-md-6"
+                                                   id="validationCustom0" type="number"
+                                                   name="sort_order" value="5" min="0"
+                                                   required="required">
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="tab-pane fade " id="data" role="tabpanel" aria-labelledby="data-tabs">
+
+
+                                </div>
+                                <div class="tab-pane fade" id="option" role="tabpanel"
+                                     aria-labelledby="option-tabs">
+                                    <h4>Option</h4>
+
+                                </div>
+                                <div class="tab-pane fade" id="image" role="tabpanel" aria-labelledby="image-tabs">
+                                    {{ formset.management_form }}
+                                    <div class="add-product">
+                                        <div class="row media_div_row ">
+                                            <div class="col-xl-4 xl-50 col-sm-12 col-12">
+                                                <img alt=""
+                                                     class="img-fluid image_zoom_1 blur-up lazyloaded img_preview">
+                                            </div>
+                                            <div class="col-xl-3 xl-50 col-sm-6 col-3">
+                                                <ul class="file-upload-product">
+                                                    <li>
+                                                        <div class="box-input-file"><input class="upload select_media"
+                                                                                           type="file"
+                                                                                           id="Product image"
+                                                                                           name="image">
+                                                            <i class="fa fa-plus "></i></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="box-input-file"><input class="upload select_media"
+                                                                                           type="file"
+                                                                                           name="image">
+                                                            <i class="fa fa-plus "><select hidden name="media_type[]"
+                                                                                           class="form-control media_type">
+                                                                <option value="1">Image</option>
+                                                                <option value="2">Video</option>
+                                                            </select></i></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="box-input-file"><input class="upload select_media"
+                                                                                           type="file"
+                                                                                           name="image">
+                                                            <i class="fa fa-plus "><select hidden name="media_type[]"
+                                                                                           class="form-control media_type">
+                                                                <option value="1">Image</option>
+                                                                <option value="2">Video</option>
+                                                            </select></i></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="box-input-file"><input class="upload select_media"
+                                                                                           type="file"
+                                                                                           name="image">
+                                                            <i class="fa fa-plus "><select hidden name="media_type[]"
+                                                                                           class="form-control media_type">
+                                                                <option value="1">Image</option>
+                                                                <option value="2">Video</option>
+                                                            </select></i></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="box-input-file"><input class="upload select_media"
+                                                                                           type="file"
+                                                                                           name="image">
+                                                            <i class="fa fa-plus "><select hidden name="media_type[]"
+                                                                                           class="form-control media_type">
+                                                                <option value="1">Image</option>
+                                                                <option value="2">Video</option>
+                                                            </select></i></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="box-input-file"><input class="upload select_media"
+                                                                                           type="file"
+                                                                                           name="image">
+                                                            <i class="fa fa-plus "><select hidden name="media_type[]"
+                                                                                           class="form-control media_type">
+                                                                <option value="1">Image</option>
+                                                                <option value="2">Video</option>
+                                                            </select></i></div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo-tabs">
+
+                                    <h4>{% translate 'SEO' %}</h4>
+
+                                    <div class="form-group  row">
+                                        <label for="validationCustom02"
+                                               class="col-md-4">{% translate 'Slug' %}
+                                        </label>
+                                        <input class=" form-control col-md-6" id="slug"
+                                               name="slug" type="text" required="">
+                                        <div class="valid-feedback">Looks good!</div>
+                                    </div>
+
+
+                                    <div class="form-group row ">
+                                        <label for="validationCustom0"
+                                               class=" col-md-4"><span>*</span>
+                                            {% translate 'Meta Tag Title' %}</label>
+                                        <input class="form-control col-md-6"
+                                               id="validationCustom0" type="text"
+                                               name="meta_title" value="5" required="">
+
+
+                                    </div>
+
+                                    <div class="form-group row ">
+                                        <label for="validationCustom0"
+                                               class=" col-md-4"><span>*</span>
+                                            {% translate 'Meta Tag Description' %}</label>
+                                        <input class="form-control col-md-6"
+                                               id="validationCustom0" type="text"
+                                               name="meta_description" value="5" required="">
+
+
+                                    </div>
+
+                                    <div class="form-group row ">
+                                        <label for="validationCustom0"
+                                               class=" col-md-4"><span>*</span>
+                                            {% translate 'Meta Tag Keywords' %}</label>
+                                        <input class="form-control col-md-6"
+                                               id="validationCustom0" type="text"
+                                               name="meta_keywords" value="5" required="">
+
+
+                                    </div>
+
+                                    <div class="tagline  row ">
+
+                                        <label for="validationCustom0"
+                                               class=" col-md-4"><span>*</span>
+                                            {% translate 'Product Tags' %}</label>
+                                        <input class="tag"
+                                               id="validationCustom0" type="text"
+                                               name="tags" value="5" data-role="tagsinput"
+                                               required="required">
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class='progress mb-3' style="height:auto">
+                                            <div class="progress-bar bg-warning" id="progressbar"
+                                                 role="progressbar" data-width="0%" aria-valuenow="0"
+                                                 aria-valuemin="0" aria-valuemax="100"
+                                                 style="display:none;width: 0%;height: 30px;border-radius: 10px;">
+                                                0%
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                            {% if field.errors %}
+                                <div class="alert alert-danger" style="margin:10px">
+                                {{ field.errors }}
+                            {% endif %}
+                            </div>
+
+                            <div class="offset-xl-3 offset-sm-4">
+                                <button type="submit" class="btn btn-primary  ">Add</button>
+                                <a href="{% url 'core:Products_list' %}">
+                                    <button type="button" class="btn btn-light" data-toggle="modal"
+                                            data-original-title="test" data-target="#exampleModal">Discard
+                                    </button>
+                                </a>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Container-fluid Ends-->
+            </div>
+        </div>
+    </div>
+
+    {% if uploaded_file_url %}
+        <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
+    {% endif %}
+
+
+
+
+{% endblock %}
+
+
+
+{% block custom_js %}
+
+
+
+    <script>
+        document.getElementById("title").onkeyup = function () {
+            document.getElementById("slug").value = document.getElementById("title").value.toLowerCase().replaceAll(" ", "-");
+        }
+
+
+        function invalidFunction(e, message) {
+            e.preventDefault();
+            document.getElementById('errorHeader').innerText = message;
+        }
+
+
+        document.getElementById("english_registration_form").onsubmit = function () {
+            var x = document.forms["ProductForm"]["title"].value;
+            var y = document.forms["ProductForm"]["price"].value;
+            var z = document.forms["ProductForm"]["image"].value;
+
+            var submit = true;
+
+            if (x == null || x == "") {
+                nameError = "Please enter your name";
+                document.getElementById("title").innerHTML = nameError;
+                submit = false;
+            }
+
+            if (y == null || y == "") {
+                priceError = "Please enter your email";
+                document.getElementById("price_error").innerHTML = priceError;
+                submit = false;
+            }
+
+            if (z == null || z == "") {
+                telephoneError = "Please enter your telephone";
+                document.getElementById("telephone_error").innerHTML = telephoneError;
+                submit = false;
+            }
+
+            return submit;
+        }
+
+        function removeWarning() {
+            document.getElementById(this.id + "_error").innerHTML = "";
+        }
+
+        document.getElementById("title").onkeyup = removeWarning;
+        document.getElementById("price").onkeyup = removeWarning;
+        document.getElementById("image").onkeyup = removeWarning;
+        $(".add_media").click(function () {
+            var media_row = $(".first_media").clone();
+            media_row.removeClass("first_media");
+            media_row.replaceAll("src", "")
+            media_row.find(".select_media").val("");
+            media_row.find(".img_preview").attr("src", "").css({"border": "none"}).css({"border-radius": "0px"}).hide();
+            media_row.find(".video_preview").attr("src", "").css({"border": "none"}).css({"border-radius": "0px"}).hide();
+            $(".media_div").append(media_row);
+        });
+        $(".remove_media").click(function () {
+            if ($(".media_div").find(".media_div_row").length > 1) {
+                $(".media_div").children().last().remove();
+            }
+        });
+        $(document).on("change", ".select_media", function () {
+            var media_type = $(this).parents(".media_div_row").find(".media_type").val();
+            var img_preview = $(this).parents(".media_div_row").find(".img_preview");
+            var vid_preview = $(this).parents(".media_div_row").find(".video_preview");
+            showPreviewMedia(this, media_type, img_preview, vid_preview);
+        });
+
+        function showPreviewMedia(input, media_type, img_preview, video_preview) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    if (media_type == "1") {
+                        img_preview.attr("src", e.target.result);
+                        img_preview.show();
+                        img_preview.css({"border": "5px solid orange"});
+                        img_preview.css({"border-radius": "10px"});
+                    }
+                    if (media_type == "2") {
+                        video_preview.show();
+                        video_preview.css({"border": "5px solid orange"});
+                        video_preview.css({"border-radius": "10px"});
+                        video_preview.attr("src", e.target.result);
+                        video_preview.load();
+                        video_preview.play();
+
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+    </script>
+    <script src="//bootstrap-tagsinput.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+    <script>
+        $('input#tags').tagsinput('remove', 'some tag');
+
+    </script>
+{% endblock custom_js %}
+
+{% block foot %} {% include 'admin/footer.html' %}  {% endblock %}
+{% block js %}{% include 'admin/js.html' %}{% endblock %}
+
+</div>

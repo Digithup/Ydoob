@@ -3,9 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.utils.crypto import get_random_string
 
-from user.models import User
-from catalog.models.models import Products, Categories
-from catalog.models.product_options import Options
+from catalog.models.models import Products, Categories, ProductVariantItems
 
 from sales.models.order import ShopCart, Order, OrderForm, OrderProduct, ShopCartForm
 
@@ -14,15 +12,16 @@ def index(request):
     return HttpResponse ("Order Page")
 
 #@login_required(login_url='/login') # Check login
-def addtoshopcart(request,id):
+def AddToCart(request,id):
     url = request.META.get('HTTP_REFERER')  # get last url
     current_user = request.user  # Access User Session information
     product= Products.objects.get(pk=id)
+    variant =ProductVariantItems.objects.filter(product_id=id)
     variantid = request.POST.get('variantid')  # from variant add to cart
 
-    if product.variant != 'None':
+    if variant != 'None':
         variantid = request.POST.get('variantid')  # from variant add to cart
-        checkinvariant = ShopCart.objects.filter(variant_id=variantid, user_id=current_user.id)  # Check product in shopcart
+        checkinvariant = ShopCart.objects.filter(product=product,variant_id=variantid, user_id=current_user.id)  # Check product in shopcart
         if checkinvariant:
             control = 1 # The product is in the cart
         else:
@@ -38,7 +37,7 @@ def addtoshopcart(request,id):
         form = ShopCartForm(request.POST)
         if form.is_valid():
             if control==1: # Update  shopcart
-                if product.variant == 'None':
+                if variant == 'None':
                     data = ShopCart.objects.get(product_id=id, user_id=current_user.id)
                 else:
                     data = ShopCart.objects.get(product_id=id, variant_id=variantid, user_id=current_user.id)
@@ -56,7 +55,7 @@ def addtoshopcart(request,id):
 
     else: # if there is no post
         if control == 1:  # Update  shopcart
-            data = ShopCart.objects.get(product_id=id, user_id=current_user.id)
+            data = ShopCart.objects.get(product_id=id ,variant_id=variantid , user_id=current_user.id)
             data.quantity += 1
             data.save()  #
         else:  #  Inser to Shopcart
@@ -76,7 +75,7 @@ def shopcart(request):
     shopcart = ShopCart.objects.filter(user_id=current_user.id)
     total=0
     for rs in shopcart:
-        total += rs.product.price * rs.quantity
+        total += int(rs.product.price) * int(rs.quantity)
     #return HttpResponse(str(total))
     context={'shopcart': shopcart,
              'category':category,
@@ -97,10 +96,10 @@ def orderproduct(request):
     shopcart = ShopCart.objects.filter(user_id=current_user.id)
     total = 0
     for rs in shopcart:
-        if rs.product.options == 'None':
+        if rs.product.variant == 'None':
             total += rs.product.price * rs.quantity
         else:
-            total += rs.options.price * rs.quantity
+            total += rs.variant.price * rs.quantity
 
     if request.method == 'POST':  # if there is a post
         form = OrderForm(request.POST)
@@ -137,12 +136,12 @@ def orderproduct(request):
                 detail.amount        = rs.amount
                 detail.save()
                 # ***Reduce quantity of sold product from Amount of Product
-                if  rs.product.options=='None':
+                if  rs.product.variant=='None':
                     product = Products.objects.get(id=rs.product_id)
                     product.amount -= rs.quantity
                     product.save()
                 else:
-                    variant = Options.objects.get(id=rs.product_id)
+                    variant = Variants.objects.get(id=rs.product_id)
                     variant.quantity -= rs.quantity
                     variant.save()
                 #************ <> *****************

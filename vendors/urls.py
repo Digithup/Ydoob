@@ -1,6 +1,6 @@
 from django.urls import path
 
-from vendors.tets2 import ProductCreateTest2
+from vendors.tets2 import ProductCreateTest3
 from vendors.views.catalog import VendorIndex, ProductsList, ProductCreate, ProductsDeleted, file_upload, \
     ProductsAddStocks, ProductMediaDelete, ProductEditMedia, ProductsAddMedia, ProductUpdate
 from vendors.views.views import SellerRegister, CreateStore, CreateSuccess, StoreWaiting, VendorDashboard, EditStore
@@ -24,7 +24,7 @@ urlpatterns = [
     ########## Products   #########
     path('store/dashboard/', VendorIndex, name='VendorIndex'),
     path('store/dashboard/products/', ProductsList.as_view(), name="ProductsList"),
-    path('store/dashboard/productcreate', ProductCreateTest2.as_view(), name="ProductCreate"),
+    path('store/dashboard/productcreate', ProductCreateTest3.as_view(), name="ProductCreate"),
 
     path('store/dashboard/products/Product_edit/<str:product_id>', ProductUpdate.as_view(), name="ProductUpdate"),
     path('store/dashboard/products/Products_delete/<int:pk>/', ProductsDeleted.as_view(), name="Product_Delete"),

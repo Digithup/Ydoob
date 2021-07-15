@@ -419,3 +419,146 @@
                     </div>
                 </div>
             </div>
+
+
+
+<div><img src="{% static '' %}images/icon/search.png" onclick="openSearch()"
+                                                  class="img-fluid blur-up lazyload" alt=""> <i class="ti-search"
+                                                                                                onclick="openSearch()"></i>
+                                        </div>
+                                        <div id="search-overlay" class="search-overlay">
+                                            <div> <span class="closebtn" onclick="closeSearch()"
+                                                        title="Close Overlay">×</span>
+                                                <div class="overlay-content">
+                                                    <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-xl-12">
+
+                                                                <form action="/search/" method="get"
+                                                                      class="autocomplete-me">
+                                                                    {% csrf_token %}
+                                                                    <div class="form-group">
+                                                                        <input type="text" class="form-control"
+                                                                               id="id_q" name="q"
+                                                                               placeholder="Search a Product">
+
+                                                                    </div>
+                                                                    <button class="btn btn-primary" type="submit"><i
+                                                                            class="fa fa-search"></i></button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+        <div class="collection-product-wrapper">
+                                  <div>
+                            <div class="">
+                                <div class="  ">
+                                    <div class="">
+                                        <div class="">{% recursetree categories %}
+                                            <div class="slide-7 ">
+                                                <div class="category-block"> {% if  not node.is_root_node %}
+                                                    <a href="#">
+                                                        <div class="category-image"><img src="{{ node.image.url }}"
+                                                                                         height="50=0px" width="70px"
+                                                                                         alt="">
+                                                        </div>
+                                                    </a>
+                                                    <div class="category-details">
+                                                        <a href="#">
+                                                            <h4>{{ node.title }}</h4></a></div>
+                                                {% endif %}
+                                                    {{ children }}
+                                                </div>
+                                            </div>
+                                            </div>{% endrecursetree %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ <!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+    <title>Ilan's Test</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="contact-form">
+                    <form id="contact-form" method="post" action="#">
+                        <input name="companyname" type="text" class="form-control vcheck" id="companyName" placeholder="  Company Name">
+                        <br>
+                        <input name="name" type="text" class="form-control vcheck" id="contactName" placeholder="  Contact Person">
+                        <br>
+                        <input name="email" type="email" class="form-control vcheck" id="Email" placeholder="  Your Email">
+                        <br>
+                        <input type="tel" id="Phone" class="form-control vcheck" name="Phone" placeholder="  Phone Number">
+                        <br>
+                        <textarea name="message" class='form-control' placeholder="  Write your message here..." style="white-space:pre-wrap; height:200px;width:500px;" row="4"></textarea>
+                        <br>
+                        <button type="submit" name="form[Submit]" id="submit" class="btn btn-primary" disabled="disabled">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+
+    <script>
+        // On change in any of the fields with the class vcheck we run this function
+        $('.vcheck').change(function() {
+            // We store the values of each input field in a variable
+            var company = $('#companyName').val();
+            var name = $('#contactName').val();
+            var email = $('#email').val();
+            var phone = $('#Phone').val();
+            // We check for null (empty) values
+            if (company == '' || name == '' || email == '' || phone == '') {
+                // When we find something blank set or keep the button to disabled
+                $('#submit').attr('disabled', 'disabled');
+            } else {
+                // When all conditions are met and values are good we enable the button
+                $('#submit').removeAttr('disabled');
+            }
+        });
+    </script>
+</body>
+
+</html>
