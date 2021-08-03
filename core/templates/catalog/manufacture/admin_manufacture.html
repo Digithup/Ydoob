@@ -1,5 +1,6 @@
 {% extends 'admin/adminbase.html' %}
 {% load static %}
+{% load i18n %}
 
     {% block custom_css %}
     {% endblock custom_css %}
@@ -13,9 +14,9 @@
                         <h3>Category List
                             <small>
                                 <ol class="breadcrumb pull-left">
-                                    <li class="breadcrumb-item"><a href="{% url 'core:admin_index' %}"><i data-feather="home"></i></a></li>
+                                    <li class="breadcrumb-item"><a href="{% url 'core:AdminIndex' %}"><i data-feather="home"></i></a></li>
 
-                                    <li class="breadcrumb-item active">Manufacturer </li>
+                                    <li class="breadcrumb-item active">{% translate 'Manufacturer' %} </li>
                                 </ol>
                             </small>
                         </h3>
@@ -50,7 +51,7 @@
                             #
                         </th>
                         <th style="width: 15%">
-                            Category Name
+                            Manufacturer Name
                         </th>
                         <th style="width: 20%">
                             Image

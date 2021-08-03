@@ -1,290 +1,310 @@
-{% extends 'admin/adminbase.html' %}
+{% extends 'front/homebase.html' %}
 {% load crispy_forms_filters %}
 {% load static %}
+{% load i18n %}
+{% load countries %}
+{% get_countries as countries %}
 
-
-{% load widget_tweaks %}
 {% block body %}
 
 
-
-    <!-- Container-fluid starts-->
-    <div class="container-fluid">
-        <div class="page-header">
+    <!-- breadcrumb start -->
+    <div class="breadcrumb-section">
+        <div class="container">
             <div class="row">
-                <div class="col-lg-6">
-                    <div class="page-header-left">
-                        <h3>Create User
-                            <small>Multikart Admin panel</small>
-                        </h3>
+                <div class="col-sm-6">
+                    <div class="page-title">
+                        <h2>{{ store.title }}</h2>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <ol class="breadcrumb pull-right">
-                        <li class="breadcrumb-item"><a href="index.html"><i data-feather="home"></i></a></li>
-                        <li class="breadcrumb-item">Users</li>
-                        <li class="breadcrumb-item active">Create User</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Container-fluid Ends-->
-
-    <!-- Container-fluid starts-->
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card tab2-card">
-                    <div class="card-header">
-                        <h5> Add User</h5>
-                    </div>
-
-                    <div class="card-body">
-                        <ul class="nav nav-tabs tab-coupon" id="myTab" role="tablist">
-                            <li class="nav-item"><a class="nav-link active show" id="account-tab"
-                                                    data-toggle="tab" href="#account" role="tab"
-                                                    aria-controls="account" aria-selected="true"
-                                                    data-original-title="" title="">Account</a></li>
-                            <li class="nav-item"><a class="nav-link  " id="profile-tab"
-                                                    data-toggle="tab" href="#profile" role="tab"
-                                                    aria-controls="profile" aria-selected="false"
-                                                    data-original-title="" title="">Profile</a></li>
-                            <li class="nav-item"><a class="nav-link" id="permission-tabs" data-toggle="tab"
-                                                    href="#permission" role="tab" aria-controls="permission"
-                                                    aria-selected="false" data-original-title="" title="">Permission</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade active show" id="account" role="tabpanel"
-                                 aria-labelledby="account-tab">
-                                <form class="needs-validation" enctype="multipart/form-data"
-                                      action="{% url 'users:update_profile' %}"
-                                      method="post">
-                                    {% csrf_token %}
-                                    <h4>Account Details</h4>
-                                    <div class="form-group  row ">
-                                        <label for="validationCustom1" class="col-xl-3 col-md-4"><span>*</span>
-                                        </label>
-
-                                        {{ form.first_name|as_crispy_field:"bootstrap4" }}
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="validationCustom1" class="col-xl-3 col-md-4"><span>*</span>
-                                            Last Name</label>
-                                        {{ form.last_name|as_crispy_field:"bootstrap4" }}
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="validationCustom2" class="col-xl-3 col-md-4"><span>*</span>
-                                            Email</label>
-                                        {{ current_user.email }}
-
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="validationCustom3" class="col-xl-3 col-md-4"><span>*</span>
-                                            Password</label>
-
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="validationCustom4" class="col-xl-3 col-md-4"><span>*</span>
-                                            Confirm Password</label>
-
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Save</button>
-                                </form>
-                            </div>
-                            <div class="tab-pane fade" id="profile" role="tabpanel"
-                                 aria-labelledby="permission-tabs">
-                                <form class="needs-validation user-add" novalidate="">
-                                    <div class="permission-block">
-                                        <div class="attribute-blocks">
-                                            <h5 class="f-w-600 mb-3">Products Related permition </h5>
-                                            <div class="row">
-                                                <div class="col-xl-3 col-sm-4">
-                                                    <label>Add Products</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="tab-pane fade" id="permission" role="tabpanel"
-                                 aria-labelledby="permission-tabs">
-                                <form class="needs-validation user-add" novalidate="">
-                                    <div class="permission-block">
-                                        <div class="attribute-blocks">
-                                            <h5 class="f-w-600 mb-3">Products Related permition </h5>
-                                            <div class="row">
-                                                <div class="col-xl-3 col-sm-4">
-                                                    <label>Add Products</label>
-                                                </div>
-                                                <div class="col-xl-9 col-sm-8">
-                                                    <div class="form-group m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
-                                                        <label class="d-block" for="edo-ani1">
-                                                            <input class="radio_animated" id="edo-ani1"
-                                                                   type="radio" name="rdo-ani">
-                                                            Allow
-                                                        </label>
-                                                        <label class="d-block" for="edo-ani2">
-                                                            <input class="radio_animated" id="edo-ani2"
-                                                                   type="radio" name="rdo-ani" checked="">
-                                                            Deny
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xl-3 col-sm-4">
-                                                    <label>Update Products</label>
-                                                </div>
-                                                <div class="col-xl-9 col-sm-8">
-                                                    <div class="form-group m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
-                                                        <label class="d-block" for="edo-ani3">
-                                                            <input class="radio_animated" id="edo-ani3"
-                                                                   type="radio" name="rdo-ani1">
-                                                            Allow
-                                                        </label>
-                                                        <label class="d-block" for="edo-ani4">
-                                                            <input class="radio_animated" id="edo-ani4"
-                                                                   type="radio" name="rdo-ani1" checked="">
-                                                            Deny
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xl-3 col-sm-4">
-                                                    <label>Delete Products</label>
-                                                </div>
-                                                <div class="col-xl-9 col-sm-8">
-                                                    <div class="form-group m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
-                                                        <label class="d-block" for="edo-ani5">
-                                                            <input class="radio_animated" id="edo-ani5"
-                                                                   type="radio" name="rdo-ani2">
-                                                            Allow
-                                                        </label>
-                                                        <label class="d-block" for="edo-ani6">
-                                                            <input class="radio_animated" id="edo-ani6"
-                                                                   type="radio" name="rdo-ani2" checked="">
-                                                            Deny
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xl-3 col-sm-4">
-                                                    <label class="mb-0 sm-label-radio">Apply discount</label>
-                                                </div>
-                                                <div class="col-xl-9 col-sm-8">
-                                                    <div class="form-group m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated pb-0">
-                                                        <label class="d-block mb-0" for="edo-ani7">
-                                                            <input class="radio_animated" id="edo-ani7"
-                                                                   type="radio" name="rdo-ani3">
-                                                            Allow
-                                                        </label>
-                                                        <label class="d-block mb-0" for="edo-ani8">
-                                                            <input class="radio_animated" id="edo-ani8"
-                                                                   type="radio" name="rdo-ani3" checked="">
-                                                            Deny
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="attribute-blocks">
-                                            <h5 class="f-w-600 mb-3">Category Related permition </h5>
-                                            <div class="row">
-                                                <div class="col-xl-3 col-sm-4">
-                                                    <label>Add Category</label>
-                                                </div>
-                                                <div class="col-xl-9 col-sm-8">
-                                                    <div class="form-group m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
-                                                        <label class="d-block" for="edo-ani9">
-                                                            <input class="radio_animated" id="edo-ani9"
-                                                                   type="radio" name="rdo-ani4">
-                                                            Allow
-                                                        </label>
-                                                        <label class="d-block" for="edo-ani10">
-                                                            <input class="radio_animated" id="edo-ani10"
-                                                                   type="radio" name="rdo-ani4" checked="">
-                                                            Deny
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xl-3 col-sm-4">
-                                                    <label>Update Category</label>
-                                                </div>
-                                                <div class="col-xl-9 col-sm-8">
-                                                    <div class="form-group m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
-                                                        <label class="d-block" for="edo-ani11">
-                                                            <input class="radio_animated" id="edo-ani11"
-                                                                   type="radio" name="rdo-ani5">
-                                                            Allow
-                                                        </label>
-                                                        <label class="d-block" for="edo-ani12">
-                                                            <input class="radio_animated" id="edo-ani12"
-                                                                   type="radio" name="rdo-ani5" checked="">
-                                                            Deny
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xl-3 col-sm-4">
-                                                    <label>Delete Category</label>
-                                                </div>
-                                                <div class="col-xl-9 col-sm-8">
-                                                    <div class="form-group m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
-                                                        <label class="d-block" for="edo-ani13">
-                                                            <input class="radio_animated" id="edo-ani13"
-                                                                   type="radio" name="rdo-ani6">
-                                                            Allow
-                                                        </label>
-                                                        <label class="d-block" for="edo-ani14">
-                                                            <input class="radio_animated" id="edo-ani14"
-                                                                   type="radio" name="rdo-ani6" checked="">
-                                                            Deny
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xl-3 col-sm-4">
-                                                    <label class="mb-0 sm-label-radio">Apply discount</label>
-                                                </div>
-                                                <div class="col-xl-9 col-sm-8">
-                                                    <div class="form-group m-checkbox-inline custom-radio-ml d-flex radio-animated pb-0">
-                                                        <label class="d-block mb-0" for="edo-ani15">
-                                                            <input class="radio_animated" id="edo-ani15"
-                                                                   type="radio" name="rdo-ani7">
-                                                            Allow
-                                                        </label>
-                                                        <label class="d-block mb-0" for="edo-ani16">
-                                                            <input class="radio_animated" id="edo-ani16"
-                                                                   type="radio" name="rdo-ani7" checked="">
-                                                            Deny
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="pull-right">
-                            <button type="submit" class="btn btn-primary">Save</button>
-                        </div>
-                    </div>
+                <div class="col-sm-6">
+                    <nav aria-label="breadcrumb" class="theme-breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'home:index' %}">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ store.title }}</li>
+                        </ol>
+                    </nav>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Container-fluid Ends-->
+    <!-- breadcrumb End -->
+
+    <form class="needs-validation" id="myform" enctype="multipart/form-data"
+          action="{% url 'user:UpdateProfile' user.slug %}"
+          method="post">
+
+        {% csrf_token %}
+        <!-- personal deatail section start -->
+        <section class="contact-page register-page">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h3>Store DETAIL</h3>
+                        <div class="error-message">
+                            {% if messages %}
+                                <ul class="messages">
+                                    {% for message in messages %}
+                                        <li {% if message.tags %}
+                                            class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {% if forms.errors %}
+                                {% for error_field, error_message in forms.errors.items %}
+                                    <div class="alert alert-danger">
+                                        {{ error_field|striptags }}: {{ error_message|striptags }}
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+
+                            {% endif %}
+                        </div>
+
+                        <div class="form-row row">
+                            <div class="col-md-6">
+                                <label for="name">Last Name</label>
+                                <input type="text" class="form-control" placeholder="Enter Your name"
+                                       name="first_name" value="{{ user.first_name }}" required="">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="name">First Name</label>
+                                <input type="text" class="form-control" placeholder="Enter Your name"
+                                       name="last_name" value="{{ user.last_name}}" required="">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email">Email</label>
+                                <input type="text" readonly class="form-control" id="last-name" name="email"
+                                       value="{{ user.email }}" placeholder="Email" required="">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="review">Phone number</label>
+                                <input type="number" readonly class="form-control" id="review" name="phone"
+                                       value="{{ user.phone }}" placeholder="Enter your number"
+                                       required="">
+                            </div>
+
+
+
+                        </div>
+                        <section class="contact-page register-page section-b-space">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label for="review">about</label>
+                                        <textarea class="form-control mb-0" placeholder="Write Your Message"
+                                                  name="about"
+                                                  id="exampleFormControlTextarea1" rows="6"></textarea>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </section>
+
+                    </div>
+
+                </div>
+            </div>
+
+            </div>
+        </section>
+        <!-- Section ends -->
+
+
+        <!-- address section start -->
+        <section class="contact-page register-page section-b-space">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h3> Socail Media</h3>
+
+                        <div class="form-row row">
+
+                            <div class="col-md-6">
+                                <label for="name">facebook</label>
+                                <input type="url" class="form-control" name="facebook" value="{{ user.facebook }}"
+                                       placeholder="facebook" >
+
+                            </div>
+                            <div class="col-md-6">
+                                <label for="name">instagram</label>
+                                <input type="url" class="form-control" name="instagram" value="{{ user.instagram }}"
+                                       placeholder="instagram"
+                                       >
+                            </div>
+                            <div class="col-md-6">
+                                <label for="name">twitter</label>
+                                <input type="url" class="form-control" name="twitter" value="{{ user.twitter }}"
+                                       placeholder="twitter"
+                                       >
+                            </div>
+                            <div class="col-md-6">
+                                <label for="name">youtube</label>
+                                <input type="url" class="form-control" name="youtube" value="{{ user.youtube }}"
+                                       placeholder="youtube"
+                                       >
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 pull-right  center-align">
+                <button class="btn btn-sm btn-solid" type="submit">Save setting</button>
+            </div>
+        </section>
+        <!-- Section ends -->
+
+    </form>
+
+
 
 {% endblock %}
 
-{% block foot %} {% include 'admin/footer.html' %}  {% endblock %}
-{% block js %}{% include 'admin/js.html' %}{% endblock %}
+{% block custom_js %}
+    <script src="//cdn.tiny.cloud/1/u6oa5pnpaa1vxho1md7uk4zmq2ai7xuf5o5wfgyrc131vpj6/tinymce/5/tinymce.min.js"
+            referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: "textarea#long_desc",
+            height: 300,
+            plugins: [
+                "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+                "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime nonbreaking",
+                "save table contextmenu directionality emoticons template paste textcolor",
+            ],
+            images_upload_url: "{% url 'core:file_upload' %}",
+            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",
+            style_formats: [
+                {title: "Bold text", inline: "b"},
+                {title: "Red text", inline: "span", styles: {color: "#ff0000"}},
+                {title: "Red header", block: "h1", styles: {color: "#ff0000"}},
+                {title: "Example 1", inline: "span", classes: "example1"},
+                {title: "Example 2", inline: "span", classes: "example2"},
+                {title: "Table styles"},
+                {title: "Table row 1", selector: "tr", classes: "tablerow1"},
+            ],
+            automatic_uploads: true,
+            file_picker_types: 'image',
+            file_picker_callback: function (cb, value, meta) {
+                var input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*');
+
+                /*
+                Note: In modern browsers input[type="file"] is functional without
+                even adding it to the DOM, but that might not be the case in some older
+                or quirky browsers like IE, so you might want to add it to the DOM
+                just in case, and visually hide it. And do not forget do remove it
+                once you do not need it anymore.
+                */
+
+                input.onchange = function () {
+                    var file = this.files[0];
+
+                    var reader = new FileReader();
+                    reader.onload = function () {
+                        /*
+                        Note: Now we need to register the blob in TinyMCEs image blob
+                        registry. In the next release this part hopefully won't be
+                        necessary, as we are looking to handle it internally.
+                        */
+                        var id = 'blobid' + (new Date()).getTime();
+                        var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                        var base64 = reader.result.split(',')[1];
+                        var blobInfo = blobCache.create(id, file, base64);
+                        blobCache.add(blobInfo);
+
+                        /* call the callback and populate the Title field with the file name */
+                        cb(blobInfo.blobUri(), {title: file.name});
+                    };
+                    reader.readAsDataURL(file);
+                };
+
+                input.click();
+            },
+        });
+    </script>
+    <script>
+        $(".add_media").click(function () {
+            var media_row = $(".first_media").clone();
+            media_row.removeClass("first_media");
+            media_row.replaceAll("src", "")
+            media_row.find(".select_media").val("");
+            media_row.find(".img_preview").attr("src", "").css({"border": "none"}).css({"border-radius": "0px"}).hide();
+            media_row.find(".video_preview").attr("src", "").css({"border": "none"}).css({"border-radius": "0px"}).hide();
+            $(".media_div").append(media_row);
+        });
+        $(".remove_media").click(function () {
+            if ($(".media_div").find(".media_div_row").length > 1) {
+                $(".media_div").children().last().remove();
+            }
+        });
+
+        $(".add_details").click(function () {
+            var details_row = $(".first_details").clone();
+            details_row.removeClass("first_details");
+            details_row.find(".title_title").val("");
+            details_row.find(".title_details").val("");
+            $(".details_div").append(details_row);
+        });
+        $(".remove_details").click(function () {
+            if ($(".details_div").find(".details_div_row").length > 1) {
+                $(".details_div").children().last().remove();
+            }
+        });
+
+        $(".add_about").click(function () {
+            var about_row = $(".first_about").clone();
+            about_row.removeClass("first_about");
+            about_row.find(".about_title").val("");
+            $(".about_div").append(about_row);
+        });
+        $(".remove_about").click(function () {
+            if ($(".about_div").find(".about_div_row").length > 1) {
+                $(".about_div").children().last().remove();
+            }
+        });
+
+        $(document).on("change", ".select_media", function () {
+            var media_type = $(this).parents(".media_div_row").find(".media_type").val();
+            var img_preview = $(this).parents(".media_div_row").find(".img_preview");
+            var vid_preview = $(this).parents(".media_div_row").find(".video_preview");
+            showPreviewMedia(this, media_type, img_preview, vid_preview);
+        });
+
+        function showPreviewMedia(input, media_type, img_preview, video_preview) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    if (media_type == "1") {
+                        img_preview.attr("src", e.target.result);
+                        img_preview.show();
+                        img_preview.css({"border": "5px solid orange"});
+                        img_preview.css({"border-radius": "10px"});
+                    }
+                    if (media_type == "2") {
+                        video_preview.show();
+                        video_preview.css({"border": "5px solid orange"});
+                        video_preview.css({"border-radius": "10px"});
+                        video_preview.attr("src", e.target.result);
+                        video_preview.load();
+                        video_preview.play();
+
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+    </script>
+    <script src="//bootstrap-tagsinput.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+{% endblock custom_js %}
+
+
+{% block foot %} {% include 'front/footer.html' %}  {% endblock %}
+{% block js %} {% include 'front/js.html' %}  {% endblock %}

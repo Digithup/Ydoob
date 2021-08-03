@@ -57,7 +57,7 @@ class AdminLogin(View):
                     return redirect(redirect_path)
 
                 else:
-                    return redirect("/admin/")
+                    return redirect("admin/")
 
             else:
                 print("error")
@@ -136,7 +136,7 @@ class AdminUserCreate(View):
 class AdminUserEdit(UpdateView):
     model = User
     fields = '__all__'
-    template_name = 'users/user-edit.html'
+    template_name = 'users/admin-user-edit.html'
     success_url = reverse_lazy('core:AdminUsersList')
 
 

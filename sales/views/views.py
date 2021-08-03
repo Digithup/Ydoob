@@ -6,6 +6,7 @@ from django.utils.crypto import get_random_string
 from catalog.models.models import Products, Categories, ProductVariantItems
 
 from sales.models.order import ShopCart, Order, OrderForm, OrderProduct, ShopCartForm
+from user.models import User
 
 
 def index(request):
@@ -96,10 +97,10 @@ def orderproduct(request):
     shopcart = ShopCart.objects.filter(user_id=current_user.id)
     total = 0
     for rs in shopcart:
-        if rs.product.variant == 'None':
+        if rs.variant == 'None':
             total += rs.product.price * rs.quantity
         else:
-            total += rs.variant.price * rs.quantity
+            total += int(rs.product.price * rs.quantity)
 
     if request.method == 'POST':  # if there is a post
         form = OrderForm(request.POST)
@@ -119,6 +120,7 @@ def orderproduct(request):
             data.ip = request.META.get('REMOTE_ADDR')
             ordercode= get_random_string(5).upper() # random cod
             data.code =  ordercode
+            print(request)
             data.save() #
 
 
@@ -141,8 +143,9 @@ def orderproduct(request):
                     product.amount -= rs.quantity
                     product.save()
                 else:
-                    variant = Variants.objects.get(id=rs.product_id)
+                    variant = ProductVariantItems.objects.get(id=rs.product_id)
                     variant.quantity -= rs.quantity
+                    print(request)
                     variant.save()
                 #************ <> *****************
 

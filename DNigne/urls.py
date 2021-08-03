@@ -22,6 +22,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 import core
+from core.views.users import AdminLogin
 from localization import views
 
 urlpatterns = [
@@ -35,6 +36,8 @@ urlpatterns = [
 ]
 
 urlpatterns += i18n_patterns(
+
+
     path('admin/', admin.site.urls ),
     path('', include('user.urls'), name='user'),
     path('', include('core.urls'), name='core'),
@@ -44,12 +47,14 @@ urlpatterns += i18n_patterns(
     path('', include('sales.urls'), name='sales'),
     path('', include('vendors.urls'), name='vendors'),
 
+
     path('search/', include('haystack.urls'), name='haystack'),
     # USER URL
     path('ckeditor/', include('ckeditor_uploader.urls')),
     # LOGIN URL
     # API URL
     path('api-auth/', include('rest_framework.urls')),
+    path("select2/", include("django_select2.urls")),
     prefix_default_language=True,
 )
 

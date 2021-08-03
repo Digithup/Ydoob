@@ -1,0 +1,19 @@
+<form method="post" action="{% url 'user:UpdateAddress' form.instance.pk %}" class="js-book-update-form">
+  {% csrf_token %}
+
+  <div class="modal-header">
+    <button type="button" class="btn btn-classic" data-bs-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">Update Address</h4>
+  </div>
+  <div class="modal-body">
+    {% include 'users/includes/partial_book_form.html' %}
+  </div>
+  <div class="modal-footer">
+   <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+    <button type="submit" class="btn btn-primary">Update Address</button>
+  </div>
+</form>

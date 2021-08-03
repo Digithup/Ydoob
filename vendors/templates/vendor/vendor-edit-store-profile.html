@@ -398,31 +398,7 @@
         }
 
 
-        $(".submit_btn").click(function () {
-            var form = new FormData($("#myform")[0]);
-            form.append("long_desc", tinyMCE.activeEditor.getContent());
 
-            //AJAX CODE
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function () {
-                if (xhr.status == 200) {
-                    console.log(xhr.responseText);
-                }
-            }
-            xhr.open("POST", "{% url 'core:Product_add' %}", true);
-            $("#progressbar").show();
-
-            //UPDATING PROGRESS BAR
-            xhr.upload.addEventListener("progress", function (ev) {
-                if (ev.lengthComputable) {
-                    var percentage = (ev.loaded / ev.total * 100 | 0);
-                    $("#progressbar").css({"width": "" + percentage + "%"}).text("Uploading .." + percentage + "%");
-                    console.log(percentage);
-                }
-            });
-
-            xhr.send(form);
-        })
 
     </script>
     <script src="//bootstrap-tagsinput.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>

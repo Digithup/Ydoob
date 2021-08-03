@@ -1,12 +1,12 @@
 from django import forms
-from django.contrib.auth.forms import ReadOnlyPasswordHashField, UserCreationForm
-from django.urls import reverse_lazy
 from django.contrib.auth import (
     authenticate,
-    get_user_model,
-    login,
-    logout
+    get_user_model
 )
+from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.urls import reverse_lazy
+
+from user.models import UserAddress
 
 User = get_user_model()
 
@@ -65,6 +65,29 @@ class UserAdminChangeForm(forms.ModelForm):
         # This is done here, rather than on the field, because the
         # field does not have access to the initial value
         return self.initial["password"]
+
+
+class UserUpdateProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        # fields = '__all__'
+        fields = ['first_name', 'last_name', 'facebook', 'instagram', 'twitter', 'youtube', 'about']
+
+
+class UserUpdateImageForm(forms.ModelForm):
+    class Meta:
+        model = User
+        # fields = '__all__'
+        fields = ['image', ]
+
+
+class UserUpdateAddressForm(forms.ModelForm):
+    class Meta:
+        model = UserAddress
+        fields = ['address_title', 'slug','first_name']
+        # fields = '__all__'
+        exclude = ['user', ]
+        # fields = ['image',]
 
 
 class GuestForm(forms.Form):
@@ -174,6 +197,3 @@ class CustomerRegisterForm(forms.ModelForm):
             user.save()
 
         return user
-
-
-

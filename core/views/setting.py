@@ -2,13 +2,20 @@ from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DeleteView
 
-from core.forms.seeting_forms import SettingAddForm, SettingLangAddForm
-from core.models.setting import Setting, SettingLang, SettingMedia
+from core.forms.setting import SettingLangForm, SettingForm
+from core.models.setting import Setting, SettingLang
 from localization.models import Language
 
 
 # Create your views here.
+
+class AdminSetting(ListView):
+    model = Setting
+
+    template_name = 'setting/admin-setting.html'
 
 
 def setting(request):
@@ -76,7 +83,7 @@ def add_setting(request):
             filename = fs.save(media_content.name, media_content)
             media_url = fs.url(filename)
 
-            setting_media = SettingMedia(setting_id=setting_obj, media_type=media_type_list[i],
+            setting_media = Setting(setting_id=setting_obj, media_type=media_type_list[i],
                                          media_content=media_url)
             setting_media.save()
             i = i + 1
@@ -123,11 +130,11 @@ def update_setting(request):
     try:
         setting = Setting.objects.first()
         lang_setting = SettingLang.objects.first()
-        forms = SettingAddForm(instance=setting)
-        lang_form = SettingLangAddForm
+        forms = SettingForm(instance=setting)
+        lang_form = SettingLangForm
         if request.method == 'POST':
-            forms = SettingAddForm(request.POST, request.FILES, instance=setting)
-            lang_form = SettingLangAddForm(request.POST)
+            forms = SettingForm(request.POST, request.FILES, instance=setting)
+            lang_form = SettingLangForm(request.POST)
             if forms.is_valid() and lang_form.is_valid():
                 lang_form.save(commit=False)
                 forms.save(commit=False)
@@ -143,11 +150,11 @@ def update_setting(request):
     except Setting.DoesNotExist:
         setting = None
 
-    forms = SettingAddForm(instance=setting)
-    lang_form = SettingLangAddForm
+    forms = SettingForm(instance=setting)
+    lang_form = SettingLangForm
     if request.method == 'POST':
-        forms = SettingAddForm(request.POST, request.FILES, instance=setting)
-        lang_form = SettingLangAddForm(request.POST)
+        forms = SettingForm(request.POST, request.FILES, instance=setting)
+        lang_form = SettingLangForm(request.POST)
         if forms.is_valid() and lang_form.is_valid():
             lang_form.save(commit=False)
             forms.save(commit=False)
@@ -160,3 +167,11 @@ def update_setting(request):
     }
 
     return render(request, 'setting.html', context)
+
+
+class SettingDelete(DeleteView):
+    model = Setting
+    fields = '__all__'
+    success_url = reverse_lazy('core:AdminSetting')
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)

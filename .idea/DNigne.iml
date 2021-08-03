@@ -24,6 +24,7 @@
     <orderEntry type="library" name="tinymce" level="application" />
     <orderEntry type="library" name="ionicons" level="application" />
     <orderEntry type="library" name="bootstrap-tagsinput" level="application" />
+    <orderEntry type="library" name="@ttskch/select2-bootstrap4-theme" level="application" />
   </component>
   <component name="PackageRequirementsSettings">
     <option name="removeUnused" value="true" />

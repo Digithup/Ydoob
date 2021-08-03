@@ -26,7 +26,7 @@
                         <h3>Language List
                             <small>
                                 <ol class="breadcrumb pull-left">
-                                    <li class="breadcrumb-item"><a href="{% url 'core:admin_index' %}"><i data-feather="home"></i></a></li>
+                                    <li class="breadcrumb-item"><a href="{% url 'core:AdminIndex' %}"><i data-feather="home"></i></a></li>
                                  <li class="breadcrumb-item"><a href="{% url 'rosetta-file-list' po_filter=po_filter %}">{% trans "Transltion" %}</a></li>
 
                                     <li class="breadcrumb-item active">{% block pagetitle %}{{block.super}}{{ rosetta_i18n_lang_name }}({{ rosetta_i18n_pofile.percent_translated }}%){% endblock %}</li>

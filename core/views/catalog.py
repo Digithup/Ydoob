@@ -4,8 +4,8 @@ import json
 from django.contrib import messages
 from django.core import serializers
 from django.core.files.storage import FileSystemStorage
-from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect, request
+from django.db.models import Q, Count
+from django.http import HttpResponse, HttpResponseRedirect, request, JsonResponse
 from django.shortcuts import render
 # Create your views here.
 from django.urls import reverse_lazy, reverse
@@ -15,10 +15,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DeleteView, DetailView, UpdateView, CreateView
 
 from DNigne.settings import BASE_URL
-from catalog.forms.forms import CategoryAddForm, ProductsForm, ProductMediaForm
+from catalog.forms.forms import CategoryAddForm, ProductsForm, ProductMediaForm, AttributesDetailsForm, \
+    OptionsDetailsForm
 from catalog.models.models import Categories, Products, ProductMedia, ProductTags, \
-    ProductTransaction
-from catalog.models.product_options import Manufacturer, FiltersGroup, Filters, AttributesGroup, Attributes
+    ProductTransaction, AttributesDetails, OptionsDetails
+from catalog.models.product_options import Manufacturer, FiltersGroup, Filters, AttributesGroup, Attributes, Options, \
+    OptionsType
 from core.forms.forms import SearchForm
 from core.models.setting import Setting
 from localization.models import Language
@@ -26,8 +28,7 @@ from user.admin import User
 from vendors.models import Store
 
 
-def index(request):
-
+def AdminIndex(request):
     categories = Categories.objects.all()
     products = Products.objects.all()
     store = Store.objects.all()
@@ -50,11 +51,9 @@ def index(request):
 
 
 def categories(request):
-    categories = Categories.objects.filter(status='True')
-
+    category = Categories.objects.all().annotate(product=Count('products'))
     context = {
-        'categories': categories,
-
+        'category': category,
     }
     return render(request, 'catalog/category/admin-category.html', context)
 
@@ -156,7 +155,7 @@ class ProductsDetailView(DetailView):
 class ProductsDeleted(DeleteView):
     model = Products
     fields = '__all__'
-    success_url = reverse_lazy('core:Products_list')
+    success_url = reverse_lazy('core:ProductsList')
 
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
@@ -196,7 +195,7 @@ class ProductsList(ListView):
             products = Products.objects.all().order_by(order_by)
         product_list = []
         for product in products:
-            product_media = ProductMedia.objects.filter(product=product.id,).first()
+            product_media = ProductMedia.objects.filter(product=product.id, ).first()
             product_list.append({"product": product, "media": product_media})
 
         return product_list
@@ -209,16 +208,29 @@ class ProductsList(ListView):
         return context
 
 
+def load_option(request):
+    option_type_id = request.GET.get('option_type')
+    options = Options.objects.filter(option_type_id=option_type_id).order_by('title')
+    return render(request, 'catalog/option/option_dropdown_list_options.html', {'options': options})
 
-def ProductAdd(request):
-    # 'extra' means the number of photos that you can upload   ^
+
+def ProductAdd(request):  # sourcery skip: aug-assign, convert-to-enumerate
+    filters = Filters.objects.all()
+    manufacturer = Manufacturer.objects.all()
+    relates = Products.objects.all()
+    attributes_group = request.GET.get('attributes_group')
+    attribute = Attributes.objects.all()
+    option_type = OptionsType.objects.all()
+    option = Options.objects.all()
+
     if request.method == "POST":
-
         print(request)
         product_form = ProductsForm(request.POST or None, request.FILES or None)
         media_form = ProductMediaForm(request.POST or None, request.FILES or None)
+        attribute_form = AttributesDetailsForm(request.POST or None, request.FILES or None)
+        option_form = OptionsDetailsForm(request.POST or None, request.FILES or None)
 
-        if product_form.is_valid() and media_form.is_valid():
+        if product_form.is_valid() and media_form.is_valid() and attribute_form.is_valid() and option_form.is_valid():
             print(request.POST)
             product_created = True
             seller = request.user.id
@@ -235,31 +247,63 @@ def ProductAdd(request):
             weight = product_form.cleaned_data['weight']
             length = product_form.cleaned_data['length']
             status = product_form.cleaned_data['status']
+            filters = request.POST.getlist('filter')
+            manufacturers = request.POST.getlist('manufacturer')
+            relates = request.POST.getlist('related')
+            attributes = request.POST.getlist('attribute')
+            attribute_details = request.POST.getlist('attribute_detail')
+            options = request.POST.getlist('option')
+            option_details = request.POST.getlist('option_detail')
             slug = product_form.cleaned_data['slug']
             media_content_list = request.FILES.getlist("image")
-
             category = Categories.objects.get(title=category)
+
             seller = User.objects.get(id=seller)
-
             product_form = None
-
             if not product_form:
 
                 print(request)
                 print(request.POST)
 
-                product_form = Products(seller=seller, category=category, title=title,
-                                        long_desc=long_desc,
+                product_form = Products(seller=seller, category=category, title=title, long_desc=long_desc,
                                         model=model, brand=brand, price=price, quantity=quantity,
                                         out_of_stock_status=out_of_stock_status, keyword=keyword,
-
-                                        requires_shipping=requires_shipping, weight=weight, length=length,
-                                        status=status,
-                                        slug=slug)
+                                        requires_shipping=requires_shipping, weight=weight,
+                                        length=length, status=status, slug=slug)
 
                 product_form.save()
-                i = 0
+                j = 0
+                for filter in filters:
+                    product_form.filter.add(filter)
+                    j = j + 1
+                k = 0
+                for manufacturer in manufacturers:
+                    product_form.manufacturer.add(manufacturer)
+                    k = k + 1
+                r = 0
+                for related in relates:
+                    product_form.related.add(related)
+                    r = r + 1
 
+                a = 0
+                for attribute_detail in attribute_details:
+                    attribute_form = AttributesDetails(product=product_form, attribute_detail=attribute_detail)
+                    attribute_form.save()
+                    a=a+1
+                b=0
+                for attribute in attributes:
+                    attribute_form.attribute.add(attribute)
+                    b=b+1
+                c=0
+                for option_detail in option_details:
+                    option_form = OptionsDetails(product=product_form, option_detail=option_detail)
+                    option_form.save()
+                    c=c+1
+                d=0
+                for option in options:
+                    option_form.option.add(option)
+                    d = d + 1
+                i = 0
                 for image in media_content_list:
                     media_form = ProductMedia(product=product_form,
                                               Image=image)
@@ -280,15 +324,21 @@ def ProductAdd(request):
     else:
 
         product_form = ProductsForm()
-
+        attribute_form = AttributesDetailsForm()
         media_form = ProductMediaForm()
+        option_form = OptionsDetailsForm()
         # return redirect(reverse('core:ProductAdd'))
 
     return render(request, 'catalog/product/add-product.html',
-                  {'product_form': product_form, 'media_form': media_form})
+                  {'manufacturer': manufacturer, 'product_form': product_form, 'media_form': media_form,
+                   'filter': filters, 'option_type': option_type,
+                   'relates': relates, 'attributes_group': attributes_group, 'attribute': attribute,
+                   'attribute_form': attribute_form, 'option_form': option_form}
+                  )
 
     # return HttpResponse("OK")
     # return redirect(reverse('vendors:ProductsList'))
+
 
 class ProductUpdate(View):
 
@@ -418,12 +468,11 @@ def to_json(self, objects):
 
 @csrf_exempt
 def file_upload(request):
-    file=request.FILES["file"]
-    fs=FileSystemStorage()
-    filename=fs.save(file.name,file)
-    file_url=fs.url(filename)
-    return HttpResponse('{"location":"'+BASE_URL+''+file_url+'"}')
-
+    file = request.FILES["file"]
+    fs = FileSystemStorage()
+    filename = fs.save(file.name, file)
+    file_url = fs.url(filename)
+    return HttpResponse('{"location":"' + BASE_URL + '' + file_url + '"}')
 
 
 ############## Search   ################
@@ -432,7 +481,7 @@ def search(request):
     if request.method == 'POST':  # check post
         form = SearchForm(request.POST)
         if form.is_valid():
-            query = form.cleaned_data['query']  # get form input data
+            query = form.cleaned_data['filter']  # get form input data
             catid = form.cleaned_data['catid']
             if catid == 0:
                 products = Products.objects.filter(
@@ -446,6 +495,17 @@ def search(request):
             return render(request, 'search/search.html', context)
 
     return HttpResponseRedirect('/')
+
+
+def autocomplete(request):
+    if 'term' in request.GET:
+        qs = Products.objects.filter(title__icontains=request.GET.get('term'))
+        titles = list()
+        for product in qs:
+            titles.append(product.title)
+        # titles = [product.title for product in qs]
+        return JsonResponse(titles, safe=False)
+    return render(request, 'core/home.html')
 
 
 def search_auto(request):
@@ -478,8 +538,9 @@ class ManufacturerListView(ListView):
         return context
 
 
-class ManufacturerDetailView(DetailView):
+class ManufacturerDetail(DetailView):
     model = Manufacturer
+    context_object_name = 'manufacturer'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -729,6 +790,118 @@ class DeleteAttribute(DeleteView):
     model = Attributes
     fields = '__all__'
     success_url = reverse_lazy('core:Attributes')
+
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)
+
+
+############## Options  #######################
+
+class OptionsTypeListView(ListView):
+    model = OptionsType
+    template_name = 'catalog/option/admin-option.html'
+    paginate_by = 100  # if pagination is desired
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+
+class OptionsTypeDetailView(DetailView):
+    model = OptionsType
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+
+class AddOptionsType(CreateView):
+    model = OptionsType
+    fields = '__all__'
+    template_name = 'catalog/option/add-option-type.html'
+    success_url = reverse_lazy('core:Options')
+
+
+class EditOptionsType(UpdateView):
+    model = OptionsType
+    fields = '__all__'
+    template_name = 'catalog/option/edit-option.html'
+    success_url = reverse_lazy('core:Attributes')
+
+
+class DeleteOptionsType(DeleteView):
+    model = OptionsType
+    fields = '__all__'
+    success_url = reverse_lazy('core:Options')
+
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)
+
+
+class OptionsListView(ListView):
+    model = Options
+    template_name = 'catalog/option/admin-option.html'
+    paginate_by = 100  # if pagination is desired
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+
+class OptionDetailView(DetailView):
+    model = Options
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+
+class AddOption(View):
+    def get(self, request, *args, **kwargs):
+        print(request)
+        options_type = OptionsType.objects.all()
+
+        return render(request, "catalog/option/add-option.html",
+                      {"options_type": options_type, })
+
+    print(request)
+
+    def post(self, request, *args, **kwargs):
+        option_type = request.POST.get("option_type")
+        sort_order = request.POST.get("sort_order")
+        title_list = request.POST.getlist("title[]")
+        sort_order_list = request.POST.getlist("sort[]")
+        print(request.POST)
+
+        options_type = OptionsType(title=option_type, sort_order=sort_order)
+        options_type.save()
+
+        j = 0
+        for title_title in title_list:
+            option = Options(title=title_title, sort_order=sort_order_list[j],
+                             option_type=options_type)
+            option.save()
+            j = j + 1
+
+        # return HttpResponse("OK")
+        return HttpResponseRedirect(reverse_lazy('core:Options'))
+
+
+class EditOption(UpdateView):
+    model = Options
+    fields = '__all__'
+    template_name = 'catalog/option/edit-option.html'
+    success_url = reverse_lazy('core:Options')
+
+
+class DeleteOption(DeleteView):
+    model = Options
+    fields = '__all__'
+    success_url = reverse_lazy('core:Options')
 
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)

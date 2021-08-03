@@ -12,13 +12,11 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="header-contact">
-                        <ul> {% if  setting_data.lang  == LANGUAGE_CODE %}
-                            <li>Welcome to Our store {{ setting_data.title }}</li>
-                        {% else %}
-                            <li>{% translate 'Welcome to Our store' %} {{ setting_data_ar.title }} </li>
-                        {% endif %}
 
-                            <li><i class="fa fa-phone" aria-hidden="true"></i>Call Us: {{ setting.phone }}</li>
+                        <li>Welcome to Our store &nbsp;{{ setting_data.title }}</li>
+
+
+                        <li><i class="fa fa-phone" aria-hidden="true"></i>Call Us: &nbsp;{{ setting.phone }}</li>
                         </ul>
                     </div>
                 </div>
@@ -29,7 +27,7 @@
                         <li class="onhover-dropdown mobile-account"><i class="fa fa-user" aria-hidden="true"></i>
                             {% if user.is_authenticated %} {{ user.first_name }}
                                 <ul class="onhover-show-div">
-                                    <li><a href="">Profile</a>
+                                    <li><a href="{% url 'user:UserProfile' user.slug %}">Profile</a>
                                     <li>
                                     <li>
                                     <li class="onhover-show">
@@ -85,8 +83,8 @@
                             </a>
                         </div>
                         <div class="brand-logo">
-                            <a href="{% url 'home:index' %}"><img src="{{ setting_media.media_content }}"
-                                                                  height="10px" width="10px"
+                            <a href="{% url 'home:index' %}"><img src="{{ setting.image.url }}"
+                                                                  height="50px" width="100px"
                                                                   class="img-fluid blur-up lazyload" alt=""></a>
                         </div>
                     </div>
@@ -113,80 +111,75 @@
                                                                                                 onclick="openSearch()"></i>
                                         </div>
                                     </li>
-                                    <li class="onhover-div mobile-setting">
-                                        <div><img src="{% static '' %}images/icon/setting.png"
-                                                  class="img-fluid blur-up lazyload" alt=""> <i
-                                                class="ti-settings"></i></div>
-                                        <div class="show-div setting">
-                                            <h6>language</h6>
-                                            <ul>
-                                                <div class="lan-selector">
-                                                    <form action="{% url 'selectlanguage' %}"
-                                                          method="post">{% csrf_token %}
-                                                        <input name="next" type="hidden" value="{{ redirect_to }}">
-                                                        <select class="selectpicker" name="language"
-                                                                style="width: auto;" onchange="this.form.submit()">
-                                                            {% get_current_language as LANGUAGE_CODE %}
-                                                            {% get_available_languages as LANGUAGES %}
-                                                            {% get_language_info_list for LANGUAGES as languages %}
-                                                            {% for language in languages %}
-                                                                <option value="{{ language.code }}"
-                                                                        {% if language.code == LANGUAGE_CODE %}
-                                                                        selected{% endif %}>
-                                                                    {{ language.name_local }} ({{ language.code }})
-                                                                </option>
-                                                            {% endfor %}
-                                                        </select>
+                                    <li class="onhover-dropdown"><a class="txt-dark" href="#">
+                                        <h3>{{ request.LANGUAGE_CODE }}</h3>
+                                        <ul class="language-dropdown onhover-show-div p-20">
+                                            <div class="lan-selector">
+                                                <form action="{% url 'set_language' %}" method="post" id="language-form"
+                                                      name="language-form">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="language" id="language" value=""/>
+                                                </form>
+                                                <script>
+                                                    function set_language(code) {
+                                                        $('#language').val(code);
+                                                        $('#language-form').submit();
+                                                    }
+                                                </script>
 
-                                                    </form>
-                                                </div>
-                                            </ul>
-                                            <h6>currency</h6>
-                                            <ul class="list-inline">
-                                                <li><a href="#">euro</a></li>
-                                                <li><a href="#">rupees</a></li>
-                                                <li><a href="#">pound</a></li>
-                                                <li><a href="#">doller</a></li>
-                                            </ul>
-                                        </div>
+                                                <li>{% for language in index_language %}
+                                                    <ul>
+                                                        <a href="javascript:set_language('{{ language.code }}')"><img
+                                                                src="{{ language.image.url }} "
+                                                                height="25px" width="25px"> {{ language.name }}
+                                                        </a><hr>{% endfor %}</ul>
+                                                </li>
+
+
+                                            </div>
+                                        </ul>
                                     </li>
+
                                     <li class="onhover-div mobile-cart">
                                         {% load myapptags %}
                                         {% shopcartcount user.id as count %}
-                                        <div></span><img src="{% static '' %}images/icon/cart.png"
-                                                         class="img-fluid blur-up lazyload" alt=""> <i
-                                                class="ti-shopping-cart"></i><span
-                                                class="cart_qty_cls">{{ count }}</span></div>
+                                        <div><img src="{% static '' %}images/icon/cart.png"
+                                                  class="img-fluid blur-up lazyload" alt=""> <i
+                                                class="ti-shopping-cart"></i></div>
+                                        <span
+                                                class="cart_qty_cls">{{ count }}</span>
 
-                                        <ul class="show-div shopping-cart">
+                                        <ul class="show-div shopping-cart row">
                                             <li>
                                                 {% for rs in shopcart %}
                                                     {% with product=rs.product %}
-                                                        <div class="media">
-                                                            {% for rm in product.productmedia_set.all %}
-                                                                <a href="#"><img alt="" height="60px" width="80px"
-                                                                                 class="mr-3"
-                                                                                 src="{{ rm.Image.url }}"></a>
-                                                            {% endfor %}
-                                                            <div class="media-body">
-                                                                <a href="#">
-                                                                    <h4>{{ products.title }}</h4>
-                                                                </a>
-                                                                <h4>
-                                                                    <span>{{ rs.quantity }} x $ {{ product.price }}</span>
-                                                                </h4>
-                                                            </div>
-                                                        </div>
+                                                        <div class="media ">
+                                                        {% for rm in product.productmedia_set.all %}
 
+                                                            <ul><a href="#"><img alt="" height="20px" width="40px"
+                                                                                 class="mr-3 img-box"
+                                                                                 src="{{ rm.Image.url }}">{% endfor %}
+                                                    </a></ul>
 
+                                                        <div class="media-body col-md-4">
+                                                            <a href="#">
+                                                                <h4>{{ product.title }}</h4>
+                                                            </a>
+                                                            <h4>
+                                                                <span>{{ rs.quantity }} x $ {{ product.price }}</span>
+                                                            </h4>
+                                                        </div> {% endwith %}
 
-                                                    {% endwith %}
-                                                {% endfor %}
-                                            <li>
-                                                <div class="total">
-                                                    <h5>subtotal : <span>{{ rs.total }}</span></h5>
                                                 </div>
-                                            </li>
+                                                    <li>
+
+                                                {% endfor %}
+                                                <div class="total">
+                                                    <h5>subtotal : <span>{{ total }}</span></h5>
+                                                </div>
+                                                </li>
+
+
                                             <li>
                                                 <div class="buttons"><a href="{% url 'sales:ShopCart' %}"
                                                                         class="view-cart">view

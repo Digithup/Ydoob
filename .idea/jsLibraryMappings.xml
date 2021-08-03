@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="file://$PROJECT_DIR$" libraries="{bootstrap-tagsinput, ionicons, tinymce}" />
+    <file url="file://$PROJECT_DIR$" libraries="{@ttskch/select2-bootstrap4-theme, bootstrap-tagsinput, ionicons, tinymce}" />
   </component>
 </project>

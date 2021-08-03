@@ -1,13 +1,15 @@
 from catalog.models.models import Products, ProductMedia
 from catalog.models.product_options import Manufacturer
 from core.models.design import SliderMedia, Banners
-from core.models.setting import Setting, SettingMedia, SettingLang
+from core.models.setting import Setting, SettingLang
 
 from localization.models import Language
 from vendors.models import Store, StoreMedia
 
 
+
 def home_processors(request):
+
     products = Products.objects.all()
     product_list = []
     for product in products:
@@ -37,49 +39,48 @@ def home_processors(request):
             'vendor_store':vendor_store,
             'vendor_products_list':vendor_products_list,
             'setting': Setting.objects.last(),
-            'setting_media': SettingMedia.objects.last(),
+
             'main_slider': SliderMedia.objects.filter(slider_id__group__title='home'),
             'banner_left': Banners.objects.filter(media_location='left'),
             'banner_right': Banners.objects.filter(title='right'),
             'banner_down': Banners.objects.filter(title='down'),
             'manufacture': Manufacturer.objects.filter(status='True'),
-            'setting_data': SettingLang.objects.all(),
-            #'setting_data_en': SettingLang.objects.get(lang='en'),
-            #'setting_data_ar': SettingLang.objects.get(lang='ar'),
+            'setting_data': SettingLang.objects.get(lang=request.LANGUAGE_CODE),
             'index_language': Language.objects.all(),
             ####### products###########
             'product_list' : product_list , # New Products,
-            'side_products': ProductMedia.objects.all().order_by('id')[:3],  # New Products
-            'side_products2': ProductMedia.objects.all().order_by('id')[:3],  # New Products
+            'side_products': product_list,  # New Products
+            'side_products2': product_list,  # New Products
             'new_products' : product_list , # New Products
-            'new_products_updated': Products.objects.all().order_by('created_at')[:6],  # New Products Update
-            'new_products_req': Products.objects.all().order_by('-id')[:10],  # New Products add
+            'new_products_updated': product_list,  # New Products Update
+            'new_products_req': product_list,  # New Products add
             'new_featured': product_list,  # Featured Products
-            'best_products' : Products.objects.all().order_by('?')[:6],  # Best Sellers
-            'categories_product': product_list # categories_product
+            'best_products' : product_list,  # Best Sellers
+            'categories_product':product_list, # categories_product
+            'products_related ': product_list,  # related_product
         }
     except BaseException as e:
         return {'setting': Setting.objects.last(),
-                'setting_media': SettingMedia.objects.last(),
+
                 'main_slider': SliderMedia.objects.filter(slider_id__group__title='home'),
                 'banner_left': Banners.objects.filter(media_location='left'),
                 'banner_right': Banners.objects.filter(title='right'),
                 'banner_down': Banners.objects.filter(title='down'),
                 'manufacture': Manufacturer.objects.filter(status='True'),
                 'setting_data': SettingLang.objects.all(),
-                # 'setting_data_en': SettingLang.objects.get(lang='en'),
-                # 'setting_data_ar': SettingLang.objects.get(lang='ar'),
+
                 'index_language': Language.objects.all(),
                 ####### products###########
                 'products_media': Products.objects.all(),  # New Products,
                 'side_products': product_list,  # New Products
-                'side_products2': Products.objects.all().order_by('product_id__title')[:3],  # New Products
+                'side_products2': product_list,  # New Products
                 'new_products': product_list,  # New Products
-                'new_products_updated': Products.objects.all().order_by('created_at')[:6],  # New Products Update
-                'new_products_req': Products.objects.all().order_by('-id')[:10],  # New Products add
+                'new_products_updated': product_list,  # New Products Update
+                'new_products_req': product_list,  # New Products add
                 'new_featured': product_list,  # Featured Products
-                'best_products': Products.objects.all().order_by('?')[:6],  # Best Sellers
-                'categories_product': product_list  # categories_product
+                'best_products': product_list,  # Best Sellers
+                'categories_product': product_list, # categories_product
+                'products_related ': product_list,  # related_product
 
 
                 },print(e);

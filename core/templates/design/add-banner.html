@@ -18,7 +18,7 @@
                     </div>
                     <div class="col-lg-6">
                         <ol class="breadcrumb pull-right">
-                            <li class="breadcrumb-item"><a href="{% url 'core:admin_index' %}"><i
+                            <li class="breadcrumb-item"><a href="{% url 'core:AdminIndex' %}"><i
                                     data-feather="home"></i></a>
                             </li>
 
@@ -335,7 +335,7 @@
                     console.log(xhr.responseText);
                 }
             }
-            xhr.open("POST", "{% url 'core:Product_add' %}", true);
+            xhr.open("POST", "{% url 'core:BannerCreate' %}", true);
             $("#progressbar").show();
 
             //UPDATING PROGRESS BAR

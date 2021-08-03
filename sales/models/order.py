@@ -28,7 +28,7 @@ class ShopCart(models.Model):
 
     @property
     def amount(self):
-        return (self.quantity * self.product.price)
+        return (int(self.quantity) * int(self.product.price))
 
     @property
     def varamount(self):

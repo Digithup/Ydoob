@@ -1,33 +1,30 @@
 {% extends 'admin/adminbase.html' %}
+{% load widget_tweaks %}
 {% load crispy_forms_filters %}
 {% load static %}
 {% load i18n %}
-
-
-{% load widget_tweaks %}
 {% block body %}
 
     <div class="page-body">
-
     <!-- Container-fluid starts-->
     <div class="container-fluid">
         <div class="page-header">
             <div class="row">
                 <div class="col-lg-6">
                     <div class="page-header-left">
-                        <h3>Add Products
+                        <h3>{% translate 'Add Products' %}
                             <small>
-                                {% if not edit %}🆕 Add a new Learned Language {% else %} ✏ Edit a
-                                    Language{% endif %}</small>
+                                {% if not edit %}🆕 Add a new product {% else %} ✏ Edit a
+                                    product{% endif %}</small>
                         </h3>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <ol class="breadcrumb pull-right">
-                        <li class="breadcrumb-item"><a href="{% url 'core:admin_index' %}"><i
+                        <li class="breadcrumb-item"><a href="{% url 'core:AdminIndex' %}"><i
                                 data-feather="home"></i></a></li>
-                        <li class="breadcrumb-item">Physical</li>
-                        <li class="breadcrumb-item active">Add Product</li>
+                        <li class="breadcrumb-item">{% translate 'Physical' %}</li>
+                        <li class="breadcrumb-item active">{% translate 'Add Product' %}</li>
                     </ol>
                 </div>
             </div>
@@ -35,73 +32,94 @@
     </div>
     <!-- Container-fluid Ends-->
 
-
     <!-- Container-fluid starts-->
     <div class="container-fluid">
         <div class="row product-adding">
             <div class="col-xl-12">
+                <form class="needs-validation repeater" enctype="multipart/form-data"
+                      action="{% url 'core:ProductAdd' %}" data-options-url="{% url 'core:ajax_load_options' %}"
+                      name="ProductForm" id="ProductForm"
+                      method="post">
+                    {% csrf_token %}
+                    <div class="card">
 
-                <div class="card">
-                    <div class="card-header"><h4 class="text-danger" id="errorHeader"></h4></div>
-                    <form class="needs-validation" enctype="multipart/form-data"
-                          action="{% url 'core:ProductAdd' %}" name="ProductForm" id="ProductForm"
-                          method="post">
-                        {% csrf_token %}
+
+                        <div class=" alert-info" id="errorHeader"></div>
+                        <div>
+                            {% if product_form.errors %}
+
+                                {% for error_field, error_message in product_form.errors.items %}
+
+                                    <div class="alert alert-danger">
+                                        {{ error_field|striptags }}: {{ error_message|striptags }}
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+
+                            {% endif %}
+                            {% if media_form.errors %}
+                                {% for error_field, error_message in media_form.errors.items %}
+
+                                    <div class="alert alert-danger">
+                                        {{ error_field|striptags }}: {{ error_message|striptags }}
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+
+                            {% endif %}
+                            {% if attribute_form.errors %}
+                                {% for error_field, error_message in attribute_form.errors.items %}
+
+                                    <div class="alert alert-danger">
+                                        {{ error_field|striptags }}: {{ error_message|striptags }}
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+
+                            {% endif %}
+                         {% if option_form.errors %}
+                                {% for error_field, error_message in option_form.errors.items %}
+
+                                    <div class="alert alert-danger">
+                                        {{ error_field|striptags }}: {{ error_message|striptags }}
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+
+                            {% endif %}
 
 
+                        </div>
 
 
                         <div class="card-body">
-                            <div>
-                                {% if product_form.errors %}
 
-                                    {% for error_field, error_message in product_form.errors.items %}
-
-                                        <div class="alert alert-danger">
-                                            {{ error_field|striptags }}: {{ error_message|striptags }}
-                                            <strong>{{ error|escape }}</strong>
-                                        </div>
-                                    {% endfor %}
-
-                                {% endif %}
-                                {% if media_form.errors %}
-                                    {% for error_field, error_message in media_form.errors.items %}
-
-                                        <div class="alert alert-danger">
-                                            {{ error_field|striptags }}: {{ error_message|striptags }}
-                                            <strong>{{ error|escape }}</strong>
-                                        </div>
-                                    {% endfor %}
-
-                                {% endif %}
-
-
-                            </div>
 
                             <ul class="nav nav-tabs tab-coupon" id="myTab" role="tablist">
                                 <li class="nav-item"><a class="nav-link active show" id="general-tab"
                                                         data-toggle="tab"
                                                         href="#general" role="tab" aria-controls="general"
                                                         aria-selected="true" data-original-title=""
-                                                        title="">General</a>
+                                                        title="">{% translate 'General' %}</a>
                                 </li>
                                 <li class="nav-item"><a class="nav-link" id="data-tabs" data-toggle="tab"
                                                         href="#description"
                                                         role="tab" aria-controls="description" aria-selected="false"
-                                                        data-original-title="" title="">description</a></li>
+                                                        data-original-title=""
+                                                        title="">{% translate 'Description' %}</a></li>
                                 <li class="nav-item"><a class="nav-link" id="description-tabs" data-toggle="tab"
                                                         href="#data"
                                                         role="tab" aria-controls="data" aria-selected="false"
-                                                        data-original-title="" title="">Data</a></li>
+                                                        data-original-title="" title="">{% translate 'Data' %}</a></li>
                                 <li class="nav-item"><a class="nav-link" id="image-tabs" data-toggle="tab"
                                                         href="#image"
                                                         role="tab" aria-controls="image" aria-selected="false"
-                                                        data-original-title="" title="">Image</a></li>
+                                                        data-original-title="" title="">{% translate 'Image' %}</a></li>
 
 
                                 <li class="nav-item"><a class="nav-link" id="seo-tabs" data-toggle="tab" href="#seo"
                                                         role="tab" aria-controls="seo" aria-selected="false"
-                                                        data-original-title="" title="">SEO</a></li>
+                                                        data-original-title="" title="">{% translate 'SEO' %}</a></li>
                             </ul>
                             <div class="tab-content" id="myTabContent">
                                 <div class="tab-pane fade active show" id="general" role="tabpanel"
@@ -110,35 +128,34 @@
                                     <div class="container-fluid">
                                         <div class=" product-adding">
                                             <div class="card ">
+
                                                 <div class="card-header">
                                                     <h5>{% translate 'General' %}</h5>
                                                 </div>
-                                                <div class="card-body form ">
+                                                <div class="card-body  ">
                                                     <div class="digital-add needs-validation ">
-
 
                                                         <div class="form-group mb-3 row">
                                                             <label for="validationCustom01"
                                                                    class="col-md-4"><span>*</span>{% translate 'Product Name' %}
                                                             </label>
-                                                            <input class="form-control col-sm-4 "
-                                                                   placeholder="title"
-                                                                   id="title" type="text"
-                                                                   name="title" value=" test" required
-                                                                   oninvalid="invalidFunction(event,'title not empty')">
+                                                            <label for="title"></label><input
+                                                                class="form-control col-sm-4 "
+                                                                placeholder="title"
+                                                                id="title" type="text"
+                                                                name="title" value=" test" required
+                                                                oninvalid="invalidFunction(event,'title not empty')">
                                                         </div>
-                                                        <div class="valid-feedback">Looks good!</div>
-                                                        <div class="invalid-feedback offset-sm-4 offset-xl-3">Please
-                                                            choose Valid Code.
-                                                        </div>
+
                                                         <div class="form-group row">
                                                             <label for="validationCustom0"
                                                                    class=" col-sm-4"><span>*</span>{% translate 'Description' %}
                                                             </label>
-                                                            <textarea class="col-md-push-12 middle" content=""
-                                                                      name="long_desc" id="editor1"
-                                                                      cols="2" onemptied=""
-                                                                      rows="2"></textarea>
+                                                            <label for="editor1"></label><textarea
+                                                                class="col-md-push-12 middle" content=""
+                                                                name="long_desc" id="editor1"
+                                                                cols="2" onemptied=""
+                                                                rows="2"></textarea>
 
                                                         </div>
 
@@ -176,7 +193,7 @@
                                             <input class="form-control col-md-6"
                                                    id="validationCustom0" type="text"
                                                    name="model" value="5"
-                                                   required="">
+                                                   required="" oninvalid="">
 
 
                                         </div>
@@ -188,19 +205,19 @@
                                             <input class="form-control col-md-6"
                                                    id="validationCustom0" type="text"
                                                    name="brand" value="5"
-                                                   required="">
+                                                   required="" oninvalid="invalidFunction(event,'brand not empty')">
 
 
                                         </div>
 
 
-                                        <div class="form-group row">
+                                        <div class="form-group row ">
                                             <label for="validationCustom0"
-                                                   class="col-md-4"><span>*</span>Category</label>
-                                            <label for="title_ar"></label>
-                                            <select name="category"
-                                                    class="custom-select  col-md-6">
-
+                                                   class="col-md-4"><span>*</span>
+                                                {% translate 'Category' %} </label>
+                                            <select class="custom-select col-md-6" id="product_category" multiple
+                                                    name="category"
+                                                    style="width: 50%">
                                                 {% for value, text in product_form.category.field.choices %}
                                                     <option value="{{ value }}">{{ text }}</option>
                                                 {% endfor %}
@@ -212,10 +229,10 @@
                                             <label for="validationCustom0"
                                                    class=" col-md-4"><span>*</span>
                                                 {% translate 'Price' %}</label>
-                                            <input class="form-control col-md-6"
-                                                   id="price" type="number"
-                                                   name="price" value="5" min="0"
-                                                   required="required">
+                                            <label for="price"></label><input class="form-control col-md-6"
+                                                                              id="price" type="number"
+                                                                              name="price" value="5" min="0"
+                                                                              required="required">
                                         </div>
 
                                         <div class="form-group row">
@@ -330,7 +347,125 @@
 
                                 </div>
                                 <div class="tab-pane fade " id="data" role="tabpanel" aria-labelledby="data-tabs">
+                                    <div class="card-header"> detail</div>
+                                    <div class="card-body">
+                                        <div class="form-group row col-md-12">
+                                            <label for="validationCustom0"
+                                                   class="col-md-4"><span>*</span>
+                                                {% translate 'Product Filter' %} </label>
+                                            <select class="col-md-6" id="product_filter" multiple
+                                                    name="filter"
+                                                    style="width: 60%">
+                                                {% for value, text in product_form.filter.field.choices %}
+                                                    <option value="{{ value }}">{{ text }}</option>
+                                                {% endfor %}
+                                            </select>
 
+                                        </div>
+                                        <div class="form-group row col-md-12">
+                                            <label for="validationCustom0"
+                                                   class="col-md-4"><span>*</span>
+                                                {% translate 'Product Manufacturer' %} </label>
+                                            <select class="col-md-6" id="product_manufacturer" multiple
+                                                    name="manufacturer"
+                                                    style="width: 60%">
+                                                {% for value, text in product_form.manufacturer.field.choices %}
+                                                    <option value="{{ value }}"><img
+                                                            src="{{ value }}"/>{{ text }}
+                                                    </option>
+
+
+                                                {% endfor %}
+                                            </select>
+
+                                        </div>
+                                        <div class="form-group row col-md-12">
+                                            <label for="validationCustom0"
+                                                   class="col-md-4"><span>*</span>
+                                                {% translate 'Product Related ' %} </label>
+                                            <select class="col-md-6" id="product_related" multiple
+                                                    name="related " style="width: 60%">
+                                                {% for value, text in product_form.related.field.choices %}
+                                                    <option value="{{ value }}">{{ text }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="form-group row  col-md-12 attributes_div">
+                                            <div class="row col-md-12 attributes_div_row first_attributes">
+                                                <div class="col-md-4">
+                                                    <label for="validationCustom0"
+                                                           class=""><span>*</span>
+                                                        {% translate 'Product Attributes ' %} </label>
+                                                    <select class="custom-select attributes" id="product_attribute"
+                                                            name="attribute" style="width: 60%">
+                                                        {% for value, title in attribute_form.attribute.field.choices %}
+                                                            <option value="{{ value }}">{{ title }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>{% translate ' Attributes Detail ' %}</label>
+                                                    <input type="text" name="attribute_detail"
+                                                           class="form-control" required=""
+                                                           placeholder="Attributes Detail"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group mb-0">
+                                            <div class="product-buttons text-center">
+
+                                                <button class="btn btn-primary fa fa-plus  add_attributes"
+                                                        type="button">
+                                                </button>
+                                                <button class="btn btn-light fa fa-minus-circle  remove_attributes"
+                                                        type="button">
+
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                        <div>
+                                        <div class="form-group row  col-md-12 option_div">
+                                            <div class="row col-md-12 option_div_row first_option">
+                                                <div class="col-md-4">
+                                                    <label for="validationCustom0"
+                                                           class=""><span>*</span>
+                                                        {% translate 'Product option ' %} </label>
+                                                    <select class="custom-select attributes" id="product_option"
+                                                            name="option" style="width: 60%">
+                                                        {% for value, title in option_form.option.field.choices %}
+                                                            <option value="{{ value }}">{{ title }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>{% translate ' option Detail ' %}</label>
+                                                    <input type="text" name="option_detail"
+                                                           class="form-control" required=""
+                                                           placeholder="Attributes Detail"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group mb-0">
+                                            <div class="product-buttons text-center">
+
+                                                <button class="btn btn-primary fa fa-plus  add_option"
+                                                        type="button">
+                                                </button>
+                                                <button class="btn btn-light fa fa-minus-circle  remove_option"
+                                                        type="button">
+
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                 </div>
                                 <div class="tab-pane fade" id="option" role="tabpanel"
@@ -492,24 +627,41 @@
                             {% endif %}
                             </div>
 
-                            <div class="offset-xl-3 offset-sm-4">
-                                <button type="submit" class="btn btn-primary  ">Add</button>
-                                <a href="{% url 'core:ProductsList' %}">
-                                    <button type="button" class="btn btn-light" data-toggle="modal"
-                                            data-original-title="test" data-target="#exampleModal">Discard
-                                    </button>
-                                </a>
-
+                            <div class="form-group mb-0">
+                                <div class="product-buttons text-center">
+                                    <button type="submit" class="btn btn-primary">{% translate 'Add' %}</button>
+                                    <button type="button" href="{% url 'core:ProductsList' %} "
+                                            class="btn btn-light">{% translate 'Discard' %}</button>
+                                </div>
                             </div>
                         </div>
-                    </form>
-                </div>
+
+                    </div>
+                </form>
 
                 <!-- Container-fluid Ends-->
             </div>
         </div>
     </div>
-
+    <div class="modal" id="modelhhh" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     {% if uploaded_file_url %}
         <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
     {% endif %}
@@ -522,56 +674,17 @@
 
 
 {% block custom_js %}
-
-
-
     <script>
-        document.getElementById("title").onkeyup = function () {
+        document.getElementById("title").onchange = function () {
             document.getElementById("slug").value = document.getElementById("title").value.toLowerCase().replaceAll(" ", "-");
         }
-
 
         function invalidFunction(e, message) {
             e.preventDefault();
             document.getElementById('errorHeader').innerText = message;
+
         }
 
-
-        document.getElementById("english_registration_form").onsubmit = function () {
-            var x = document.forms["ProductForm"]["title"].value;
-            var y = document.forms["ProductForm"]["price"].value;
-            var z = document.forms["ProductForm"]["image"].value;
-
-            var submit = true;
-
-            if (x == null || x == "") {
-                nameError = "Please enter your name";
-                document.getElementById("title").innerHTML = nameError;
-                submit = false;
-            }
-
-            if (y == null || y == "") {
-                priceError = "Please enter your email";
-                document.getElementById("price_error").innerHTML = priceError;
-                submit = false;
-            }
-
-            if (z == null || z == "") {
-                telephoneError = "Please enter your telephone";
-                document.getElementById("telephone_error").innerHTML = telephoneError;
-                submit = false;
-            }
-
-            return submit;
-        }
-
-        function removeWarning() {
-            document.getElementById(this.id + "_error").innerHTML = "";
-        }
-
-        document.getElementById("title").onkeyup = removeWarning;
-        document.getElementById("price").onkeyup = removeWarning;
-        document.getElementById("image").onkeyup = removeWarning;
         $(".add_media").click(function () {
             var media_row = $(".first_media").clone();
             media_row.removeClass("first_media");
@@ -617,13 +730,115 @@
             }
         }
 
+        $(".add_attributes").click(function () {
+            var attributes_row = $(".first_attributes").clone();
+            attributes_row.removeClass("first_attributes");
+            attributes_row.find(".first_attributes").val("");
+            attributes_row.find("#product_attribute").select2({
+                theme: "classic",
+                closeOnSelect: true,
+                placeholder: 'Add Product Category',
+                minimumInputLength: 1,
+                maximumSelectionLength: 5,
+                allowClear: true,
+            });
+            attributes_row.find(".attribute_details").val("");
+            $(".attributes_div").append(attributes_row);
+        });
+        $(".remove_attributes").click(function () {
+            if ($(".attributes_div").find(".attributes_div_row").length > 1) {
+                $(".attributes_div").children().last().remove();
+            }
+        });
 
-    </script>
-    <script src="//bootstrap-tagsinput.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
-    <script>
+
+        $(".add_option").click(function () {
+            var option_row = $(".first_option").clone();
+            option_row.removeClass("first_option").val("");
+            option_row.removeClass("product_option");
+            option_row.find("#product_option").select2({
+                theme: "classic",
+                closeOnSelect: true,
+                placeholder: 'Add Product Option',
+                minimumInputLength: 1,
+                maximumSelectionLength: 5,
+                allowClear: true,
+            });
+            $(".option_div").append(option_row);
+        });
+        $(".remove_option").click(function () {
+            if ($(".option_div").find(".option_div_row").length > 1) {
+                $(".option_div").children().last().remove();
+            }
+        });
+
+
         $('input#tags').tagsinput('remove', 'some tag');
 
     </script>
+
+
+
+
+
+    <script>
+        $('#product_category').select2({
+            theme: "classic",
+            closeOnSelect: true,
+            placeholder: 'Add Product Category',
+            minimumInputLength: 1,
+            maximumSelectionLength: 1,
+            allowClear: true,
+        });
+        $('#product_filter').select2({
+            theme: "classic",
+            closeOnSelect: true,
+            placeholder: 'Add Product Filters',
+            minimumInputLength: 1,
+            maximumSelectionLength: 5,
+            allowClear: true,
+        });
+        $('#product_manufacturer').select2({
+            theme: "classic",
+            closeOnSelect: false,
+            placeholder: 'Add Product Manufacturer',
+            minimumInputLength: 1,
+            maximumSelectionLength: 1,
+            allowClear: true,
+        });
+
+
+        $('#product_related').select2({
+            theme: "classic",
+            closeOnSelect: false,
+            placeholder: 'Add Product Related',
+            minimumInputLength: 1,
+            maximumSelectionLength: 6,
+            allowClear: true,
+
+        });
+
+
+    </script>
+    <script>
+        $("#option_type").change(function () {
+            var url = $("#ProductForm").attr("data-options-url");  // get the url of the `load_cities` view
+            var optionTypeId = $(this).val();  // get the selected country ID from the HTML input
+
+            $.ajax({                       // initialize an AJAX request
+                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                data: {
+                    'option_type': optionTypeId       // add the country id to the GET parameters
+                },
+                success: function (data) {   // `data` is the return of the `load_cities` view function
+                    $("#option").html(data);  // replace the contents of the city input with the data that came from the server
+                }
+            });
+
+        });
+    </script>
+
+
 {% endblock custom_js %}
 
 {% block foot %} {% include 'admin/footer.html' %}  {% endblock %}

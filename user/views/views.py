@@ -1,37 +1,26 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.contrib.auth import login
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy, reverse
-from django.contrib import admin
-from django.contrib.auth.decorators import user_passes_test
-from django.contrib.auth.decorators import login_required
-from user.admin import UserAdmin
-from user.forms import GuestForm, UserAdminChangeForm
+from django.template.loader import render_to_string
+from django.urls import reverse_lazy
 from django.utils.http import is_safe_url
-from user.signals import user_logged_in
-from django.views.generic import CreateView, TemplateView, UpdateView
-from django.views import View, generic
+from django.views import View
+from django.views.generic import CreateView, UpdateView
 
-from django.contrib.auth import (
-    authenticate,
-    get_user_model,
-    login,
-    logout
-)
-
-from user.models import GuestEmail, User
-from user.forms import UserLoginForm, UserRegisterForm
+from user.forms import GuestForm, UserUpdateProfileForm, UserUpdateImageForm, UserUpdateAddressForm
+from user.forms import UserRegisterForm
+from user.models import GuestEmail, User, UserAddress
 
 
-
-
-def user_profile(request, id):
-    user = User.objects.get(id=id)
+def UserProfile(request, slug):
+    user = User.objects.get(id=request.user.id)
+    address = UserAddress.objects.filter(user=user)
 
     context = {'user': user,
-              }
-    return render(request, 'accounts/user_profile.html', context)
+               'address': address,
+               }
+    return render(request, 'users/user_profile.html', context)
 
 
 def user_delete(request, user_id):
@@ -41,18 +30,228 @@ def user_delete(request, user_id):
     return redirect('users:user_list')
 
 
-def update_profile(request):
+def UpdateProfile(request, slug):
     user = User.objects.get(id=request.user.id)
-    forms = UserAdminChangeForm(instance=user)
+    forms = UserUpdateProfileForm(instance=user)
     if request.method == 'POST':
-        forms = UserAdminChangeForm(request.POST, request.FILES, instance=user)
+        forms = UserUpdateProfileForm(request.POST, request.FILES, instance=user)
         if forms.is_valid():
+            first_name = forms.cleaned_data['first_name']
+            last_name = forms.cleaned_data['last_name']
+            facebook = forms.cleaned_data['facebook']
+            instagram = forms.cleaned_data['instagram']
+            twitter = forms.cleaned_data['twitter']
+            youtube = forms.cleaned_data['youtube']
+            about = forms.cleaned_data['about']
+            forms = User.objects.get(id=request.user.id)
+            forms.first_name = first_name
+            forms.last_name = last_name
+
+            forms.facebook = facebook
+            forms.instagram = instagram
+            forms.twitter = twitter
+            forms.youtube = youtube
+            forms.about = about
             forms.save()
+            return redirect('user:UserProfile', user.slug)
+        else:
+            print("Form invalid, see below error msg")
+            print(request.POST)
+            messages.error(request, "Error")
+    else:
+        context = {
+            'user': user,
+            'forms': forms
+        }
+        return render(request, 'users/UpdateProfile.html', context)
+
+
+def UpdateImage(request, slug):
+    user = User.objects.get(id=request.user.id)
+    forms = UserUpdateImageForm(instance=user)
+
+    if request.method == 'POST':
+        forms = UserUpdateImageForm(request.POST, request.FILES, instance=user)
+        if forms.is_valid():
+
+            image = request.FILES.get('image')
+
+            forms = User.objects.get(id=request.user.id)
+
+            forms.image = image
+
+            forms.save()
+            return redirect('user:UserProfile', user.slug)
+        else:
+            print("Form invalid, see below error msg")
+            print(request.POST)
+            context = {
+                'user': user,
+                'forms': forms
+            }
+            return render(request, 'users/user_profile_update_image.html', context)
+            messages.error(request, "Error")
+    else:
+        context = {
+            'user': user,
+            'forms': forms
+        }
+        return render(request, 'users/user_profile_update_image.html', context)
+
+
+def CreateAddress(request, slug):
+    user = User.objects.get(id=request.user.id)
+    user_address = UserAddress.objects.get(user=user)
+    forms = UserUpdateAddressForm()
     context = {
         'user': user,
         'forms': forms
     }
-    return render(request, 'accounts/test.html', context)
+    if request.method == 'POST':
+        forms = UserUpdateAddressForm(request.POST, request.FILES, )
+        if forms.is_valid():
+            address_title = forms.cleaned_data['address_title']
+            first_name = forms.cleaned_data['first_name']
+            last_name = forms.cleaned_data['last_name']
+            governorate = forms.cleaned_data['governorate']
+            city = forms.cleaned_data['city']
+            area = forms.cleaned_data['area']
+            street_name = forms.cleaned_data['street_name']
+            location_type = forms.cleaned_data['location_type']
+            phone = forms.cleaned_data['phone']
+            country = forms.cleaned_data['country']
+            shipping_note = forms.cleaned_data['shipping_note']
+            building_name = forms.cleaned_data['building_name']
+            floor_no = forms.cleaned_data['floor_no']
+            apartment_no = forms.cleaned_data['apartment_no']
+            nearest_landmark = forms.cleaned_data['nearest_landmark']
+            postal_code = forms.cleaned_data['postal_code']
+            print(request)
+            forms = UserAddress(address_title=address_title, first_name=first_name, last_name=last_name,
+                                governorate=governorate, city=city, area=area, street_name=street_name,
+                                location_type=location_type, phone=phone, country=country,
+                                shipping_note=shipping_note, user=user,
+                                building_name=building_name, floor_no=floor_no, apartment_no=apartment_no,
+                                nearest_landmark=nearest_landmark,
+                                postal_code=postal_code)
+
+            forms.save()
+            messages.success(request, "SUCCESS")
+            # return HttpResponseRedirect("pk")
+            # return render(request, 'users/user_profile.html')
+            return redirect('user:UserProfile', user.slug)
+        else:
+            print("Form invalid, see below error msg")
+            print(request.POST)
+            messages.error(request, "Error")
+    else:
+        user = User.objects.get(id=request.user.id)
+        forms = UserUpdateAddressForm()
+        context = {
+            'user': user,
+            'forms': forms,
+            'user_address': user_address
+        }
+        return render(request, 'users/UpdateAddress.html', context)
+    context = {
+        'user': user,
+        'forms': forms,
+        'user_address': user_address,
+    }
+    return render(request, 'users/UpdateAddress.html', context)
+
+
+def address_create(request):
+    data = dict()
+    user = User.objects.get(id=request.user.id)
+    user_address = UserAddress.objects.get(user=user)
+    if request.method == 'POST':
+        form = UserUpdateAddressForm(request.POST)
+        if form.is_valid():
+            form = UserAddress(user=user)
+            form.save()
+            data['form_is_valid'] = True
+            address = UserAddress.objects.all()
+            data['html_book_list'] = render_to_string('users/includes/partial_book_list.html', {
+                'address': address
+            })
+        else:
+            data['form_is_valid'] = False
+    else:
+        form = UserUpdateAddressForm()
+
+    context = {'form': form}
+    data['html_form'] = render_to_string('users/includes/partial_book_create.html',
+                                         context,
+                                         request=request
+                                         )
+    return JsonResponse(data)
+
+
+def UpdateAddress(request, slug):
+    user = User.objects.get(id=request.user.id)
+    user_address = UserAddress.objects.get(user=user)
+    forms = UserUpdateAddressForm()
+    context = {
+        'user': user,
+        'forms': forms
+    }
+    if request.method == 'POST':
+        forms = UserUpdateAddressForm(request.POST, request.FILES, )
+        if forms.is_valid():
+            address_title = forms.cleaned_data['address_title']
+            first_name = forms.cleaned_data['first_name']
+            last_name = forms.cleaned_data['last_name']
+            governorate = forms.cleaned_data['governorate']
+            city = forms.cleaned_data['city']
+            area = forms.cleaned_data['area']
+            street_name = forms.cleaned_data['street_name']
+            location_type = forms.cleaned_data['location_type']
+            phone = forms.cleaned_data['phone']
+            country = forms.cleaned_data['country']
+            shipping_note = forms.cleaned_data['shipping_note']
+            building_name = forms.cleaned_data['building_name']
+            floor_no = forms.cleaned_data['floor_no']
+            apartment_no = forms.cleaned_data['apartment_no']
+            nearest_landmark = forms.cleaned_data['nearest_landmark']
+            postal_code = forms.cleaned_data['postal_code']
+            print(request)
+            forms = UserAddress(address_title=address_title, first_name=first_name, last_name=last_name,
+                                governorate=governorate, city=city, area=area, street_name=street_name,
+                                location_type=location_type, phone=phone, country=country,
+                                shipping_note=shipping_note, user=user,
+                                building_name=building_name, floor_no=floor_no, apartment_no=apartment_no,
+                                nearest_landmark=nearest_landmark,
+                                postal_code=postal_code)
+
+            forms.save()
+            messages.success(request, "SUCCESS")
+            # return HttpResponseRedirect("pk")
+            # return render(request, 'users/user_profile.html')
+            return redirect('user:UserProfile', user.slug)
+        else:
+            print("Form invalid, see below error msg")
+            print(request.POST)
+            messages.error(request, "Error")
+    else:
+        user = User.objects.get(id=request.user.id)
+        forms = UserUpdateAddressForm()
+        context = {
+            'user': user,
+            'forms': forms,
+            'user_address': user_address
+        }
+        return render(request, 'users/UpdateAddress.html', context)
+    context = {
+        'user': user,
+        'forms': forms,
+        'user_address': user_address,
+    }
+    html_form = render_to_string('users/UpdateAddress.html',
+                                 context,
+                                 request=request,
+                                 )
+    return JsonResponse({'html_form': html_form})
 
 
 class AddProfile(CreateView):
@@ -68,10 +267,6 @@ class EditProfile(UpdateView):
     fields = '__all__'
     template_name = 'accounts/UpdateProfile.html'
     success_url = reverse_lazy('users:user_profile')
-
-
-
-
 
 
 # class RegisterView(CreateView):

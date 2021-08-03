@@ -21,12 +21,13 @@ class Setting(models.Model):
     )
     phone = models.IntegerField(blank=True, default='510')
     email = models.EmailField(blank=True, max_length=50, default='', null=True)
-    # image = models.ImageField(upload_to='images/store/',   default='images/store/nigne.png')
+    image = models.ImageField(upload_to='images/setting/%Y/%m/%d',   default='images/store/nigne.png')
     facebook = models.URLField(blank=True, max_length=50, default='', null=True)
     instagram = models.URLField(blank=True, max_length=50, default='', null=True)
     twitter = models.URLField(blank=True, max_length=50, default='', null=True)
     youtube = models.URLField(blank=True, max_length=50, default='', null=True)
     status = models.CharField(max_length=10, choices=STATUS, default='Enable')
+    slug = models.SlugField(unique=True)
     create_at = models.DateTimeField(auto_now=True, null=False)
     update_at = models.DateTimeField(auto_now=True)
 
@@ -37,7 +38,7 @@ class Setting(models.Model):
 
 
 class SettingLang(models.Model):
-    setting_id = models.ForeignKey(Setting, on_delete=models.CASCADE)  # many to one relation with Category
+    setting = models.ForeignKey(Setting, on_delete=models.CASCADE)  # many to one relation with Category
     lang = models.CharField(max_length=6 , default='en')
     title = models.CharField(max_length=150, null=True, default='Nigne')
     keywords = models.CharField(max_length=255, default=' ', null=True)
@@ -45,23 +46,15 @@ class SettingLang(models.Model):
     address = models.CharField(blank=True, max_length=100, default=' ', null=True)
     about = RichTextUploadingField(blank=True, default='', null=True)
     contact = RichTextUploadingField(blank=True, default='', null=True)
-    # slug = models.SlugField(null=True)
+    #
 
 
-class Images(models.Model):
-    setting = models.ForeignKey(Setting, on_delete=models.CASCADE)
-    title = models.CharField(max_length=50, blank=True)
-    image = models.ImageField(blank=True, upload_to='images/store/')
 
-    def __str__(self):
-        return self.title
-
-
-class SettingMedia(models.Model):
+class SettingTags(models.Model):
     id = models.AutoField(primary_key=True)
-    setting_id = models.ForeignKey(Setting, on_delete=models.CASCADE)
-    media_type_choice = ((1, "Image"), (2, "Video"))
-    media_type = models.CharField(max_length=255)
-    media_content = models.FileField(upload_to='images/setting')
+    setting = models.ForeignKey(Setting, on_delete=models.CASCADE)
+    meta_title = models.CharField(max_length=255, verbose_name='Meta Tag Title')
+    meta_description = models.CharField(max_length=255)
+    meta_keywords = models.CharField(max_length=255)
+    tags = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
-    is_active = models.IntegerField(default=1)

@@ -43,7 +43,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-
+'dal',
+'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -95,6 +96,7 @@ INSTALLED_APPS = [
     'jquery',
     'djangoformsetjs',
     'django_countries',
+    'django_select2',
 
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -267,8 +269,16 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         'LOCATION': os.path.join(tempfile.gettempdir(), 'django_imagefit')
     },
-}
+"select2": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/2",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
 
+}
+SELECT2_CACHE_BACKEND = "select2"
 IMAGEFIT_PRESETS = {
     'thumbnail': {'width': 64, 'height': 64, 'crop': True},
     'my_preset1': {'width': 300, 'height': 220},
@@ -303,9 +313,9 @@ MESSAGE_TAGS = {
 SITE_ID = 1
 BASE_URL = "http://127.0.0.1:8000"
 # SESSION_COOKIE_SECURE = True
-# LOGIN_URL = '/admin/login'
-# LOGOUT_URL = '/admin/logout'
-LOGIN_REDIRECT_URL = '/login'
+#LOGIN_URL = '/admin/login'
+#LOGOUT_URL = '/admin/logout'
+#LOGIN_REDIRECT_URL = '/login'
 # Cart
 CART_SESSION_ID = 'cart'
 SESSION_COOKIE_AGE = 85555

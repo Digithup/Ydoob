@@ -57,7 +57,7 @@ def index(request):
     return render(request, 'front/index.html', context)
 
 
-def categories(request):
+def CategoriesDetail(request):
     categories = Categories.objects.all()
 
     context = {

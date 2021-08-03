@@ -1,0 +1,29 @@
+{% for rp in address %}
+    <tr>
+
+        <td>{{ rp.location_type.text }}</td>
+        <td>{{ rp.address_title }}</td>
+        <td>{{ rp.first_name }}</td>
+        <td>{{ rp.last_name }}</td>
+        <td>{{ rp.governorate }}</td>
+        <td>{{ rp.city }}</td>
+        <td>{{ rp.phone }}</td>
+        <td style="width: 150px">
+
+            <button type="button"
+                    class="btn btn-warning btn-sm js-update-book"
+                    data-url="{% url 'user:UpdateAddress' rp.pk %}">
+                <span class="fa fa-pencil"></span>
+            </button>
+            <button type="button"
+                    class="btn btn-danger btn-sm js-delete-book"
+                    data-url="{% url 'user:DeleteAddress' rp.pk %}">
+                <span class="fa fa-remove"></span>
+            </button>
+        </td>
+    </tr>
+{% empty %}
+    <tr>
+        <td colspan="8" class="text-center bg-warning">No Address</td>
+    </tr>
+{% endfor %}

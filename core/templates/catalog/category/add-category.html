@@ -1,6 +1,7 @@
 {% extends 'admin/adminbase.html' %}
 {% load static %}
 {% load widget_tweaks %}
+{% load i18n %}
 {% block body %}
     <!-- Container-fluid starts-->
     <div class="container-fluid">
@@ -8,17 +9,17 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="page-header-left">
-                        <h3>Add Category
-                            <small>Multikart Admin panel</small>
+                        <h3>{% translate 'Add Category' %}
+                            <small>{% translate 'Admin panel' %}</small>
                         </h3>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <ol class="breadcrumb pull-right">
-                        <li class="breadcrumb-item"><a href="{% url 'core:admin_index' %}"><i
+                        <li class="breadcrumb-item"><a href="{% url 'core:AdminIndex' %}"><i
                                 data-feather="home"></i></a></li>
 
-                        <li class="breadcrumb-item active">Add Category</li>
+                        <li class="breadcrumb-item active">{% translate 'Add Category' %}</li>
                     </ol>
                 </div>
             </div>
@@ -29,165 +30,206 @@
 
     <!-- Container-fluid starts-->
     <div class="container-fluid">
-        <div class="row">
+        <form class="needs-validation add-Products-form" novalidate=""
+              enctype="multipart/form-data" action=""
+              method="post">
+            {% csrf_token %}
+            <div class="row product-adding">
 
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5>Add Category</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row Products-adding">
-                            <div class="col-xl-5">
-                                <div class="add-Products">
-                                    <div class="row">
+                <div class="col-xl-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                {% if form.errors %}
+
+                                    {% for error_field, error_message in form.errors.items %}
+
+                                        <div class="alert alert-danger">
+                                            {{ error_field|striptags }}: {{ error_message|striptags }}
+                                            <strong>{{ error|escape }}</strong>
+                                        </div>
+                                    {% endfor %}
+
+                                {% endif %}
+
+
+                            </div>
+                            <h5>{% translate 'General' %}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="digital-add needs-validation">
+                                <div class="form-group">
+                                    <label hidden for="validationCustom01" class="col-form-label pt-0"><span>*</span>
+                                        Title</label>
+                                    <input hidden class="form-control" id="title" type="text" required=""
+                                           value="{{ categories.title }}" name="title">
+                                </div>
+                                <div class="form-group">
+                                    <label for="validationCustomtitle"
+                                           class="col-form-label pt-0"><span>*</span>{% translate 'Title En ' %}
+                                    </label>
+                                    <input class="form-control" id="title_en" type="text" required=""
+                                           value="{{ categories.title_en }}" name="title_en">
+                                </div>
+                                <div class="form-group">
+                                    <label for="validationCustomtitle"
+                                           class="col-form-label pt-0"><span>*</span>{% translate 'Title Ar' %} </label>
+                                    <input class="form-control" id="validationCustomtitle" type="text" required=""
+                                           value="{{ categories.title_ar }}" name="title_ar">
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label"><span>*</span> {% translate 'Category' %}</label>
+                                    <select class="custom-select form-control" name="parent" required="">
+                                        <option value="">--Select--</option>
+                                        {% for value, text in form.parent.field.choices %}
+                                            <option value="{{ value }}">{{ text }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label"><span>*</span> {% translate 'Status' %}</label>
+                                    <div class="m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
+                                        <label class="d-block" for="edo-ani">
+                                            <input class="radio_animated" id="edo-ani" value="True" type="radio"
+                                                   name="status">
+                                            Enable
+                                        </label>
+                                        <label class="d-block" for="edo-ani1">
+                                            <input class="radio_animated" id="edo-ani1" value="False" type="radio"
+                                                   name="status">
+                                            Disable
+                                        </label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="">
-                                <form class="needs-validation add-Products-form" novalidate=""
-                                      enctype="multipart/form-data" action="{% url 'core:AddCategory' %}"
-                                      method="post">
-                                    {% csrf_token %}
-                                    <div class="card">
-                                        <div>
-                                            {% if form.errors %}
-                                                {% for error_field, error_message in form.errors.items %}
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>{% translate 'Image Upload' %}</h5>
+                        </div>
+                        <div class="card-body media_div_row">
+                            <div class="add-product ">
+                                <div class="row  ">
+                                    <div class="col-md-6">
+                                        <img alt=""
+                                             class="img-fluid image_zoom_1 blur-up lazyloaded img_preview">
+                                    </div>
+                                    <div class="col-md4 pull-left">
+                                        <ul class="file-upload-product">
 
-                                                    <div class="alert alert-danger">
-                                                        {{ error_field|striptags }}: {{ error_message|striptags }}
-                                                        <strong>{{ error|escape }}</strong>
-                                                    </div>
-                                                {% endfor %}
+                                            <li>
+                                                <div class="box-input-file"><input class="upload select_media"
+                                                                                   type="file"
+                                                                                   name="image">
+                                                    <i class="fa fa-plus "><select hidden
+                                                                                   class="form-control media_type">
+                                                        <option value="1">Image</option>
 
-                                            {% endif %}
-                                        </div>
-                                        <div class=" ">
-                                            <div class="digital-add needs-validation">
-                                                <div class="form-group row">
-                                                    <label hidden for="validationCustom0"
-                                                           class="col-xl-3 col-md-4"><span>*</span>Title </label>
-                                                    <label for="validationCustom0"></label><input hidden
-                                                                                                  class="form-control col-md-7"
-                                                                                                  id="title" type="text"
-                                                                                                  name="title"
-                                                                                                  required="">
-                                                </div>
-                                            </div>
-                                            <div class="digital-add needs-validation">
-                                                <div class="form-group row">
-                                                    <label for="validationCustom0"
-                                                           class="col-xl-3 col-md-4"><span>*</span>Title EN</label>
-                                                    <label for="title_en"></label><input class="form-control col-md-7"
-                                                                                         id="title_en" type="text"
-                                                                                         name="title_en" required="">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="digital-add needs-validation">
-                                            <div class="form-group row">
-                                                <label for="validationCustom0"
-                                                       class="col-xl-3 col-md-4"><span>*</span>Title ar</label>
-                                                <label for="title_ar"></label><input class="form-control col-md-7"
-                                                                                     id="title_ar" type="text"
-                                                                                     name="title_ar" required="">
-                                            </div>
-                                        </div>
+                                                    </select></i></div>
+                                            </li>
 
-                                        <div class="form-group row">
-                                            <label for="validationCustom0"
-                                                   class="col-xl-3 col-md-4"><span>*</span>Category</label>
-                                            <label for="title_ar"></label>
-                                            <select name="parent"
-                                                    class="custom-select  col-md-7">
-                                                <option value="">--Select--</option>
-                                                {% for value, text in form.parent.field.choices %}
-                                                    <option value="{{ value }}">{{ text }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                        <div>
-
-                                            <div class=" row ">
-                                                <label for="validationCustom0"
-                                                       class="col-xl-3 col-md-4"><span>*</span>Detail
-                                                </label>
-                                                <textarea id="editor1" content=""
-                                                          name="description" cols="10"
-                                                          rows="4"></textarea>
-
-                                            </div>
-                                            <div class="card-body row-cols-1">
-                                                <div class="form-group row">
-                                                    <label class="col-xl-3 col-md-4">Image
-                                                    </label>
-                                                    <input type="file" name="image" id="image">
-                                                </div>
-                                            </div>
-
-
-                                            <div class="digital-add needs-validation">
-                                                <div class="form-group row">
-                                                    <label for="validationCustom0"
-                                                           class="col-xl-3 col-md-4"><span>*</span> status</label>
-                                                    <select name="status"
-                                                            class="custom-select  col-md-7">
-                                                        <option value="">--Select--</option>
-                                                        {% for value, text in form.status.field.choices %}
-                                                            <option value="{{ value }}">{{ text }}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                </div>
-                                                <div class="digital-add needs-validation">
-                                                    <div class="form-group row">
-                                                        <label for="validationCustom0"
-                                                               class="col-xl-3 col-md-4"><span>*</span>keywords</label>
-                                                        <input class="form-control col-md-7"
-                                                               id="keywords" type="text"
-                                                               name="keywords" required="">
-
-                                                    </div>
-                                                </div>
-                                                <div class="digital-add needs-validation">
-                                                    <div class="form-group row">
-                                                        <label for="validationCustom0"
-                                                               class="col-xl-3 col-md-4"><span>*</span>slug</label>
-                                                        <input class="form-control col-md-7"
-                                                               id="slug" type="text"
-                                                               name="slug" required="">
-
-                                                    </div>
-                                                </div>
-
-                                                {% if field.errors %}
-                                                    <div class="alert alert-danger" style="margin:10px">
-                                                    {{ field.errors }}
-                                                {% endif %}
-                                                </div>
-
-                                                <div class="offset-xl-3 offset-sm-4">
-                                                    <button type="submit" class="btn btn-primary  ">Add</button>
-
-                                                    <a href="{% url 'core:categories' %}">
-                                                        <button type="button" class="btn btn-primary"
-                                                                data-toggle="modal"
-                                                                data-original-title="test" data-target="#exampleModal">
-                                                            Discard
-                                                        </button>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                </form>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+
                 </div>
+                <div class="col-xl-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>{% translate 'Add Description' %}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="digital-add needs-validation">
+                                <div class="form-group mb-0">
+                                    <div class="description-sm">
+                                        <textarea id="editor1" name="description" cols="10" rows="8"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Meta Data</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="digital-add needs-validation">
+                                <div class="form-group">
+                                    <label for="validationCustom05"
+                                           class="col-form-label pt-0">{% translate ' Slug' %}</label>
+                                    <input class="form-control" id="slug" type="text" required=""
+                                           value="{{ categories.slug }}" name="slug">
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label">{% translate 'Meta keywords' %}</label>
+                                    <textarea rows="4" cols="12" name="keywords"></textarea>
+                                </div>
+                                <div class="decor">
+                                    {% if field.errors %}
+                                        <div class="alert alert-danger" style="margin:10px">
+                                        {{ field.errors }}
+
+                                    {% endif %}
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <div class="product-buttons text-center">
+                                            <button type="submit" class="btn btn-primary">{% translate 'Add' %}</button>
+                                            <button type="button" href="{% url 'core:categories' %} "
+                                                    class="btn btn-light">{% translate 'Discard' %}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
             </div>
-        </div>
+        </form>
     </div>
     <!-- Container-fluid Ends-->
+
+{% block custom_js %}
+
+    <script>
+
+
+        $(document).on("change", ".select_media", function () {
+            var media_type = $(this).parents(".media_div_row").find(".media_type").val();
+            var img_preview = $(this).parents(".media_div_row").find(".img_preview");
+
+            showPreviewMedia(this, media_type, img_preview);
+        });
+
+        function showPreviewMedia(input, media_type = 1, img_preview,) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    if (media_type == "1") {
+                        img_preview.attr("src", e.target.result);
+                        img_preview.show();
+                        img_preview.css({"border": "5px solid orange"});
+                        img_preview.css({"border-radius": "10px"});
+                    }
+
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+    </script>
+
+{% endblock custom_js %}
 
 {% endblock %}
 
 {% block foot %} {% include 'admin/footer.html' %}  {% endblock %}
 {% block js %} {% include 'admin/js.html' %}  {% endblock %}
+

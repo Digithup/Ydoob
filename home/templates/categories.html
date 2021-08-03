@@ -34,7 +34,7 @@
         <div class="collection-wrapper">
             <div class="container">
                 <div class="row col-md">
-                 <div class="row margin-default ratio_square">
+                    <div class="row margin-default ratio_square">
                         <div class="row margin-default ratio_square">{% recursetree categories %}
 
                             <div class="col-xl-2 col-sm-3 col-4">
@@ -42,8 +42,9 @@
                                 <a href="{{ node.slug }}">
                                     <div class="img-category">
 
-                                            <img src="{{ node.image.url }}" style="width: 50px;height: 50%" class="img-fluid sm-img"
-                                                 alt="">
+                                        <img src="{{ node.image.url }}" style="width: 50px;height: 50%"
+                                             class="img-fluid sm-img"
+                                             alt="">
 
                                         <h4>{{ node }}</h4>
                                     </div>
@@ -51,7 +52,8 @@
 
                             </div>{% endrecursetree %}
 
-                        </div></div>
+                        </div>
+                    </div>
                     <div class="col-sm-3 collection-filter">
                         <!-- side-bar colleps block stat -->
                         <div class="collection-filter-block">
@@ -144,97 +146,45 @@
                         <div class="theme-card">
                             <h5 class="title-border">new product</h5>
                             <div class="offer-slider slide-1">
+
+                                {% for sp in side_products %}
+                                        <div class="media">
+                                                <a href="{% url 'home:ProductDetail' sp.product.slug %}"><img class="img-fluid blur-up lazyload"
+                                                                src="{{ sp.media.Image.url }}" height="70px" width="100px"></a>
+                                                <div class="media-body align-self-center">
+                                                    <div class="rating"><i class="fa fa-star"></i> <i
+                                                            class="fa fa-star"></i> <i class="fa fa-star"></i> <i
+                                                            class="fa fa-star"></i> <i class="fa fa-star"></i></div>
+                                                    <a href="{% url 'home:ProductDetail' sp.product.slug %}">
+                                                        <h6>{{ sp.product.title }}</h6>
+                                                    </a>
+                                                    <h4>{{ sp.product_id.product_max_price }}</h4>
+                                                </div>
+
+                                        </div>{% endfor %}
                                 <div>
-                                    <div class="media">
-                                        {% for rs in categories_product %}
-                                            <a href="/product/{{ rs.id }}/{{ rs.slug }}"><img
-                                                    class="img-fluid blur-up lazyload"
-                                                    src="{{ rs.media.media_content }}" alt=""></a>
-                                            <div class="media-body align-self-center">
-                                                <div class="rating"><i class="fa fa-star"></i> <i
-                                                        class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                                        class="fa fa-star"></i> <i class="fa fa-star"></i></div>
-                                                <a href="product-page(no-sidebar).html">
-                                                    <h6>{{ rs.product.title }}</h6>
-                                                </a>
-                                                <h4>$500.00</h4>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                    <div class="media">
-                                        <a href=""><img class="img-fluid blur-up lazyload"
-                                                        src="{% static 'categories.html' %}images/pro/1.jpg" alt=""></a>
-                                        <div class="media-body align-self-center">
-                                            <div class="rating"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i></div>
-                                            <a href="product-page(no-sidebar).html">
-                                                <h6>Slim Fit Cotton Shirt</h6>
-                                            </a>
-                                            <h4>$500.00</h4>
-                                        </div>
-                                    </div>
-                                    <div class="media">
-                                        <a href=""><img class="img-fluid blur-up lazyload"
-                                                        src="{% static 'categories.html' %}images/pro/1.jpg" alt=""></a>
-                                        <div class="media-body align-self-center">
-                                            <div class="rating"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i></div>
-                                            <a href="product-page(no-sidebar).html">
-                                                <h6>Slim Fit Cotton Shirt</h6>
-                                            </a>
-                                            <h4>$500.00</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="media">
-                                        <a href=""><img class="img-fluid blur-up lazyload"
-                                                        src="{% static 'categories.html' %}images/pro/1.jpg" alt=""></a>
-                                        <div class="media-body align-self-center">
-                                            <div class="rating"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i></div>
-                                            <a href="product-page(no-sidebar).html">
-                                                <h6>Slim Fit Cotton Shirt</h6>
-                                            </a>
-                                            <h4>$500.00</h4>
-                                        </div>
-                                    </div>
-                                    <div class="media">
-                                        <a href=""><img class="img-fluid blur-up lazyload"
-                                                        src="{% static 'categories.html' %}images/pro/1.jpg" alt=""></a>
-                                        <div class="media-body align-self-center">
-                                            <div class="rating"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i></div>
-                                            <a href="product-page(no-sidebar).html">
-                                                <h6>Slim Fit Cotton Shirt</h6>
-                                            </a>
-                                            <h4>$500.00</h4>
-                                        </div>
-                                    </div>
-                                    <div class="media">
-                                        <a href=""><img class="img-fluid blur-up lazyload"
-                                                        src="{% static 'categories.html' %}images/pro/1.jpg" alt=""></a>
-                                        <div class="media-body align-self-center">
-                                            <div class="rating"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i></div>
-                                            <a href="product-page(no-sidebar).html">
-                                                <h6>Slim Fit Cotton Shirt</h6>
-                                            </a>
-                                            <h4>$500.00</h4>
-                                        </div>
-                                    </div>
+                                    {% for sp in side_products %}
+                                        <div class="media">
+                                                <a href="{% url 'home:ProductDetail' sp.product.slug %}"><img class="img-fluid blur-up lazyload"
+                                                                src="{{ sp.Image.url }}" height="70px" width="100px"></a>
+                                                <div class="media-body align-self-center">
+                                                    <div class="rating"><i class="fa fa-star"></i> <i
+                                                            class="fa fa-star"></i> <i class="fa fa-star"></i> <i
+                                                            class="fa fa-star"></i> <i class="fa fa-star"></i></div>
+                                                    <a href="{% url 'home:ProductDetail' sp.product.slug %}">
+                                                        <h6>{{ sp.product.title }}</h6>
+                                                    </a>
+                                                    <h4>{{ sp.product_id.product_max_price }}</h4>
+                                                </div>
+
+                                        </div>{% endfor %}
                                 </div>
                             </div>
                         </div>
                         <!-- side-bar single product slider end -->
                         <!-- side-bar banner start here -->
                         <div class="collection-sidebar-banner">
-                            <a href="#"><img src="{% static 'categories.html' %}images/side-banner.png"
+                            <a href="#"><img src="{% static '' %}images/side-banner.png"
                                              class="img-fluid blur-up lazyload" alt=""></a>
                         </div>
                         <!-- side-bar banner end here -->
@@ -247,7 +197,7 @@
                                 <div class="col-sm-12">
                                     <div class="top-banner-wrapper">
 
-                                        <a href="#"><img src="{% static 'categories.html' %}images/mega-menu/2.jpg"
+                                        <a href="#"><img src="{% static '' %}images/mega-menu/2.jpg"
                                                          class="img-fluid blur-up lazyload" alt=""></a>
                                         <div class="top-banner-content small-section">
 
@@ -279,19 +229,19 @@
                                                                 <div class="collection-grid-view">
                                                                     <ul>
                                                                         <li><img
-                                                                                src="{% static 'categories.html' %}images/icon/2.png"
+                                                                                src="{% static '' %}images/icon/2.png"
                                                                                 alt=""
                                                                                 class="product-2-layout-view"></li>
                                                                         <li><img
-                                                                                src="{% static 'categories.html' %}images/icon/3.png"
+                                                                                src="{% static '' %}images/icon/3.png"
                                                                                 alt=""
                                                                                 class="product-3-layout-view"></li>
                                                                         <li><img
-                                                                                src="{% static 'categories.html' %}images/icon/4.png"
+                                                                                src="{% static '' %}images/icon/4.png"
                                                                                 alt=""
                                                                                 class="product-4-layout-view"></li>
                                                                         <li><img
-                                                                                src="{% static 'categories.html' %}images/icon/6.png"
+                                                                                src="{% static '' %}images/icon/6.png"
                                                                                 alt=""
                                                                                 class="product-6-layout-view"></li>
                                                                     </ul>
@@ -321,7 +271,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="product-wrapper-grid">
-                                                    <div class="row margin-res"> {% for dod in new_products_req %}
+                                                    <div class="row margin-res"> {% for dod in categories_product %}
                                                         <div class="col-xl-3 col-6 col-grid-box">
 
                                                             <div class="product-box">
@@ -329,7 +279,7 @@
                                                                 <div class="img-wrapper">
                                                                     <div class="front">
                                                                         <a href="product-page(no-sidebar).html"><img
-                                                                                src="{{ dod.media_content }}"
+                                                                                src="{{ dod.media.Image.url }}"
                                                                                 class="img-fluid blur-up lazyload bg-img"
                                                                                 alt=""></a>
                                                                     </div>
@@ -414,8 +364,11 @@
                                 </div>
                             </div>
                         </div>
-                    </div></div>
-            </div></div> </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     <!-- section End -->
 
 {% endblock %}

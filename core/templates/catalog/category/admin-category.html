@@ -13,7 +13,7 @@
                         <h3>Category List
                             <small>
                                 <ol class="breadcrumb pull-left">
-                                    <li class="breadcrumb-item"><a href="{% url 'core:admin_index' %}"><i data-feather="home"></i></a></li>
+                                    <li class="breadcrumb-item"><a href="{% url 'core:AdminIndex' %}"><i data-feather="home"></i></a></li>
 
                                     <li class="breadcrumb-item active">Category </li>
                                 </ol>
@@ -66,7 +66,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for rs in categories %}
+                    {% for rs in category %}
                         <tr>
                             <td>
                                 {{ forloop.counter }}
@@ -94,12 +94,12 @@
                             <td class="project_progress">
                                 <div class="progress progress-sm">
                                     <div class="progress-bar bg-green" role="progressbar"
-                                         aria-volumenow="57" aria-volumemin="0" aria-volumemax="100"
-                                         style="width: 57%">
+                                         aria-volumenow="{{ rs.product }}" aria-volumemin="0" aria-volumemax="100"
+                                         style="width: {{ rs.product }}%">
                                     </div>
                                 </div>
                                 <small>
-                                    57% Complete
+                                   {{ rs.product }}
                                 </small>
                             </td>
                             <td class="project-state">

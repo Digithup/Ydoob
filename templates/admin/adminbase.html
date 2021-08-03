@@ -25,13 +25,13 @@
     <link rel="stylesheet" type="text/css" href="{% static '' %}css/fontawesome.css">
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="{% static '' %}plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="{% static '' %}modules/fontawesome-free/css/all.min.css">
     <!-- Flag icon-->
     <link rel="stylesheet" type="text/css" href="{% static '' %}css/flag-icon.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- overlayScrollbars -->
-    <link rel="stylesheet" href="{% static '' %}dist/css/adminlte.min.css">
+
+
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 
@@ -66,7 +66,14 @@
 
     <!-- App css-->
     <link rel="stylesheet" type="text/css" href="{% static '' %}css/admin.css">
+ <!-- Jquery ui-->
+    <link rel="stylesheet" type="text/css" href="{% static '' %}modules/jquery-ui-1.12.1/jquery-ui.min.css">
 
+<!-- select2 ui-->
+    <link rel="stylesheet" type="text/css" href="{% static '' %}modules/select2/dist/css/select2.min.css">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css">
 
 
 
@@ -134,7 +141,7 @@
                     <li><a class="text-dark" href="#!" onclick="toggleFullScreen()"><i
                             data-feather="maximize-2"></i></a></li>
                     <li class="onhover-dropdown"><a class="txt-dark" href="#">
-                        <h6>EN</h6></a>
+                        <h6>{{request.LANGUAGE_CODE }}</h6></a>
                         <ul class="language-dropdown onhover-show-div p-20">
                             <div class="lan-selector">
                                 <form action="{% url 'set_language' %}" method="post" id="language-form"

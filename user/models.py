@@ -2,6 +2,13 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, User
 from django.utils.safestring import mark_safe
+from django.utils.text import slugify
+
+Type = (
+    ('1', 'Home'),
+    ('2', 'Business'),
+
+)
 
 
 class UserManager(BaseUserManager):
@@ -79,10 +86,9 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=200, blank=True, null=True)
     last_name = models.CharField(max_length=200, blank=True, null=True)
     phone = models.CharField(blank=True, null=True, max_length=20)
-    address = models.CharField(blank=True, null=True, max_length=150)
-    city = models.CharField(blank=True, null=True, max_length=20)
-    country = models.CharField(blank=True, null=True, max_length=50)
-    image = models.ImageField(blank=True, null=True, upload_to='images/users/', default='images/dashboard-bases/man.png')
+
+    image = models.ImageField(upload_to='images/users/%y/%m',
+                              default='images/dashboard-bases/man.png')
     facebook = models.URLField(blank=True, max_length=50)
     instagram = models.URLField(blank=True, max_length=50)
     twitter = models.URLField(blank=True, max_length=50)
@@ -93,11 +99,16 @@ class User(AbstractBaseUser):
     seller = models.BooleanField(default=False)
     staff = models.BooleanField(default=False)
     admin = models.BooleanField(default=False)
+    slug = models.SlugField(unique=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     USERNAME_FIELD = 'email'
 
     objects = UserManager()
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.email)
+        super(User, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.email
@@ -151,6 +162,40 @@ class User(AbstractBaseUser):
         return mark_safe('<img src="{}" height="50"/>'.format(self.image.url))
 
     image_tag.short_description = 'Image'
+
+
+class UserAddress(models.Model):
+    address_title = models.CharField(max_length=150)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=150)
+    last_name = models.CharField(blank=True, null=True, max_length=150)
+    governorate = models.CharField(blank=True, null=True, max_length=150)
+    city = models.CharField(blank=True, null=True, max_length=20)
+    area = models.CharField(blank=True, null=True, max_length=50)
+    street_name = models.CharField(blank=True, null=True, max_length=150)
+    location_type = models.CharField(max_length=10, choices=Type)
+    phone = models.CharField(blank=True, null=True, max_length=150)
+    country = models.CharField(blank=True, null=True, max_length=50)
+    shipping_note = models.CharField(blank=True, null=True, max_length=255)
+    building_name = models.CharField(blank=True, null=True, max_length=255)
+    floor_no = models.CharField(blank=True, null=True, max_length=255)
+    apartment_no = models.CharField(blank=True, null=True, max_length=255)
+    nearest_landmark = models.CharField(blank=True, null=True, max_length=255)
+    postal_code = models.CharField(blank=True, null=True, max_length=50)
+    slug = models.SlugField(unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["updated_at"]
+        verbose_name_plural = "Shipping Address"
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.address_title)
+        super(UserAddress, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.address_title
 
 
 class GuestEmail(models.Model):

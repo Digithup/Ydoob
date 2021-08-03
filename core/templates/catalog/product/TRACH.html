@@ -1,0 +1,407 @@
+
+<label class="col-sm-2 control-label" for="input-category"><span data-toggle="tooltip" title="" data-original-title="(Autocomplete)">Categories</span></label>
+<div class="col-sm-10">
+<input type="text" name="category" value="" placeholder="Categories" id="input-category" class="form-control" autocomplete="off"><ul class="dropdown-menu" style="top: 36px; left: 15px; display: none;"><li data-value="33"><a href="#">Cameras</a></li><li data-value="31"><a href="#">Components&nbsp;&nbsp;&gt;&nbsp;&nbsp;Scanners</a></li><li data-value="32"><a href="#">Components&nbsp;&nbsp;&gt;&nbsp;&nbsp;Web Cameras</a></li></ul>
+<div id="product-category" class="well well-sm" style="height: 150px; overflow: auto;"> </div>
+</div>
+
+
+<div class="form-group">
+<label class="col-sm-2 control-label" for="input-category"><span data-toggle="tooltip" title="" data-original-title="(Autocomplete)">Categories</span></label>
+<div class="col-sm-10">
+<input type="text" name="category" value="" placeholder="Categories" id="input-category" class="form-control" autocomplete="off"><ul class="dropdown-menu" style="top: 36px; left: 15px; display: none;"><li data-value="33"><a href="#">Cameras</a></li><li data-value="31"><a href="#">Components&nbsp;&nbsp;&gt;&nbsp;&nbsp;Scanners</a></li><li data-value="32"><a href="#">Components&nbsp;&nbsp;&gt;&nbsp;&nbsp;Web Cameras</a></li></ul>
+<div id="product-category" class="well well-sm" style="height: 150px; overflow: auto;"> </div>
+</div>
+</div>
+
+
+function(c) {
+  if (/(38|40|27|32)/.test(c.which) && !/input|textarea/i.test(c.target.tagName)) {
+    var d = a(this);
+    if (c.preventDefault(), c.stopPropagation(), !d.is(".disabled, :disabled")) {
+      var e = b(d),
+        g = e.hasClass("open");
+      if (!g && 27 != c.which || g && 27 == c.which) return 27 == c.which && e.find(f).trigger("focus"), d.trigger("click");
+      var h = " li:not(.disabled):visible a",
+        i = e.find(".dropdown-menu" + h);
+      if (i.length) {
+        var j = i.index(c.target);
+        38 == c.which && j > 0 && j--, 40 == c.which && j < i.length - 1 && j++, ~j || (j = 0), i.eq(j).trigger("focus")
+      }
+    }
+  }
+}
+
+
+
+
+                                                                                <div class="form-group row  col-md-12 attributes_div">
+                                                                                    <div class="row col-md-12 attributes_div_row first_attributes">
+                                                                                        <div class="col-md-4">
+                                                                                            <label for="validationCustom0"
+                                                                                                   class=""><span>*</span>
+                                                                                                {% translate 'Product Attributes ' %} </label>
+                                                                                            <select class="form-group attributes" id="product_attribute"
+                                                                                                    name="attribute" style="width: 60%" multiple>
+                                                                                                {% for value, title in product_form.attribute.field.choices %}
+                                                                                                    <option value="{{ value }}">{{ title }}</option>
+                                                                                                {% endfor %}
+                                                                                            </select>
+                                                                                        </div>
+                                                                                        <div class="col-md-6">
+                                                                                            <label>Sort</label>
+                                                                                            <input type="text"  name="sort[]"
+                                                                                                   class="form-control  sort" required=""
+                                                                                                   placeholder="sort order"/>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-group mb-0">
+                                                                                    <div class="product-buttons text-center">
+
+                                                                                        <button class="btn btn-primary fa fa-plus  add_attributes"
+                                                                                           type="button">
+                                                                                        </button>
+                                                                                        <button class="btn btn-light fa fa-minus-circle  remove_attributes"
+                                                                                                type="button">
+
+                                                                                        </button>
+                                                                                    </div>
+<div class="container">
+    <div  class="report-repeater">
+        <div data-repeater-list="group-a">
+            <div class="repeater-row"  data-repeater-item>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+
+                            <input class="form-control" name="fname" id="fname" placeholder="First Name">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="form-group">
+
+                            <input  class="form-control"  type="text" name="lname" id="lname" placeholder="Last Name">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="form-group">
+
+                            <select class="form-control" id="role">
+                                <option>Role</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+
+                            <button data-repeater-delete type="button" class="btn btn-primary" >Delete</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <button data-repeater-create type="button" class="btn btn-primary" >Add</button>
+    </div>
+</div>
+
+
+
+                        $('select').select2({
+            width: '100%'
+            //theme: "bootstrap"
+        });
+
+
+if($('.report-repeater').length)
+        {
+            var  reportRepeater = $('.report-repeater').repeater({
+                defaultValues: {
+                    'textarea-input': 'foo',
+                    'text-input': 'bar',
+                },
+                show: function () {
+                    $(this).slideDown();
+                  $('.select2-container').remove();
+                    $('select').select2({
+                       width: '100%',
+                        placeholder: "Placeholder text",
+                        allowClear: true
+                    });
+                },
+                hide: function (deleteElement) {
+                    if(confirm('Are you sure you want to delete this?')) {
+                        $(this).slideUp(deleteElement);
+                    }
+                }
+
+            });
+        }
+
+
+                                                                                <div class="form-group row col-md-12 ">
+                                            <div class="" data-repeater-list="outer-list">
+                                                <div data-repeater-item>
+                                                    <input type="text" name="text-input" value="A"/>
+                                                    <input disabled data-repeater-delete type="button" value="Delete"/>
+
+                                                    <div class="inner-repeater">
+                                                        <div class="form-group row  ">
+                                                            <div class="row col-md-12 ">
+                                                                <div class="col-md-4">
+                                                                    <label for="validationCustom0"
+                                                                           class=""><span>*</span>
+                                                                        {% translate 'Product Attributes ' %} </label>
+                                                                    <select class="form-group attributes"
+                                                                            id="product_attribute"
+                                                                            name="attribute" style="width: 60%"
+                                                                            multiple>
+                                                                        {% for value, title in product_form.attribute.field.choices %}
+                                                                            <option value="{{ value }}">{{ title }}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>Sort</label>
+                                                                    <input type="text" name="sort[]"
+                                                                           class="form-control  sort" required=""
+                                                                           placeholder="sort order"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group mb-0">
+                                                            <div class="product-buttons text-center">
+
+                                                                <input class="btn btn-primary fa fa-plus "
+                                                                       type="button" data-repeater-create value="Add"/>
+
+                                                                <input class="btn btn-light fa fa-minus-circle"
+                                                                       data-repeater-delete type="button"
+                                                                       value="Delete"/>
+
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div></div>
+
+
+ ($('.report-repeater').length) {
+            var reportRepeater = $('.report-repeater').repeater({
+                defaultValues: {
+                    'textarea-input': 'foo',
+                    'text-input': 'bar',
+                },
+                show: function () {
+                    $(this).slideDown();
+                    $('.attribute_container').remove();
+                    $('.product_attribute').select2({
+                        theme: "classic",
+                        closeOnSelect: false,
+                        placeholder: 'Add Product Attributes',
+                        minimumInputLength: 1,
+                        maximumSelectionLength: 6,
+                        allowClear: true,
+                    });
+                },
+                hide: function (deleteElement) {
+                    if (confirm('Are you sure you want to delete this?')) {
+                        $(this).slideUp(deleteElement);
+                    }
+                }
+
+            });
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        $(".add_options").click(function () {
+            var options_row = $(".first_options").clone();
+            options_row.removeClass("first_options");
+            options_row.find(".first_options").val("");
+            options_row.find("#product_options").select2({
+                theme: "classic",
+                closeOnSelect: true,
+                placeholder: 'Add Product Options',
+                minimumInputLength: 1,
+                maximumSelectionLength: 5,
+                allowClear: true,
+            });
+            options_row.find(".options_details").val("");
+            $(".options_div").append(options_row);
+        });
+        $(".remove_options").click(function () {
+            if ($(".options_div").find(".options_div_row").length > 1) {
+                $(".options_div").children().last().remove();
+            }
+        });
+
+
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <form class="form-horizontal">
+            <div class="form-group">
+              <label for="type" class="col-sm-5 control-label">I'd like to ride</label>
+              <div class="col-sm-5">
+                <select name="type" id="type" class="form-control">
+                  <option>--Select your ride--</option>
+                  <option value="animals">Animal</option>
+                  <option value="vehicles">Vehicle</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="subtype" class="col-sm-5 control-label">More specifically</label>
+              <div class="col-sm-5">
+                <select name="subtype" id="subtype"  class="form-control">
+                    <option>-- Select type first--</option>
+                </select>
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+
+    </div> <!-- /container -->
+
+
+<!-- /option -->
+  <div>
+                                        <div class="form-group row   options_div">
+                                            <div class="row col-md-15 options_div_row first_options">
+
+                                                <div class="col-md-4">
+                                                    <label for="validationCustom0"
+                                                           class=""><span>*</span>
+                                                        {% translate 'Options Type ' %} </label>
+                                                    <select class="custom-select options" id="product_option_type"
+                                                            name="option_type" style="width: 60%">
+                                                        {% for value, title in option_form.option_type.field.choices %}
+                                                            <option value="{{ value }}">{{ title }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="validationCustom0"
+                                                           class=""><span>*</span>
+                                                        {% translate 'Product Options ' %} </label>
+                                                    <select class="custom-select product_options" id="product_option"
+                                                            name="option" style="width: 60%">
+                                                        {% for value, title in option_form.option.field.choices %}
+                                                            <option value="{{ value }}">{{ title }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label>{% translate ' Options Detail ' %}</label>
+                                                    <input type="text" name="options_detail"
+                                                           class="form-control" required=""
+                                                           placeholder="Options Detail"/>
+                                                </div>
+
+                                            </div>
+                                            {{ form.media.js }}
+                                        </div>
+
+                                        <div class="form-group mb-0">
+                                            <div class="product-buttons text-center">
+
+                                                <button class="btn btn-primary fa fa-plus  add_options"
+                                                        type="button">
+                                                </button>
+                                                <button class="btn btn-light fa fa-minus-circle  remove_options"
+                                                        type="button">
+
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+/**
+ * A Javascript module to loadeding/refreshing options of a select2 list box using ajax based on selection of another select2 list box.
+ *
+ * @url : https://gist.github.com/ajaxray/187e7c9a00666a7ffff52a8a69b8bf31
+ * @auther : Anis Uddin Ahmad <anis.programmer@gmail.com>
+ *
+ * Live demo - https://codepen.io/ajaxray/full/oBPbQe/
+ * w: http://ajaxray.com | t: @ajaxray
+ */
+var Select2Cascade = ( function(window, $) {
+
+    function Select2Cascade(parent, child, url, select2Options) {
+        var afterActions = [];
+        var options = select2Options || {};
+
+        // Register functions to be called after cascading data loading done
+        this.then = function(callback) {
+            afterActions.push(callback);
+            return this;
+        };
+
+        parent.select2(select2Options).on("change", function (e) {
+
+            child.prop("disabled", true);
+
+            var _this = this;
+            $.getJSON(url.replace(':parentId:', $(this).val()), function(items) {
+                var newOptions = '<option value="">-- Select --</option>';
+                for(var id in items) {
+                    newOptions += '<option value="'+ id +'">'+ items[id] +'</option>';
+                }
+
+                child.select2('destroy').html(newOptions).prop("disabled", false)
+                    .select2(options);
+
+                afterActions.forEach(function (callback) {
+                    callback(parent, child, items);
+                });
+            });
+        });
+    }
+
+    return Select2Cascade;
+
+})( window, $);
+
+$(document).ready(function() {
+    var select2Options = { width: 'resolve' };
+    // Loading raw JSON files of a secret gist - https://gist.github.com/ajaxray/32c5a57fafc3f6bc4c430153d66a55f5
+    var apiUrl =  'https://gist.githubusercontent.com/ajaxray/32c5a57fafc3f6bc4c430153d66a55f5/raw/260a653e6347fb6d2360e8ec376a2dc4888c1afa/:parentId:.json';
+
+    $('select').select2(select2Options);
+    var cascadLoading = new Select2Cascade($('#type'), $('#subtype'), apiUrl, select2Options);
+    cascadLoading.then( function(parent, child, items) {
+        // Dump response data
+        console.log(items);
+    });
+});
+

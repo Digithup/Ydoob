@@ -163,7 +163,7 @@
                                                     <div class="rating"><i class="fa fa-star"></i> <i
                                                             class="fa fa-star"></i> <i class="fa fa-star"></i> <i
                                                             class="fa fa-star"></i> <i class="fa fa-star"></i></div>
-                                                    <a href="{% url 'home:ProductDetail' sp.id %}">
+                                                    <a href="{% url 'home:ProductDetail' sp.product.slug %}">
                                                         <h6>{{ sp.product.title }}</h6>
                                                     </a>
                                                     <h4>{{ sp.product_id.product_max_price }}</h4>
@@ -180,7 +180,7 @@
                                                     <div class="rating"><i class="fa fa-star"></i> <i
                                                             class="fa fa-star"></i> <i class="fa fa-star"></i> <i
                                                             class="fa fa-star"></i> <i class="fa fa-star"></i></div>
-                                                    <a href="{% url 'home:ProductDetail' sp.id %}">
+                                                    <a href="{% url 'home:ProductDetail' sp.product.slug %}">
                                                         <h6>{{ sp.product.title }}</h6>
                                                     </a>
                                                     <h4>{{ sp.product_id.product_max_price }}</h4>

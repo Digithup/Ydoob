@@ -16,15 +16,15 @@
                     <div class="page-header-left">
                         <h3>{% translate " Filters" %}
                             <small>
-                                <ol class="breadcrumb pull-left">
-                                    <li class="breadcrumb-item"><a href="{% url 'core:admin_index' %}"><i data-feather="home"></i></a></li>
+                                <ul class="breadcrumb pull-left">
+                                    <li class="breadcrumb-item"><a href="{% url 'core:AdminIndex' %}"><i data-feather="home"></i></a></li>
 
                                     <li class="breadcrumb-item active">Filters </li>
-                                </ol>
+                                </ul>
                             </small>
                         </h3>
 
-                        </ol>
+                        </ul>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -82,15 +82,9 @@
                                 </small>
                             </td>
                             <td>
-                                <ul class="list-inline">
-                                    <li class="list-inline-item">
-                                        <img alt="Avatar" class="table-avatar"
-                                                {% if rs.media_content.url %}
-                                             src="{{ rs.media_content.url }}" height="75px" width="75px">
-                                                {% endif %}
-                                    </li>
-
-                                </ul>
+                                <a>
+                                    {{ rs.title }}
+                                </a>
                             </td>
                             <td class="project_progress">
                                 <div class="progress progress-sm">
@@ -131,7 +125,7 @@
         </div>
         <!-- /.card -->
 
-    </div>
+
 
     <!-- Container-fluid Ends-->
 

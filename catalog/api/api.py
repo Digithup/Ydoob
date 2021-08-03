@@ -40,7 +40,7 @@ class CategoryApi(generics.RetrieveUpdateDestroyAPIView):
 
 class ProductsListApi(generics.ListCreateAPIView):
     model = Products
-    #queryset = Products.objects.all()
+    queryset = Products.objects.all()
     serializer_class = Productserializer
 
 

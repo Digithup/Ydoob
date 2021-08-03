@@ -11,6 +11,7 @@ from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 from translations.models import Translatable
 
+from catalog.models.product_options import Filters, Manufacturer, Attributes, Options
 from user.models import User
 
 STATUS = (
@@ -74,18 +75,22 @@ class Products(models.Model):
     minimum_quantity = models.CharField(max_length=255, default=1)
     subtract_stock = models.CharField(max_length=255, choices=STATUS, default='Yes', null=True)
     out_of_stock_status = models.CharField(max_length=255, choices=OutStock, default='2')
-    requires_shipping = models.CharField(max_length=65,default=False,choices=STATUS, null=True)
+    requires_shipping = models.CharField(max_length=65, default=False, choices=STATUS, null=True)
     weight = models.IntegerField(default=0, null=True, blank=True)
     length = models.IntegerField(default=0, null=True, blank=True)
-    status = models.CharField(max_length=10, choices=STATUS, default='Yes', null=True)
+    filter = models.ManyToManyField(Filters, related_name="product_filter", blank=True)
+    manufacturer = models.ManyToManyField(Manufacturer, related_name="product_manufacturer", blank=True)
+    related = models.ManyToManyField('self', related_name="product_manufacturer", blank=True)
+
+
+    status = models.CharField(max_length=10, null=True)
     sort_order = models.SmallIntegerField(default=0, null=True)
-    slug = models.SlugField(unique=True,null=False,max_length=128)
+    slug = models.SlugField(unique=True, null=False, max_length=128)
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
-
 
     def get_absolute_url(self):
         return reverse('ProductDetail', args=[str(self.id)])
@@ -94,8 +99,6 @@ class Products(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         return super().save(*args, **kwargs)
-
-
 
 
 def image_directory_path(instance, filename):
@@ -109,15 +112,41 @@ def image_directory_path(instance, filename):
     return os.path.join(instance.product, sub_folder, filename)
 
 
+class AttributesDetails(models.Model):
+    attribute = models.ManyToManyField(Attributes, related_name="product_attribute", blank=True)
+    product = models.ForeignKey(Products, on_delete=models.CASCADE, null=True)
+    attribute_detail = models.CharField(max_length=255, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.attribute
+
+    class Meta:
+        verbose_name_plural = "Attribute Detail"
+
+class OptionsDetails(models.Model):
+    option = models.ManyToManyField(Options, related_name="product_options", blank=True)
+    product = models.ForeignKey(Products, on_delete=models.CASCADE, null=True)
+    option_detail = models.CharField(max_length=255, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.option
+
+    class Meta:
+        verbose_name_plural = "Options"
+
+
 class ProductMedia(models.Model):
     product = models.ForeignKey(Products, on_delete=models.CASCADE)
-    image = models.FileField(verbose_name='Product Image',name='Image' )
+    image = models.FileField(verbose_name='Product Image', name='Image', upload_to='images/products/%Y/%m/')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ["product"]
         verbose_name_plural = "Product Image"
-
 
 
 class ProductTransaction(models.Model):

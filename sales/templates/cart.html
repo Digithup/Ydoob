@@ -39,6 +39,12 @@
 
             <div class="row">
                 <div class="col-sm-12">
+                <div class="cart_counter">
+                        <div class="countdownholder">
+                            Your cart will be expired in<span id="timer" ></span> minutes!
+                        </div>
+                        <a href="checkout.html" class="cart_checkout btn btn-solid btn-xs">check out</a>
+                    </div>
                     <table class="table cart-table table-responsive-xs">
                         <thead>
                             <tr class="table-head">
@@ -66,7 +72,7 @@
                                             <div class="qty-box">
                                                 <div class="input-group">
                                                     <input type="text" name="quantity" class="form-control input-number"
-                                                        value="1">
+                                                        value="1" max="{{ product.amount }}">
                                                 </div>
                                             </div>
                                         </div>
@@ -83,11 +89,13 @@
                                     <h2> {{ product.price }}</h2>
                                 </td>
                                 <td>
-                                    <div class="qty-box">
+                                 <div class="qty-box">
                                         <div class="input-group">
-                                            {{rs.quantity}}
+                                            <input type="number" name="quantity" class="form-control input-number"
+                                                value="{{rs.quantity}}" max="{{ product.quantity }}">
                                         </div>
                                     </div>
+
                                 </td>
                                 <td><a href="{% url 'sales:DeleteFromCart'  rs.id %}" class="icon"><i class="ti-close"></i></a></td>
                                 <td>
@@ -104,7 +112,7 @@
                             <tr>
                                 <td>total price :</td>
                                 <td>
-                                    <h2>$. {{ total }}</h2>
+                                    <h2> {{ total }} $</h2>
                                 </td>
                             </tr>
                         </tfoot>

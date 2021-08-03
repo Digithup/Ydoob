@@ -2,14 +2,326 @@ from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from django.forms import modelformset_factory
 from django.http import request, HttpResponse, HttpResponseRedirect
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from django.views import View
+from django.views.generic import TemplateView
 
-from catalog.forms.forms import ProductsForm, ProductMediaForm
-from catalog.models.models import Categories, Products, ProductMedia, ProductTransaction
-from core.forms.banners_forms import render
-from core.models.setting import Setting, SettingLang, SettingMedia
+from catalog.forms.forms import ProductsForm, ProductMediaForm, OptionsDetailsForm, AttributesDetailsForm
+from catalog.models.models import Categories, Products, ProductMedia, ProductTransaction, OptionsDetails, \
+    AttributesDetails
+from catalog.models.product_options import Filters, Manufacturer, Attributes, OptionsType, Options
+from core.forms.banner import render
+from core.forms.setting import SettingForm, SettingLangForm, SettingTagForm
+from core.models.setting import Setting, SettingLang, SettingTags
 from localization.models import Language
 from user.models import User
+
+
+
+
+
+
+
+
+
+def ProductAddopencart(request):
+    filter = Filters.objects.all()
+    # 'extra' means the number of photos that you can upload   ^
+    if request.method == "POST":
+
+        print(request)
+        product_form = ProductsForm(request.POST or None, request.FILES or None)
+        media_form = ProductMediaForm(request.POST or None, request.FILES or None)
+
+        if product_form.is_valid() and media_form.is_valid():
+            print(request.POST)
+            product_created = True
+            seller = request.user.id
+            category = product_form.cleaned_data['category']
+            title = product_form.cleaned_data['title']
+            long_desc = product_form.cleaned_data['long_desc']
+            keyword = product_form.cleaned_data['keyword']
+            model = product_form.cleaned_data['model']
+            brand = product_form.cleaned_data['brand']
+            price = product_form.cleaned_data['price']
+            quantity = product_form.cleaned_data['quantity']
+            out_of_stock_status = product_form.cleaned_data['out_of_stock_status']
+            requires_shipping = product_form.cleaned_data['requires_shipping']
+            weight = product_form.cleaned_data['weight']
+            length = product_form.cleaned_data['length']
+            status = product_form.cleaned_data['status']
+            slug = product_form.cleaned_data['slug']
+            media_content_list = request.FILES.getlist("image")
+
+            category = Categories.objects.get(title=category)
+            seller = User.objects.get(id=seller)
+
+            product_form = None
+
+            if not product_form:
+
+                print(request)
+                print(request.POST)
+
+                product_form = Products(seller=seller, category=category, title=title,
+                                        long_desc=long_desc,
+                                        model=model, brand=brand, price=price, quantity=quantity,
+                                        out_of_stock_status=out_of_stock_status, keyword=keyword,
+
+                                        requires_shipping=requires_shipping, weight=weight, length=length,
+                                        status=status,
+                                        slug=slug)
+
+                product_form.save()
+                i = 0
+
+                for image in media_content_list:
+                    media_form = ProductMedia(product=product_form,
+                                              Image=image)
+                    media_form.save()
+                    i = i + 1
+                    print(request.POST)
+                    # use django messages framework
+                messages.success(request,
+                                 "Yeeew, check it out on the home page!")
+
+                return HttpResponseRedirect("/admin/products/")
+
+            else:
+                print("Form invalid, see below error msg")
+                print(request.POST)
+                messages.error(request, "Error")
+
+    else:
+
+        product_form = ProductsForm()
+
+        media_form = ProductMediaForm()
+        # return redirect(reverse('core:ProductAdd'))
+
+    return render(request, 'catalog/product/trushtest.html',
+                  {'product_form': product_form, 'media_form': media_form ,'filters':filter,})
+
+    # return HttpResponse("OK")
+    # return redirect(reverse('vendors:ProductsList'))
+
+
+
+
+
+class NewModelViewTest(View):
+    def get(self, request, *args, **kwargs):
+        print(request)
+        setting_form = SettingForm()
+        lang_form = SettingLangForm()
+        tags_form = SettingTagForm()
+        lang_list = Language.objects.filter(status=True)
+        return render(request, 'setting/add-setting.html',
+                      {"lang_list": lang_list, "setting_form": setting_form, "lang_form": lang_form,
+                       "tags_form": tags_form})
+
+    print(request)
+
+
+def AddSetting(request):
+    lang_list = Language.objects.filter(status=True)
+    # 'extra' means the number of photos that you can upload   ^
+    if request.method == "POST":
+
+        print(request)
+        setting_form = SettingForm(request.POST or None, request.FILES or None)
+        lang_form = SettingLangForm(request.POST or None, request.FILES or None)
+        tags_form = SettingTagForm(request.POST or None, request.FILES or None)
+
+        if setting_form.is_valid() and tags_form.is_valid():
+            print(request.POST)
+            product_created = True
+
+            phone = setting_form.cleaned_data['phone']
+            email = setting_form.cleaned_data['email']
+            image = setting_form.cleaned_data['image']
+            facebook = setting_form.cleaned_data['facebook']
+            instagram = setting_form.cleaned_data['instagram']
+            twitter = setting_form.cleaned_data['twitter']
+            youtube = setting_form.cleaned_data['youtube']
+            status = setting_form.cleaned_data['status']
+            slug = setting_form.cleaned_data['slug']
+
+            setting = request.POST.get('setting_id')
+            setting_lang_list = request.POST.getlist('lang[]')
+            setting_title_list = request.POST.getlist('title[]')
+            setting_keywords_list = request.POST.getlist('keywords[]')
+            setting_company_list = request.POST.getlist('company[]')
+            setting_address_list = request.POST.getlist('address[]')
+            setting_about_list = request.POST.getlist('about[]')
+            meta_title = tags_form.cleaned_data['meta_title']
+            meta_description = tags_form.cleaned_data['meta_description']
+            meta_keywords = tags_form.cleaned_data['meta_keywords']
+            tags = tags_form.cleaned_data['tags']
+
+            if not setting:
+
+                print(request)
+                print(request.POST)
+
+                setting_form = Setting(phone=phone, email=email, image=image, facebook=facebook,
+                                       instagram=instagram, twitter=twitter, youtube=youtube,
+                                       status=status, slug=slug)
+
+                setting_form.save()
+
+                j = 0
+                for setting_title in setting_title_list:
+                    lang_form = SettingLang(title=setting_title, keywords=setting_keywords_list[j],
+                                            about=setting_about_list[j], address=setting_address_list[j]
+                                            , lang=setting_lang_list[j], company=setting_company_list[j],
+                                            setting=setting_form)
+
+                    lang_form.save()
+                    j = j + 1
+
+                tags_form = SettingTags(setting=setting_form, meta_title=meta_title,
+                                        meta_description=meta_description,
+                                        meta_keywords=meta_keywords, tags=tags)
+                tags_form.save()
+
+                print(request.POST)
+                # use django messages framework
+                messages.success(request,
+                                 "Yeeew, check it out on the home page!")
+
+                return HttpResponseRedirect("/admin/setting/")
+
+            else:
+                print("Form invalid, see below error msg")
+                print(request.POST)
+                messages.error(request, "Error")
+
+    else:
+
+        setting_form = SettingForm()
+        lang_form = SettingLangForm()
+        tags_form = SettingTagForm()
+        # return redirect(reverse('core:ProductAdd'))
+
+    return render(request, 'setting/add-setting.html',
+                  {"lang_list": lang_list, 'setting_form': setting_form, 'lang_form': lang_form,
+                   'tags_form': tags_form})
+
+    # return HttpResponse("OK")
+    # return redirect(reverse('vendors:ProductsList'))
+
+
+class UpdateSetting(View):
+
+    def get(self, request,slug, *args, **kwargs):
+
+        setting = Setting.objects.get(slug=slug)
+        setting_lang = SettingLang.objects.filter(setting=setting, lang=request.LANGUAGE_CODE)
+        setting_tag = SettingTags.objects.get(setting=setting)
+        lang_list = Language.objects.filter(status=True)
+        setting_form = SettingForm()
+        lang_form = SettingLangForm()
+        tags_form = SettingTagForm()
+        return render(request, "setting/update-setting.html",
+                      {"setting": setting, "setting_lang": setting_lang,
+                       "setting_tag": setting_tag, "lang_list": lang_list ,"setting_form":setting_form})
+
+    def post(self, request,slug, *args, **kwargs):
+
+        if request.method == "POST":
+            print(request)
+            setting_form = SettingForm(request.POST or None, request.FILES or None)
+            lang_form = SettingLangForm(request.POST or None, request.FILES or None)
+            tags_form = SettingTagForm(request.POST or None, request.FILES or None)
+
+            if setting_form.is_valid() and tags_form.is_valid():
+                print(request.POST)
+                product_created = True
+
+                phone = setting_form.cleaned_data['phone']
+                email = setting_form.cleaned_data['email']
+                image = setting_form.cleaned_data['image']
+                facebook = setting_form.cleaned_data['facebook']
+                instagram = setting_form.cleaned_data['instagram']
+                twitter = setting_form.cleaned_data['twitter']
+                youtube = setting_form.cleaned_data['youtube']
+                status = setting_form.cleaned_data['status']
+                slugy = setting_form.cleaned_data['slug']
+
+                setting = Setting.objects.get(slug=slug)
+                setting_lang_list = request.POST.getlist('lang[]')
+                setting_title_list = request.POST.getlist('title[]')
+                setting_keywords_list = request.POST.getlist('keywords[]')
+                setting_company_list = request.POST.getlist('company[]')
+                setting_address_list = request.POST.getlist('address[]')
+                setting_about_list = request.POST.getlist('about[]')
+                meta_title = tags_form.cleaned_data['meta_title']
+                meta_description = tags_form.cleaned_data['meta_description']
+                meta_keywords = tags_form.cleaned_data['meta_keywords']
+                tags = tags_form.cleaned_data['tags']
+
+                if setting:
+                    setting.phone = phone
+                    setting.email = email
+                    setting.image = image
+                    setting.facebook = facebook
+                    setting.instagram = instagram
+                    setting.twitter = twitter
+                    setting.youtube = youtube
+                    setting.status = status
+                    setting.slug = slugy
+                    setting.save()
+
+                    print(request)
+                    print(request.POST)
+                    setting_lang = SettingLang.objects.filter(setting=setting, ).delete()
+                    setting_tag = SettingTags.objects.filter(setting=setting).delete()
+
+                    j = 0
+                    for setting_title in setting_title_list:
+                        setting_lang = SettingLang(title=setting_title, keywords=setting_keywords_list[j],
+                                                about=setting_about_list[j], address=setting_address_list[j]
+                                                , lang=setting_lang_list[j], company=setting_company_list[j],
+                                                setting=setting)
+
+                        setting_lang.save()
+                        j = j + 1
+
+
+                    setting_tag = SettingTags(setting=setting, meta_title=meta_title,
+                                            meta_description=meta_description,
+                                            meta_keywords=meta_keywords, tags=tags)
+                    setting_tag.save()
+
+                    print(request.POST)
+                    # use django messages framework
+                    messages.success(request,
+                                     "Yeeew, check it out on the home page!")
+
+                    return HttpResponseRedirect("/admin/setting/")
+
+                else:
+                    print("Form invalid, see below error msg")
+                    print(request.POST)
+                    messages.error(request, "Error")
+
+        else:
+
+            setting_form = SettingForm()
+            lang_form = SettingLangForm()
+            tags_form = SettingTagForm()
+
+            # return redirect(reverse('core:ProductAdd'))
+
+        return render(request, 'setting/update-setting.html',
+                      {'setting_form': setting_form, 'lang_form': lang_form,
+                       'tags_form': tags_form})
+
+        # return HttpResponse("OK")
+        # return redirect(reverse('vendors:ProductsList'))
+
 
 """
 
@@ -308,8 +620,8 @@ class SettingAddViewTest(View):
             filename = fs.save(media_content.name, media_content)
             media_url = fs.url(filename)
 
-            setting_media = SettingMedia(setting_id=setting_obj, media_type=media_type_list[i],
-                                         media_content=media_url)
+            setting_media = Setting(setting_id=setting_obj, media_type=media_type_list[i],
+                                    media_content=media_url)
             setting_media.save()
             i = i + 1
 
@@ -323,7 +635,7 @@ class SettingAddViewTest(View):
             setting_title.save()
             j = j + 1
         # return HttpResponse("OK")
-        return render(request, 'setting.html')
+        return render(request, 'setting/add-setting.html')
 
 
 # https://stackoverflow.com/questions/569468/django-multiple-models-in-one-template-using-forms
@@ -516,7 +828,7 @@ class ProductCreateTestNe(View):
             # return redirect(reverse('vendors:ProductsList'))
 
 
-def ProductCreateTestNew(request):
+def ProductCreateTestNew(self, request, *args, **kwargs):
     # 'extra' means the number of photos that you can upload   ^
     if request.method == "POST":
 

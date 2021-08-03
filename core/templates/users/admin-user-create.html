@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-lg-6">
                     <ol class="breadcrumb pull-right">
-                        <li class="breadcrumb-item"><a href="{% url 'core:admin_index' %}"><i
+                        <li class="breadcrumb-item"><a href="{% url 'core:AdminIndex' %}"><i
                                 data-feather="home"></i></a></li>
                         <li class="breadcrumb-item">Physical</li>
                         <li class="breadcrumb-item active">Add Product</li>
@@ -41,7 +41,7 @@
             <div class="col-xl-12">
                 <div class="card">
                     <form class="needs-validation" id="myform" enctype="multipart/form-data"
-                          action="{% url 'core:Product_add' %}"
+                          action="{% url 'core:AdminUserCreate' %}"
                           method="post">
                         {% csrf_token %}
 
@@ -382,7 +382,7 @@
                             <div class="product-buttons text-center">
                                     <button type="submit" class="btn btn-primary  submit_btn">Add</button>
 
-                                    <a href="{% url 'core:Products_list' %}">
+                                    <a href="{% url 'core:AdminUsersList' %}">
                             <button type="button" class="btn btn-light" data-toggle="modal"
                                     data-original-title="test" data-target="#exampleModal">Discard
                             </button>
@@ -556,7 +556,7 @@
                     console.log(xhr.responseText);
                 }
             }
-            xhr.open("POST", "{% url 'core:Product_add' %}", true);
+            xhr.open("POST", "{% url 'core:AdminUserCreate' %}", true);
             $("#progressbar").show();
 
             //UPDATING PROGRESS BAR
