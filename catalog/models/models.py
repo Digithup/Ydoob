@@ -11,7 +11,7 @@ from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 from translations.models import Translatable
 
-from catalog.models.product_options import Filters, Manufacturer, Attributes, Options
+from catalog.models.product_options import Filters, Manufacturer, Attributes, Options, Variant, Variant
 from user.models import User
 
 STATUS = (
@@ -24,6 +24,13 @@ OutStock = (
     ('2', 'In Stock'),
     ('3', 'Out Stock'),
     ('4', 'Pre-order'),
+)
+VARIANTS = (
+    ('None', 'None'),
+    ('Size', 'Size'),
+    ('Color', 'Color'),
+    ('Size-Color', 'Size-Color'),
+
 )
 
 
@@ -59,14 +66,21 @@ class Categories(MPTTModel, Translatable):
         return self.title
 
 
+VARIANTS = (
+    ('None', 'None'),
+    ('Size', 'Size'),
+    ('Color', 'Color'),
+    ('Size-Color', 'Size-Color'),
+
+)
 
 
 class Products(models.Model):
     id = models.AutoField(primary_key=True)
     seller = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Categories, on_delete=models.CASCADE, null=False)
-    title = models.CharField(max_length=255, null=False, blank=False)
-    keyword = models.CharField(max_length=255, null=False, blank=False)
+    title = models.CharField(max_length=1500, null=False, blank=False)
+    keyword = models.CharField(max_length=3500, null=False, blank=False)
     long_desc = models.TextField(null=True)
     model = models.CharField(max_length=65, null=True)
     brand = models.CharField(max_length=255, null=True)
@@ -81,9 +95,8 @@ class Products(models.Model):
     filter = models.ManyToManyField(Filters, related_name="product_filter", blank=True)
     manufacturer = models.ManyToManyField(Manufacturer, related_name="product_manufacturer", blank=True)
     related = models.ManyToManyField('self', related_name="product_manufacturer", blank=True)
-
-
     status = models.CharField(max_length=10, null=True)
+
     sort_order = models.SmallIntegerField(default=0, null=True)
     slug = models.SlugField(unique=True, null=False, max_length=128)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -113,9 +126,9 @@ def image_directory_path(instance, filename):
 
 
 class AttributesDetails(models.Model):
-    attribute = models.ManyToManyField(Attributes, related_name="product_attribute", blank=True)
-    product = models.ForeignKey(Products, on_delete=models.CASCADE, null=True)
-    attribute_detail = models.CharField(max_length=255, null=True)
+    attribute = models.ForeignKey(Attributes, on_delete=models.CASCADE, null=True, blank=True)
+    product = models.ForeignKey(Products, on_delete=models.CASCADE, null=True, blank=True)
+    attribute_detail = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
 
@@ -125,10 +138,12 @@ class AttributesDetails(models.Model):
     class Meta:
         verbose_name_plural = "Attribute Detail"
 
+
 class OptionsDetails(models.Model):
-    option = models.ManyToManyField(Options, related_name="product_options", blank=True)
-    product = models.ForeignKey(Products, on_delete=models.CASCADE, null=True)
-    option_detail = models.CharField(max_length=255, null=True)
+    option = models.ForeignKey(Options, on_delete=models.CASCADE, null=True, blank=True)
+    product = models.ForeignKey(Products, on_delete=models.CASCADE, null=True, blank=True)
+    option_detail = models.CharField(max_length=255, null=True, blank=True)
+    option_price = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
 
@@ -136,7 +151,25 @@ class OptionsDetails(models.Model):
         return self.option
 
     class Meta:
-        verbose_name_plural = "Options"
+        verbose_name_plural = "Options Detail"
+
+
+class VariantDetails(models.Model):
+    variant = models.CharField(max_length=255, choices=VARIANTS, default='1')
+    product = models.ForeignKey(Products, on_delete=models.CASCADE, null=True, blank=True)
+    variant_price = models.CharField(max_length=255, null=True, blank=True)
+    variant_quantity = models.IntegerField(default=1, null=True, blank=True)
+    variant_detail = models.CharField(max_length=255, null=True, blank=True)
+    variant_code = models.CharField(max_length=255)
+    variant_image = models.FileField(verbose_name='Product Variant Image', name='VariantImage',
+                                     upload_to='images/products/%Y/%m/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.variant
+
+    class Meta:
+        verbose_name_plural = "Variant Detail"
 
 
 class ProductMedia(models.Model):
@@ -210,17 +243,3 @@ class ProductReviewVoting(models.Model):
     user_id_voting = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, choices=STATUS)
-
-
-class ProductVariant(models.Model):
-    id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-
-class ProductVariantItems(models.Model):
-    id = models.AutoField(primary_key=True)
-    product_variant_id = models.ForeignKey(ProductVariant, on_delete=models.CASCADE)
-    product_id = models.ForeignKey(Products, on_delete=models.CASCADE)
-    title = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)

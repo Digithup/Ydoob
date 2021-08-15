@@ -27,7 +27,7 @@ class Setting(models.Model):
     twitter = models.URLField(blank=True, max_length=50, default='', null=True)
     youtube = models.URLField(blank=True, max_length=50, default='', null=True)
     status = models.CharField(max_length=10, choices=STATUS, default='Enable')
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True,default='nigne')
     create_at = models.DateTimeField(auto_now=True, null=False)
     update_at = models.DateTimeField(auto_now=True)
 
@@ -37,13 +37,14 @@ class Setting(models.Model):
 
 
 
+
 class SettingLang(models.Model):
     setting = models.ForeignKey(Setting, on_delete=models.CASCADE)  # many to one relation with Category
-    lang = models.CharField(max_length=6 , default='en')
+    lang = models.CharField(max_length=6 , default='en' ,blank=True,null=True)
     title = models.CharField(max_length=150, null=True, default='Nigne')
     keywords = models.CharField(max_length=255, default=' ', null=True)
     company = models.CharField(max_length=50, default=' ', null=True)
-    address = models.CharField(blank=True, max_length=100, default=' ', null=True)
+    address = models.CharField(blank=True, max_length=100, default='', null=True)
     about = RichTextUploadingField(blank=True, default='', null=True)
     contact = RichTextUploadingField(blank=True, default='', null=True)
     #

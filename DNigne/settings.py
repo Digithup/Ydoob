@@ -23,6 +23,14 @@ PAYPAL_API_KEY_HIDDEN = "aEKFH985N2oOIFWOeS7rdq2Nht6CdztTVDDjDuQCMIBKcAbjyL-Z3ZY
 import os
 import tempfile
 from pathlib import Path
+import environ
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+# reading .env file
+environ.Env.read_env()
 from django.contrib.messages import constants as message_constants
 from django.utils.translation import ugettext_lazy as _
 
@@ -33,18 +41,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in Productsion secret!
-SECRET_KEY = 'jwv-s5yx#u7bhnxh6zjt3ds=!jnvqv(qv5zu!2$g)t)n*d8zf+'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in Productsion!
-DEBUG = True
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
 
 # Application definition
 
 INSTALLED_APPS = [
-'dal',
-'dal_select2',
+    'dal',
+    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -79,8 +87,8 @@ INSTALLED_APPS = [
     'easy_thumbnails',
     'filer',
     'mptt',
-    #'whoosh',
-    #'haystack',
+    # 'whoosh',
+    # 'haystack',
     'rest_framework',
     'corsheaders',
     'crispy_forms',
@@ -97,6 +105,7 @@ INSTALLED_APPS = [
     'djangoformsetjs',
     'django_countries',
     'django_select2',
+    'currencies',
 
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -137,6 +146,7 @@ TEMPLATES = [
                 'django.template.context_processors.i18n',
                 'core.context_processors.core_processors',
                 'home.context_processors.home_processors',
+                'home.context_processors.user_processors',
                 'sales.context_processors.cart',
                 'vendors.context_processors.vendor_processors',
                 'django.contrib.auth.context_processors.auth',
@@ -269,7 +279,7 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         'LOCATION': os.path.join(tempfile.gettempdir(), 'django_imagefit')
     },
-"select2": {
+    "select2": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379/2",
         "OPTIONS": {
@@ -313,9 +323,9 @@ MESSAGE_TAGS = {
 SITE_ID = 1
 BASE_URL = "http://127.0.0.1:8000"
 # SESSION_COOKIE_SECURE = True
-#LOGIN_URL = '/admin/login'
-#LOGOUT_URL = '/admin/logout'
-#LOGIN_REDIRECT_URL = '/login'
+# LOGIN_URL = '/admin/login'
+# LOGOUT_URL = '/admin/logout'
+# LOGIN_REDIRECT_URL = '/login'
 # Cart
 CART_SESSION_ID = 'cart'
 SESSION_COOKIE_AGE = 85555
@@ -335,3 +345,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'nigneegypt@gmail.com'
 EMAIL_HOST_PASSWORD = 'Hitham5320826*'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+############Payment STRIPE########
+STRIPE_PUBLIC_KEY = env('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
+STRIPE_WEBHOOK_SECRET = env('STRIPE_WEBHOOK_SECRET')

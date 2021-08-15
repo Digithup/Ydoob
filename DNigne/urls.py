@@ -28,7 +28,7 @@ from localization import views
 urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
     path('selectlanguage', views.selectlanguage, name='selectlanguage'),
-    # path('selectcurrency', views.selectcurrency, name='selectcurrency'),
+    path('selectcurrency', views.selectcurrency, name='selectcurrency'),
     #path('savelangcur', views.savelangcur, name='savelangcur'),
 
 
@@ -55,7 +55,9 @@ urlpatterns += i18n_patterns(
     # API URL
     path('api-auth/', include('rest_framework.urls')),
     path("select2/", include("django_select2.urls")),
-    prefix_default_language=True,
+
+    #prefix_default_language=True,
+
 )
 
 #handler404 = error.error_handler

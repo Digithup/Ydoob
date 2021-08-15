@@ -14,7 +14,7 @@ def core_processors(request):
 
         }
     except Exception as e:
-        return {'setting': Setting.objects.last(),
-                'index_language': Language.objects.all()
+        return {'setting': None,
+                'index_language': None
 
                 }

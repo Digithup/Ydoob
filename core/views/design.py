@@ -12,7 +12,7 @@ from core.models.design import Slider, SliderGroup, SliderMedia, Banners
 
 
 class SliderView(TemplateView):
-    template_name = "Slider/sliders-admin.html"
+    template_name = "design/slider/sliders-admin.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -23,13 +23,13 @@ class SliderView(TemplateView):
 class SliderDetailView(DetailView):
     model = Slider
     context_object_name = 'slider'
-    template_name = 'slider/slider-detail.html'
+    template_name = 'design/slider/slider-detail.html'
 
 
 class SliderGroupCreate(CreateView):
     model = SliderGroup
     fields = '__all__'
-    template_name = 'slider/add-slider-group.html'
+    template_name = 'design/slider/add-slider-group.html'
     success_url = reverse_lazy('core:SliderView')
 
 
@@ -46,7 +46,7 @@ class SliderCreate(View):
 
         groups = SliderGroup.objects.filter(status=True)
 
-        return render(request, "slider/slider-create.html",
+        return render(request, "design/slider/slider-create.html",
                       {"groups": groups, })
 
     print(request)
@@ -87,7 +87,7 @@ class SliderCreate(View):
 ###################Banners#############
 
 class BannersView(TemplateView):
-    template_name = "design/banners-admin.html"
+    template_name = "design/banner/banners-admin.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -98,7 +98,7 @@ class BannersView(TemplateView):
 class BannerDetailView(DetailView):
     model = Banners
     context_object_name = 'design'
-    template_name = 'design/banner-detail.html'
+    template_name = 'design/banner/banner-detail.html'
 
 
 
@@ -116,7 +116,7 @@ class BannerCreate(View):
     def get(self, request, *args, **kwargs):
         print(request)
 
-        return render(request, "design/add-banner.html",
+        return render(request, "design/banner/add-banner.html",
                       )
 
     print(request)
@@ -141,7 +141,7 @@ class BannerCreate(View):
 ############ Menu ##############
 
 class MenuView(TemplateView):
-    template_name = "Slider/sliders-admin.html"
+    template_name = "design/slider/sliders-admin.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -152,20 +152,20 @@ class MenuView(TemplateView):
 class MenuDetailView(DetailView):
     model = Slider
     context_object_name = 'slider'
-    template_name = 'slider/slider-detail.html'
+    template_name = 'design/slider/slider-detail.html'
 
 
 class MenuGroupCreate(CreateView):
     model = SliderGroup
     fields = '__all__'
-    template_name = 'slider/add-slider-group.html'
+    template_name = 'design/slider/add-slider-group.html'
     success_url = reverse_lazy('core:SliderView')
 
 
 class MenuDelete(DeleteView):
     model = Slider
     fields = '__all__'
-    template_name = 'slider/confirm_delete.html'
+    template_name = 'design/slider/confirm_delete.html'
     success_url = reverse_lazy('core:SliderView')
 
 

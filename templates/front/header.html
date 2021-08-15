@@ -5,7 +5,8 @@
 {% load myapptags %}
 {% load i18n %}
 <!-- header start -->
-<header class="header-style-5 border-style" id="sticky-header">
+{#<header class="header-style-5 border-style" id="sticky-header">#}
+<header class="header-style-5 border-style" >
     <div class="mobile-fix-option"></div>
     <div class="top-header top-header-dark">
         <div class="container">
@@ -138,7 +139,7 @@
 
                                             </div>
                                         </ul>
-                                    </li>
+                                    </a></li>
 
                                     <li class="onhover-div mobile-cart">
                                         {% load myapptags %}
@@ -158,7 +159,7 @@
 
                                                             <ul><a href="#"><img alt="" height="20px" width="40px"
                                                                                  class="mr-3 img-box"
-                                                                                 src="{{ rm.Image.url }}">{% endfor %}
+                                                                                 src="{{ rm.image.url }}">{% endfor %}
                                                     </a></ul>
 
                                                         <div class="media-body col-md-4">

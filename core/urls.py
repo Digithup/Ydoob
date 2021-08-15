@@ -8,10 +8,12 @@ from core.views.catalog import AddCategory, categories, EditCategory, DeleteCate
     FiltersListView, AttributesGroupListView, EditAttributesGroup, AddAttributesGroup, DeleteAttributesGroup, \
     AttributeListView, EditAttribute, AddAttribute, DeleteAttribute, ProductUpdate, ProductAdd, ProductsList, search, \
     search_auto, ManufacturerDetail, OptionsTypeListView, AddOptionsType, EditOptionsType, DeleteOptionsType, \
-    OptionsListView, EditOption, AddOption, DeleteOption, load_option
+    OptionsListView, EditOption, AddOption, DeleteOption, load_option, VariantListView, EditVariant, AddVariant, \
+    DeleteVariant, load_variant
 from core.views.design import BannerDetailView, BannerDelete, \
     SliderView, SliderDelete, SliderGroupCreate, SliderDetailView, BannersView, BannerCreate, \
     SliderCreate
+from core.views.order import OrdersListView, EditOrder, OrderDetailView
 from core.views.setting import SettingDelete, AdminSetting
 from core.views.users import AdminLogin, AdminLogout, AdminUserCreate, \
     AdminUserDetail, AdminUserEdit, AdminUserDelete, AdminUsersList
@@ -81,7 +83,15 @@ urlpatterns = [
     path('admin/Option/edit/<int:pk>/', EditOption.as_view(), name='EditOption'),
     path('admin/Option/add/', AddOption.as_view(), name='AddOption'),
     path('admin/Option/delete/<int:pk>/', DeleteOption.as_view(), name='DeleteOption'),
-    path('ajax/load-options/', load_option, name='ajax_load_options'),
+    #path('ajax/load-options/', load_option, name='ajax_load_options'),
+
+    ########## Variant #########
+    path('admin/Variant/', VariantListView.as_view(), name='Variant'),
+    path('admin/Variant/edit/<int:pk>/', EditVariant.as_view(), name='EditVariant'),
+    path('admin/Variant/add/', AddVariant, name='AddVariant'),
+    path('admin/Variant/delete/<int:pk>/', DeleteVariant.as_view(), name='DeleteVariant'),
+
+    path('ajax/load-Variant/', load_variant, name='ajax_load_options'),
 
     ########## Manufacturer   #########
     path('admin/manufacture/', ManufacturerListView.as_view(), name='Manufacturers'),
@@ -89,6 +99,11 @@ urlpatterns = [
     path('admin/manufacture/edit/<int:pk>/', EditManufacture.as_view(), name='EditManufacturer'),
     path('admin/manufacture/edit/<int:pk>/', ManufacturerDetail.as_view(), name='ManufacturerDetail'),
     path('admin/manufacture/delete/<int:pk>/', DeleteManufacture.as_view(), name='DeleteManufacture'),
+
+    ########## Sales   #########
+    path('admin/sales/', OrdersListView.as_view(), name='Orders'),
+    path('admin/sales/edit/<int:pk>/', EditOrder.as_view(), name='EditOrder'),
+    path('admin/sales/edit/<int:pk>/', OrderDetailView.as_view(), name='OrderDetail'),
 
     ########## Slider   #########
     path('admin/slider', SliderView.as_view(), name='SliderView'),
@@ -104,7 +119,7 @@ urlpatterns = [
     path('admin/design/delete/<int:pk>/', BannerDelete.as_view(), name='BannerDelete'),
 
     ################ Users ################
-    path('admin/login5/', AdminLogin.as_view(), name='AdminLogin'),
+    path('', AdminLogin.as_view(), name='AdminLogin'),
     path('admin/logout/', AdminLogout, name='AdminLogout'),
     path('admin/users/', AdminUsersList.as_view(), name='AdminUsersList'),
     path('admin/users/create/', AdminUserCreate.as_view(), name='AdminUserCreate'),

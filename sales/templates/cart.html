@@ -1,4 +1,3 @@
-
 {% extends 'front/homebase.html' %}
 
 {% load crispy_forms_filters %}
@@ -39,89 +38,95 @@
 
             <div class="row">
                 <div class="col-sm-12">
-                <div class="cart_counter">
+                    <div class="cart_counter">
                         <div class="countdownholder">
-                            Your cart will be expired in<span id="timer" ></span> minutes!
+                            Your cart will be expired in<span id="timer"></span> minutes!
                         </div>
                         <a href="checkout.html" class="cart_checkout btn btn-solid btn-xs">check out</a>
                     </div>
                     <table class="table cart-table table-responsive-xs">
                         <thead>
-                            <tr class="table-head">
-                                <th scope="col">image</th>
-                                <th scope="col">product name</th>
-                                <th scope="col">price</th>
-                                <th scope="col">quantity</th>
-                                <th scope="col">action</th>
-                                <th scope="col">total</th>
-                            </tr>
+                        <tr class="table-head">
+                            <th scope="col">image</th>
+
+                            <th scope="col">product name</th>
+                            <th scope="col">price</th>
+                            <th scope="col">quantity</th>
+                            <th scope="col">action</th>
+                            <th scope="col">total</th>
+                        </tr>
                         </thead>
                         <tbody>
-                        {% for rs in shopcart %}
-                    {% with product=rs.product  %}
-                        {% for rm in product.productmedia_set.all  %}
-                            <tr>
-                                <td>
 
-                                    <img src="{% if rm.Image %} {{ rm.Image.url }} {% else %} {% static 'img/default.jpg' %} {% endif %}" alt="..." style="height: 50px; width: 90px">
-                                </td>
-                            {% endfor %}
-                                <td><a href="#">{{ product.title }}</a>
-                                    <div class="mobile-cart-content row">
-                                        <div class="col-xs-3">
-                                            <div class="qty-box">
-                                                <div class="input-group">
-                                                    <input type="text" name="quantity" class="form-control input-number"
-                                                        value="1" max="{{ product.amount }}">
-                                                </div>
+                        {% for rs in shopcart %}
+                            {% with product=rs.product %}
+                                {% for rm in product.productmedia_set.all %}
+                                    <tr>
+
+                                    <td>
+                                        <img src="{% if rm.Image %} {{ rm.Image.url }} {% else %} {% static 'img/default.jpg' %} {% endif %}"
+                                             alt="..." style="height: 50px; width: 90px">
+                                    {% endfor %} </td>
+
+
+                            <td><a href="#">{{ product.title }}</a>
+                                <div class="mobile-cart-content row">
+                                    <div class="col-xs-3">
+                                        <div class="qty-box">
+                                            <div class="input-group">
+                                                <input type="text" name="quantity" class="form-control input-number"
+                                                       value="1" max="{{ product.amount }}">
                                             </div>
                                         </div>
-                                        <div class="col-xs-3">
-                                            <h2 class="td-color">{{ product.price }}</h2>
-                                        </div>
-                                        <div class="col-xs-3">
-                                            <h2 class="td-color"><a href="#" class="icon"><i class="ti-close"></i></a>
-                                            </h2>
-                                        </div>
                                     </div>
-                                </td>
-                                <td>
-                                    <h2> {{ product.price }}</h2>
-                                </td>
-                                <td>
-                                 <div class="qty-box">
-                                        <div class="input-group">
-                                            <input type="number" name="quantity" class="form-control input-number"
-                                                value="{{rs.quantity}}" max="{{ product.quantity }}">
-                                        </div>
+                                    <div class="col-xs-3">
+                                        <h2 class="td-color">{{ product.price }}</h2>
                                     </div>
+                                    <div class="col-xs-3">
+                                        <h2 class="td-color"><a href="#" class="icon"><i class="ti-close"></i></a>
+                                        </h2>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <h2> {{ product.price }}</h2>
+                            </td>
+                            <td>
+                                <div class="qty-box">
+                                    <div class="input-group">
+                                        <input type="number" name="quantity" class="form-control input-number"
+                                               value="{{ rs.quantity }}" max="{{ product.quantity }}">
+                                    </div>
+                                </div>
 
-                                </td>
-                                <td><a href="{% url 'sales:DeleteFromCart'  rs.id %}" class="icon"><i class="ti-close"></i></a></td>
-                                <td>
-                                    <h2 class="td-color">{{ rs.amount }}</h2>
-                                </td>
+                            </td>
+                            <td><a href="{% url 'sales:DeleteFromCart'  rs.id %}" class="icon"><i class="ti-close"></i></a>
+                            </td>
+                            <td>
+                                <h2 class="td-color">{{ rs.amount }}</h2>
+                            </td>
                             </tr>
-                        </tbody>
-                     {% endwith %}
-                {% endfor %}
+                                </tbody>
+                            {% endwith %}
+                        {% endfor %}
 
                     </table>
                     <table class="table cart-table table-responsive-md">
                         <tfoot>
-                            <tr>
-                                <td>total price :</td>
-                                <td>
-                                    <h2> {{ total }} $</h2>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>total price :</td>
+                            <td>
+                                <h2> {{ total }} $</h2>
+                            </td>
+                        </tr>
                         </tfoot>
                     </table>
                 </div>
             </div>
             <div class="row cart-buttons">
-                <div class="col-6"><a href="{% url "home:ProductsView" %}" class="btn btn-solid">continue shopping</a></div>
-                <div class="col-6"><a href="{% url 'sales:OrderProduct'  %}" class="btn btn-solid">check out</a></div>
+                <div class="col-6"><a href="{% url "home:ProductsView" %}" class="btn btn-solid">continue shopping</a>
+                </div>
+                <div class="col-6"><a href="{% url 'sales:OrderProduct' %}" class="btn btn-solid">check out</a></div>
             </div>
         </div>
     </section>

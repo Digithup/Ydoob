@@ -99,3 +99,61 @@
                 </form>
             </div>
             <!-- Container-fluid Ends-->
+
+
+
+             <div class="form-group row  col-md-12 variant_div">
+                                                <div class="card-body row col-md-15 variant_div_row first_variant">
+                                                    <div class="col-md-4">
+                                                        <label for="validationCustom0"
+                                                               class=""><span>*</span>
+                                                            {% translate 'Product Variant ' %} </label>
+                                                        <select class="custom-select variant" id="product_variant"
+                                                                name="variant" style="width: 60%">
+                                                            {% for value, title in variant_form.variant.field.choices %}
+                                                                <option value="{{ value }}">{{ title }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label>{% translate ' varaint Detail ' %}</label>
+                                                        <input type="text" name="variant_detail"
+                                                               class="form-control"
+                                                               placeholder="option Detail"/>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label>{% translate ' varaint Price ' %}</label>
+                                                        <input type="number" name="variant_price"
+                                                               class="form-control"
+                                                               placeholder="option Price"/>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label>{% translate ' varaint amount ' %}</label>
+                                                        <input type="number" name="variant_price"
+                                                               class="form-control"
+                                                               placeholder="option Price"/>
+                                                    </div>
+                                                <div class="col-md-3">
+                                                        <label>{% translate ' varaint color ' %}</label>
+                                                        <input type="number" name="variant_price"
+                                                               class="form-control"
+                                                               placeholder="option Price"/>
+                                                    </div>
+                                                    <div class="row col-md-6 ml-auto p-2">
+
+
+                                                            <div class=" row col-md-4">
+                                                                <label>{% translate ' varaint amount ' %}</label>
+                                                                <input type="file"  name="image"
+                                                                   onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])">
+                                                            </div>
+                                                            <div class="row col-md-2 ml-auto p-2">
+                                                                 <p><img src="{{ user.image.url }}" alt="" id="blah"
+                                                                    class="img-fluid pull-right"></p>
+                                                            </div>
+
+
+
+                                                </div>
+                                            </div>
+                                        </div>

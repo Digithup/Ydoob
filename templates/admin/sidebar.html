@@ -29,6 +29,7 @@
                             <li><a href="{% url 'core:Filters' %}"><i class="fa fa-circle"></i>Filters</a></li>
                             <li><a href="{% url 'core:Attributes' %}"><i class="fa fa-circle"></i>Attributes</a></li>
                             <li><a href="{% url 'core:Options' %}"><i class="fa fa-circle"></i>Options</a></li>
+                             <li><a href="{% url 'core:Variant' %}"><i class="fa fa-circle"></i>Variant</a></li>
                             <li><a href="{% url 'core:Manufacturers' %}"><i class="fa fa-circle"></i>Manufacturers</a></li>
                             <li><a href="add-product.html"><i class="fa fa-circle"></i>Downloads</a></li>
                             <li><a href="add-product.html"><i class="fa fa-circle"></i>Reviews</a></li>
@@ -39,7 +40,7 @@
             <li><a class="sidebar-header" href=""><i data-feather="dollar-sign"></i><span>Sales</span><i
                     class="fa fa-angle-right pull-right"></i></a>
                 <ul class="sidebar-submenu">
-                    <li><a href="order.html"><i class="fa fa-circle"></i>Orders</a></li>
+                    <li><a href="{% url 'core:Orders' %}"><i class="fa fa-circle"></i>Orders</a></li>
                     <li><a href="transactions.html"><i class="fa fa-circle"></i>Transactions</a></li>
                 </ul>
             </li>

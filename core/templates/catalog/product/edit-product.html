@@ -37,7 +37,7 @@
         <div class="row product-adding">
             <div class="col-xl-12">
                 <form class="needs-validation repeater" enctype="multipart/form-data"
-                      action="{% url 'core:ProductUpdate' product.slug %}" data-options-url="{% url 'core:ajax_load_options' %}"
+                      action="{% url 'core:ProductAdd' %}" data-options-url="{% url 'core:ajax_load_options' %}"
                       name="ProductForm" id="ProductForm"
                       method="post">
                     {% csrf_token %}
@@ -79,6 +79,16 @@
                             {% endif %}
                          {% if option_form.errors %}
                                 {% for error_field, error_message in option_form.errors.items %}
+
+                                    <div class="alert alert-danger">
+                                        {{ error_field|striptags }}: {{ error_message|striptags }}
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+
+                            {% endif %}
+                        {% if variant_form.errors %}
+                                {% for error_field, error_message in variant_form.errors.items %}
 
                                     <div class="alert alert-danger">
                                         {{ error_field|striptags }}: {{ error_message|striptags }}
@@ -143,7 +153,7 @@
                                                                 class="form-control col-sm-4 "
                                                                 placeholder="title"
                                                                 id="title" type="text"
-                                                                name="title" value="{{ product.title }}" required
+                                                                name="title" value=" test" required
                                                                 oninvalid="invalidFunction(event,'title not empty')">
                                                         </div>
 
@@ -153,7 +163,7 @@
                                                             </label>
                                                             <label for="editor1"></label><textarea
                                                                 class="col-md-push-12 middle" content=""
-                                                                name="long_desc" id="editor1" value="{{ product.long_desc }}"
+                                                                name="long_desc" id="editor1"
                                                                 cols="2" onemptied=""
                                                                 rows="2"></textarea>
 
@@ -165,7 +175,7 @@
                                                             </label>
                                                             <textarea class="col-md-push-12 middle" content=""
                                                                       name="keyword" id="editor1"
-                                                                      cols="2" value="{{ product.keyword }}"
+                                                                      cols="2"
                                                                       rows="2" required="required"></textarea>
 
                                                         </div>
@@ -192,7 +202,7 @@
                                                 {% translate 'Model' %}</label>
                                             <input class="form-control col-md-6"
                                                    id="validationCustom0" type="text"
-                                                   name="model" value="{{ product.model }}"
+                                                   name="model" value="5"
                                                    required="" oninvalid="">
 
 
@@ -204,7 +214,7 @@
                                                 {% translate 'Brand' %}</label>
                                             <input class="form-control col-md-6"
                                                    id="validationCustom0" type="text"
-                                                   name="brand" value="{{ product.brand }}"
+                                                   name="brand" value="5"
                                                    required="" oninvalid="invalidFunction(event,'brand not empty')">
 
 
@@ -216,7 +226,7 @@
                                                    class="col-md-4"><span>*</span>
                                                 {% translate 'Category' %} </label>
                                             <select class="custom-select col-md-6" id="product_category" multiple
-                                                    name="category" value="{{ product.category }}"
+                                                    name="category"
                                                     style="width: 50%">
                                                 {% for value, text in product_form.category.field.choices %}
                                                     <option value="{{ value }}">{{ text }}</option>
@@ -444,11 +454,17 @@
                                                         {% endfor %}
                                                     </select>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-3">
                                                     <label>{% translate ' option Detail ' %}</label>
                                                     <input type="text" name="option_detail"
                                                            class="form-control" required=""
-                                                           placeholder="Attributes Detail"/>
+                                                           placeholder="option Detail"/>
+                                                </div>
+                                            <div class="col-md-3">
+                                                    <label>{% translate ' option Price ' %}</label>
+                                                    <input type="text" name="option_price"
+                                                           class="form-control" required=""
+                                                           placeholder="option Price"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -460,6 +476,49 @@
                                                         type="button">
                                                 </button>
                                                 <button class="btn btn-light fa fa-minus-circle  remove_option"
+                                                        type="button">
+
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                   <div>
+
+                                        <div class="form-group row  col-md-12 variant_div">
+                                            <div class="row col-md-12 variant_div_row first_variant">
+                                                <div class="col-md-4">
+                                                    <label for="validationCustom0"
+                                                           class=""><span>*</span>
+                                                        {% translate 'Product Variant ' %} </label>
+                                                    <select class="custom-select variant" id="product_variant"
+                                                            name="variant" style="width: 60%">
+                                                        {% for value, title in variant_form.variant.field.choices %}
+                                                            <option value="{{ value }}">{{ title }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label>{% translate ' varaint Detail ' %}</label>
+                                                    <input type="text" name="variant_detail"
+                                                           class="form-control" required=""
+                                                           placeholder="option Detail"/>
+                                                </div>
+                                            <div class="col-md-3">
+                                                    <label>{% translate ' varaint Price ' %}</label>
+                                                    <input type="text" name="variant_price"
+                                                           class="form-control" required=""
+                                                           placeholder="option Price"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group mb-0">
+                                            <div class="product-buttons text-center">
+
+                                                <button class="btn btn-primary fa fa-plus  add_variant"
+                                                        type="button">
+                                                </button>
+                                                <button class="btn btn-light fa fa-minus-circle  remove_variant"
                                                         type="button">
 
                                                 </button>
@@ -676,7 +735,12 @@
 {% block custom_js %}
     <script>
         document.getElementById("title").onchange = function () {
-            document.getElementById("slug").value = document.getElementById("title").value.toLowerCase().replaceAll(" ", "-");
+            document.getElementById("slug").value = document.getElementById("title").value.toLowerCase().replaceAll(" ", "-")
+                 .replace(/[^a-z0-9 -]/g, "") // remove invalid chars
+    .replace(/\s+/g, "-") // collapse whitespace and replace by -
+    .replace(/-+/g, "-") // collapse dashes
+    .replace(/^-+/, "") // trim - from start of text
+    .replace(/-+$/, ""); // trim - from end of text
         }
 
         function invalidFunction(e, message) {
@@ -769,6 +833,26 @@
         $(".remove_option").click(function () {
             if ($(".option_div").find(".option_div_row").length > 1) {
                 $(".option_div").children().last().remove();
+            }
+        });
+
+        $(".add_variant").click(function () {
+            var variant_row = $(".first_variant").clone();
+            variant_row.removeClass("first_variant").val("");
+            variant_row.removeClass("product_variant");
+            variant_row.find("#product_variant").select2({
+                theme: "classic",
+                closeOnSelect: true,
+                placeholder: 'Add Product variant',
+                minimumInputLength: 1,
+                maximumSelectionLength: 5,
+                allowClear: true,
+            });
+            $(".variant_div").append(variant_row);
+        });
+        $(".remove_variant").click(function () {
+            if ($(".variant_div").find(".variant_div_row").length > 1) {
+                $(".variant_div").children().last().remove();
             }
         });
 

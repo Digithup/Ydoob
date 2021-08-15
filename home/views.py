@@ -2,14 +2,15 @@ import json
 
 from django.core import serializers
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.views.generic import ListView, DetailView
 from haystack.query import SearchQuerySet
 
 from DNigne import settings
-from catalog.models.models import Categories, Products, ProductMedia
-from catalog.models.product_options import Manufacturer
+from catalog.models.models import Categories, Products, ProductMedia, VariantDetails
+from catalog.models.product_options import Manufacturer, Variant
 from core.models.design import SliderMedia, Banners
 from core.models.setting import Setting
 from home.forms import SearchForm
@@ -17,44 +18,12 @@ from sales.models.order import ShopCart
 
 
 def index(request):
-    if not request.session.has_key('currency'):
-        request.session['currency'] = settings.DEFAULT_CURRENCY
 
-    setting = Setting.objects.first()
-    products_latest = Products.objects.all().order_by('-id')[:4]  # last 4 products
-    categories = Categories.objects.all()
-    product = Products.objects.all()
-    banner = Banners.objects.all()
-    slider_media = SliderMedia.objects.all()
-    manufacture = Manufacturer.objects.filter(status='True')
-    current_user = request.user  # Access User Session information
-    shopcart = ShopCart.objects.filter(user_id=current_user.id)
-    total = 0
-    for rs in shopcart:
-        total += int(rs.product.price) * int(rs.quantity)
-    top_collection = Products.objects.all().order_by('-id')[:8]  # last 4 products
-    products_first = Products.objects.all().order_by('id')[:8]  # first 4 products
-    new_sale_products = Products.objects.all().order_by('-id')[:2]  # New Products
-    new_random_products = Products.objects.all().order_by('id', 'update_at')[:4]  # New Products
-    featured_products = Products.objects.all().order_by('id')[:8]  # Featured Products
-    best_products = Products.objects.all().order_by('?')[:8]  # Best Sellers
 
-    context = {
-        'setting': setting,
-        'categories': categories,
-        'product': product,
-        'design': banner,
-        'manufacture': manufacture,
-        # 'slider_media':slider_media,
-        'shopcart': shopcart,
-        'top_collection': top_collection,
-        'products_first': products_first,
-        'new_sale_products': new_sale_products,
-        'new_random_products': new_random_products,
-        'featured_products': featured_products,
-        'best_products': best_products,
-    }
-    return render(request, 'front/index.html', context)
+
+
+
+    return render(request, 'front/index.html')
 
 
 def CategoriesDetail(request):
@@ -90,30 +59,6 @@ class ProductsListView(ListView):
     template_name = "front/index.html"
     paginate_by = 12
 
-    def get_queryset(self):
-        filter_val = self.request.GET.get("filter", "")
-        order_by = self.request.GET.get("orderby", "id")
-        if filter_val != "":
-            products = Products.objects.filter(
-                Q(Products_name__contains=filter_val) | Q(Products_description__contains=filter_val)).order_by(order_by)
-        else:
-            products = Products.objects.all().order_by(order_by)
-        product_list = []
-        for product in products:
-            product_media = ProductMedia.objects.filter(product_id=product.id,  ).first()
-            product_list.append({"product": product, "media": product_media})
-
-        return product_list
-
-    def get_context_data(self, **kwargs):
-        context = super(ProductsListView, self).get_context_data(**kwargs)
-        context["filter"] = self.request.GET.get("filter", "")
-        context["orderby"] = self.request.GET.get("orderby", "id")
-        context["all_table_fields"] = Products._meta.get_fields()
-        return context
-
-
-
 
 
 class ProductDetailView(DetailView):
@@ -121,8 +66,76 @@ class ProductDetailView(DetailView):
     template_name = 'product-details.html'
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
-    #context_object_name = 'productsmedia'
+    pk_url_kwarg = 'id'
+    context_object_name = 'product'
+    def get_context_data(self, **kwargs):
+        #slug = kwargs["slug"]
+        context = super(ProductDetailView, self).get_context_data(**kwargs)
+        context['product_variant'] = VariantDetails.objects.all()
+        #context['CategoryChilled'] = Categories.objects.filter(slug='slug')
+        return context
 
+
+def product_detail(request,slug):
+    query = request.GET.get('q')
+    # >>>>>>>>>>>>>>>> M U L T I   L A N G U G A E >>>>>> START
+    defaultlang = settings.LANGUAGE_CODE[0:2] #en-EN
+    currentlang = request.LANGUAGE_CODE[0:2]
+    #category = categoryTree(0, '', currentlang)
+    category = Categories.objects.all()
+
+    product = Products.objects.get(slug=slug)
+
+    if defaultlang != currentlang:
+        try:
+            prolang =  Products.objects.raw('SELECT p.id,p.price,p.amount,p.image,p.variant,l.title, l.keywords, l.description,l.slug,l.detail '
+                                          'FROM product_product as p '
+                                          'INNER JOIN product_productlang as l '
+                                          'ON p.id = l.product_id '
+                                          'WHERE p.id=%s and l.lang=%s',[id,currentlang])
+            product=prolang[0]
+        except:
+            pass
+    # <<<<<<<<<< M U L T I   L A N G U G A E <<<<<<<<<<<<<<< end
+
+    images = ProductMedia.objects.filter(product=product)
+   # comments = Comment.objects.filter(product_id=id,status='True')
+    context = {'product': product,'category': category,
+               'images': images,
+               }
+    if product.variantdetails_set.all !="None": # Product have variants
+        if request.method == 'POST': #if we select color
+            variant_id = request.POST.get('variantid')
+            variant = VariantDetails.objects.get(id=variant_id) #selected product by click color radio
+            colors = VariantDetails.objects.filter(product_id=id,size_id=variant.size_id )
+            sizes = VariantDetails.objects.raw('SELECT * FROM  variantdetails_variant  WHERE product_id=%s GROUP BY size_id',[id])
+            query += variant.title+' Size:' +str(variant.size) +' Color:' +str(variant.color)
+        else:
+            variants = VariantDetails.objects.filter(product=product)
+            colors = VariantDetails.objects.filter(product=product, )
+            sizes = VariantDetails.objects.raw('SELECT * FROM  product_variants  WHERE product_id=%s GROUP BY size_id',[id])
+            variant =VariantDetails.objects.get(id=variants[0].id)
+        context.update({'sizes': sizes, 'colors': colors,
+                        'variant': variant,'query': query
+                        })
+    return render(request,'product-details.html',context)
+
+
+
+def ajaxcolor(request):
+    data = {}
+    if request.POST.get('action') == 'post':
+        size_id = request.POST.get('size')
+        productid = request.POST.get('productid')
+        colors = VariantDetails.objects.filter(product_id=productid, variant__title=size_id)
+        context = {
+            'size_id': size_id,
+            'productid': productid,
+            'colors': colors,
+        }
+        data = {'rendered_table': render_to_string('color_list.html', context=context)}
+        return JsonResponse(data)
+    return JsonResponse(data)
 
 def search(request):
     if request.method == 'POST':  # check post
@@ -142,7 +155,6 @@ def search(request):
             return render(request, 'search/search.html', context)
 
     return render(request, 'search/search.html')
-
 
 def search_auto(request):
     if request.is_ajax():

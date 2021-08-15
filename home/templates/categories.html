@@ -278,7 +278,7 @@
 
                                                                 <div class="img-wrapper">
                                                                     <div class="front">
-                                                                        <a href="product-page(no-sidebar).html"><img
+                                                                        <a href="{% url 'home:ProductDetail'  dod.product.slug %}"><img
                                                                                 src="{{ dod.media.Image.url }}"
                                                                                 class="img-fluid blur-up lazyload bg-img"
                                                                                 alt=""></a>

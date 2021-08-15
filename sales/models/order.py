@@ -1,9 +1,8 @@
 from django.db import models
 from django.forms import ModelForm
 
+from catalog.models.models import Products, OptionsDetails, VariantDetails
 from user.models import User
-from catalog.models.models import Products, ProductVariantItems
-
 from vendors.models import Store
 
 
@@ -11,8 +10,7 @@ class ShopCart(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     store = models.ForeignKey(Store, on_delete=models.SET_NULL, null=True)
     product = models.ForeignKey(Products, on_delete=models.SET_NULL, null=True)
-    variant = models.ForeignKey(ProductVariantItems , on_delete=models.SET_NULL,null=True)
-
+    variant = models.ForeignKey(VariantDetails, on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField()
 
     def __str__(self):
@@ -23,16 +21,16 @@ class ShopCart(models.Model):
         return (self.product.price)
 
     @property
-    def thumbnail(self):
-        return (self.product.thumbnail.url)
+    def image(self):
+        return self.product.productmedia_set.all()
 
     @property
     def amount(self):
-        return (int(self.quantity) * int(self.product.price))
+        return int(self.quantity) * int(self.product.price)
 
     @property
     def varamount(self):
-        return (self.quantity * self.variant.price)
+        return (self.quantity * self.variant.variant_price)
 
 
 class ShopCartForm(ModelForm):
@@ -84,7 +82,6 @@ class OrderProduct(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Products, on_delete=models.CASCADE)
-
     quantity = models.IntegerField()
     price = models.FloatField()
     amount = models.FloatField()

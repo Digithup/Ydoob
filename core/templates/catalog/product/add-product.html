@@ -77,8 +77,18 @@
                                 {% endfor %}
 
                             {% endif %}
-                         {% if option_form.errors %}
+                            {% if option_form.errors %}
                                 {% for error_field, error_message in option_form.errors.items %}
+
+                                    <div class="alert alert-danger">
+                                        {{ error_field|striptags }}: {{ error_message|striptags }}
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+
+                            {% endif %}
+                            {% if variant_form.errors %}
+                                {% for error_field, error_message in variant_form.errors.items %}
 
                                     <div class="alert alert-danger">
                                         {{ error_field|striptags }}: {{ error_message|striptags }}
@@ -107,19 +117,28 @@
                                                         role="tab" aria-controls="description" aria-selected="false"
                                                         data-original-title=""
                                                         title="">{% translate 'Description' %}</a></li>
+                                <li class="nav-item"><a class="nav-link" id="variant-tabs" data-toggle="tab"
+                                                        href="#variant"
+                                                        role="tab" aria-controls="data" aria-selected="false"
+                                                        data-original-title=""
+                                                        title="">{% translate 'Variant' %}</a>
+                                </li>
                                 <li class="nav-item"><a class="nav-link" id="description-tabs" data-toggle="tab"
                                                         href="#data"
                                                         role="tab" aria-controls="data" aria-selected="false"
-                                                        data-original-title="" title="">{% translate 'Data' %}</a></li>
+                                                        data-original-title="" title="">{% translate 'Data' %}</a>
+                                </li>
                                 <li class="nav-item"><a class="nav-link" id="image-tabs" data-toggle="tab"
                                                         href="#image"
                                                         role="tab" aria-controls="image" aria-selected="false"
-                                                        data-original-title="" title="">{% translate 'Image' %}</a></li>
+                                                        data-original-title="" title="">{% translate 'Image' %}</a>
+                                </li>
 
 
                                 <li class="nav-item"><a class="nav-link" id="seo-tabs" data-toggle="tab" href="#seo"
                                                         role="tab" aria-controls="seo" aria-selected="false"
-                                                        data-original-title="" title="">{% translate 'SEO' %}</a></li>
+                                                        data-original-title="" title="">{% translate 'SEO' %}</a>
+                                </li>
                             </ul>
                             <div class="tab-content" id="myTabContent">
                                 <div class="tab-pane fade active show" id="general" role="tabpanel"
@@ -346,6 +365,93 @@
 
 
                                 </div>
+                                <div class="tab-pane fade " id="variant" role="tabpanel"
+                                     aria-labelledby="variant-tabs">
+                                    <div class="card-header"><h4>Variant</h4></div>
+
+                                    <div class="card-body">
+                                        <table class="table table-responsive-md">
+                                            <tr>
+                                                <th style="align-content: center">{% translate ' Variant ' %}</th>
+                                                <th style="align-content: center">{% translate ' price ' %}</th>
+                                                <th style="align-content: center">{% translate ' amount ' %}</th>
+                                                <th style="align-content: center">{% translate ' detail ' %}</th>
+                                                <th style="align-content: center">{% translate ' color ' %}</th>
+                                                <th style="align-content: center">{% translate ' image ' %}</th>
+
+                                            </tr>
+                                        </table>
+                                        <div>
+                                            <div class="variant_div">
+                                                <div class="variant_div_row first_variant">
+                                                    <div data-repeater-item class="table table-responsive">
+                                                        <table class="table ">
+
+                                                            <td style="width:20%"><select class=""
+                                                                                          id="product_variant"
+                                                                                          name="variant">
+
+                                                                {% for value, title in  variant_form.variant.field.choices %}
+                                                                    <option value="{{ value }}">{{ title }}</option>
+                                                                {% endfor %}
+                                                            </select></td>
+                                                            <td style="width:5%"><input type="text"
+
+                                                                                         name="variant_price"
+
+                                                                                         placeholder="option Price"/>
+                                                            </td>
+                                                            <td style="width:5%"><input type="text"
+
+                                                                                         name="variant_quantity"
+
+                                                                                         placeholder="option amount"/>
+                                                            </td>
+                                                            <td style="width:10%">
+                                                                <input type="text"
+
+                                                                                         name="variant_detail"
+
+                                                                                         placeholder="option amount"/>
+                                                            </td>
+
+
+                                                            <td style="width:10%"><input type="color"
+                                                                                         name="variant_code"
+
+                                                            /></td>
+                                                            <td style="width:20%">
+                                                                <div>
+                                                                    <input type="file" name="variant_image" id="variant_image"
+                                                                           onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])">
+
+                                                                    <img src="{{ user.image.url }}" alt="" width="20%"
+                                                                         height="20%" id="blah"/>
+                                                                </div>
+                                                            </td>
+
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group mb-0">
+                                                <div class="product-buttons text-center">
+
+                                                    <button class="btn btn-primary fa fa-plus  add_variant"
+                                                            type="button">
+                                                    </button>
+                                                    <button class="btn btn-light fa fa-minus-circle  remove_variant"
+                                                            type="button">
+
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="tab-pane fade " id="data" role="tabpanel" aria-labelledby="data-tabs">
                                     <div class="card-header"> detail</div>
                                     <div class="card-body">
@@ -409,9 +515,10 @@
                                                 <div class="col-md-6">
                                                     <label>{% translate ' Attributes Detail ' %}</label>
                                                     <input type="text" name="attribute_detail"
-                                                           class="form-control" required=""
+                                                           class="form-control"
                                                            placeholder="Attributes Detail"/>
                                                 </div>
+
                                             </div>
                                         </div>
 
@@ -430,7 +537,7 @@
                                     </div>
 
 
-                                        <div>
+                                    <div>
                                         <div class="form-group row  col-md-12 option_div">
                                             <div class="row col-md-12 option_div_row first_option">
                                                 <div class="col-md-4">
@@ -444,11 +551,17 @@
                                                         {% endfor %}
                                                     </select>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-3">
                                                     <label>{% translate ' option Detail ' %}</label>
                                                     <input type="text" name="option_detail"
-                                                           class="form-control" required=""
-                                                           placeholder="Attributes Detail"/>
+                                                           class="form-control"
+                                                           placeholder="option Detail"/>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label>{% translate ' option Price ' %}</label>
+                                                    <input type="number" name="option_price"
+                                                           class="form-control"
+                                                           placeholder="option Price"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -465,6 +578,8 @@
                                                 </button>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div>
                                     </div>
 
                                 </div>
@@ -636,7 +751,7 @@
                             </div>
                         </div>
 
-                    </div>
+
                 </form>
 
                 <!-- Container-fluid Ends-->
@@ -676,7 +791,12 @@
 {% block custom_js %}
     <script>
         document.getElementById("title").onchange = function () {
-            document.getElementById("slug").value = document.getElementById("title").value.toLowerCase().replaceAll(" ", "-");
+            document.getElementById("slug").value = document.getElementById("title").value.toLowerCase().replaceAll(" ", "-")
+                .replace(/[^a-z0-9 -]/g, "") // remove invalid chars
+                .replace(/\s+/g, "-") // collapse whitespace and replace by -
+                .replace(/-+/g, "-") // collapse dashes
+                .replace(/^-+/, "") // trim - from start of text
+                .replace(/-+$/, ""); // trim - from end of text
         }
 
         function invalidFunction(e, message) {
@@ -772,6 +892,36 @@
             }
         });
 
+        $(".add_variant").click(function () {
+            var variant_row = $(".first_variant").clone();
+            variant_row.removeClass("first_variant").val("");
+            variant_row.removeClass("product_variant");
+            variant_row.find('#category1').hide();
+            variant_row.find('#group').change(function (e) {
+                var group = $(this).val();
+                if (group == 'Premium') {
+                    $('#category1').show();
+                } else {
+                    $('#category1').hide();
+                }
+            });
+            variant_row.find("#product_variant").select2({
+                theme: "classic",
+                closeOnSelect: true,
+                placeholder: 'Add Product variant',
+                minimumInputLength: 1,
+                maximumSelectionLength: 5,
+                allowClear: true,
+            });
+
+            $(".variant_div").append(variant_row);
+        });
+        $(".remove_variant").click(function () {
+            if ($(".variant_div").find(".variant_div_row").length > 1) {
+                $(".variant_div").children().last().remove();
+            }
+        });
+
 
         $('input#tags').tagsinput('remove', 'some tag');
 
@@ -820,23 +970,12 @@
 
 
     </script>
-    <script>
-        $("#option_type").change(function () {
-            var url = $("#ProductForm").attr("data-options-url");  // get the url of the `load_cities` view
-            var optionTypeId = $(this).val();  // get the selected country ID from the HTML input
 
-            $.ajax({                       // initialize an AJAX request
-                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
-                data: {
-                    'option_type': optionTypeId       // add the country id to the GET parameters
-                },
-                success: function (data) {   // `data` is the return of the `load_cities` view function
-                    $("#option").html(data);  // replace the contents of the city input with the data that came from the server
-                }
-            });
 
-        });
-    </script>
+
+
+
+
 
 
 {% endblock custom_js %}

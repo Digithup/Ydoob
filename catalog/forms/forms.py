@@ -7,8 +7,8 @@ from django.http import request
 from django_select2.forms import ModelSelect2Widget, ModelSelect2MultipleWidget
 from haystack import indexes
 
-from catalog.models.models import Categories, Products, ProductMedia, AttributesDetails, OptionsDetails
-from catalog.models.product_options import Filters, Manufacturer, Attributes, Options, OptionsType
+from catalog.models.models import Categories, Products, ProductMedia, AttributesDetails, OptionsDetails, VariantDetails
+from catalog.models.product_options import Filters, Manufacturer, Attributes, Options, OptionsType, Variant
 
 
 class CategoryAddForm(forms.ModelForm):
@@ -66,11 +66,12 @@ class ProductsForm(forms.ModelForm):
 
 
 class AttributesDetailsForm(forms.ModelForm):
-    attribute = forms.ModelChoiceField(queryset=Attributes.objects.all(), label=u"attribute",
+    attribute = forms.ModelChoiceField(queryset=Attributes.objects.all(), required=False,label=u"attribute",
                                        widget=ModelSelect2Widget(
                                            search_fields=['title'],
                                            dependent_fields={'attribute': 'attribute'
                                                              }))
+    attribute_detail = forms.CharField(required=False)
 
     class Meta:
         model = AttributesDetails
@@ -86,18 +87,36 @@ class OptionsDetailsForm(forms.ModelForm):
     #
     #                                    ))
 
-    option = forms.ModelChoiceField(queryset=Options.objects.all(), label=u"Options",
+    option = forms.ModelChoiceField(queryset=Options.objects.all(),required=False, label=u"Options",
                                        widget=ModelSelect2Widget (
                                            model=Options,
                                            search_fields=['title__icontains'],
                                            dependent_fields={'option_type': 'option_type'
 
                                                              }) )
+    option_price = forms.CharField(required=False)
+    option_detail = forms.CharField(required=False)
     class Meta:
         model = OptionsDetails
         fields = '__all__'
         exclude = ['product']
 
+
+class VariantDetailsForm(forms.ModelForm):
+
+    # variant = forms.ModelChoiceField(queryset=Variant.objects.all(),required=False, label=u"Variant",
+    #                                    widget=ModelSelect2Widget (
+    #                                        model=Variant,
+    #                                        search_fields=['title__icontains'],
+    #                                      ) )
+    variant_detail = forms.CharField(required=False)
+    variant_price = forms.CharField(required=False)
+    variant_quantity = forms.CharField(required=False)
+    variant_image = forms.CharField(required=False)
+    class Meta:
+        model = VariantDetails
+        fields = '__all__'
+        exclude = ['product']
 
 
 
@@ -126,3 +145,15 @@ class ProductsIndex(indexes.SearchIndex, indexes.Indexable):
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.filter(pub_date__lte=datetime.datetime.now())
+
+class VariantForm(forms.ModelForm):
+
+    # variant = forms.ModelChoiceField(queryset=Variant.objects.all(),required=False, label=u"Variant",
+    #                                    widget=ModelSelect2Widget (
+    #                                        model=Variant,
+    #                                        search_fields=['title__icontains'],
+    #                                      ) )
+
+    class Meta:
+        model = Variant
+        fields = '__all__'

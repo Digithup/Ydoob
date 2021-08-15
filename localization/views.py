@@ -56,9 +56,6 @@ from localization.models import Home, Language
 
 def all_lang(request):
     lang = Language.objects.all()
-
-
-
     context = {
 
         'lang': lang,
@@ -112,7 +109,11 @@ def savelangcur(request):
     return HttpResponseRedirect(lasturl)
 
 
-
+def selectcurrency(request):
+    lasturl = request.META.get('HTTP_REFERER')
+    if request.method == 'POST':  # check post
+        request.session['currency'] = request.POST['currency']
+    return HttpResponseRedirect(lasturl)
 
 
 

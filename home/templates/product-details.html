@@ -4,11 +4,11 @@
 {% load myapptags %}
 {% load imagefit %}
 {% load bootstrap4 %}
+{% load currency %}
 <!--Slick slider css-->
 <link rel="stylesheet" type="text/css" href="{% static '' %}css/slick.css">
 <link rel="stylesheet" type="text/css" href="{% static '' %}css/slick-theme.css">
 {% block body %}
-
 
 
     <!-- breadcrumb start -->
@@ -155,39 +155,41 @@
                             <h5 class="title-border">new product</h5>
                             <div class="offer-slider slide-1">
                                 <div>
-                                        {% for sp in side_products %}
+                                    {% for sp in side_products %}
                                         <div class="media">
-                                                <a href="{% url 'home:ProductDetail' sp.product.slug %}"><img class="img-fluid blur-up lazyload"
-                                                                src="{{ sp.Image.url }}" height="70px" width="100px"></a>
-                                                <div class="media-body align-self-center">
-                                                    <div class="rating"><i class="fa fa-star"></i> <i
-                                                            class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                                            class="fa fa-star"></i> <i class="fa fa-star"></i></div>
-                                                    <a href="{% url 'home:ProductDetail' sp.product.slug %}">
-                                                        <h6>{{ sp.product.title }}</h6>
-                                                    </a>
-                                                    <h4>{{ sp.product_id.product_max_price }}</h4>
-                                                </div>
+                                            <a href="{% url 'home:ProductDetail' sp.product.slug %}"><img
+                                                    class="img-fluid blur-up lazyload"
+                                                    src="{{ sp.Image.url }}" height="70px" width="100px"></a>
+                                            <div class="media-body align-self-center">
+                                                <div class="rating"><i class="fa fa-star"></i> <i
+                                                        class="fa fa-star"></i> <i class="fa fa-star"></i> <i
+                                                        class="fa fa-star"></i> <i class="fa fa-star"></i></div>
+                                                <a href="{% url 'home:ProductDetail' sp.product.slug %}">
+                                                    <h6>{{ sp.product.title }}</h6>
+                                                </a>
+                                                <h4>{{ sp.product_id.product_max_price }}</h4>
+                                            </div>
 
                                         </div>{% endfor %}
-                                    </div>
+                                </div>
                                 <div>
-                                        {% for sp in side_products2 %}
+                                    {% for sp in side_products2 %}
                                         <div class="media">
-                                                <a href="{% url 'home:ProductDetail' sp.product.slug %}"><img class="img-fluid blur-up lazyload"
-                                                                src="{{ sp.Image.url }}" height="70px" width="100px"></a>
-                                                <div class="media-body align-self-center">
-                                                    <div class="rating"><i class="fa fa-star"></i> <i
-                                                            class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                                            class="fa fa-star"></i> <i class="fa fa-star"></i></div>
-                                                    <a href="{% url 'home:ProductDetail' sp.product.slug %}">
-                                                        <h6>{{ sp.product.title }}</h6>
-                                                    </a>
-                                                    <h4>{{ sp.product_id.product_max_price }}</h4>
-                                                </div>
+                                            <a href="{% url 'home:ProductDetail' sp.product.slug %}"><img
+                                                    class="img-fluid blur-up lazyload"
+                                                    src="{{ sp.Image.url }}" height="70px" width="100px"></a>
+                                            <div class="media-body align-self-center">
+                                                <div class="rating"><i class="fa fa-star"></i> <i
+                                                        class="fa fa-star"></i> <i class="fa fa-star"></i> <i
+                                                        class="fa fa-star"></i> <i class="fa fa-star"></i></div>
+                                                <a href="{% url 'home:ProductDetail' sp.product.slug %}">
+                                                    <h6>{{ sp.product.title }}</h6>
+                                                </a>
+                                                <h4>{{ sp.product_id.product_max_price }}</h4>
+                                            </div>
 
                                         </div>{% endfor %}
-                                    </div>
+                                </div>
                             </div>
                         </div>
                         <!-- side-bar single product slider end -->
@@ -204,13 +206,13 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="product-slick">
-                                        {% for rs in products.productmedia_set.all %}
-                                        <div>
-                                                 <img src="{{ rs.Image.url }}" alt=""
-                                                  class="img-fluid blur-up lazyload image_zoom_cls-0">
-                                        </div>{% endfor %}
+                                        {% for rs in product.productmedia_set.all %}
+                                            <div>
+                                                <img src="{{ rs.Image.url }}" alt="" height="50px" width="50%"
+                                                     class="img-fluid blur-up lazyload image_zoom_cls-0">
+                                            </div>{% endfor %}
 
-                                         <div class="video-product">
+                                        <div class="video-product">
                                             <iframe src="https://www.youtube.com/embed/gyGsPlt06bo" frameborder="0"
                                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                                     allowfullscreen></iframe>
@@ -219,11 +221,11 @@
                                     <div class="row">
                                         <div class="col-12 p-0">
                                             <div class="slider-nav">
-                                                {% for rs in products.productmedia_set.all %}
-                                        <div>
-                                                 <img src="{{ rs.Image.url }}" alt=""
-                                                  class="img-fluid blur-up lazyload image_zoom_cls-0">
-                                        </div>{% endfor %}
+                                                {% for rs in product.productmedia_set.all %}
+                                                    <div>
+                                                        <img src="{{ rs.Image.url }}" alt=""
+                                                             class="img-fluid blur-up lazyload image_zoom_cls-0">
+                                                    </div>{% endfor %}
 
 
                                                 <div>
@@ -256,7 +258,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <h2>{{ products.title }}</h2>
+                                        <h2>{{ product.title }}</h2>
                                         <div class="rating-section">
                                             <div class="rating"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i
                                                     class="fa fa-star"></i> <i class="fa fa-star"></i> <i
@@ -265,15 +267,36 @@
                                         </div>
                                         <div class="label-section">
                                             <span class="badge badge-grey-color">#1 Best seller</span>
-                                            <span class="label-text">in fashion</span>
+                                            <span class="label-text">in {{ product.category }}</span>
                                         </div>
-                                        <h3 class="price-detail">${{ products.price }}
+                                        <h3 class="price-detail">${{ product.price }}
                                             <del>$459.00</del>
                                             <span>55% off</span></h3>
+                                        <ul class="image-swatch">
+                                            {% for rs in product.variantdetails_set.all %}
+                                                {% if rs.variant == 'Size-Color' %}
+                                                    <li class="active"><a href="#"><img src="{{ rs.VariantImage.url }}"
+                                                                                        alt=""
+                                                                                        class="img-fluid blur-up lazyload"></a>
+                                                    </li>
+
+                                                {% endif %}{% endfor %}
+                                        </ul>
+
+
                                         <ul class="color-variant">
-                                            <li class="bg-light0 active"></li>
-                                            <li class="bg-light1"></li>
-                                            <li class="bg-light2"></li>
+                                            {% for rs in product.variantdetails_set.all %}
+                                                {% if rs.variant == 'Color' %}
+
+
+
+                                                    <li class=" " style="background-color:{{ rs.variant_code }}"
+                                                        title="{{ rs.variant_detail }}"
+                                                    ></li>
+
+
+                                                {% endif %}{% endfor %}
+
                                         </ul>
                                         <div id="selectSize"
                                              class="addeffect-section product-description border-product">
@@ -301,262 +324,384 @@
                                             <h6 class="error-message">please select size</h6>
                                             <div class="size-box">
                                                 <ul>
-                                                    <li><a href="javascript:void(0)">s</a></li>
-                                                    <li><a href="javascript:void(0)">m</a></li>
-                                                    <li><a href="javascript:void(0)">l</a></li>
-                                                    <li><a href="javascript:void(0)">xl</a></li>
+                                                    {% for rs in product.variantdetails_set.all %}
+
+                                                        {% if rs.variant == 'Size' %}
+
+                                                            <li><a href="javascript:void(0)">{{ rs.variant_detail }}</a>
+                                                            </li>
+
+
+                                                        {% endif %}
+
+                                                    {% endfor %}
                                                 </ul>
                                             </div>
-                                            {% if  product.variant != 'None'   %}
-                                <h6 class="product-title">quantity</h6>
-                                     <form action="{% url 'sales:AddToCart' products.id %}" method="post"  id="addchart-form">
-                                    {% csrf_token %}
-                                        <div class="qty-box">
-                                    <div class="input-group"><span class="input-group-prepend"><button type="button"
-                                                                                                       class="btn quantity-left-minus"
-                                                                                                       data-type="minus"
-                                                                                                       data-field=""><i
-                                            class="ti-angle-left"></i></button> </span>
-                                        <input type="text" name="quantity" class="form-control input-number" value="1"  max="{{ product.amount }}">
-                                        <span class="input-group-prepend"><button type="button"
-                                                                                  class="btn quantity-right-plus"
-                                                                                  data-type="plus" data-field=""><i
-                                                class="ti-angle-right"></i></button></span></div>
-                                </div>
+
+                                            <div class="product-btns">
+                                                <div class="row">
+                                                    {% if product.variantdetails_set.all == 'Size-Color' %}
+
+                                                        <div class="product-options">
+                                                            <div class="size-option">
+                                                                <form method="POST" id="post-form">
+                                                                    <input  name="productid" id="productid"
+                                                                           value="{{ product.id }}">
+                                                                    <span class="text-uppercase">Size :</span>
+                                                                    {% csrf_token %}
+                                                                    <select name="size" id="size">
+                                                                        {% for rs in sizes %}
+                                                                            <option
+                                                                                    {% if variant.size_id == rs.size_id %}
+                                                                                        selected {% endif %}
+                                                                                        value="{{ rs.size_id }}">{{ rs.size.name }}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </form>
+                                                            </div>
+
+                                                            <form method="post" action="?q=selectvariant"
+                                                                  id="post-color">
+                                                                {% csrf_token %}
+                                                                <div id="appendHere">
+                                                                    <input type="hidden" name="size" id="size"
+                                                                           value="{{ size_id }}">
+                                                                    <ul class="color-option">
+                                                                        <li><span class="text-uppercase">Color:</span>
+                                                                        </li>
+                                                                        {% for rs in products.variantdetails_set.all %}
+                                                                            <input type="radio"
+                                                                                    {% if variant.id == rs.id %}
+                                                                                   checked {% endif %} name="variantid"
+                                                                                   id="variantid" value="{{ rs.id }}"
+                                                                                   onchange="this.form.submit();">
+                                                                            <li  {% if variant.id == rs.id %}
+                                                                                class="active" {% endif %}>
+                                                                                <a style="background-color:{{ rs.variant_code }}; color: #D9D9D9; text-shadow: 1px 1px #000000; width: 90px">
+                                                                                    {{ rs.price|currency:request.session.currency }} {{ request.session.currency }} {{ rs.color }}
+                                                                                </a>
+                                                                                <img src="{{ rs.VariantImage.url }}"
+                                                                                     style="height: 70px">
+                                                                            </li>
+                                                                        {% endfor %}
+                                                                    </ul>
+                                                                </div>
+                                                            </form>
+                                                        </div>
 
 
-                                        <div class="product-buttons"><a href="{% url 'sales:AddToCart' products.id %}" data-toggle="modal" data-target="#addtocart"
-                                                            class="btn btn-solid">add to cartm</a> <a href="{% url 'sales:OrderProduct' %}"
-                                                                                                     class="btn btn-solid">buy
-                                now</a>
-                                        </div> </form>
-                            </div>
-                             {% else %}
-                            <h6 class="product-title">quantity</h6>
-                                      <form action="{% url 'sales:AddToCart' product.id %}" method="post"  id="addchart-form">
-                                    {% csrf_token %}
-                                <div class="qty-box">
-                                   {% if product.amount > 0  %}
-                                    <div class="input-group"><span class="input-group-prepend"><button type="button"
-                                                                                                       class="btn quantity-left-minus"
-                                                                                                       data-type="minus"
-                                                                                                       data-field=""><i
-                                            class="ti-angle-left"></i></button> </span>
-                                        <input type="text" name="quantity" class="form-control input-number" value="1" max="{{ product.amount }}">
-                                        <span class="input-group-prepend"><button type="button"
-                                                                                  class="btn quantity-right-plus" aria-errormessage="{{ product.amount }}"
-                                                                                  data-type="plus" data-field="" ><i
-                                                class="ti-angle-right" aria-valuemax="{{ product.amount }}"></i></button></span></div>
-                                     </div>
-                                       {% else %} Out of Stock {% endif %}
+                                                    {% elif product.variantdetails_set.all == 'Size' %}
+                                                        <form method="post" action="?q=selectvariant" id="post-color">
+                                                            {% csrf_token %}
+                                                            <div id="appendHere">
+                                                                <input type="hidden" name="size" id="size"
+                                                                       value="{{ size_id }}">
+                                                                <ul class="color-option">
+                                                                    <li><span class="text-uppercase">Size:</span></li>
+                                                                    {% for rs in sizes %}
+                                                                        <input type="radio"
+                                                                                {% if variant.id == rs.id %}
+                                                                               checked {% endif %} name="variantid"
+                                                                               id="variantid" value="{{ rs.id }}"
+                                                                               onchange="this.form.submit();">
+                                                                        <li  {% if variant.id == rs.id %}
+                                                                            class="active" {% endif %}>
+                                                                            <a style=" color: #204d74;  width: 90px">
+                                                                                ${{ rs.size }}<br> {{ rs.price|currency:request.session.currency }} {{ request.session.currency }}
+                                                                            </a>
+                                                                        </li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            </div>
+                                                        </form>
+                                                        <br><br>
 
+                                                    {% elif product.variantdetails_set.all == 'Color' %}
+                                                        <form method="post" action="?q=selectvariant" id="post-color">
+                                                            {% csrf_token %}
+                                                            <div id="appendHere">
+                                                                <input type="hidden" name="size" id="size"
+                                                                       value="{{ size_id }}">
+                                                                <ul class="color-option">
+                                                                    <li><span class="text-uppercase">Color:</span></li>
+                                                                    {% for rs in colors %}
+                                                                        <input type="radio"
+                                                                                {% if variant.id == rs.id %}
+                                                                               checked {% endif %} name="variantid"
+                                                                               id="variantid" value="{{ rs.id }}"
+                                                                               onchange="this.form.submit();">
+                                                                        <li  {% if variant.id == rs.id %}
+                                                                            class="active" {% endif %}>
+                                                                            <a style="background-color:{{ rs.color.code }}; color: #D9D9D9; text-shadow: 1px 1px #000000; width: 90px">
+                                                                                {{ rs.price|currency:request.session.currency }} {{ request.session.currency }} {{ rs.color }}
+                                                                            </a>
+                                                                            <img src="{{ rs.image }}"
+                                                                                 style="height: 70px">
+                                                                        </li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            </div>
 
-                            <div class="product-buttons"><a href="{% url 'sales:AddToCart' product.id %}"  type="submit"
-                                                            class="btn btn-solid">add to cartd</a> <a href="{% url 'sales:OrderProduct' %}"
-                                                                                                     class="btn btn-solid">buy
-                                now</a>
-                            </div>
-                                      </form>
-                         {% endif %}
-                                        <div class="product-count">
-                                            <ul>
-                                                <li>
-                                                    <img src="{% static '' %}images/icon/truck.png" class="img-fluid"
-                                                         alt="image">
-                                                    <span class="lang">Free shipping for orders above $500 USD</span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="border-product">
-                                            <h6 class="product-title">Sales Ends In</h6>
-                                            <div class="timer">
-                                                <p id="demo"></p>
-                                            </div>
-                                        </div>
-                                        <div class="border-product">
-                                            <h6 class="product-title">shipping info</h6>
-                                            <ul class="shipping-info">
-                                                <li>100% Original Products</li>
-                                                <li>Free Delivery on order above Rs. 799</li>
-                                                <li>Pay on delivery is available</li>
-                                                <li>Easy 30 days returns and exchanges</li>
-                                            </ul>
-                                        </div>
-                                        <div class="border-product">
-                                            <h6 class="product-title">share it</h6>
-                                            <div class="product-icon">
-                                                <ul class="product-social">
-                                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-rss"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <section class="tab-product m-0">
-                            <div class="row">
-                                <div class="col-sm-12 col-lg-12">
-                                    <ul class="nav nav-tabs nav-material" id="top-tab" role="tablist">
-                                        <li class="nav-item"><a class="nav-link active" id="top-home-tab"
-                                                                data-bs-toggle="tab" href="#top-home" role="tab"
-                                                                aria-selected="true"><i
-                                                class="icofont icofont-ui-home"></i>Details</a>
-                                            <div class="material-border"></div>
-                                        </li>
-                                        <li class="nav-item"><a class="nav-link" id="profile-top-tab"
-                                                                data-bs-toggle="tab" href="#top-profile" role="tab"
-                                                                aria-selected="false"><i
-                                                class="icofont icofont-man-in-glasses"></i>Specification</a>
-                                            <div class="material-border"></div>
-                                        </li>
-                                        <li class="nav-item"><a class="nav-link" id="contact-top-tab"
-                                                                data-bs-toggle="tab" href="#top-contact" role="tab"
-                                                                aria-selected="false"><i
-                                                class="icofont icofont-contacts"></i>Video</a>
-                                            <div class="material-border"></div>
-                                        </li>
-                                        <li class="nav-item"><a class="nav-link" id="review-top-tab"
-                                                                data-bs-toggle="tab" href="#top-review" role="tab"
-                                                                aria-selected="false"><i
-                                                class="icofont icofont-contacts"></i>Write
-                                            Review</a>
-                                            <div class="material-border"></div>
-                                        </li>
-                                    </ul>
-                                    <div class="tab-content nav-material" id="top-tabContent">
-                                        <div class="tab-pane fade show active" id="top-home" role="tabpanel"
-                                             aria-labelledby="top-home-tab">
-                                            <div class="product-tab-discription">
-                                                <div class="part">
-                                                    <p>The Model is wearing a white blouse from our stylist's
-                                                        collection, see the image for a mock-up of what the actual
-                                                        blouse would look like.it has text written on it in a black
-                                                        cursive language which looks great on a white color.</p>
-                                                </div>
-                                                <div class="part">
-                                                    <h5 class="inner-title">fabric:</h5>
-                                                    <p>Art silk is manufactured by synthetic fibres like rayon. It's
-                                                        light in weight and is soft on the skin for comfort in
-                                                        summers.Art silk is manufactured by synthetic fibres like rayon.
-                                                        It's light in weight and is soft on the skin for comfort in
-                                                        summers.</p>
-                                                </div>
-                                                <div class="part">
-                                                    <h5 class="inner-title">size & fit:</h5>
-                                                    <p>The model (height 5'8") is wearing a size S</p>
-                                                </div>
-                                                <div class="part">
-                                                    <h5 class="inner-title">Material & Care:</h5>
-                                                    <p>Top fabric: pure cotton</p>
-                                                    <p>Bottom fabric: pure cotton</p>
-                                                    <p>Hand-wash</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="top-profile" role="tabpanel"
-                                             aria-labelledby="profile-top-tab">
-                                            <p>The Model is wearing a white blouse from our stylist's collection, see
-                                                the image for a mock-up of what the actual blouse would look like.it has
-                                                text written on it in a black cursive language which looks great on a
-                                                white color.</p>
-                                            <div class="single-product-tables">
-                                                <table>
-                                                    <tbody>
-                                                    <tr>
-                                                        <td>Sleeve Length</td>
-                                                        <td>Sleevless</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Neck</td>
-                                                        <td>Round Neck</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Occasion</td>
-                                                        <td>Sports</td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                                <table>
-                                                    <tbody>
-                                                    <tr>
-                                                        <td>Fabric</td>
-                                                        <td>Polyester</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Fit</td>
-                                                        <td>Regular Fit</td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="top-contact" role="tabpanel"
-                                             aria-labelledby="contact-top-tab">
-                                            <div class="">
-                                                <iframe width="560" height="315"
-                                                        src="https://www.youtube.com/embed/BUWzX78Ye_8"
-                                                        allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="top-review" role="tabpanel"
-                                             aria-labelledby="review-top-tab">
-                                            <form class="theme-form">
-                                                <div class="form-row row">
-                                                    <div class="col-md-12">
-                                                        <div class="media">
-                                                            <label>Rating</label>
-                                                            <div class="media-body ms-3">
-                                                                <div class="rating three-star"><i
-                                                                        class="fa fa-star"></i> <i
-                                                                        class="fa fa-star"></i> <i
-                                                                        class="fa fa-star"></i> <i
-                                                                        class="fa fa-star"></i> <i
-                                                                        class="fa fa-star"></i></div>
+                                                        </form>
+                                                        </div>
+                                                    {% endif %}
+
+                                                {% if  product.variantdetails_set.all != 'None' %}
+                                                    <form action="{% url 'sales:AddToCart' product.id %}" method="post"
+                                                          id="addchart-form">
+                                                        {% csrf_token %}
+                                                        <input name="variantid" id="variantid" value="{{ variant.id }}">
+                                                        <div id="SelectedProduct">
+                                                            <p><strong>Availability:</strong>
+                                                                {% if rs.variant_quantity > 0 %} In Stock {% else %} Out
+                                                                    of Stock {% endif %}</p>
+                                                            <p><strong>Selected :</strong> Size : {{ variant.size }}
+                                                                Color : {{ variant.color }} </p>
+                                                            <h3 class="product-price">${{ variant.price }}</h3>
+                                                            <div class="qty-input">
+                                                                <span class="text-uppercase">QTY: </span>
+                                                                <input class="input" name="quantity" type="number"
+                                                                       value="1" min="1" max="{{ variant.quantity }}">
+                                                                <button type="submit" {% if variant.quantity < 1 %}
+                                                                        disabled {% endif %}
+                                                                        class="primary-btn add-to-cart">
+                                                                    <i class="fa fa-shopping-cart"></i> Add to Cart
+                                                                </button>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label for="name">Name</label>
-                                                        <input type="text" class="form-control" id="name"
-                                                               placeholder="Enter Your name" required>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label for="email">Email</label>
-                                                        <input type="text" class="form-control" id="email"
-                                                               placeholder="Email" required>
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <label for="review">Review Title</label>
-                                                        <input type="text" class="form-control" id="review"
-                                                               placeholder="Enter your Review Subjects" required>
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <label for="review">Review Title</label>
-                                                        <textarea class="form-control"
-                                                                  placeholder="Wrire Your Testimonial Here"
-                                                                  id="exampleFormControlTextarea1" rows="6"></textarea>
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <button class="btn btn-solid" type="submit">Submit YOur
-                                                            Review
-                                                        </button>
-                                                    </div>
+                                                    </form>
+                                                {% else %}
+
+                                                    <form action="{% url 'sales:AddToCart' product.id %}" method="post"
+                                                          id="addchart-form">
+                                                        {% csrf_token %}
+                                                        <div id="SelectedProduct">
+                                                            <p><strong>Availability:</strong>
+                                                                {% if product.quantity > 0 %} In Stock {% else %} Out of
+                                                                    Stock {% endif %}</p>
+                                                            <h3 class="product-price">{{ product.price|currency:request.session.currency }} {{ request.session.currency }}</h3>
+                                                            <div class="qty-input">
+                                                                <span class="text-uppercase">QTY: </span>
+                                                                <input class="input" name="quantity" type="number"
+                                                                       value="1" min="1" max="{{ product.quantity }}">
+                                                                <button type="submit" {% if product.quantity < 1 %}
+                                                                        disabled {% endif %}
+                                                                        class="primary-btn add-to-cart">
+                                                                    <i class="fa fa-shopping-cart"></i> Add to Cart
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+
+                                                {% endif %}
+                                            </div>
+                                            <br>
+
+                                            <div class="product-count">
+                                                <ul>
+                                                    <li>
+                                                        <img src="{% static '' %}images/icon/truck.png"
+                                                             class="img-fluid"
+                                                             alt="image">
+                                                        <span class="lang">Free shipping for orders above $500 USD</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="border-product">
+                                                <h6 class="product-title">Sales Ends In</h6>
+                                                <div class="timer">
+                                                    <p id="demo"></p>
                                                 </div>
-                                            </form>
+                                            </div>
+                                            <div class="border-product">
+                                                <h6 class="product-title">shipping info</h6>
+                                                <ul class="shipping-info">
+                                                    <li>100% Original Products</li>
+                                                    <li>Free Delivery on order above Rs. 799</li>
+                                                    <li>Pay on delivery is available</li>
+                                                    <li>Easy 30 days returns and exchanges</li>
+                                                </ul>
+                                            </div>
+                                            <div class="border-product">
+                                                <h6 class="product-title">share it</h6>
+                                                <div class="product-icon">
+                                                    <ul class="product-social">
+                                                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                                        <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                                                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                                        <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                                                        <li><a href="#"><i class="fa fa-rss"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </section>
+                            <section class="tab-product m-0">
+                                <div class="row">
+                                    <div class="col-sm-12 col-lg-12">
+                                        <ul class="nav nav-tabs nav-material" id="top-tab" role="tablist">
+                                            <li class="nav-item"><a class="nav-link active" id="top-home-tab"
+                                                                    data-bs-toggle="tab" href="#top-home" role="tab"
+                                                                    aria-selected="true"><i
+                                                    class="icofont icofont-ui-home"></i>Details</a>
+                                                <div class="material-border"></div>
+                                            </li>
+                                            <li class="nav-item"><a class="nav-link" id="profile-top-tab"
+                                                                    data-bs-toggle="tab" href="#top-profile" role="tab"
+                                                                    aria-selected="false"><i
+                                                    class="icofont icofont-man-in-glasses"></i>Specification</a>
+                                                <div class="material-border"></div>
+                                            </li>
+                                            <li class="nav-item"><a class="nav-link" id="contact-top-tab"
+                                                                    data-bs-toggle="tab" href="#top-contact" role="tab"
+                                                                    aria-selected="false"><i
+                                                    class="icofont icofont-contacts"></i>Video</a>
+                                                <div class="material-border"></div>
+                                            </li>
+                                            <li class="nav-item"><a class="nav-link" id="review-top-tab"
+                                                                    data-bs-toggle="tab" href="#top-review" role="tab"
+                                                                    aria-selected="false"><i
+                                                    class="icofont icofont-contacts"></i>Write
+                                                Review</a>
+                                                <div class="material-border"></div>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content nav-material" id="top-tabContent">
+                                            <div class="tab-pane fade show active" id="top-home" role="tabpanel"
+                                                 aria-labelledby="top-home-tab">
+                                                <div class="product-tab-discription">
+                                                    <div class="part">
+                                                        <p>The Model is wearing a white blouse from our stylist's
+                                                            collection, see the image for a mock-up of what the actual
+                                                            blouse would look like.it has text written on it in a black
+                                                            cursive language which looks great on a white color.</p>
+                                                    </div>
+                                                    <div class="part">
+                                                        <h5 class="inner-title">fabric:</h5>
+                                                        <p>Art silk is manufactured by synthetic fibres like rayon. It's
+                                                            light in weight and is soft on the skin for comfort in
+                                                            summers.Art silk is manufactured by synthetic fibres like
+                                                            rayon.
+                                                            It's light in weight and is soft on the skin for comfort in
+                                                            summers.</p>
+                                                    </div>
+                                                    <div class="part">
+                                                        <h5 class="inner-title">size & fit:</h5>
+                                                        <p>The model (height 5'8") is wearing a size S</p>
+                                                    </div>
+                                                    <div class="part">
+                                                        <h5 class="inner-title">Material & Care:</h5>
+                                                        <p>Top fabric: pure cotton</p>
+                                                        <p>Bottom fabric: pure cotton</p>
+                                                        <p>Hand-wash</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="top-profile" role="tabpanel"
+                                                 aria-labelledby="profile-top-tab">
+                                                <p>The Model is wearing a white blouse from our stylist's collection,
+                                                    see
+                                                    the image for a mock-up of what the actual blouse would look like.it
+                                                    has
+                                                    text written on it in a black cursive language which looks great on
+                                                    a
+                                                    white color.</p>
+                                                <div class="single-product-tables">
+                                                    <table>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>Sleeve Length</td>
+                                                            <td>Sleevless</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Neck</td>
+                                                            <td>Round Neck</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Occasion</td>
+                                                            <td>Sports</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <table>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>Fabric</td>
+                                                            <td>Polyester</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Fit</td>
+                                                            <td>Regular Fit</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="top-contact" role="tabpanel"
+                                                 aria-labelledby="contact-top-tab">
+                                                <div class="">
+                                                    <iframe width="560" height="315"
+                                                            src="https://www.youtube.com/embed/BUWzX78Ye_8"
+                                                            allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="top-review" role="tabpanel"
+                                                 aria-labelledby="review-top-tab">
+                                                <form class="theme-form">
+                                                    <div class="form-row row">
+                                                        <div class="col-md-12">
+                                                            <div class="media">
+                                                                <label>Rating</label>
+                                                                <div class="media-body ms-3">
+                                                                    <div class="rating three-star"><i
+                                                                            class="fa fa-star"></i> <i
+                                                                            class="fa fa-star"></i> <i
+                                                                            class="fa fa-star"></i> <i
+                                                                            class="fa fa-star"></i> <i
+                                                                            class="fa fa-star"></i></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="name">Name</label>
+                                                            <input type="text" class="form-control" id="name"
+                                                                   placeholder="Enter Your name" required>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="email">Email</label>
+                                                            <input type="text" class="form-control" id="email"
+                                                                   placeholder="Email" required>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <label for="review">Review Title</label>
+                                                            <input type="text" class="form-control" id="review"
+                                                                   placeholder="Enter your Review Subjects" required>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <label for="review">Review Title</label>
+                                                            <textarea class="form-control"
+                                                                      placeholder="Wrire Your Testimonial Here"
+                                                                      id="exampleFormControlTextarea1"
+                                                                      rows="6"></textarea>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <button class="btn btn-solid" type="submit">Submit YOur
+                                                                Review
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
     </section>
     <!-- Section ends -->
 

@@ -1,0 +1,19 @@
+
+{% for rs in variant %}
+    {% if rs == 'color' %}
+    <div class="data-fields col-md-3" data-parent="variant_type"
+                                                     data-sub="color" id="option">
+                                                    <div class="sare-title">color picker</div>
+                                                    <input type="text" name="audio" placeholder="Audio" id="option"
+                                                           onchange="myFunction()" value=""/>
+                                                </div>
+    {% else %}
+     <div class=" row col-md-4">
+                                                        <label>{% translate ' varaint amount ' %}</label>
+                                                        <input type="file" name="image"
+                                                               onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])">
+                                                    </div>
+    {% endif %}
+
+
+{% endfor %}
