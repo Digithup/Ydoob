@@ -23,11 +23,13 @@ from django.utils.translation import gettext_lazy as _
 
 import core
 from core.views.users import AdminLogin
+from home.tests import ajaxcolortest
 from localization import views
 
 urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
     path('selectlanguage', views.selectlanguage, name='selectlanguage'),
+
     path('selectcurrency', views.selectcurrency, name='selectcurrency'),
     #path('savelangcur', views.savelangcur, name='savelangcur'),
 
@@ -37,7 +39,7 @@ urlpatterns = [
 
 urlpatterns += i18n_patterns(
 
-
+    path('currencies/', include('currencies.urls')),
     path('admin/', admin.site.urls ),
     path('', include('user.urls'), name='user'),
     path('', include('core.urls'), name='core'),
@@ -55,6 +57,7 @@ urlpatterns += i18n_patterns(
     # API URL
     path('api-auth/', include('rest_framework.urls')),
     path("select2/", include("django_select2.urls")),
+path('ajaxcolor/', ajaxcolortest, name='ajaxcolor'),
 
     #prefix_default_language=True,
 

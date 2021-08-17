@@ -370,14 +370,26 @@
                                     <div class="card-header"><h4>Variant</h4></div>
 
                                     <div class="card-body">
+                                    <div class="form-group row">
+                                            <label for="validationCustom0"
+                                                   class=" col-md-4"><span>*</span>
+                                                {% translate 'Variant System' %} </label>
+                                            <select name="variant"
+                                                    class="custom-select  col-md-6">
+                                                {% for value, text in product_form.variant.field.choices %}
+                                                    <option value="{{ value }}">{{ text }}</option>
+                                                {% endfor %}
+                                            </select>
+
+                                        </div>
                                         <table class="table table-responsive-md">
                                             <tr>
-                                                <th style="align-content: center">{% translate ' Variant ' %}</th>
-                                                <th style="align-content: center">{% translate ' price ' %}</th>
-                                                <th style="align-content: center">{% translate ' amount ' %}</th>
-                                                <th style="align-content: center">{% translate ' detail ' %}</th>
-                                                <th style="align-content: center">{% translate ' color ' %}</th>
-                                                <th style="align-content: center">{% translate ' image ' %}</th>
+                                                <th style="align-content: center">{% translate ' Title ' %}</th>
+                                                <th style="align-content: center">{% translate ' Size ' %}</th>
+                                                <th style="align-content: center">{% translate ' Color ' %}</th>
+                                                <th style="align-content: center">{% translate ' Price ' %}</th>
+                                                <th style="align-content: center">{% translate ' Quantity ' %}</th>
+                                                <th style="align-content: center">{% translate ' Image ' %}</th>
 
                                             </tr>
                                         </table>
@@ -386,43 +398,50 @@
                                                 <div class="variant_div_row first_variant">
                                                     <div data-repeater-item class="table table-responsive">
                                                         <table class="table ">
+                                                        <td style="width:5%"><input type="text"
 
-                                                            <td style="width:20%"><select class=""
+                                                                                         name="variant_title"
+
+                                                                                         placeholder="Product Title"/>
+                                                            </td>
+                                                        <td style="width:20%"><select class=""
                                                                                           id="product_variant"
-                                                                                          name="variant">
+                                                                                          name="variant_color">
 
-                                                                {% for value, title in  variant_form.variant.field.choices %}
+                                                                {% for value, title in  variant_form.color.field.choices %}
                                                                     <option value="{{ value }}">{{ title }}</option>
                                                                 {% endfor %}
                                                             </select></td>
+
+                                                            <td style="width:20%"><select class=""
+                                                                                          id="product_variant"
+                                                                                          name="variant_size">
+
+                                                                {% for value, title in  variant_form.size.field.choices %}
+                                                                    <option value="{{ value }}">{{ title }}</option>
+                                                                {% endfor %}
+                                                            </select></td>
+
+
                                                             <td style="width:5%"><input type="text"
 
                                                                                          name="variant_price"
-
-                                                                                         placeholder="option Price"/>
-                                                            </td>
-                                                            <td style="width:5%"><input type="text"
-
-                                                                                         name="variant_quantity"
 
                                                                                          placeholder="option amount"/>
                                                             </td>
                                                             <td style="width:10%">
                                                                 <input type="text"
 
-                                                                                         name="variant_detail"
+                                                                                         name="variant_quantity"
 
                                                                                          placeholder="option amount"/>
                                                             </td>
 
 
-                                                            <td style="width:10%"><input type="color"
-                                                                                         name="variant_code"
 
-                                                            /></td>
                                                             <td style="width:20%">
                                                                 <div>
-                                                                    <input type="file" name="variant_image" id="variant_image"
+                                                                    <input type="file" name="ImageVariant" id="variant_image"
                                                                            onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])">
 
                                                                     <img src="{{ user.image.url }}" alt="" width="20%"
@@ -434,6 +453,7 @@
                                                         </table>
                                                     </div>
                                                 </div>
+
                                             </div>
 
 
@@ -975,7 +995,55 @@
 
 
 
-
+<script>
+    $(document).ready(function () {
+        $('.repeater').repeater({
+            // (Optional)
+            // start with an empty list of repeaters. Set your first (and only)
+            // "data-repeater-item" with style="display:none;" and pass the
+            // following configuration flag
+            initEmpty: true,
+            // (Optional)
+            // "defaultValues" sets the values of added items.  The keys of
+            // defaultValues refer to the value of the input's name attribute.
+            // If a default value is not specified for an input, then it will
+            // have its value cleared.
+            defaultValues: {
+                'text-input': 'foo'
+            },
+            // (Optional)
+            // "show" is called just after an item is added.  The item is hidden
+            // at this point.  If a show callback is not given the item will
+            // have $(this).show() called on it.
+            show: function () {
+                $(this).slideDown();
+            },
+            // (Optional)
+            // "hide" is called when a user clicks on a data-repeater-delete
+            // element.  The item is still visible.  "hide" is passed a function
+            // as its first argument which will properly remove the item.
+            // "hide" allows for a confirmation step, to send a delete request
+            // to the server, etc.  If a hide callback is not given the item
+            // will be deleted.
+            hide: function (deleteElement) {
+                if(confirm('Are you sure you want to delete this element?')) {
+                    $(this).slideUp(deleteElement);
+                }
+            },
+            // (Optional)
+            // You can use this if you need to manually re-index the list
+            // for example if you are using a drag and drop library to reorder
+            // list items.
+            ready: function (setIndexes) {
+                $dragAndDrop.on('drop', setIndexes);
+            },
+            // (Optional)
+            // Removes the delete button from the first list item,
+            // defaults to false.
+            isFirstItemUndeletable: true
+        })
+    });
+</script>
 
 
 {% endblock custom_js %}

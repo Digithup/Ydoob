@@ -16,11 +16,11 @@ from django.views.generic import ListView, DeleteView, DetailView, UpdateView, C
 
 from DNigne.settings import BASE_URL
 from catalog.forms.forms import CategoryAddForm, ProductsForm, ProductMediaForm, AttributesDetailsForm, \
-    OptionsDetailsForm, VariantDetailsForm, VariantForm
+    OptionsDetailsForm, ColorForm, SizeForm, VariantDetailsForm
 from catalog.models.models import Categories, Products, ProductMedia, ProductTags, \
     ProductTransaction, AttributesDetails, OptionsDetails, VariantDetails
 from catalog.models.product_options import Manufacturer, FiltersGroup, Filters, AttributesGroup, Attributes, Options, \
-    OptionsType, Variant
+    OptionsType, Color, Size
 from core.forms.forms import SearchForm
 from core.models.setting import Setting
 from localization.models import Language
@@ -67,8 +67,7 @@ def AddCategory(request):
             print(request.POST)
             category_created = True
             title = form.cleaned_data['title']
-            title_en = form.cleaned_data['title_en']
-            title_ar = form.cleaned_data['title_ar']
+
             keywords = form.cleaned_data['keywords']
             description = form.cleaned_data['description']
             parent = form.cleaned_data['parent']
@@ -79,7 +78,7 @@ def AddCategory(request):
             category_obj = None
             if not category_id:
                 print(request)
-                category_obj = Categories.objects.create(title=title, title_ar=title_ar, title_en=title_en,
+                category_obj = Categories.objects.create(title=title,
                                                          keywords=keywords, parent=parent,
                                                          description=description, image=image,
                                                          slug=slug, status=status
@@ -89,8 +88,7 @@ def AddCategory(request):
                 print(request)
 
             category_obj.title = title
-            category_obj.title_en = title_en
-            category_obj.title_ar = title_ar
+
             category_obj.keywords = keywords
             category_obj.description = description
             category_obj.image = image
@@ -208,12 +206,6 @@ class ProductsList(ListView):
         return context
 
 
-def load_variant(request):
-    variant_type = request.GET.get('variant_type')
-    variant = Variant.objects.filter(title__in=variant_type).order_by('title')
-    return render(request, 'catalog/variant/variant_dropdown_list_options.html', {'variant': variant})
-
-
 def load_option(request):
     option_type_id = request.GET.get('option_type')
     options = Options.objects.filter(option_type_id=option_type_id).order_by('title')
@@ -264,14 +256,15 @@ def ProductAdd(request):  # sourcery skip: aug-assign, convert-to-enumerate
             options = request.POST.getlist('option')
             option_details = request.POST.getlist('option_detail')
             option_prices = request.POST.getlist('option_price')
-            variants = request.POST.getlist('variant')
-            variant_details = request.POST.getlist('variant_detail')
-            variant_prices = request.POST.getlist('variant_price')
-            variant_code = request.POST.getlist('variant_code')
+            variant_title = request.POST.getlist('variant_title')
+            variant = product_form.cleaned_data['variant']
+            variant_size = request.POST.getlist('variant_size')
+            variant_color = request.POST.getlist('variant_color')
+            variant_price = request.POST.getlist('variant_price')
             variant_quantity = request.POST.getlist('variant_quantity')
-            variant_images = request.FILES.getlist('variant_image')
+            variant_images = request.FILES.getlist('ImageVariant')
             slug = product_form.cleaned_data['slug']
-            media_content_list = request.FILES.getlist("image[1][0]hjkhj")
+            media_content_list = request.FILES.getlist("image")
             category = Categories.objects.get(title=category)
 
             seller = User.objects.get(id=seller)
@@ -285,7 +278,7 @@ def ProductAdd(request):  # sourcery skip: aug-assign, convert-to-enumerate
                                         model=model, brand=brand, price=price, quantity=quantity,
                                         out_of_stock_status=out_of_stock_status, keyword=keyword,
                                         requires_shipping=requires_shipping, weight=weight,
-                                        length=length, status=status, slug=slug)
+                                        length=length, status=status, slug=slug ,variant=variant)
 
                 product_form.save()
                 j = 0
@@ -317,16 +310,27 @@ def ProductAdd(request):  # sourcery skip: aug-assign, convert-to-enumerate
 
                 z = 0
                 for variant_image in variant_images:
-                    variant_form = VariantDetails(product=product_form, variant_detail=variant_details[z],variant=variants[z],
-                                                  variant_price=variant_prices[z],variant_code=variant_code[z],
-                                                  variant_quantity=variant_quantity[z],VariantImage=variant_image)
+                    m = variant_color
+                    n = ''.join(m)  # converting list into string
+                    variant_color = n
+
+                    x = variant_size
+                    y = ''.join(x)  # converting list into string
+                    variant_size = y
+
+                    variant_form = VariantDetails(product=product_form, title=variant_title[z],
+                                                  color=Color.objects.get(id=variant_color[z]),
+                                                  size=Size.objects.get(id=variant_size[z]),
+
+                                                  price=variant_price[z],
+                                                  quantity=variant_quantity[z], image=variant_image)
                     variant_form.save()
                     z = z + 1
 
                 i = 0
                 for image in media_content_list:
                     media_form = ProductMedia(product=product_form,
-                                              Image=image)
+                                              image=image)
                     media_form.save()
                     i = i + 1
                     print(request.POST)
@@ -350,7 +354,7 @@ def ProductAdd(request):  # sourcery skip: aug-assign, convert-to-enumerate
         variant_form = VariantDetailsForm()
         # return redirect(reverse('core:ProductAdd'))
 
-    return render(request, 'catalog/product/addProductTestOption.html',
+    return render(request, 'catalog/product/add-product.html',
                   {'manufacturer': manufacturer, 'product_form': product_form, 'media_form': media_form,
                    'filter': filters, 'option_type': option_type,
                    'relates': relates, 'attributes_group': attributes_group, 'attribute': attribute,
@@ -923,11 +927,23 @@ class DeleteOption(DeleteView):
         return self.post(*args, **kwargs)
 
 
-############## Variant  #######################
-
+############## Color  #######################
 class VariantListView(ListView):
-    model = Variant
+    model = Color
     template_name = 'catalog/variant/admin-variant.html'
+    paginate_by = 100  # if pagination is desired
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        context['color'] = self.queryset
+        context['size'] = Size.objects.all()
+        return context
+
+
+class ColorListView(ListView):
+    model = Color
+    template_name = 'catalog/variant/color/admin-color.html'
     paginate_by = 100  # if pagination is desired
 
     def get_context_data(self, **kwargs):
@@ -936,8 +952,8 @@ class VariantListView(ListView):
         return context
 
 
-class VariantDetailView(DetailView):
-    model = Variant
+class ColorDetailView(DetailView):
+    model = Color
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -945,72 +961,137 @@ class VariantDetailView(DetailView):
         return context
 
 
-class AddVariantl(CreateView):
-    model = Variant
-    fields = '__all__'
-    template_name = 'catalog/variant/add-variant.html'
-    success_url = reverse_lazy('core:Variant')
+def AddColor(request):  # sourcery skip: aug-assign, convert-to-enumerate
 
-
-def AddVariant(request):  # sourcery skip: aug-assign, convert-to-enumerate
-
+    color = Color.objects.all()
     if request.method == "POST":
         print(request)
-
-        variant_form = VariantForm(request.POST or None, request.FILES or None)
-
-        if variant_form.is_valid():
+        color_form = ColorForm(request.POST or None, request.FILES or None)
+        if color_form.is_valid():
             print(request.POST)
-            product_created = True
-            group = variant_form.cleaned_data['group']
-            titles = request.POST.getlist('title')
+            names = request.POST.getlist('name')
             code = request.POST.getlist('code')
-            sort_order = request.POST.getlist('sort_order')
-
-            product_form = None
-            if not product_form:
-                print(request)
+            color_form = None
+            if not color_form:
                 print(request.POST)
-                i=0
-                for title in titles:
-                    variant_form = Variant(group=group,title=title,sort_order=sort_order[i],code=code[i])
-                    variant_form.save()
-                    i=i+1
+                j = 0
+                for name in names:
+                    color_form = Color(name=name, code=code[j])
+                    color_form.save()
+                    j = j + 1
+                    # use django messages framework
+                messages.success(request,
+                                 "Yeeew, check it out on the home page!")
+
+                return HttpResponseRedirect("/admin/Variant/")
+
+            else:
+                print("Form invalid, see below error msg")
                 print(request.POST)
-                # use django messages framework
-            messages.success(request,
-                             "Yeeew, check it out on the home page!")
-
-            return HttpResponseRedirect("/admin/Variant/")
-
-        else:
-            print("Form invalid, see below error msg")
-            print(request.POST)
-            messages.error(request, "Error")
+                messages.error(request, "Error")
 
     else:
 
-        variant_form = VariantForm()
+        color_form = ColorForm()
         # return redirect(reverse('core:ProductAdd'))
 
-    return render(request, 'catalog/variant/add-variant.html',
-                  { 'variant_form': variant_form, }
+    return render(request, 'catalog/variant/color/add-color.html',
+                  {'color_form': color_form, 'color': color, }
                   )
 
+    # return HttpResponse("OK")
+    # return redirect(reverse('vendors:ProductsList'))
 
-# return HttpResponse("OK")
-# return redirect(reverse('vendors:ProductsList'))
 
-
-class EditVariant(UpdateView):
-    model = Variant
+class EditColor(UpdateView):
+    model = Color
     fields = '__all__'
-    template_name = 'catalog/variant/edit-variant.html'
-    success_url = reverse_lazy('core:Variant')
+    template_name = 'catalog/variant/color/edit-color.html'
+    success_url = reverse_lazy('core:Color')
 
 
-class DeleteVariant(DeleteView):
-    model = Variant
+class DeleteColor(DeleteView):
+    model = Color
+    fields = '__all__'
+    success_url = reverse_lazy('core:Color')
+
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)
+
+
+############## Color  #######################
+
+class SizeListView(ListView):
+    model = Size
+    template_name = 'catalog/variant/size/admin-size.html'
+    paginate_by = 100  # if pagination is desired
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+
+class SizeDetailView(DetailView):
+    model = Size
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+
+def AddSize(request):  # sourcery skip: aug-assign, convert-to-enumerate
+
+    size = Size.objects.all()
+    if request.method == "POST":
+        print(request)
+        Size_form = SizeForm(request.POST or None, request.FILES or None)
+        if Size_form.is_valid():
+            print(request.POST)
+            names = request.POST.getlist('name')
+            code = request.POST.getlist('code')
+            Size_form = None
+            if not Size_form:
+                print(request.POST)
+                j = 0
+                for name in names:
+                    Size_form = Size(name=name, code=code[j])
+                    Size_form.save()
+                    j = j + 1
+                    # use django messages framework
+                messages.success(request,
+                                 "Yeeew, check it out on the home page!")
+
+                return HttpResponseRedirect("/admin/Variant/")
+
+            else:
+                print("Form invalid, see below error msg")
+                print(request.POST)
+                messages.error(request, "Error")
+
+    else:
+
+        Size_form = SizeForm()
+        # return redirect(reverse('core:ProductAdd'))
+
+    return render(request, 'catalog/variant/size/add-size.html',
+                  {'Size_form': Size_form, 'size': size, }
+                  )
+
+    # return HttpResponse("OK")
+    # return redirect(reverse('vendors:ProductsList'))
+
+
+class EditSize(UpdateView):
+    model = Color
+    fields = '__all__'
+    template_name = 'catalog/variant/size/edit-size.html'
+    success_url = reverse_lazy('core:Size')
+
+
+class DeleteSize(DeleteView):
+    model = Color
     fields = '__all__'
     success_url = reverse_lazy('core:Variant')
 

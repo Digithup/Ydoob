@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .tests import product_detailtest, ajaxcolortest
 from .views import ProductDetailView, autocomplete, CategoriesDetail, CategoryDetail, ProductsListView, ajaxcolor, \
     product_detail
 
@@ -8,7 +9,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('home/', views.index, name='index'),
     path('search/autocomplete', autocomplete, name='autocomplete'),
-path('ajaxcolor/', ajaxcolor, name='ajaxcolor'),
+
     # path('search/', SearchView(), name='search'),
     # path('search_auto/', views.search_auto, name='search_auto'),
 
@@ -19,7 +20,8 @@ path('ajaxcolor/', ajaxcolor, name='ajaxcolor'),
 
     ############ Product ##############
     #path('product/<slug:slug>/', ProductDetailView.as_view(), name='ProductDetail'),
-    path('product/<slug:slug>/', product_detail, name='ProductDetail'),
+    path('product/<int:id>/<slug:slug>/', product_detailtest, name='ProductDetail'),
+
     #path('search/<int:pk>/', ProductDetailView.as_view(), name='ProductDetail'),
 
 ]

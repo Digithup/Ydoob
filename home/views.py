@@ -1,7 +1,6 @@
 import json
 
 from django.core import serializers
-from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
@@ -10,11 +9,7 @@ from haystack.query import SearchQuerySet
 
 from DNigne import settings
 from catalog.models.models import Categories, Products, ProductMedia, VariantDetails
-from catalog.models.product_options import Manufacturer, Variant
-from core.models.design import SliderMedia, Banners
-from core.models.setting import Setting
 from home.forms import SearchForm
-from sales.models.order import ShopCart
 
 
 def index(request):
@@ -76,7 +71,7 @@ class ProductDetailView(DetailView):
         return context
 
 
-def product_detail(request,slug):
+def product_detail(request,slug,id):
     query = request.GET.get('q')
     # >>>>>>>>>>>>>>>> M U L T I   L A N G U G A E >>>>>> START
     defaultlang = settings.LANGUAGE_CODE[0:2] #en-EN
@@ -108,12 +103,12 @@ def product_detail(request,slug):
             variant_id = request.POST.get('variantid')
             variant = VariantDetails.objects.get(id=variant_id) #selected product by click color radio
             colors = VariantDetails.objects.filter(product_id=id,size_id=variant.size_id )
-            sizes = VariantDetails.objects.raw('SELECT * FROM  variantdetails_variant  WHERE product_id=%s GROUP BY size_id',[id])
+            sizes = VariantDetails.objects.raw('SELECT * FROM catalog_variantdetails WHERE product_id=%s group by size_id',[id])
             query += variant.title+' Size:' +str(variant.size) +' Color:' +str(variant.color)
         else:
             variants = VariantDetails.objects.filter(product=product)
             colors = VariantDetails.objects.filter(product=product, )
-            sizes = VariantDetails.objects.raw('SELECT * FROM  product_variants  WHERE product_id=%s GROUP BY size_id',[id])
+            sizes = VariantDetails.objects.raw('SELECT * FROM  catalog_variantdetails WHERE product_id=%s group by size_id',[id])
             variant =VariantDetails.objects.get(id=variants[0].id)
         context.update({'sizes': sizes, 'colors': colors,
                         'variant': variant,'query': query

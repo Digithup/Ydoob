@@ -2,27 +2,16 @@ from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from django.forms import modelformset_factory
 from django.http import request, HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect
-from django.urls import reverse_lazy
+from django.shortcuts import render
 from django.views import View
-from django.views.generic import TemplateView
 
-from catalog.forms.forms import ProductsForm, ProductMediaForm, OptionsDetailsForm, AttributesDetailsForm
-from catalog.models.models import Categories, Products, ProductMedia, ProductTransaction, OptionsDetails, \
-    AttributesDetails
-from catalog.models.product_options import Filters, Manufacturer, Attributes, OptionsType, Options
-from core.forms.banner import render
+from catalog.forms.forms import ProductsForm, ProductMediaForm
+from catalog.models.models import Categories, Products, ProductMedia, ProductTransaction
+from catalog.models.product_options import Filters
 from core.forms.setting import SettingForm, SettingLangForm, SettingTagForm
 from core.models.setting import Setting, SettingLang, SettingTags
 from localization.models import Language
 from user.models import User
-
-
-
-
-
-
-
 
 
 def ProductAddopencart(request):

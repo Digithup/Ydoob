@@ -11,7 +11,8 @@ from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 from translations.models import Translatable
 
-from catalog.models.product_options import Filters, Manufacturer, Attributes, Options, Variant, Variant
+from catalog.models.product_options import Filters, Manufacturer, Attributes, Options, \
+    Color, Size
 from user.models import User
 
 STATUS = (
@@ -96,7 +97,7 @@ class Products(models.Model):
     manufacturer = models.ManyToManyField(Manufacturer, related_name="product_manufacturer", blank=True)
     related = models.ManyToManyField('self', related_name="product_manufacturer", blank=True)
     status = models.CharField(max_length=10, null=True)
-
+    variant = models.CharField(max_length=10, choices=VARIANTS, default='None')
     sort_order = models.SmallIntegerField(default=0, null=True)
     slug = models.SlugField(unique=True, null=False, max_length=128)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -155,18 +156,17 @@ class OptionsDetails(models.Model):
 
 
 class VariantDetails(models.Model):
-    variant = models.CharField(max_length=255, choices=VARIANTS, default='1')
+    title = models.CharField(max_length=100, blank=True,null=True)
     product = models.ForeignKey(Products, on_delete=models.CASCADE, null=True, blank=True)
-    variant_price = models.CharField(max_length=255, null=True, blank=True)
-    variant_quantity = models.IntegerField(default=1, null=True, blank=True)
-    variant_detail = models.CharField(max_length=255, null=True, blank=True)
-    variant_code = models.CharField(max_length=255)
-    variant_image = models.FileField(verbose_name='Product Variant Image', name='VariantImage',
-                                     upload_to='images/products/%Y/%m/', null=True, blank=True)
+    size = models.ForeignKey(Size, on_delete=models.CASCADE, blank=True, null=True)
+    color = models.ForeignKey(Color, on_delete=models.CASCADE, blank=True, null=True)
+    price = models.DecimalField(max_digits=12, decimal_places=2,default=0)
+    quantity = models.IntegerField(default=1)
+    image = models.FileField(verbose_name='Product Image',  upload_to='images/products/%Y/%m/')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.variant
+        return self.title
 
     class Meta:
         verbose_name_plural = "Variant Detail"
@@ -174,7 +174,7 @@ class VariantDetails(models.Model):
 
 class ProductMedia(models.Model):
     product = models.ForeignKey(Products, on_delete=models.CASCADE)
-    image = models.FileField(verbose_name='Product Image', name='Image', upload_to='images/products/%Y/%m/')
+    image = models.FileField(verbose_name='Product Image', name='image', upload_to='images/products/%Y/%m/')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

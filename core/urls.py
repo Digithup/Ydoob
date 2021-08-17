@@ -8,8 +8,9 @@ from core.views.catalog import AddCategory, categories, EditCategory, DeleteCate
     FiltersListView, AttributesGroupListView, EditAttributesGroup, AddAttributesGroup, DeleteAttributesGroup, \
     AttributeListView, EditAttribute, AddAttribute, DeleteAttribute, ProductUpdate, ProductAdd, ProductsList, search, \
     search_auto, ManufacturerDetail, OptionsTypeListView, AddOptionsType, EditOptionsType, DeleteOptionsType, \
-    OptionsListView, EditOption, AddOption, DeleteOption, load_option, VariantListView, EditVariant, AddVariant, \
-    DeleteVariant, load_variant
+    OptionsListView, EditOption, AddOption, DeleteOption, \
+    ColorListView, AddColor, EditColor, DeleteColor, SizeListView, EditSize, AddSize, DeleteSize, \
+    VariantListView, load_option
 from core.views.design import BannerDetailView, BannerDelete, \
     SliderView, SliderDelete, SliderGroupCreate, SliderDetailView, BannersView, BannerCreate, \
     SliderCreate
@@ -83,15 +84,21 @@ urlpatterns = [
     path('admin/Option/edit/<int:pk>/', EditOption.as_view(), name='EditOption'),
     path('admin/Option/add/', AddOption.as_view(), name='AddOption'),
     path('admin/Option/delete/<int:pk>/', DeleteOption.as_view(), name='DeleteOption'),
-    #path('ajax/load-options/', load_option, name='ajax_load_options'),
+    path('ajax/load-options/', load_option, name='ajax_load_options'),
 
     ########## Variant #########
     path('admin/Variant/', VariantListView.as_view(), name='Variant'),
-    path('admin/Variant/edit/<int:pk>/', EditVariant.as_view(), name='EditVariant'),
-    path('admin/Variant/add/', AddVariant, name='AddVariant'),
-    path('admin/Variant/delete/<int:pk>/', DeleteVariant.as_view(), name='DeleteVariant'),
+    path('admin/Color/', ColorListView.as_view(), name='Color'),
+    path('admin/Color/edit/<int:pk>/', EditColor.as_view(), name='EditColor'),
+    path('admin/Color/add/', AddColor, name='AddColor'),
+    path('admin/Color/delete/<int:pk>/', DeleteColor.as_view(), name='DeleteColor'),
 
-    path('ajax/load-Variant/', load_variant, name='ajax_load_options'),
+    path('admin/Size/', SizeListView.as_view(), name='Size'),
+    path('admin/Size/edit/<int:pk>/', EditSize.as_view(), name='EditSize'),
+    path('admin/Size/add/', AddSize, name='AddSize'),
+    path('admin/Size/delete/<int:pk>/', DeleteSize.as_view(), name='DeleteSize'),
+
+
 
     ########## Manufacturer   #########
     path('admin/manufacture/', ManufacturerListView.as_view(), name='Manufacturers'),

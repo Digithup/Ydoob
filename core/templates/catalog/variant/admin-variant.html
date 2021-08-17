@@ -31,9 +31,14 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="card-tools pull-right ">
-                            <a href="{% url 'core:AddVariant' %}">
+                            <a href="{% url 'core:AddColor' %}">
                                 <button type="button" class="btn btn-primary" data-toggle="modal"
-                                        data-original-title="test" data-target="#exampleModal">Add Varaint
+                                        data-original-title="test" data-target="#exampleModal">Add Color
+                                </button>
+                            </a>
+                            <a href="{% url 'core:AddSize' %}">
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                        data-original-title="test" data-target="#exampleModal">Add Size
                                 </button>
                             </a>
 
@@ -68,7 +73,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for rs in object_list %}
+                {% for rs in size %}
                     <tr>
                         <td>
                             {{ forloop.counter }}
@@ -76,13 +81,11 @@
                         <td>
 
                             <a>
-                                {% if rs.group == 'Color' %}
-                                    <input disabled type="color" id="head" name="head"
-                                           value="{{ rs.code }}"><span>{{ rs.title }}</span>
-                                {% else %}
 
-                                    {{ rs.title }}
-                                {% endif %}
+                                   {{ rs.name }}
+
+
+
                             </a>
                             <br/>
                             <small>
@@ -103,16 +106,63 @@
                         </td>
                         <td class="project-actions text-right">
 
-                            <a class="btn btn-info btn-sm" href="{% url 'core:EditVariant' rs.id %}">
+                            <a class="btn btn-info btn-sm" href="{% url 'core:EditSize' rs.id %}">
                                 <i class="fas fa-pencil-alt">
                                 </i>
                                 Edit
                             </a>
-                            <a class="btn btn-danger btn-sm" href="{% url 'core:DeleteVariant' rs.id %}">
-                                <i class="fas fa-trash">
-                                </i>
-                                Delete
+                            <a href="{% url 'core:DeleteSize' rs.id  %}"
+                                                   onclick="return confirm('Are you sure you want to delete {{ rs.name }}?')">
+                                                <button class="btn" type="button" data-original-title="" title=""><i
+                                                        class="ti-trash"></i></button>
+                                                </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                 {% for rs in object_list %}
+                    <tr>
+                        <td>
+                            {{ forloop.counter }}
+                        </td>
+                        <td>
+
+                            <a>
+
+                                    <input disabled type="color" id="head" name="head"
+                                           value="{{ rs.code }}"><span>{{ rs.name }}</span>
+
+
+
                             </a>
+                            <br/>
+                            <small>
+
+                            </small>
+                        </td>
+                        <td>
+                            <a>
+                                {{ rs.group.title }}
+
+                            </a>
+
+                            </ul>
+                        </td>
+
+                        <td class="project-state">
+                            <span class="badge badge-success">{{ rs.sort_order }}</span>
+                        </td>
+                        <td class="project-actions text-right">
+
+                            <a class="btn btn-info btn-sm" href="{% url 'core:EditColor' rs.id %}">
+                                <i class="fas fa-pencil-alt">
+                                </i>
+                                Edit
+                            </a>
+                            <a href="{% url 'core:DeleteColor' rs.id  %}"
+                                                   onclick="return confirm('Are you sure you want to delete {{ rs.name }}?')">
+                                                <button class="btn" type="button" data-original-title="" title=""><i
+                                                        class="ti-trash"></i></button>
+                                                </a>
                         </td>
                     </tr>
                 {% endfor %}

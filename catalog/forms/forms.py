@@ -8,7 +8,7 @@ from django_select2.forms import ModelSelect2Widget, ModelSelect2MultipleWidget
 from haystack import indexes
 
 from catalog.models.models import Categories, Products, ProductMedia, AttributesDetails, OptionsDetails, VariantDetails
-from catalog.models.product_options import Filters, Manufacturer, Attributes, Options, OptionsType, Variant
+from catalog.models.product_options import Filters, Manufacturer, Attributes, Options, Color, Size
 
 
 class CategoryAddForm(forms.ModelForm):
@@ -47,6 +47,7 @@ class ProductsForm(forms.ModelForm):
         ('3', 'Out Stock'),
         ('4', 'Pre-order'),
     )
+
 
     class Meta:
         model = Products
@@ -103,12 +104,14 @@ class OptionsDetailsForm(forms.ModelForm):
 
 
 class VariantDetailsForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(VariantDetailsForm, self).__init__(*args, **kwargs)
+        self.fields['size'].choices = list(Size.objects.values_list('id', 'name'))
 
-    # variant = forms.ModelChoiceField(queryset=Variant.objects.all(),required=False, label=u"Variant",
-    #                                    widget=ModelSelect2Widget (
-    #                                        model=Variant,
-    #                                        search_fields=['title__icontains'],
-    #                                      ) )
+        self.fields['color'].choices = list(Color.objects.values_list('id', 'name'))
+
+
+
     variant_detail = forms.CharField(required=False)
     variant_price = forms.CharField(required=False)
     variant_quantity = forms.CharField(required=False)
@@ -146,14 +149,15 @@ class ProductsIndex(indexes.SearchIndex, indexes.Indexable):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.filter(pub_date__lte=datetime.datetime.now())
 
-class VariantForm(forms.ModelForm):
 
-    # variant = forms.ModelChoiceField(queryset=Variant.objects.all(),required=False, label=u"Variant",
-    #                                    widget=ModelSelect2Widget (
-    #                                        model=Variant,
-    #                                        search_fields=['title__icontains'],
-    #                                      ) )
+class ColorForm(forms.ModelForm):
 
     class Meta:
-        model = Variant
+        model = Color
+        fields = '__all__'
+
+
+class SizeForm(forms.ModelForm):
+    class Meta:
+        model = Size
         fields = '__all__'
