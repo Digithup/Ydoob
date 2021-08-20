@@ -96,13 +96,7 @@
 </head>
 
 <body>
-<div class="container">
-        {% include 'admin/partials/messages.html' %}
-        {% block content %}
-        {% endblock %}
-      </div>
-<!-- page-wrapper Start-->
-<div class="page-wrapper">
+
 
 
     <!-- Page Header Start-->
@@ -214,20 +208,10 @@
             </div>
         </div>
     </div>
-    {% if messages %}
-        {% for message in messages %}
-            {% if message.tags == "success" %}
-                <div class="alert alert-success">
-                    {{ message }}
-                </div>
-            {% endif %}
-            {% if message.tags == "error" %}
-                <div class="alert alert-danger">
-                    {{ message }}
-                </div>
-            {% endif %}
-        {% endfor %}
-    {% endif %}
+
+<!-- page-wrapper Start-->
+<div class="page-wrapper">
+
     {% block page_content %}
     {% endblock page_content %}
     <!-- Page Header Ends -->

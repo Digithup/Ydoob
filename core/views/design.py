@@ -1,13 +1,12 @@
-from datetime import datetime
-
+from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
-from django.db import transaction
-from django.forms import formset_factory
-from django.http import request, HttpResponse, HttpResponseRedirect
+from django.http import request, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView, DetailView, DeleteView, CreateView
+
+from core.forms.banner import BannersAddForm
 from core.models.design import Slider, SliderGroup, SliderMedia, Banners
 
 
@@ -37,13 +36,13 @@ class SliderDelete(DeleteView):
     model = Slider
     fields = '__all__'
     success_url = reverse_lazy('core:SliderView')
+
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
 
 
 class SliderCreate(View):
     def get(self, request, *args, **kwargs):
-
         groups = SliderGroup.objects.filter(status=True)
 
         return render(request, "design/slider/slider-create.html",
@@ -101,18 +100,70 @@ class BannerDetailView(DetailView):
     template_name = 'design/banner/banner-detail.html'
 
 
-
-
-
 class BannerDelete(DeleteView):
     model = Banners
     fields = '__all__'
     success_url = reverse_lazy('core:BannerView')
+
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
 
 
-class BannerCreate(View):
+def BannerCreate(request):  # sourcery skip: aug-assign, convert-to-enumerate
+
+    if request.method == "POST":
+        print(request)
+
+        banner_form = BannersAddForm(request.POST or None, request.FILES or None)
+
+        if banner_form.is_valid():
+
+            return _extracted_from_BannerCreate_10(request, banner_form)
+        print("Form invalid, see below error msg")
+        print(request.POST)
+        messages.error(request, "Error")
+
+    else:
+        banner_form = BannersAddForm()
+# return redirect(reverse('core:ProductAdd'))
+
+    return render(request, 'design/banner/add-banner.html',
+                  {'banner_form': banner_form, }
+                  )
+
+def _extracted_from_BannerCreate_10(request, banner_form):
+    print(request.POST)
+    product_created = True
+    position = banner_form.cleaned_data['position']
+    status = banner_form.cleaned_data['status']
+
+    media_content = banner_form.cleaned_data['media_content']
+    media_link = banner_form.cleaned_data['media_link']
+
+    banner_form = None
+    if not banner_form:
+        print(request)
+        print(request.POST)
+
+        banner_form = Banners(position=position, status=status,
+                              media_content=media_content, media_link=media_link,
+                              )
+
+        banner_form.save()
+
+        print(request.POST)
+        # use django messages framework
+    messages.success(request,
+                     "Yeeew, check it out on the home page!")
+
+   # return HttpResponseRedirect("/admin/design/")
+    return HttpResponseRedirect(reverse_lazy('core:BannerView'))
+
+# return HttpResponse("OK")
+# return redirect(reverse('vendors:ProductsList'))
+
+
+class BannerCdreate(View):
     def get(self, request, *args, **kwargs):
         print(request)
 
@@ -122,7 +173,7 @@ class BannerCreate(View):
     print(request)
 
     def post(self, request, *args, **kwargs):
-        title = request.POST.get("title")
+        position = request.POST.get("position")
         status = request.POST.get("status")
         sort_order = request.POST.get("sort_order")
         media_content = request.FILES.get("media_content")
@@ -130,9 +181,9 @@ class BannerCreate(View):
         media_location = request.POST.get("media_location")
         print(request.POST)
         # status = request.POST.get("status")
-        banner = Banners(title=title, status=status, sort_order=sort_order,media_content=media_content,
-                         media_link=media_link,media_location=media_location
-                     )
+        banner = Banners(position=position, status=status, sort_order=sort_order, media_content=media_content,
+                         media_link=media_link, media_location=media_location
+                         )
         banner.save()
         # return HttpResponse("OK")
         return HttpResponseRedirect(reverse_lazy('core:BannerView'))
@@ -167,6 +218,3 @@ class MenuDelete(DeleteView):
     fields = '__all__'
     template_name = 'design/slider/confirm_delete.html'
     success_url = reverse_lazy('core:SliderView')
-
-
-

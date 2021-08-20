@@ -64,7 +64,7 @@
                                     <tr>
 
                                     <td>
-                                        <img src="{% if rm.Image %} {{ rm.Image.url }} {% else %} {% static 'img/default.jpg' %} {% endif %}"
+                                        <img src="{% if rm.image %} {{ rm.image.url }} {% else %} {% static 'img/default.jpg' %} {% endif %}"
                                              alt="..." style="height: 50px; width: 90px">
                                     {% endfor %} </td>
 

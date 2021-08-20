@@ -57,7 +57,7 @@ class AdminLogin(View):
                     return redirect(redirect_path)
 
                 else:
-                    return redirect("admin/")
+                    return redirect("/admin/")
 
             else:
                 print("error")

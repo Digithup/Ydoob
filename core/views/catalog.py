@@ -502,52 +502,6 @@ def file_upload(request):
 
 ############## Search   ################
 
-def search(request):
-    if request.method == 'POST':  # check post
-        form = SearchForm(request.POST)
-        if form.is_valid():
-            query = form.cleaned_data['filter']  # get form input data
-            catid = form.cleaned_data['catid']
-            if catid == 0:
-                products = Products.objects.filter(
-                    title__icontains=query)  # SELECT * FROM catalog WHERE title LIKE '%query%'
-            else:
-                products = Products.objects.filter(title__icontains=query, category_id=catid)
-
-            category = Categories.objects.all()
-            context = {'products': products, 'query': query,
-                       'category': category}
-            return render(request, 'search/search.html', context)
-
-    return HttpResponseRedirect('/')
-
-
-def autocomplete(request):
-    if 'term' in request.GET:
-        qs = Products.objects.filter(title__icontains=request.GET.get('term'))
-        titles = list()
-        for product in qs:
-            titles.append(product.title)
-        # titles = [product.title for product in qs]
-        return JsonResponse(titles, safe=False)
-    return render(request, 'core/home.html')
-
-
-def search_auto(request):
-    if request.is_ajax():
-        q = request.GET.get('term', '')
-        products = Products.objects.filter(title__icontains=q)
-
-        results = []
-        for rs in products:
-            Products_json = {}
-            Products_json = rs.title + " > " + rs.category.title
-            results.append(Products_json)
-        data = json.dumps(results)
-    else:
-        data = 'fail'
-    mimetype = 'application/json'
-    return HttpResponse(data, mimetype)
 
 
 ############## Manufacturer #######################

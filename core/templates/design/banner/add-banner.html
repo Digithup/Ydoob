@@ -1,7 +1,9 @@
 {% extends 'admin/adminbase.html' %}
 {% load crispy_forms_filters %}
 {% load static %}
+ {% load i18n %}
 {% block body %}
+
 
     <div class="page-body">
 
@@ -36,8 +38,8 @@
             <div class="row product-adding">
                 {% if form_show_errors %}
                 {% endif %}
-                {% if form.errors %}
-                    {% for error_field, error_message in form.errors.items %}
+                {% if banner_form.errors %}
+                    {% for error_field, error_message in banner_form.errors.items %}
 
                         <div class="alert alert-danger">
                             {{ error_field|striptags }}: {{ error_message|striptags }}
@@ -65,42 +67,30 @@
 
                                             <div class="digital-add needs-validation ">
                                                 <div class="form-group row">
-                                                    <label for="validationCustom0"
-                                                           class="col-md-4"><span>*</span>Title</label>
-                                                    <input class="form-control col-md-6 "
-                                                           placeholder="title"
-                                                           id="title" type="text"
-                                                           name="title" required="">
+                                                    <label class="col-md-4 col-form-label"><span>*</span> {% translate 'Category' %}
+                                                    </label>
+                                                    <select class="form-control col-md-6" name="position"
+                                                            required="">
+
+                                                        {% for value, text in banner_form.position.field.choices %}
+                                                            <option value="{{ value }}">{{ text }}</option>
+                                                        {% endfor %}
+                                                    </select>
                                                 </div>
 
-                                                <div class="form-group row ">
-                                                    <label for="validationCustom0"
-                                                           class=" col-md-4"><span>*</span>
-                                                        sort order</label>
-                                                    <input class="form-control col-md-6"
-                                                           id="validationCustom0" type="number" min="0" max="10"
-                                                           name="sort_order" required="">
 
-                                                </div>
-                                                <div class="form-group row ">
-                                                    <label for="validationCustom0"
-                                                           class=" col-md-4"><span>*</span>
-                                                        Media Location</label>
-                                                    <input class="form-control col-md-6"
-                                                           id="validationCustom0" type="text"
-                                                           name="media_location" required="">
 
-                                                </div>
+
                                                 <div class="form-group row">
                                                     <label for="validationCustom0"
                                                            class=" col-md-4"><span>*</span>
                                                         status </label>
-                                                    <select name="status"
-                                                            {{ status.get_choices_display }}
-                                                            class="custom-select  col-md-6" required="">
-                                                        <option value="">--Select--</option>
-                                                        <option>Enable</option>
-                                                        <option>Disable</option>
+                                                    <select class="form-control col-md-6" name="status"
+                                                            required="">
+
+                                                        {% for value, text in banner_form.status.field.choices %}
+                                                            <option value="{{ value }}">{{ text }}</option>
+                                                        {% endfor %}
                                                     </select>
                                                 </div>
 
@@ -145,14 +135,14 @@
                                             </div>
                                             <br>
 
-                                </div>
-                                <div class="card-header">
-                                    <div class="form-group mb-0 align-content-end">
-                                        <div class="product-buttons text-center">
-                                            <button type="submit" class="btn btn-primary">Add</button>
-                                            <button type="button" class="btn btn-light">Discard</button>
                                         </div>
-                                    </div>
+                                        <div class="card-header">
+                                            <div class="form-group mb-0 align-content-end">
+                                                <div class="product-buttons text-center">
+                                                    <button type="submit" class="btn btn-primary">Add</button>
+                                                    <button type="button" class="btn btn-light">Discard</button>
+                                                </div>
+                                            </div>
                 </form>
 
 

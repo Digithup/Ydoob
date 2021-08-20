@@ -3,113 +3,162 @@
 {% load static %}
 {% load bootstrap4 %}
 
+
 {% block body %}
 
-    <!--section start-->
-    <section class="authentication-page">
-        <div class="container">
-            <section class="search-block">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-6 offset-lg-3">
-                            {% block content %}
-    <h2>Search</h2>
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb">
+		<div class="container">
+			<ul class="breadcrumb">
+				<li><a href="/">Home</a></li>
+				<li class="active">{{ query }} results</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /BREADCRUMB -->
+	<!-- section -->
+	<div class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
 
-    <form method="get" action=".">
-        <table>
-            {{ form.as_table }}
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <input type="submit" value="Search">
-                </td>
-            </tr>
-        </table>
+				<!-- MAIN -->
+				<div id="main" class="col-md-12">
+					<!-- store top filter -->
+					<div class="store-filter clearfix">
+						<div class="pull-left">
+							<div class="row-filter">
+								<a href="#"><i class="fa fa-th-large"></i></a>
+								<a href="#" class="active"><i class="fa fa-bars"></i></a>
+							</div>
+							<div class="sort-filter">
+								<span class="text-uppercase">Sort By:</span>
+								<select class="input">
+										<option value="0">Position</option>
+										<option value="0">Price</option>
+										<option value="0">Rating</option>
+									</select>
+								<a href="#" class="main-btn icon-btn"><i class="fa fa-arrow-down"></i></a>
+							</div>
+						</div>
+						<div class="pull-right">
+							<div class="page-filter">
+								<span class="text-uppercase">Show:</span>
+								<select class="input">
+										<option value="0">10</option>
+										<option value="1">20</option>
+										<option value="2">30</option>
+									</select>
+							</div>
+							<ul class="store-pages">
+								<li><span class="text-uppercase">Page:</span></li>
+								<li class="active">1</li>
+								<li><a href="#">2</a></li>
+								<li><a href="#">3</a></li>
+								<li><a href="#"><i class="fa fa-caret-right"></i></a></li>
+							</ul>
+						</div>
+					</div>
+					<!-- /store top filter -->
 
-        {% if query %}
-            <h3>Results</h3>
+					<!-- STORE -->
+					<div id="store">
+						<!-- row -->
+						<div class="row">
 
-            {% for result in page.object_list %}
-                <p>
-                    <a href="{{ result.object.get_absolute_url }}">{{ result.object.title }}</a>
-                </p>
-            {% empty %}
-                <p>No results found.</p>
-            {% endfor %}
+                            <div class="col-md-12">
+						<div class="order-summary clearfix">
+							<div class="section-title">
+								<h3 class="title">Product List</h3>
+							</div>
+							<table class="shopping-cart-table table">
+								<thead>
+									<tr>
+										<th>Product</th>
+										<th></th>
+                                        <th>Category</th>
+										<th class="text-center">Price</th>
+										<th class="text-center">Quantity</th>
 
-            {% if page.has_previous or page.has_next %}
-                <div>
-                    {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
-                    |
-                    {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
-                </div>
-            {% endif %}
-        {% else %}
-            {# Show some example queries to run, maybe query syntax, something else? #}
-        {% endif %}
-    </form>
-{% endblock %}
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </section>
-    <!-- section end -->
+										<th class="text-right"></th>
+									</tr>
+								</thead>
+								<tbody>
 
+                                {% for rs in products %}
+                                    {{ rs.title }}
+									<tr>
+										<td class="thumb"><a href="/product/{{ rs.id }}/{{ rs.slug }}">
+                                            <img src="{{ rs.image.url }}" alt="" style="height: 100px">
+                                        </a></td>
 
-    <!-- product section start -->
-    <section class="section-b-space ratio_asos">
-        <div class="container">
-            <div class="row search-product">
-                {% for rs in page.object_list %}
-                    <div class="col-xl-2 col-md-4 col-sm-6">
-                        <div class="product-box">
+										<td class="details"> <a href="/product/{{ rs.id }}/{{ rs.slug }}">{{ rs.title }}</a>	</td>
+                                        <td class="details"> <a href="/category/{{ rs.category_id }}/{{ rs.category.slug }}">{{ rs.category }}</a>	</td>
+										<td class="price text-center"><strong>{{ rs.price }} </strong></td>
+										<td class="qty text-center"><input class="input" type="number" value="1"></td>
 
-                            <div class="img-wrapper">
-                                <div class="front">
-                                    <a href="#"><img src="{{ rs.object.thumbnail.url }}"
-                                                     class="img-fluid blur-up lazyload bg-img" alt=""></a>
-                                </div>
-                                <div class="back">
-                                    <a href="#"><img src="{{ rs.image.url }}"
-                                                     class="img-fluid blur-up lazyload bg-img" alt=""></a>
-                                </div>
-                                <div class="cart-info cart-wrap">
-                                    <button data-toggle="modal" data-target="#addtocart" title="Add to cart"><i
-                                            class="ti-shopping-cart"></i></button>
-                                    <a href="javascript:void(0)"
-                                       title="Add to Wishlist"><i class="ti-heart" aria-hidden="true"></i></a> <a
-                                        href="#"
-                                        data-toggle="modal" data-target="#quick-view" title="Quick View"><i
-                                        class="ti-search" aria-hidden="true"></i></a> <a href="compare.html"
-                                                                                         title="Compare"><i
-                                        class="ti-reload" aria-hidden="true"></i></a></div>
-                            </div>
-                            <div class="product-detail">
-                                <div class="rating"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                        class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>
-                                </div>
-                                <a href="{{ rs.object.id }}">
-                                    <h6>{{ rs.title }}</h6>
-                                </a>
-                                <h4>{{ rs.object.price }}</h4>
-                                <ul class="color-variant">
-                                    <li class="bg-light0"></li>
-                                    <li class="bg-light1"></li>
-                                    <li class="bg-light2"></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </section>
-    <!-- product section end -->
+										<td class="text-right"><a href="/order/addtoshopcart/{{ rs.id }}" class="primary-btn add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</a></td>
+									</tr>
+                                    {% endfor %}
 
+								</tbody>
 
+							</table>
 
+						</div>
+
+					</div>
+
+						</div>
+						<!-- /row -->
+					</div>
+					<!-- /STORE -->
+
+					<!-- store bottom filter -->
+					<div class="store-filter clearfix">
+						<div class="pull-left">
+							<div class="row-filter">
+								<a href="#"><i class="fa fa-th-large"></i></a>
+								<a href="#" class="active"><i class="fa fa-bars"></i></a>
+							</div>
+							<div class="sort-filter">
+								<span class="text-uppercase">Sort By:</span>
+								<select class="input">
+										<option value="0">Position</option>
+										<option value="0">Price</option>
+										<option value="0">Rating</option>
+									</select>
+								<a href="#" class="main-btn icon-btn"><i class="fa fa-arrow-down"></i></a>
+							</div>
+						</div>
+						<div class="pull-right">
+							<div class="page-filter">
+								<span class="text-uppercase">Show:</span>
+								<select class="input">
+										<option value="0">10</option>
+										<option value="1">20</option>
+										<option value="2">30</option>
+									</select>
+							</div>
+							<ul class="store-pages">
+								<li><span class="text-uppercase">Page:</span></li>
+								<li class="active">1</li>
+								<li><a href="#">2</a></li>
+								<li><a href="#">3</a></li>
+								<li><a href="#"><i class="fa fa-caret-right"></i></a></li>
+							</ul>
+						</div>
+					</div>
+					<!-- /store bottom filter -->
+				</div>
+				<!-- /MAIN -->
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /section -->
 
 {% endblock %}
 

@@ -1,8 +1,9 @@
 {% extends 'front/homebase.html' %}
 {% load static %}
 {% load i18n %}
+{% load mptt_tags %}
 {% block body %}
-    {% load mptt_tags %}
+
 
     <!-- breadcrumb start -->
 
@@ -35,18 +36,19 @@
             <div class="container">
                 <div class="row col-md">
                     <div class="row margin-default ratio_square">
-                        <div class="row margin-default ratio_square">{% recursetree categories %}
+
+                        <div class="row margin-default ratio_square">{% recursetree all_category %}
 
                             <div class="col-xl-2 col-sm-3 col-4">
 
-                                <a href="{{ node.slug }}">
+                                <a href="{{ node.id }}/{{ node.slug }}">
                                     <div class="img-category">
 
                                         <img src="{{ node.image.url }}" style="width: 50px;height: 50%"
                                              class="img-fluid sm-img"
                                              alt="">
 
-                                        <h4>{{ node }}</h4>
+                                        <h6>{{ node }}</h6>
                                     </div>
                                 </a>
 
@@ -143,49 +145,52 @@
                         </div>
                         <!-- silde-bar colleps block end here -->
                         <!-- side-bar single product slider start -->
-                        <div class="theme-card">
-                            <h5 class="title-border">new product</h5>
-                            <div class="offer-slider slide-1">
-
-                                {% for sp in side_products %}
+                       <div class="theme-card demo-card">
+                                <h5 class="title-border">new product</h5>
+                                <div class="offer-slider slide-1">
+                                    <div>
+                                        {% for sp in categories_side_products %}
                                         <div class="media">
-                                                <a href="{% url 'home:ProductDetail' sp.product.slug %}"><img class="img-fluid blur-up lazyload"
-                                                                src="{{ sp.media.Image.url }}" height="70px" width="100px"></a>
+                                                <a href="{% url 'home:ProductDetail' sp.product.id sp.product.slug %}"><img class="img-fluid blur-up lazyload"
+                                                                src="{{ sp.media.image.url }}" height="70px" width="100px"></a>
                                                 <div class="media-body align-self-center">
                                                     <div class="rating"><i class="fa fa-star"></i> <i
                                                             class="fa fa-star"></i> <i class="fa fa-star"></i> <i
                                                             class="fa fa-star"></i> <i class="fa fa-star"></i></div>
-                                                    <a href="{% url 'home:ProductDetail' sp.product.slug %}">
+                                                    <a href="{% url 'home:ProductDetail' sp.product.id sp.product.slug %}">
                                                         <h6>{{ sp.product.title }}</h6>
                                                     </a>
-                                                    <h4>{{ sp.product_id.product_max_price }}</h4>
+                                                    <h4>{{ sp.product.price }}</h4>
                                                 </div>
 
                                         </div>{% endfor %}
-                                <div>
-                                    {% for sp in side_products %}
+                                    </div>
+                                    <div>
+                                        {% for sp in categories_side_products2 %}
                                         <div class="media">
-                                                <a href="{% url 'home:ProductDetail' sp.product.slug %}"><img class="img-fluid blur-up lazyload"
-                                                                src="{{ sp.Image.url }}" height="70px" width="100px"></a>
+                                                <a href=""><img class="img-fluid blur-up lazyload"
+                                                                src="{{ sp.media.image.url }}" height="70px" width="100px"></a>
                                                 <div class="media-body align-self-center">
                                                     <div class="rating"><i class="fa fa-star"></i> <i
                                                             class="fa fa-star"></i> <i class="fa fa-star"></i> <i
                                                             class="fa fa-star"></i> <i class="fa fa-star"></i></div>
-                                                    <a href="{% url 'home:ProductDetail' sp.product.slug %}">
+                                                    <a href="{% url 'home:ProductDetail' sp.product.id sp.product.slug %}">
                                                         <h6>{{ sp.product.title }}</h6>
                                                     </a>
-                                                    <h4>{{ sp.product_id.product_max_price }}</h4>
+                                                    <h4>{{ sp.product.price }}</h4>
                                                 </div>
 
                                         </div>{% endfor %}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         <!-- side-bar single product slider end -->
                         <!-- side-bar banner start here -->
                         <div class="collection-sidebar-banner">
-                            <a href="#"><img src="{% static '' %}images/side-banner.png"
+                             {% for rr in category_collection %}
+                            <a href="#"><img src="{{ rr.media_content.url }}"
                                              class="img-fluid blur-up lazyload" alt=""></a>
+                            {% endfor %}
                         </div>
                         <!-- side-bar banner end here -->
                     </div>
@@ -196,9 +201,10 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="top-banner-wrapper">
-
-                                        <a href="#"><img src="{% static '' %}images/mega-menu/2.jpg"
+ {% for rr in category_banner %}
+                                        <a href="#"><img src="{{ rr.media_content.url }}"
                                                          class="img-fluid blur-up lazyload" alt=""></a>
+                                     {% endfor %}
                                         <div class="top-banner-content small-section">
 
                                             <div class="collection-product-wrapper">
@@ -278,8 +284,8 @@
 
                                                                 <div class="img-wrapper">
                                                                     <div class="front">
-                                                                        <a href="{% url 'home:ProductDetail'  dod.product.slug %}"><img
-                                                                                src="{{ dod.media.Image.url }}"
+                                                                        <a href="{% url 'home:ProductDetail'  dod.product.id dod.product.slug %}"><img
+                                                                                src="{{ dod.media.image.url }}"
                                                                                 class="img-fluid blur-up lazyload bg-img"
                                                                                 alt=""></a>
                                                                     </div>
@@ -306,10 +312,10 @@
                                                                             class="fa fa-star"></i> <i
                                                                             class="fa fa-star"></i>
                                                                     </div>
-                                                                    <a href="product-page(no-sidebar).html">
-                                                                        <h6>{{ dod.product_id.title }}</h6>
+                                                                    <a href="{% url 'home:ProductDetail'  dod.product.id dod.product.slug %}">
+                                                                        <h6>{{ dod.product.title }}</h6>
                                                                     </a>
-                                                                    <h4>{{ dod.product_id.product_max_price }}</h4>
+                                                                    <h4>{{ dod.product.price }}</h4>
                                                                     <ul class="color-variant">
                                                                         <li class="bg-color1"></li>
                                                                         <li class="bg-color3"></li>

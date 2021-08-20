@@ -159,18 +159,21 @@ def product_detailtest(request, id, slug):
             variant_id = request.POST.get('variantid')
             variant = VariantDetails.objects.get(id=variant_id)  # selected product by click color radio
             colors = VariantDetails.objects.filter(product=product, size_id=variant.size_id)
+            images = VariantDetails.objects.filter(product=product, size_id=variant.size_id)
             sizes = VariantDetails.objects.raw(
                 'SELECT * FROM  catalog_variantdetails  WHERE product_id=%s GROUP BY size_id', [id])
-            query += variant.title + ' Size:' + str(variant.size) + ' Color:' + str(variant.color)
+            query += variant.title + ' Size:' + str(variant.size) + ' Color:' + str(variant.color )
+
         else:
             variants = VariantDetails.objects.filter(product=product)
             colors = VariantDetails.objects.filter(product=product, size_id=variants[0].size_id)
+            images = VariantDetails.objects.filter(product=product, size_id=variants[0].size_id)
             sizes = VariantDetails.objects.raw(
                 'SELECT * FROM  catalog_variantdetails  WHERE product_id=%s GROUP BY size_id', [id])
             variant = VariantDetails.objects.get(id=variants[0].id)
         context.update({'sizes': sizes, 'colors': colors,
-                        'variant': variant, 'query': query
-                        })
+                        'variant': variant, 'query': query,
+                        'images':images})
     return render(request, 'product-details.html', context)
 
 
@@ -180,10 +183,12 @@ def ajaxcolortest(request):
         size_id = request.POST.get('size')
         productid = request.POST.get('productid')
         colors = VariantDetails.objects.filter(product_id=productid, size_id=size_id)
+        images = VariantDetails.objects.filter(product_id=productid, size_id=size_id)
         context = {
             'size_id': size_id,
             'productid': productid,
             'colors': colors,
+            'images':images,
         }
         data = {'rendered_table': render_to_string('color_list.html', context=context)}
         return JsonResponse(data)

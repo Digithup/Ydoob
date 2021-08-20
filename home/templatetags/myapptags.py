@@ -29,7 +29,7 @@ def categoryTree(id,menu,lang):
             query = Categories.objects.filter(parent_id__isnull=True).order_by("id")
         else: # non default language
             query = Categories.objects.raw('SELECT c.id,l.title, l.keywords, l.description,l.slug' 
-                                      '  FROM product_category as c'
+                                      '  FROM catalog_categories as c'
                                       '  INNER JOIN product_categorylang as	l'
                                       '  ON c.id = l.category_id'
                                       '  WHERE  parent_id IS NULL and lang=%s ORDER BY c.id',[lang])
@@ -39,7 +39,7 @@ def categoryTree(id,menu,lang):
             query = Categories.objects.filter(parent_id=id)
         else: # non default language
             query = Categories.objects.raw('SELECT c.id,l.title, l.keywords, l.description,l.slug'
-                                     '  FROM product_category as c'
+                                     '  FROM catalog_categories as c'
                                      '  INNER JOIN product_categorylang as	l'
                                      '  ON c.id = l.category_id'
                                      '  WHERE  parent_id =%s AND lang=%s', [id,lang])
@@ -57,5 +57,5 @@ def categoryTree(id,menu,lang):
                 menu += '\t\t</div>\n'
                 menu += "\t</li>\n\n"
             else :
-                menu += '\t\t\t\t<li><a href="'+reverse('category_products',args=(rs.id, rs.slug)) +'">' + rs.title + '</a></li>\n'
+                menu += '\t\t\t\t<li><a href="'+reverse('home:Category',args=(rs.id, rs.slug)) +'">' + rs.title + '</a></li>\n'
     return menu

@@ -186,9 +186,10 @@
                                 <div class="offer-slider slide-1">
                                     <div>
                                         {% for sp in side_products %}
-                                        <div class="media">
-                                                <a href="{% url 'home:ProductDetail' sp.product.id sp.product.slug %}"><img class="img-fluid blur-up lazyload"
-                                                                src="{{ sp.media.Image.url }}" height="70px" width="100px"></a>
+                                            <div class="media">
+                                                <a href="{% url 'home:ProductDetail' sp.product.id sp.product.slug %}"><img
+                                                        class="img-fluid blur-up lazyload"
+                                                        src="{{ sp.media.image.url }}" height="70px" width="100px"></a>
                                                 <div class="media-body align-self-center">
                                                     <div class="rating"><i class="fa fa-star"></i> <i
                                                             class="fa fa-star"></i> <i class="fa fa-star"></i> <i
@@ -196,35 +197,37 @@
                                                     <a href="{% url 'home:ProductDetail' sp.product.id sp.product.slug %}">
                                                         <h6>{{ sp.product.title }}</h6>
                                                     </a>
-                                                    <h4>{{ sp.product_id.product_max_price }}</h4>
+                                                    <h4>{{ sp.product.price }}</h4>
                                                 </div>
 
-                                        </div>{% endfor %}
+                                            </div>{% endfor %}
                                     </div>
                                     <div>
-                                        {% for sp in side_products %}
-                                        <div class="media">
+                                        {% for sp in side_products2 %}
+                                            <div class="media">
                                                 <a href=""><img class="img-fluid blur-up lazyload"
-                                                                src="{{ sp.media_content }}" height="70px" width="100px"></a>
+                                                                src="{{ sp.media.image.url }}" height="70px"
+                                                                width="100px"></a>
                                                 <div class="media-body align-self-center">
                                                     <div class="rating"><i class="fa fa-star"></i> <i
                                                             class="fa fa-star"></i> <i class="fa fa-star"></i> <i
                                                             class="fa fa-star"></i> <i class="fa fa-star"></i></div>
                                                     <a href="{% url 'home:ProductDetail' sp.product.id sp.product.slug %}">
-                                                        <h6>{{ sp.product_id.title }}</h6>
+                                                        <h6>{{ sp.product.title }}</h6>
                                                     </a>
-                                                    <h4>{{ sp.product_id.product_max_price }}</h4>
+                                                    <h4>{{ sp.product.price }}</h4>
                                                 </div>
 
-                                        </div>{% endfor %}
+                                            </div>{% endfor %}
                                     </div>
                                 </div>
                             </div>
                             <div class="collection-sidebar-banner">
-                                {% for rr in banner_left %}
+                                {% for rr in banner_collection %}
                                     <a href="#"><img src="{{ rr.media_content.url }}"
                                                      class="img-fluid blur-up lazyload" alt=""></a>
-                                    </div> {% endfor %}
+                                    </div>
+                                {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -243,26 +246,34 @@
                                         </div>
                                         <div class="marketplace-slider product-m no-arrow mb-4">
                                             {% for dod in new_products %}
-                                            <div class="product-box">
+                                                <div class="product-box">
 
                                                     <div class="img-wrapper">
                                                         <div class="front">
                                                             <a href="{% url 'home:ProductDetail' dod.product.id dod.product.slug %}"><img
-                                                                    src="{{ dod.media.Image.url }}"
+                                                                    src="{{ dod.media.image.url }}"
                                                                     class="img-fluid blur-up lazyload bg-img"
                                                                     alt=""></a>
                                                         </div>
+
                                                         <div class="cart-info cart-wrap bg-color-cls sm-box">
-                                                            <button onclick="openCart()" title="Add to cart"><i
+                                                            <button type="submit" title="Add to cart"><i
                                                                     class="ti-shopping-cart"></i></button>
-                                                            <a href="javascript:void(0)" title="Add to Wishlist"><i
-                                                                    class="ti-heart" aria-hidden="true"></i></a>
+                                                            <form action="{% url 'sales:AddWishlist' %}" method="post">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="product-id"
+                                                                       value="{{ dod.product.id }}">
+                                                                <button type="submit" title="Add to Wishlist"><i
+                                                                        class="ti-heart"></i></button>
+
+                                                            </form>
                                                             <a href="#" data-bs-toggle="modal"
                                                                data-bs-target="#quick-view" title="Quick View"><i
                                                                     class="ti-search" aria-hidden="true"></i></a>
                                                             <a href="compare.html" title="Compare"><i
-                                                                                                      aria-hidden="true"></i></a>
+                                                                    aria-hidden="true"></i></a>
                                                         </div>
+
                                                     </div>
                                                     <div class="product-detail">
                                                         <div class="rating"><i class="fa fa-star"></i> <i
@@ -280,30 +291,36 @@
                                                     </div>
 
 
-                                            </div> {% endfor %}
+                                                </div> {% endfor %}
 
                                         </div>
                                         <div class="marketplace-slider product-m no-arrow">
-                                             {% for dod in new_products %}
-                                            <div class="product-box">
+                                            {% for dod in new_products %}
+                                                <div class="product-box">
 
                                                     <div class="img-wrapper">
                                                         <div class="front">
                                                             <a href="{% url 'home:ProductDetail' dod.product.id dod.product.slug %}"><img
-                                                                    src="{{ dod.media.Image.url }}"
+                                                                    src="{{ dod.media.image.url }}"
                                                                     class="img-fluid blur-up lazyload bg-img"
                                                                     alt=""></a>
                                                         </div>
                                                         <div class="cart-info cart-wrap bg-color-cls sm-box">
                                                             <button onclick="openCart()" title="Add to cart"><i
                                                                     class="ti-shopping-cart"></i></button>
-                                                            <a href="javascript:void(0)" title="Add to Wishlist"><i
-                                                                    class="ti-heart" aria-hidden="true"></i></a>
+                                                            <form action="{% url 'sales:AddWishlist' %}" method="post">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="product-id"
+                                                                       value="{{ dod.product.id }}">
+                                                                <button type="submit" title="Add to Wishlist"><i
+                                                                        class="ti-heart"></i></button>
+
+                                                            </form>
                                                             <a href="#" data-bs-toggle="modal"
                                                                data-bs-target="#quick-view" title="Quick View"><i
                                                                     class="ti-search" aria-hidden="true"></i></a>
                                                             <a href="compare.html" title="Compare"><i
-                                                                                                      aria-hidden="true"></i></a>
+                                                                    aria-hidden="true"></i></a>
                                                         </div>
                                                     </div>
                                                     <div class="product-detail">
@@ -312,9 +329,9 @@
                                                                 class="fa fa-star"></i> <i class="fa fa-star"></i>
                                                         </div>
                                                         <a href="{% url 'home:ProductDetail' dod.product.id dod.product.slug %}">
-                                                            <h6>{{ dod.product_id.title }}</h6>
+                                                            <h6>{{ dod.product.title }}</h6>
                                                         </a>
-                                                        <h4>{{ dod.product_id.product_max_price }}</h4>
+                                                        <h4>{{ dod.product.price }}</h4>
                                                         <ul class="color-variant">
                                                             <li class="bg-color1"></li>
                                                             <li class="bg-color3"></li>
@@ -322,7 +339,7 @@
                                                     </div>
 
 
-                                            </div> {% endfor %}
+                                                </div> {% endfor %}
 
                                         </div>
                                     </div>
@@ -334,36 +351,40 @@
                             <div class="container">
                                 <div class="row partition2">
                                     <div class="col-md-6">
-                                        <a href="#">
-                                            <div class="collection-banner p-right text-end">
-                                                <div class="img-part">
-                                                    <img src="{% static '' %}images/marketplace/banner/19.jpg"
-                                                         class="img-fluid blur-up lazyload bg-img" alt="">
-                                                </div>
-                                                <div class="contain-banner banner-3">
-                                                    <div>
-                                                        <h4 class="text-muted">save 30%</h4>
-                                                        <h2 class="text-dark">shoes</h2>
+                                        {% for rr in banner_middle_left %}
+                                            <a href="#">
+                                                <div class="collection-banner p-right text-end">
+                                                    <div class="img-part">
+                                                        <img src="{{ rr.media_content.url }}"
+                                                             class="img-fluid blur-up lazyload bg-img" alt="">
+                                                    </div>
+                                                    <div class="contain-banner banner-3">
+                                                        <div>
+                                                            <h4 class="text-muted">save 30%</h4>
+                                                            <h2 class="text-dark">shoes</h2>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </a>
+                                            </a>
+                                        {% endfor %}
                                     </div>
                                     <div class="col-md-6">
-                                        <a href="#">
-                                            <div class="collection-banner p-right text-end">
-                                                <div class="img-part">
-                                                    <img src="{% static '' %}images/marketplace/banner/20.jpg"
-                                                         class="img-fluid blur-up lazyload bg-img" alt="">
-                                                </div>
-                                                <div class="contain-banner banner-3">
-                                                    <div>
-                                                        <h4 class="text-muted">save 60%</h4>
-                                                        <h2 class="text-dark">phones</h2>
+                                        {% for rr in banner_middle_right %}
+                                            <a href="#">
+                                                <div class="collection-banner p-right text-end">
+                                                    <div class="img-part">
+                                                        <img src="{{ rr.media_content.url }}"
+                                                             class="img-fluid blur-up lazyload bg-img" alt="">
+                                                    </div>
+                                                    <div class="contain-banner banner-3">
+                                                        <div>
+                                                            <h4 class="text-muted">save 60%</h4>
+                                                            <h2 class="text-dark">phones</h2>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </a>
+                                            </a>
+                                        {% endfor %}
                                     </div>
                                 </div>
                             </div>
@@ -391,89 +412,108 @@
                                                 <div id="tab-4" class="tab-content active default">
                                                     <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-5 row-cols-md-4 row-cols-2 gy-4">
                                                         {% for dod in new_products_req %}
-                                                        <div class="product-box">
+                                                            <div class="product-box">
 
-                                                    <div class="img-wrapper">
-                                                        <div class="front">
-                                                            <a href="{% url 'home:ProductDetail' dod.product.id dod.product.slug %}"><img
-                                                                    src="{{ dod.media.Image.url }}"
-                                                                    class="img-fluid blur-up lazyload bg-img"
-                                                                    alt=""></a>
-                                                        </div>
-                                                        <div class="cart-info cart-wrap bg-color-cls sm-box">
-                                                            <button onclick="openCart()" title="Add to cart"><i
-                                                                    class="ti-shopping-cart"></i></button>
-                                                            <a href="javascript:void(0)" title="Add to Wishlist"><i
-                                                                    class="ti-heart" aria-hidden="true"></i></a>
-                                                            <a href="#" data-bs-toggle="modal"
-                                                               data-bs-target="#quick-view" title="Quick View"><i
-                                                                    class="ti-search" aria-hidden="true"></i></a>
-                                                            <a href="compare.html" title="Compare"><i
-                                                                                                      aria-hidden="true"></i></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="product-detail">
-                                                        <div class="rating"><i class="fa fa-star"></i> <i
-                                                                class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                                                class="fa fa-star"></i> <i class="fa fa-star"></i>
-                                                        </div>
-                                                        <a href="{% url 'home:ProductDetail' dod.product.id dod.product.slug %}">
-                                                            <h6>{{ dod.product.title }}</h6>
-                                                        </a>
-                                                        <h4>{{ dod.product_id.product_max_price }}</h4>
-                                                        <ul class="color-variant">
-                                                            <li class="bg-color1"></li>
-                                                            <li class="bg-color3"></li>
-                                                        </ul>
-                                                    </div>
+                                                                <div class="img-wrapper">
+                                                                    <div class="front">
+                                                                        <a href="{% url 'home:ProductDetail' dod.product.id dod.product.slug %}"><img
+                                                                                src="{{ dod.media.image.url }}"
+                                                                                class="img-fluid blur-up lazyload bg-img"
+                                                                                alt=""></a>
+                                                                    </div>
+                                                                    <div class="cart-info cart-wrap bg-color-cls sm-box">
+                                                                        <button onclick="openCart()"
+                                                                                title="Add to cart"><i
+                                                                                class="ti-shopping-cart"></i></button>
+                                                                        <form action="{% url 'sales:AddWishlist' %}" method="post">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="product-id"
+                                                                       value="{{ dod.product.id }}">
+                                                                <button type="submit" title="Add to Wishlist"><i
+                                                                        class="ti-heart"></i></button>
+
+                                                            </form>
+                                                                        <a href="#" data-bs-toggle="modal"
+                                                                           data-bs-target="#quick-view"
+                                                                           title="Quick View"><i
+                                                                                class="ti-search"
+                                                                                aria-hidden="true"></i></a>
+                                                                        <a href="compare.html" title="Compare"><i
+                                                                                aria-hidden="true"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="product-detail">
+                                                                    <div class="rating"><i class="fa fa-star"></i> <i
+                                                                            class="fa fa-star"></i> <i
+                                                                            class="fa fa-star"></i> <i
+                                                                            class="fa fa-star"></i> <i
+                                                                            class="fa fa-star"></i>
+                                                                    </div>
+                                                                    <a href="{% url 'home:ProductDetail' dod.product.id dod.product.slug %}">
+                                                                        <h6>{{ dod.product.title }}</h6>
+                                                                    </a>
+                                                                    <h4>{{ dod.product.price }}</h4>
+                                                                    <ul class="color-variant">
+                                                                        <li class="bg-color1"></li>
+                                                                        <li class="bg-color3"></li>
+                                                                    </ul>
+                                                                </div>
 
 
-                                            </div> {% endfor %}
+                                                            </div> {% endfor %}
 
                                                     </div>
                                                 </div>
                                                 <div id="tab-5" class="tab-content">
                                                     <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-5 row-cols-md-4 row-cols-2 gy-4">
                                                         {% for dod in new_featured %}
-                                            <div class="product-box">
+                                                            <div class="product-box">
 
-                                                    <div class="img-wrapper">
-                                                        <div class="front">
-                                                            <a href="{% url 'home:ProductDetail' dod.product.id dod.product.slug %}"><img
-                                                                    src="{{ dod.media.Image.url }}"
-                                                                    class="img-fluid blur-up lazyload bg-img"
-                                                                    alt=""></a>
-                                                        </div>
-                                                        <div class="cart-info cart-wrap bg-color-cls sm-box">
-                                                            <button onclick="openCart()" title="Add to cart"><i
-                                                                    class="ti-shopping-cart"></i></button>
-                                                            <a href="javascript:void(0)" title="Add to Wishlist"><i
-                                                                    class="ti-heart" aria-hidden="true"></i></a>
-                                                            <a href="#" data-bs-toggle="modal"
-                                                               data-bs-target="#quick-view" title="Quick View"><i
-                                                                    class="ti-search" aria-hidden="true"></i></a>
-                                                            <a href="compare.html" title="Compare"><i
-                                                                                                      aria-hidden="true"></i></a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="product-detail">
-                                                        <div class="rating"><i class="fa fa-star"></i> <i
-                                                                class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                                                class="fa fa-star"></i> <i class="fa fa-star"></i>
-                                                        </div>
-                                                        <a href="{% url 'home:ProductDetail' dod.product.id dod.product.slug %}">
-                                                            <h6>{{ dod.product_id.title }}</h6>
-                                                        </a>
-                                                        <h4>{{ dod.product_id.product_max_price }}</h4>
-                                                        <ul class="color-variant">
-                                                            <li class="bg-color1"></li>
-                                                            <li class="bg-color3"></li>
-                                                        </ul>
-                                                    </div>
+                                                                <div class="img-wrapper">
+                                                                    <div class="front">
+                                                                        <a href="{% url 'home:ProductDetail' dod.product.id dod.product.slug %}"><img
+                                                                                src="{{ dod.media.image.url }}"
+                                                                                class="img-fluid blur-up lazyload bg-img"
+                                                                                alt=""></a>
+                                                                    </div>
+                                                                    <div class="cart-info cart-wrap bg-color-cls sm-box">
+                                                                        <button onclick="openCart()"
+                                                                                title="Add to cart"><i
+                                                                                class="ti-shopping-cart"></i></button>
+                                                                        <form action="{% url 'sales:AddWishlist' %}" method="post">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="product-id"
+                                                                       value="{{ dod.product.id }}">
+                                                                <button type="submit" title="Add to Wishlist"><i
+                                                                        class="ti-heart"></i></button>
 
-
-                                            </div> {% endfor %}
-
+                                                            </form>
+                                                                        <a href="#" data-bs-toggle="modal"
+                                                                           data-bs-target="#quick-view"
+                                                                           title="Quick View"><i
+                                                                                class="ti-search"
+                                                                                aria-hidden="true"></i></a>
+                                                                        <a href="compare.html" title="Compare"><i
+                                                                                aria-hidden="true"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="product-detail">
+                                                                    <div class="rating"><i class="fa fa-star"></i> <i
+                                                                            class="fa fa-star"></i> <i
+                                                                            class="fa fa-star"></i> <i
+                                                                            class="fa fa-star"></i> <i
+                                                                            class="fa fa-star"></i>
+                                                                    </div>
+                                                                    <a href="{% url 'home:ProductDetail' dod.product.id dod.product.slug %}">
+                                                                        <h6>{{ dod.product.title }}</h6>
+                                                                    </a>
+                                                                    <h4>{{ dod.product.price }}</h4>
+                                                                    <ul class="color-variant">
+                                                                        <li class="bg-color1"></li>
+                                                                        <li class="bg-color3"></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>{% endfor %}
                                                     </div>
                                                 </div>
                                             </div>
@@ -492,30 +532,19 @@
 
 
 <!-- blog section -->
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <div class="title1 section-t-space">
-                <h4>Recent Story</h4>
-                <h2 class="title-inner1">from the blog</h2>
-            </div>
-        </div>
-    </div>
-</div>
-<section class="blog p-t-0 ratio2_3">
+<section class="blog ratio2_3 gym-blog section-b-space overflow-hidden">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="slide-3 no-arrow">
+                <div class="slide-3 no-arrow slick-default-margin">
                     <div class="col-md-12">
                         <a href="#">
                             <div class="classic-effect">
                                 <div>
-                                    <img src="{% static '' %}images/blog/1.jpg"
-                                         class="img-fluid blur-up lazyload bg-img"
-                                         alt="">
+                                    <img alt="" src="{% static '' %}images/marketplace/blog/1.jpg"
+                                         class="img-fluid blur-up lazyload bg-img">
+                                    <span></span>
                                 </div>
-                                <span></span>
                             </div>
                         </a>
                         <div class="blog-details">
@@ -523,7 +552,6 @@
                             <a href="#">
                                 <p>Lorem ipsum dolor sit consectetur adipiscing elit,</p>
                             </a>
-                            <hr class="style1">
                             <h6>by: John Dio , 2 Comment</h6>
                         </div>
                     </div>
@@ -531,11 +559,10 @@
                         <a href="#">
                             <div class="classic-effect">
                                 <div>
-                                    <img src="{% static '' %}images/blog/2.jpg"
-                                         class="img-fluid blur-up lazyload bg-img"
-                                         alt="">
+                                    <img alt="" src="{% static '' %}images/marketplace/blog/2.jpg"
+                                         class="img-fluid blur-up lazyload bg-img">
+                                    <span></span>
                                 </div>
-                                <span></span>
                             </div>
                         </a>
                         <div class="blog-details">
@@ -543,7 +570,6 @@
                             <a href="#">
                                 <p>Lorem ipsum dolor sit consectetur adipiscing elit,</p>
                             </a>
-                            <hr class="style1">
                             <h6>by: John Dio , 2 Comment</h6>
                         </div>
                     </div>
@@ -551,11 +577,10 @@
                         <a href="#">
                             <div class="classic-effect">
                                 <div>
-                                    <img src="{% static '' %}images/blog/3.jpg"
-                                         class="img-fluid blur-up lazyload bg-img"
-                                         alt="">
+                                    <img alt="" src="{% static '' %}images/marketplace/blog/3.jpg"
+                                         class="img-fluid blur-up lazyload bg-img">
+                                    <span></span>
                                 </div>
-                                <span></span>
                             </div>
                         </a>
                         <div class="blog-details">
@@ -563,7 +588,6 @@
                             <a href="#">
                                 <p>Lorem ipsum dolor sit consectetur adipiscing elit,</p>
                             </a>
-                            <hr class="style1">
                             <h6>by: John Dio , 2 Comment</h6>
                         </div>
                     </div>
@@ -571,11 +595,10 @@
                         <a href="#">
                             <div class="classic-effect">
                                 <div>
-                                    <img src="{% static '' %}images/blog/4.jpg"
-                                         class="img-fluid blur-up lazyload bg-img"
-                                         alt="">
+                                    <img alt="" src="{% static '' %}images/marketplace/blog/4.jpg"
+                                         class="img-fluid blur-up lazyload bg-img">
+                                    <span></span>
                                 </div>
-                                <span></span>
                             </div>
                         </a>
                         <div class="blog-details">
@@ -583,27 +606,6 @@
                             <a href="#">
                                 <p>Lorem ipsum dolor sit consectetur adipiscing elit,</p>
                             </a>
-                            <hr class="style1">
-                            <h6>by: John Dio , 2 Comment</h6>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <a href="#">
-                            <div class="classic-effect">
-                                <div>
-                                    <img src="{% static '' %}images/blog/5.jpg"
-                                         class="img-fluid blur-up lazyload bg-img"
-                                         alt="">
-                                </div>
-                                <span></span>
-                            </div>
-                        </a>
-                        <div class="blog-details">
-                            <h4>25 January 2018</h4>
-                            <a href="#">
-                                <p>Lorem ipsum dolor sit consectetur adipiscing elit,</p>
-                            </a>
-                            <hr class="style1">
                             <h6>by: John Dio , 2 Comment</h6>
                         </div>
                     </div>
@@ -612,7 +614,7 @@
         </div>
     </div>
 </section>
-<!-- blog section end -->
+<!-- blog section end-->
 
 
 <!-- instagram section -->

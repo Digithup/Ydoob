@@ -85,7 +85,7 @@ class Products(models.Model):
     long_desc = models.TextField(null=True)
     model = models.CharField(max_length=65, null=True)
     brand = models.CharField(max_length=255, null=True)
-    price = models.CharField(max_length=255, null=False)
+    price = models.DecimalField(max_digits=12, decimal_places=2,default=0)
     quantity = models.CharField(max_length=255, default=0)
     minimum_quantity = models.CharField(max_length=255, default=1)
     subtract_stock = models.CharField(max_length=255, choices=STATUS, default='Yes', null=True)
@@ -243,3 +243,13 @@ class ProductReviewVoting(models.Model):
     user_id_voting = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, choices=STATUS)
+
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Products, on_delete=models.CASCADE)
+    quantity=models.SmallIntegerField(default='1')
+    def __str__(self):
+        return f"{self.quantity} of {self.product}"
+    def get_item_price(self):
+        return self.quantity * self.product.price

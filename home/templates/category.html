@@ -1,8 +1,9 @@
 {% extends 'front/homebase.html' %}
 {% load static %}
 {% load i18n %}
+ {% load mptt_tags %}
 {% block body %}
-    {% load mptt_tags %}
+
 
 
     <!-- breadcrumb start -->
@@ -13,7 +14,7 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="page-title">
-                        <h2>{{ object.title }}</h2>
+                        <h2>{{ category.title }}</h2>
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -43,7 +44,7 @@
                                                                             width="50px" height="50px"     alt=""></div>
                                             </a>
                                             <div class="category-details ">
-                                                <a href="#">
+                                                <a href="{{ node.slug }}">
                                                     <h5 class=" ">{{ node.title }}</h5>
                                                 </a>
                                             </div>{% endif %}
@@ -147,97 +148,41 @@
                         <div class="theme-card">
                             <h5 class="title-border">new product</h5>
                             <div class="offer-slider slide-1">
-                                <div>
-                                    <div class="media">
-                                        {% for rs in categories_product %}
-                                            <a href="/product/{{ rs.id }}/{{ rs.slug }}"><img
-                                                    class="img-fluid blur-up lazyload"
-                                                    src="{{ rs.media.media_content }}" alt=""></a>
-                                            <div class="media-body align-self-center">
-                                                <div class="rating"><i class="fa fa-star"></i> <i
-                                                        class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                                        class="fa fa-star"></i> <i class="fa fa-star"></i></div>
-                                                <a href="product-page(no-sidebar).html">
-                                                    <h6>{{ rs.product.title }}</h6>
-                                                </a>
-                                                <h4>$500.00</h4>
-                                            </div>
-                                        {% endfor %}
+                                    <div>
+                                        {% for sp in category_side_products %}
+                                        <div class="media">
+                                                <a href="{% url 'home:ProductDetail' sp.product.id sp.product.slug %}"><img class="img-fluid blur-up lazyload"
+                                                                src="{{ sp.media.image.url }}" height="70px" width="100px"></a>
+                                                <div class="media-body align-self-center">
+                                                    <div class="rating"><i class="fa fa-star"></i> <i
+                                                            class="fa fa-star"></i> <i class="fa fa-star"></i> <i
+                                                            class="fa fa-star"></i> <i class="fa fa-star"></i></div>
+                                                    <a href="{% url 'home:ProductDetail' sp.product.id sp.product.slug %}">
+                                                        <h6>{{ sp.product.title }}</h6>
+                                                    </a>
+                                                    <h4>{{ sp.product.price }}</h4>
+                                                </div>
+
+                                        </div>{% endfor %}
                                     </div>
-                                    <div class="media">
-                                        <a href=""><img class="img-fluid blur-up lazyload"
-                                                        src="{% static 'categories.html' %}images/pro/1.jpg" alt=""></a>
-                                        <div class="media-body align-self-center">
-                                            <div class="rating"><i class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i></div>
-                                            <a href="product-page(no-sidebar).html">
-                                                <h6>Slim Fit Cotton Shirt</h6>
-                                            </a>
-                                            <h4>$500.00</h4>
-                                        </div>
-                                    </div>
-                                    <div class="media">
-                                        <a href=""><img class="img-fluid blur-up lazyload"
-                                                        src="{% static 'categories.html' %}images/pro/1.jpg" alt=""></a>
-                                        <div class="media-body align-self-center">
-                                            <div class="rating"><i class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i></div>
-                                            <a href="product-page(no-sidebar).html">
-                                                <h6>Slim Fit Cotton Shirt</h6>
-                                            </a>
-                                            <h4>$500.00</h4>
-                                        </div>
+                                    <div>
+                                        {% for sp in category_side_products2 %}
+                                        <div class="media">
+                                                <a href=""><img class="img-fluid blur-up lazyload"
+                                                                src="{{ sp.media.image.url }}" height="70px" width="100px"></a>
+                                                <div class="media-body align-self-center">
+                                                    <div class="rating"><i class="fa fa-star"></i> <i
+                                                            class="fa fa-star"></i> <i class="fa fa-star"></i> <i
+                                                            class="fa fa-star"></i> <i class="fa fa-star"></i></div>
+                                                    <a href="{% url 'home:ProductDetail' sp.product.id sp.product.slug %}">
+                                                        <h6>{{ sp.product.title }}</h6>
+                                                    </a>
+                                                    <h4>{{ sp.product.price }}</h4>
+                                                </div>
+
+                                        </div>{% endfor %}
                                     </div>
                                 </div>
-                                <div>
-                                    <div class="media">
-                                        <a href=""><img class="img-fluid blur-up lazyload"
-                                                        src="{% static 'categories.html' %}images/pro/1.jpg" alt=""></a>
-                                        <div class="media-body align-self-center">
-                                            <div class="rating"><i class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i></div>
-                                            <a href="product-page(no-sidebar).html">
-                                                <h6>Slim Fit Cotton Shirt</h6>
-                                            </a>
-                                            <h4>$500.00</h4>
-                                        </div>
-                                    </div>
-                                    <div class="media">
-                                        <a href=""><img class="img-fluid blur-up lazyload"
-                                                        src="{% static 'categories.html' %}images/pro/1.jpg" alt=""></a>
-                                        <div class="media-body align-self-center">
-                                            <div class="rating"><i class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i></div>
-                                            <a href="product-page(no-sidebar).html">
-                                                <h6>Slim Fit Cotton Shirt</h6>
-                                            </a>
-                                            <h4>$500.00</h4>
-                                        </div>
-                                    </div>
-                                    <div class="media">
-                                        <a href=""><img class="img-fluid blur-up lazyload"
-                                                        src="{% static 'categories.html' %}images/pro/1.jpg" alt=""></a>
-                                        <div class="media-body align-self-center">
-                                            <div class="rating"><i class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-                                                    class="fa fa-star"></i></div>
-                                            <a href="product-page(no-sidebar).html">
-                                                <h6>Slim Fit Cotton Shirt</h6>
-                                            </a>
-                                            <h4>$500.00</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                         <!-- side-bar single product slider end -->
                         <!-- side-bar banner start here -->
@@ -253,15 +198,12 @@
                                 <div class="col-sm-12">
                                     <div class="top-banner-content small-section">
 
-                                        <h4>BIGGEST DEALS ON TOP BRANDS</h4>
-                                        <p>The trick to choosing the best wear for yourself is to keep in mind your
-                                            body type, individual style, occasion and also the time of day or
-                                            weather.
-                                            In addition to eye-catching products from top brands, we also offer an
-                                            easy 30-day return and exchange policy, free and fast shipping across
-                                            all pin codes, cash or card on delivery option, deals and discounts,
-                                            among other perks. So, sign up now and shop for westarn wear to your
-                                            heart’s content on Multikart. </p>
+
+
+                                        <h4></h4>
+                                        <p>{{ category.description| safe  }} </p>
+
+
                                     </div>
 
                                 </div>
@@ -352,15 +294,15 @@
                                     </div>
                                     <div class="product-wrapper-grid">
                                         <div class="row margin-res">
-                                            {% for dod in new_products_req %}
+                                            {% for dod in category_product %}
                                                 <div class="col-xl-3 col-6 col-grid-box">
 
                                                     <div class="product-box">
 
                                                         <div class="img-wrapper">
                                                             <div class="front">
-                                                                <a href="product-page(no-sidebar).html"><img
-                                                                        src="{{ dod.media_content }}"
+                                                                <a href="{% url 'home:ProductDetail' dod.product.id dod.product.slug %}"><img
+                                                                        src="{{ dod.media.image.url }}"
                                                                         class="img-fluid blur-up lazyload bg-img"
                                                                         alt=""></a>
                                                             </div>
@@ -397,10 +339,10 @@
                                                                 <i
                                                                         class="fa fa-star"></i>
                                                             </div>
-                                                            <a href="product-page(no-sidebar).html">
-                                                                <h6>{{ dod.product_id.title }}</h6>
+                                                            <a href="{% url 'home:ProductDetail' dod.product.id dod.product.slug %}">
+                                                                <h6>{{ dod.product.title }}</h6>
                                                             </a>
-                                                            <h4>{{ dod.product_id.product_max_price }}</h4>
+                                                            <h4>{{ dod.product.price }}</h4>
                                                             <ul class="color-variant">
                                                                 <li class="bg-color1"></li>
                                                                 <li class="bg-color3"></li>

@@ -60,16 +60,16 @@
 <body>
 {% include 'front/header.html' %}
 {% block sidebar %} {% endblock %}
+
 {% block slider %} {% endblock %}
 {% block body %} {% endblock %}
+
+
+
 {% block foot %} {% endblock %}
-
+{% block custom_js %}{% endblock custom_js %}
 {% block js %} {% endblock %}
- {% block javascript %}
-    {% endblock %}
-{% block custom_js %}
-{% endblock custom_js %}
-
+{% block javascript %}{% endblock %}
 
 
 

@@ -1,21 +1,23 @@
 from django.urls import path
+
 from . import views
-from .tests import product_detailtest, ajaxcolortest
-from .views import ProductDetailView, autocomplete, CategoriesDetail, CategoryDetail, ProductsListView, ajaxcolor, \
-    product_detail
+from .search import SearchView
+from .tests import product_detailtest
+from .views import  CategoriesDetail, CategoryDetail, ProductsListView, product_detail
 
 app_name = 'home'
 urlpatterns = [
     path('', views.index, name='index'),
     path('home/', views.index, name='index'),
-    path('search/autocomplete', autocomplete, name='autocomplete'),
 
-    # path('search/', SearchView(), name='search'),
-    # path('search_auto/', views.search_auto, name='search_auto'),
+
+############ search ##############
+
+
 
     ############ Category Product ##############
     path('categories/', CategoriesDetail, name='Categories'),
-    path('categories/<slug:slug>', CategoryDetail.as_view(), name='Category'),
+    path('categories/<int:id>/<slug:slug>', CategoryDetail, name='Category'),
     path('products/', ProductsListView.as_view(), name='ProductsView'),
 
     ############ Product ##############

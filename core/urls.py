@@ -6,8 +6,8 @@ from core.views.catalog import AddCategory, categories, EditCategory, DeleteCate
     ProductsDeleted, DeleteManufacture, EditManufacture, AddManufacture, ManufacturerListView, \
     DeleteFilter, AddFilter, EditFilter, DeleteFiltersGroup, AddFiltersGroup, EditFiltersGroup, FiltersGroupListView, \
     FiltersListView, AttributesGroupListView, EditAttributesGroup, AddAttributesGroup, DeleteAttributesGroup, \
-    AttributeListView, EditAttribute, AddAttribute, DeleteAttribute, ProductUpdate, ProductAdd, ProductsList, search, \
-    search_auto, ManufacturerDetail, OptionsTypeListView, AddOptionsType, EditOptionsType, DeleteOptionsType, \
+    AttributeListView, EditAttribute, AddAttribute, DeleteAttribute, ProductUpdate, ProductAdd, ProductsList,  \
+    ManufacturerDetail, OptionsTypeListView, AddOptionsType, EditOptionsType, DeleteOptionsType, \
     OptionsListView, EditOption, AddOption, DeleteOption, \
     ColorListView, AddColor, EditColor, DeleteColor, SizeListView, EditSize, AddSize, DeleteSize, \
     VariantListView, load_option
@@ -31,8 +31,7 @@ urlpatterns = [
     path('admin/', AdminIndex, name='AdminIndex'),
 
     # path('admin/logout', AdminIndex, name='AdminIndex'),
-    path('search/', search, name='search'),
-    path('search_auto/', search_auto, name='search_auto'),
+
 
     ########## categories  #########
     path('admin/category/', categories, name='categories'),
@@ -122,11 +121,11 @@ urlpatterns = [
     ########## Banners   #########
     path('admin/design', BannersView.as_view(), name='BannerView'),
     path('admin/design/<int:pk>/', BannerDetailView.as_view(), name='BannerDetailView'),
-    path('admin/design/create/', BannerCreate.as_view(), name='BannerCreate'),
+    path('admin/design/create/', BannerCreate, name='BannerCreate'),
     path('admin/design/delete/<int:pk>/', BannerDelete.as_view(), name='BannerDelete'),
 
     ################ Users ################
-    path('', AdminLogin.as_view(), name='AdminLogin'),
+    path('login/', AdminLogin.as_view(), name='AdminLogin'),
     path('admin/logout/', AdminLogout, name='AdminLogout'),
     path('admin/users/', AdminUsersList.as_view(), name='AdminUsersList'),
     path('admin/users/create/', AdminUserCreate.as_view(), name='AdminUserCreate'),

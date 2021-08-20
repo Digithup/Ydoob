@@ -74,18 +74,31 @@ class Banners(models.Model):
         ('True', 'Enable'),
         ('False', 'Disable'),
     )
+    Position = (
+        ('Top Left', 'Top Left'),
+        ('Top Middle', 'Top Middle'),
+        ('Top Right', 'Top Right'),
+        ('Middle Left', 'Middle Left'),
+        ('Middle Right', 'Middle Right'),
+        ('Bottom Left', 'Bottom Left'),
+        ('Bottom Middle', 'Bottom Middle'),
+        ('Bottom Right', 'Bottom Right'),
+        ('Collection Sidebar', 'Collection Sidebar'),
+        ('Categories Top', 'Categories Top'),
+        ('Categories Sidebar', 'Categories Sidebar'),
+    )
 
-    status = models.CharField(max_length=10, choices=STATUS)
-    title = models.CharField(max_length=150, null=False, verbose_name="Title", unique=True)
-    sort_order = models.IntegerField(default=0, null=False)
-    media_content = models.FileField(upload_to='images/banners')
+    status = models.CharField(max_length=10, choices=STATUS,default="True")
+    position = models.CharField(max_length=150, null=False, choices=Position, unique=True)
+
+    media_content = models.FileField(upload_to='images/banners/%Y/%m/')
     media_link = models.URLField(null=False, blank=True)
-    media_location = models.CharField(null=False, max_length=100)
+
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.title
+        return self.position.title
 
 
 class Menu(models.Model):

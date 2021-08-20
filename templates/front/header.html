@@ -6,7 +6,7 @@
 {% load i18n %}
 <!-- header start -->
 {#<header class="header-style-5 border-style" id="sticky-header">#}
-<header class="header-style-5 border-style" >
+<header class="header-style-5 border-style">
     <div class="mobile-fix-option"></div>
     <div class="top-header top-header-dark">
         <div class="container">
@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-lg-6 text-end">
                     <ul class="header-dropdown">
-                        <li class="mobile-wishlist"><a href="#"><i class="fa fa-heart" aria-hidden="true"></i></a>
+                        <li class="mobile-wishlist"><a href="{% url 'sales:Wishlist' %}"><i class="fa fa-heart" aria-hidden="true"><span >{{ wish_count }}</span></i></a>
                         </li>
                         <li class="onhover-dropdown mobile-account"><i class="fa fa-user" aria-hidden="true"></i>
                             {% if user.is_authenticated %} {{ user.first_name }}
@@ -89,66 +89,125 @@
                                                                   class="img-fluid blur-up lazyload" alt=""></a>
                         </div>
                     </div>
-                    <div>
-                        <form class="form_search" role="form" action="/search/" method="get"
-                              class="autocomplete-me">
-                            {% csrf_token %}
-                            <input id="query search-autocomplete" type="search"
-                                   placeholder="Search anything here..."
-                                   id="id_q" name="q" class="nav-search nav-search-field"
-                                   aria-expanded="true">
-                            <button type="submit" name="nav-submit-button" class="btn-search">
-                                <i class="ti-search"></i>
-                            </button>
-                        </form>
-                    </div>
+                <script>
+                    $(function() {
+                        $("#query").autocomplete({
+                            source: "/search_auto/",
+                            select: function (event, ui) { //item selected
+                                AutoCompleteSelectHandler(event, ui)
+                            },
+                            minLength: 2,
+                        });
+                    });
+                    function AutoCompleteSelectHandler(event, ui)
+                    {
+                        var selectedObj = ui.item;
+                    }
+                </script>
+                    <div class="header-search">
+                    <form action="/search/" method="post">
+                        {% csrf_token %}
+                        <input id="query" name="query" class="input search-input" type="text" placeholder="Enter your keyword">
+                        <select name="catid"  class="input search-categories">
+                            <option value="0">{% trans "All Categories" %}</option>
+
+                        </select>
+                        <button class="search-btn"><i class="fa fa-search"></i></button>
+                    </form>
+                </div>
+                <!-- /Search -->
+
+            </div>
                     <div class="menu-right pull-right">
                         <div>
                             <div class="icon-nav">
                                 <ul>
                                     <li class="onhover-div mobile-search d-xl-none d-inline-block">
-                                        <div><img src="{% static '' %}images/icon/search.png" onclick="openSearch()"
+                                        <div><img src="{% static '' %}images/icon/search.png"
                                                   class="img-fluid blur-up lazyload" alt=""> <i class="ti-search"
-                                                                                                onclick="openSearch()"></i>
+                                                                                               ></i>
                                         </div>
                                     </li>
-                                    <li class="onhover-dropdown"><a class="txt-dark" href="#">
-                                        <h3>{{ request.LANGUAGE_CODE }}</h3>
-                                        <ul class="language-dropdown onhover-show-div p-20">
-                                            <div class="lan-selector">
-                                                <form action="{% url 'set_language' %}" method="post" id="language-form"
-                                                      name="language-form">
-                                                    {% csrf_token %}
-                                                    <input type="hidden" name="language" id="language" value=""/>
-                                                </form>
-                                                <script>
-                                                    function set_language(code) {
-                                                        $('#language').val(code);
-                                                        $('#language-form').submit();
-                                                    }
-                                                </script>
+                                    <li class="onhover-div mobile-setting">
+                                        <div><img src="{% static '' %}images/icon/setting.png"
+                                                  class="img-fluid blur-up lazyload" alt=""> <i
+                                                class="ti-settings"></i></div>
+                                        <div class="show-div setting">
+                                            <h6>language</h6>
+                                            <ul>
+                                                <div class="lan-selector">
+                                                    <form action="{% url 'set_language' %}" method="post"
+                                                          id="language-form"
+                                                          name="language-form">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="language" id="language" value=""/>
+                                                    </form>
+                                                    <script>
+                                                        function set_language(code) {
+                                                            $('#language').val(code);
+                                                            $('#language-form').submit();
+                                                        }
+                                                    </script>
 
-                                                <li>{% for language in index_language %}
-                                                    <ul>
-                                                        <a href="javascript:set_language('{{ language.code }}')"><img
-                                                                src="{{ language.image.url }} "
-                                                                height="25px" width="25px"> {{ language.name }}
-                                                        </a><hr>{% endfor %}</ul>
-                                                </li>
+                                                    <li>{% for language in index_language %}
+                                                        <ul>
+                                                            <a href="javascript:set_language('{{ language.code }}')"><img
+                                                                    src="{{ language.image.url }} "
+                                                                    height="25px" width="25px"> {{ language.name }}
+                                                            </a>
+                                                            <hr type="hidden">
+                                                        </ul>{% endfor %}
+                                                    </li>
 
 
-                                            </div>
-                                        </ul>
-                                    </a></li>
+                                                </div>
+                                            </ul>
+                                            <h6>currency</h6>
+                                            <ul class="list-inline">
+                                                <li><a href="#">euro</a></li>
+                                                <li><a href="#">rupees</a></li>
+                                                <li><a href="#">pound</a></li>
+                                                <li><a href="#">doller</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    {#                                    <li class="onhover-dropdown"><a class="txt-dark" href="#">#}
+                                    {#                                        <h3>{{ request.LANGUAGE_CODE }}</h3>#}
+                                    {#                                        <ul class="language-dropdown onhover-show-div p-20">#}
+                                    {#                                            <div class="lan-selector">#}
+                                    {#                                                <form action="{% url 'set_language' %}" method="post" id="language-form"#}
+                                    {#                                                      name="language-form">#}
+                                    {#                                                    {% csrf_token %}#}
+                                    {#                                                    <input type="hidden" name="language" id="language" value=""/>#}
+                                    {#                                                </form>#}
+                                    {#                                                <script>#}
+                                    {#                                                    function set_language(code) {#}
+                                    {#                                                        $('#language').val(code);#}
+                                    {#                                                        $('#language-form').submit();#}
+                                    {#                                                    }#}
+                                    {#                                                </script>#}
+                                    {##}
+                                    {#                                                <li>{% for language in index_language %}#}
+                                    {#                                                    <ul>#}
+                                    {#                                                        <a href="javascript:set_language('{{ language.code }}')"><img#}
+                                    {#                                                                src="{{ language.image.url }} "#}
+                                    {#                                                                height="25px" width="25px"> {{ language.name }}#}
+                                    {#                                                        </a><hr>{% endfor %}</ul>#}
+                                    {#                                                </li>#}
+                                    {##}
+                                    {##}
+                                    {#                                            </div>#}
+                                    {#                                        </ul>#}
+                                    {#                                    </a></li>#}
+
 
                                     <li class="onhover-div mobile-cart">
                                         {% load myapptags %}
                                         {% shopcartcount user.id as count %}
-                                        <div><img src="{% static '' %}images/icon/cart.png"
-                                                  class="img-fluid blur-up lazyload" alt=""> <i
-                                                class="ti-shopping-cart"></i></div>
-                                        <span
-                                                class="cart_qty_cls">{{ count }}</span>
+                                        <div></span><img src="{% static '' %}images/icon/cart.png"
+                                                         class="img-fluid blur-up lazyload" alt=""> <span
+                                                class="qty">{{ count }}</span></div>
+
 
                                         <ul class="show-div shopping-cart row">
                                             <li>
@@ -196,6 +255,25 @@
                 </div>
             </div>
         </div>
+        <div class="container">
+            {% include 'admin/partials/messages.html' %}
+            {% block content %}
+            {% endblock %}
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == "success" %}
+                        <div class="alert alert-success">
+                            {{ message }}
+                        </div>
+                    {% endif %}
+                    {% if message.tags == "error" %}
+                        <div class="alert alert-danger">
+                            {{ message }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
     </div>
     <div class="bottom-part bottom-light">
         <div class="container">
@@ -209,7 +287,12 @@
                                     <div class="mobile-back text-end">Back<i class="fa fa-angle-right ps-2"
                                                                              aria-hidden="true"></i></div>
                                 </li>
-                                <li><a href="{% url 'home:index' %}">Home</a></li>
+
+
+
+
+                                <!-- /category nav -->
+
                                 <li class="mega" id="hover-cls">
                                     <a href="{% url 'home:Categories' %}">{% translate 'Category' %}
                                         <div class="lable-nav">new</div>
@@ -373,7 +456,7 @@
                                     </ul>
                                 </li>
                                 <li>
-                                    <a href="#">shop</a>
+                                    <a href="#">{% translate 'Electronics' %}</a>
                                     <ul>
                                         <li><a href="category-page(top-filter).html">top filter<span
                                                 class="new-tag">new</span></a></li>
@@ -393,138 +476,95 @@
                                         <li><a href="category-page(list-view).html">list view</a></li>
                                     </ul>
                                 </li>
-                                <li>
-                                    <a href="#">product</a>
+                                 <li>
+                                    <a href="#">{% translate ' Fashion' %}</a>
                                     <ul>
-                                        <li><a href="product-page(360-view).html">360 view <span
+                                        <li><a href="category-page(top-filter).html">top filter<span
                                                 class="new-tag">new</span></a></li>
-                                        <li><a href="product-page(video-thumbnail).html">video
-                                            thumbnail<span class="new-tag">new</span></a></li>
-                                        <li>
-                                            <a href="#">sidebar</a>
-                                            <ul>
-                                                <li><a href="product-page.html">left sidebar</a></li>
-                                                <li><a href="product-page(right-sidebar).html">right
-                                                    sidebar</a>
-                                                </li>
-                                                <li><a href="product-page(no-sidebar).html">no sidebar</a>
-                                                </li>
-                                            </ul>
+                                        <li><a href="category-page(modern).html">modern<span
+                                                class="new-tag">new</span></a></li>
+                                        <li><a href="category-page.html">left sidebar</a></li>
+                                        <li><a href="category-page(right).html">right sidebar</a></li>
+                                        <li><a href="category-page(no-sidebar).html">no sidebar</a></li>
+                                        <li><a href="category-page(sidebar-popup).html">sidebar popup</a>
                                         </li>
-                                        <li>
-                                            <a href="#">thumbnail image</a>
-                                            <ul>
-                                                <li><a href="product-page(left-image).html">left image</a>
-                                                </li>
-                                                <li><a href="product-page(right-image).html">right image</a>
-                                                </li>
-                                                <li><a href="product-page(image-outside).html">image
-                                                    outside</a></li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            <a href="#">three column</a>
-                                            <ul>
-                                                <li><a href="product-page(3-col-left).html">thumbnail
-                                                    left</a>
-                                                </li>
-                                                <li><a href="product-page(3-col-right).html">thumbnail
-                                                    right</a>
-                                                </li>
-                                                <li><a href="product-page(3-column).html">thubnail
-                                                    bottom</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="product-page(4-image).html">four image</a></li>
-                                        <li><a href="product-page(sticky).html">sticky</a></li>
-                                        <li><a href="product-page(accordian).html">accordian</a></li>
-                                        <li><a href="product-page(bundle).html">bundle</a></li>
-                                        <li><a href="product-page(image-swatch).html">image swatch </a></li>
-                                        <li><a href="product-page(vertical-tab).html">vertical tab</a></li>
+                                        <li><a href="category-page(metro).html">metro</a></li>
+                                        <li><a href="category-page(full-width).html">full width</a></li>
+                                        <li><a href="category-page(infinite-scroll).html">infinite
+                                            scroll</a></li>
+                                        <li><a href=category-page(3-grid).html>three grid</a></li>
+                                        <li><a href="category-page(6-grid).html">six grid</a></li>
+                                        <li><a href="category-page(list-view).html">list view</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="#">pages</a>
+                                 <li>
+                                    <a href="#">{% translate 'Mobiles & Tablets' %}</a>
                                     <ul>
-                                        <li>
-                                            <a href="#">vendor</a>
-                                            <ul>
-                                                <li><a href="vendor-dashboard.html">vendor dashboard</a>
-                                                </li>
-                                                <li><a href="vendor-profile.html">vendor profile</a></li>
-                                                <li><a href="become-vendor.html">become vendor</a></li>
-                                            </ul>
+                                        <li><a href="category-page(top-filter).html">top filter<span
+                                                class="new-tag">new</span></a></li>
+                                        <li><a href="category-page(modern).html">modern<span
+                                                class="new-tag">new</span></a></li>
+                                        <li><a href="category-page.html">left sidebar</a></li>
+                                        <li><a href="category-page(right).html">right sidebar</a></li>
+                                        <li><a href="category-page(no-sidebar).html">no sidebar</a></li>
+                                        <li><a href="category-page(sidebar-popup).html">sidebar popup</a>
                                         </li>
-                                        <li>
-                                            <a href="#">account</a>
-                                            <ul>
-                                                <li><a href="wishlist.html">wishlist</a></li>
-                                                <li><a href="cart.html">cart</a></li>
-                                                <li><a href="dashboard.html">Dashboard</a></li>
-                                                <li><a href="login.html">login</a></li>
-                                                <li><a href="register.html">register</a></li>
-                                                <li><a href="contact.html">contact</a></li>
-                                                <li><a href="forget_pwd.html">forget password</a></li>
-                                                <li><a href="profile.html">profile</a></li>
-                                                <li><a href="checkout.html">checkout</a></li>
-                                                <li><a href="order-success.html">order success</a></li>
-                                                <li><a href="order-tracking.html">order tracking<span
-                                                        class="new-tag">new</span></a></li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            <a href="#">portfolio</a>
-                                            <ul>
-                                                <li><a href="">grid</a>
-                                                    <ul>
-                                                        <li><a href="grid-2-col.html">grid
-                                                            2</a></li>
-                                                        <li><a href="grid-3-col.html">grid
-                                                            3</a></li>
-                                                        <li><a href="grid-4-col.html">grid
-                                                            4</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li><a href="">masonry</a>
-                                                    <ul>
-                                                        <li><a href="masonary-2-grid.html">grid 2</a></li>
-                                                        <li><a href="masonary-3-grid.html">grid 3</a></li>
-                                                        <li><a href="masonary-4-grid.html">grid 4</a></li>
-                                                        <li><a href="masonary-fullwidth.html">full width</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="about-page.html">about us</a></li>
-                                        <li><a href="search.html">search</a></li>
-                                        <li><a href="review.html">review</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">compare</a>
-                                            <ul>
-                                                <li><a href="compare.html">compare</a></li>
-                                                <li><a href="compare-2.html">compare-2</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="collection.html">collection</a></li>
-                                        <li><a href="lookbook.html">lookbook</a></li>
-                                        <li><a href="sitemap.html">site map</a>
-                                        </li>
-                                        <li><a href="404.html">404</a></li>
-                                        <li><a href="coming-soon.html">coming soon</a></li>
-                                        <li><a href="faq.html">FAQ</a></li>
+                                        <li><a href="category-page(metro).html">metro</a></li>
+                                        <li><a href="category-page(full-width).html">full width</a></li>
+                                        <li><a href="category-page(infinite-scroll).html">infinite
+                                            scroll</a></li>
+                                        <li><a href=category-page(3-grid).html>three grid</a></li>
+                                        <li><a href="category-page(6-grid).html">six grid</a></li>
+                                        <li><a href="category-page(list-view).html">list view</a></li>
                                     </ul>
                                 </li>
+                                 <li>
+                                    <a href="#">{% translate 'Home & Kitchen' %}</a>
+                                    <ul>
+                                        <li><a href="category-page(top-filter).html">top filter<span
+                                                class="new-tag">new</span></a></li>
+                                        <li><a href="category-page(modern).html">modern<span
+                                                class="new-tag">new</span></a></li>
+                                        <li><a href="category-page.html">left sidebar</a></li>
+                                        <li><a href="category-page(right).html">right sidebar</a></li>
+                                        <li><a href="category-page(no-sidebar).html">no sidebar</a></li>
+                                        <li><a href="category-page(sidebar-popup).html">sidebar popup</a>
+                                        </li>
+                                        <li><a href="category-page(metro).html">metro</a></li>
+                                        <li><a href="category-page(full-width).html">full width</a></li>
+                                        <li><a href="category-page(infinite-scroll).html">infinite
+                                            scroll</a></li>
+                                        <li><a href=category-page(3-grid).html>three grid</a></li>
+                                        <li><a href="category-page(6-grid).html">six grid</a></li>
+                                        <li><a href="category-page(list-view).html">list view</a></li>
+                                    </ul>
+                                </li>
+
                                 <li>
-                                    <a href="#">blog</a>
+                                    <a href="#">{% translate 'Office' %}</a>
                                     <ul>
-                                        <li><a href="blog-page.html">left sidebar</a></li>
-                                        <li><a href="blog(right-sidebar).html">right sidebar</a></li>
-                                        <li><a href="blog(no-sidebar).html">no sidebar</a></li>
-                                        <li><a href="blog-details.html">blog details</a></li>
+                                        <li><a href="category-page(top-filter).html">top filter<span
+                                                class="new-tag">new</span></a></li>
+                                        <li><a href="category-page(modern).html">modern<span
+                                                class="new-tag">new</span></a></li>
+                                        <li><a href="category-page.html">left sidebar</a></li>
+                                        <li><a href="category-page(right).html">right sidebar</a></li>
+                                        <li><a href="category-page(no-sidebar).html">no sidebar</a></li>
+                                        <li><a href="category-page(sidebar-popup).html">sidebar popup</a>
+                                        </li>
+                                        <li><a href="category-page(metro).html">metro</a></li>
+                                        <li><a href="category-page(full-width).html">full width</a></li>
+                                        <li><a href="category-page(infinite-scroll).html">infinite
+                                            scroll</a></li>
+                                        <li><a href=category-page(3-grid).html>three grid</a></li>
+                                        <li><a href="category-page(6-grid).html">six grid</a></li>
+                                        <li><a href="category-page(list-view).html">list view</a></li>
                                     </ul>
                                 </li>
+
+
+
+
                             </ul>
                         </nav>
                     </div>
