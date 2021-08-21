@@ -1,28 +1,23 @@
-import phone as phone
 from django.contrib import messages
-from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.contrib.auth import login, get_user_model
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.template.context_processors import request
 from django.urls import reverse, reverse_lazy
-from django.utils.decorators import method_decorator
 from django.utils.html import format_html
-from django.views.generic import CreateView, UpdateView, ListView, DetailView
+from django.views.generic import CreateView, UpdateView, ListView
 from django.views.generic.base import RedirectView, View
 
-from DNigne.mixins import LoginRequiredMixin
-from catalog.models.models import Products, ProductMedia
+from catalog.models.models import Products
 from core.decorators import admin_required
-from user.models import User
 
-from vendors.forms import StoreEditForm, SellerRegisterForm, AlreadyUserSellerRegisterForm
+from vendors.forms import SellerRegisterForm, AlreadyUserSellerRegisterForm
 from vendors.models import Store, StoreMedia
 
-
+User = get_user_model()
 @admin_required
 # @method_decorator([login_required, admin_required], name='dispatch')
 def store_list(request):
@@ -48,22 +43,8 @@ class SellerRegister(CreateView):
         login(self.request, user)
         return redirect('home:index')
 
-class AlreadyUserSellerRegister(UpdateView):
-    model = User
-    form_class = AlreadyUserSellerRegisterForm
-    #fields = ['phone','seller',]
-    template_name = 'accounts/AlreadyUserSellerRegister.html'
 
-    def get_context_data(self, **kwargs):
-        kwargs['user_type'] = 'seller'
-        return super().get_context_data(**kwargs)
-
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect('home:index')
-
-def s(request, slug):
+def AlreadyUserSellerRegister(request, slug):
     user = User.objects.get(id=request.user.id)
     forms = AlreadyUserSellerRegisterForm(instance=user)
 
@@ -71,14 +52,14 @@ def s(request, slug):
         forms = AlreadyUserSellerRegisterForm(request.POST, request.FILES, instance=user)
         if forms.is_valid():
 
-            phone = forms.cleaned_data['phone']
+            seller = forms.cleaned_data['seller']
 
             forms = User.objects.get(id=request.user.id)
 
-            forms.phone = phone
+            forms.seller = seller
 
             forms.save()
-            return redirect('home:index', )
+            return redirect('home:index', user.slug)
         else:
             print("Form invalid, see below error msg")
             print(request.POST)
@@ -95,6 +76,23 @@ def s(request, slug):
             'forms': forms
         }
         return render(request, 'accounts/AlreadyUserSellerRegister.html', context)
+
+
+
+class dd(UpdateView):
+    model = User
+    form_class = AlreadyUserSellerRegisterForm
+    #fields = ['phone','seller',]
+    template_name = 'accounts/AlreadyUserSellerRegister.html'
+
+
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('home:index')
+
+
 
 
 class CreateStore(View):

@@ -1,14 +1,16 @@
 from django import forms
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.shortcuts import render
 from django.utils.text import slugify
 from requests import request
 
 from user.forms import UserRegisterForm
-from user.models import User
+
 from vendors.models import Store
 
+User = get_user_model()
 
 class SellerRegisterForm(forms.ModelForm):
     """
@@ -59,26 +61,25 @@ class SellerRegisterForm(forms.ModelForm):
 
 
 class AlreadyUserSellerRegisterForm(forms.ModelForm):
-
-
     class Meta:
         model = User
-        exclude=['email','password']
-    def save(self, commit=True):
-        """
-        Description:Save the provided password in hashed format.\n
-        """
-        user = super(AlreadyUserSellerRegisterForm, self).save(commit=False)
+        # fields = '__all__'
+        fields = ['seller',]
 
-        user.seller = True
-        user.active = False  # send confirmation email via signals
-
-        if commit:
-            user.save()
-
-        return user
+        def save(self, commit=True):
+            """
+            Description:Save the provided password in hashed format.\n
+            """
+            user = super(AlreadyUserSellerRegisterForm, self).save(commit=False)
 
 
+            user.seller = True
+            user.active = False  # send confirmation email via signals
+
+            if commit:
+                user.save()
+
+            return user
 
 
 class StoreAddForm(forms.ModelForm):

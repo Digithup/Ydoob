@@ -34,17 +34,16 @@ class UserManager(BaseUserManager):
         return user_obj
 
     def create_customer(self, email, first_name=None, last_name=None, password=None):
-        user = self.create_user(
+        return self.create_user(
             email,
             first_name=first_name,
             last_name=last_name,
             password=password,
 
         )
-        return user
 
     def create_seller(self, email, first_name=None, last_name=None, password=None, ):
-        user = self.create_user(
+        return self.create_user(
             email,
             first_name=first_name,
             last_name=last_name,
@@ -52,20 +51,18 @@ class UserManager(BaseUserManager):
             is_seller=True,
             is_staff=True,
         )
-        return user
 
     def create_staff_user(self, email, first_name=None, last_name=None, password=None):
-        user = self.create_user(
+        return self.create_user(
             email,
             first_name=first_name,
             last_name=last_name,
             password=password,
             is_staff=True,
         )
-        return user
 
     def create_superuser(self, email, first_name=None, last_name=None, password=None):
-        user = self.create_user(
+        return self.create_user(
             email,
             first_name=first_name,
             last_name=last_name,
@@ -73,7 +70,6 @@ class UserManager(BaseUserManager):
             is_staff=True,
             is_admin=True
         )
-        return user
 
 
 class User(AbstractBaseUser):
@@ -86,7 +82,6 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=200, blank=True, null=True)
     last_name = models.CharField(max_length=200, blank=True, null=True)
     phone = models.CharField(blank=True, null=True, max_length=20)
-
     image = models.ImageField(upload_to='images/users/%y/%m',
                               default='images/dashboard-bases/man.png')
     facebook = models.URLField(blank=True, max_length=50)

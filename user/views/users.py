@@ -122,7 +122,7 @@ class RegistrationView(View):
 
             user = User.objects.create_user( email=email)
             user.set_password(password)
-            user.is_active = False
+            user.active = False
             user.is_seller = False
             user.save()
             current_site = get_current_site(request)
@@ -159,9 +159,9 @@ class Verification(View):
             if not account_activation_token.check_token(user, token):
                 return redirect('login'+'?message='+'User already activated')
 
-            if user.is_active and user.is_seller:
+            if user.active and user.is_seller:
                 return redirect('login')
-            user.is_active = True
+            user.active = True
             user.is_seller = True
             user.save()
 

@@ -291,31 +291,24 @@
                         <form class="theme-form" action="{% url 'vendors:AlreadyUserSellerRegister' user.slug %}" method="post">
                             {% csrf_token %}
                             <div class="form-row">
-{{ forms }}
-                                <div class="form-group mb-3 row">
-                                    <label for="validationCustom01"
-                                           class="col-md-4"><span>*</span>{% translate 'Email' %}
-                                    </label>
-                                    <label for="title"></label><input
-                                        class="form-control col-sm-4 "
-                                        placeholder="title"
-                                        id="title" type="text"
-                                        name="email" value="{{ user.email }}" required
-                                        oninvalid="invalidFunction(event,'title not empty')">
+                                  <div class="form-group">
+                                    <label class="col-form-label"><span>*</span> {% translate 'BE Seller' %}</label>
+                                    <div class="m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
+                                        <label class="d-block" for="edo-ani">
+                                            <input class="radio_animated" id="edo-ani" value="True" type="radio"
+                                                   name="seller">
+                                            Enable
+                                        </label>
+                                        <label class="d-block" for="edo-ani1">
+                                            <input class="radio_animated" id="edo-ani1" value="False" type="radio"
+                                                   name="seller">
+                                            Disable
+                                        </label>
+                                    </div>
                                 </div>
-                                <div class="form-group mb-3 row">
-                                    <label for="validationCustom01"
-                                           class="col-md-4"><span>*</span>{% translate 'Number' %}
-                                    </label>
-                                    <label for="title"></label><input
-                                        class="form-control col-sm-4 "
-                                        placeholder="title"
-                                        id="phone" type="text"
-                                        name="title" required
-                                        oninvalid="invalidFunction(event,'title not empty')">
-                                </div>
-
                             </div>
+
+
 
 
                             <div><input type="submit" value="create Account" class="btn btn-solid"></div>

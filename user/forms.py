@@ -81,6 +81,8 @@ class UserUpdateImageForm(forms.ModelForm):
         fields = ['image', ]
 
 
+
+
 class UserUpdateAddressForm(forms.ModelForm):
     class Meta:
         model = UserAddress
@@ -117,7 +119,7 @@ class UserLoginForm(forms.Form):
             if not user.check_password(password):
                 raise forms.ValidationError("Incorrect Password")
 
-            if not user.is_active:
+            if not user.active:
                 raise forms.ValidationError("This user is not longer active.")
 
         return super(UserLoginForm, self).clean(*args, **kwargs)
@@ -191,7 +193,7 @@ class CustomerRegisterForm(forms.ModelForm):
         """
         user = super(CustomerRegisterForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password1"])
-        # user.is_active = True # send confirmation email via signals
+        # user.active = True # send confirmation email via signals
 
         if commit:
             user.save()

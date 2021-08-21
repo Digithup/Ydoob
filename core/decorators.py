@@ -45,7 +45,7 @@ def superuser_required(view_func=None, redirect_field_name=REDIRECT_FIELD_NAME,
     superuser, redirecting to the login page if necessary.
     """
     actual_decorator = user_passes_test(
-        lambda u: u.is_active and u.is_superuser,
+        lambda u: u.active and u.is_superuser,
         login_url=login_url,
         redirect_field_name=redirect_field_name
     )
@@ -60,7 +60,7 @@ def admin_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login
     redirects to the log-in page if necessary.
     """
     actual_decorator = user_passes_test(
-        lambda u: u.is_active and u.is_admin,
+        lambda u: u.active and u.is_admin,
         login_url=login_url,
         redirect_field_name=redirect_field_name
     )
