@@ -13,7 +13,7 @@ urlpatterns = [
 
     ##########Customer################
 
-    path('login5/', CustomerLogin.as_view(), name='CustomerLogin'),
+    path('login/', CustomerLogin.as_view(), name='CustomerLogin'),
     path('register/', CustomerRegister.as_view(), name='CustomerRegister'),
     path('logout/', customer_logout, name='CustomerLogout'),
 

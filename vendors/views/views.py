@@ -50,7 +50,8 @@ class SellerRegister(CreateView):
 
 class AlreadyUserSellerRegister(UpdateView):
     model = User
-    forms=AlreadyUserSellerRegisterForm
+    form_class = AlreadyUserSellerRegisterForm
+
     template_name = 'accounts/AlreadyUserSellerRegister.html'
     success_url = reverse_lazy('home:index')
 

@@ -67,10 +67,6 @@ class AlreadyUserSellerRegisterForm(forms.ModelForm):
         def __init__(self):
             self.cleaned_data = None
 
-        def already_user(self):
-            user = User.objects.all()
-            return user.email if user.is_authenticated else self.cleaned_data.get("email")
-
         def save(self, commit=True):
             """
             Description:Save the provided password in hashed format.\n

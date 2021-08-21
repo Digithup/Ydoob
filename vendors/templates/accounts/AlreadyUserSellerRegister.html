@@ -291,7 +291,7 @@
                         <form class="theme-form" action="{% url 'vendors:AlreadyUserSellerRegister' user.slug %}" method="post">
                             {% csrf_token %}
                             <div class="form-row">
-
+{{ forms }}
                                 <div class="form-group mb-3 row">
                                     <label for="validationCustom01"
                                            class="col-md-4"><span>*</span>{% translate 'Email' %}
