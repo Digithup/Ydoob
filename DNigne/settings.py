@@ -116,7 +116,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -126,6 +126,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+
 
 ]
 
@@ -356,8 +357,10 @@ EMAIL_HOST_PASSWORD = 'Hitham5320826*'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 ############Payment STRIPE########
-STRIPE_PUBLIC_KEY='pk_test_51J0RXNGtFP6X219RWcEB73bmW5TibfQxM7pdcuq6bSOp1syVZYDtIj3E3WFsGmCLy16Al7poS1WHc9aG2Sy5vrx800MYhiTw3t'
-STRIPE_SECRET_KEY='sk_test_51J0RXNGtFP6X219RvdElyf2W3bLi2r80YXYLBfxWNhiW34EyQoscHWZDY3VwqPJCGLXlNt4E9Cj8Sq3yi4mjtiDd00ncYScmmw'
-STRIPE_WEBHOOK_SECRET='whsec_9lTzxlMyPvX92OajtbFiO0olITNoK6Zi'
+STRIPE_PUBLIC_KEY = env('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
+STRIPE_WEBHOOK_SECRET = env('STRIPE_WEBHOOK_SECRET')
+
 
 django_heroku.settings(locals())
+DISABLE_COLLECTSTATIC=1

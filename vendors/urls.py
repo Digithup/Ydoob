@@ -3,7 +3,8 @@ from django.urls import path
 from vendors.tets2 import ProductCreateTest3
 from vendors.views.catalog import VendorIndex, ProductsList, ProductCreate, ProductsDeleted, file_upload, \
     ProductsAddStocks, ProductMediaDelete, ProductEditMedia, ProductsAddMedia, ProductUpdate
-from vendors.views.views import SellerRegister, CreateStore, CreateSuccess, StoreWaiting, VendorDashboard, EditStore
+from vendors.views.views import SellerRegister, CreateStore, CreateSuccess, StoreWaiting, VendorDashboard, EditStore, \
+    AlreadyUserSellerRegister
 
 app_name = 'vendors'
 
@@ -13,6 +14,7 @@ urlpatterns = [
 
     ###############Front Seller Url##############
     path('register/seller/', SellerRegister.as_view(), name='SellerRegister'),
+    path('register/sellers/', AlreadyUserSellerRegister.as_view(), name='AlreadyUserSellerRegister'),
     path('startselling/', CreateStore.as_view(), name='CreateStore'),
     path('CreateSuccess/', CreateSuccess, name='CreateSuccess'),
     path('StoreWaiting/', StoreWaiting, name='StoreWaiting'),

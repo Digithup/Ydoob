@@ -57,6 +57,35 @@ class SellerRegisterForm(forms.ModelForm):
 
         return user
 
+class AlreadyUserSellerRegisterForm(forms.ModelForm):
+
+
+    class Meta:
+        model = User
+        fields = ['email', 'phone',]
+
+    def already_user(self):
+        user=User.objects.all()
+        if user.is_authenticated:
+            email=user.email
+        else:
+            email = self.cleaned_data.get("email")
+        return email
+
+
+
+    def save(self, commit=True):
+        """
+        Description:Save the provided password in hashed format.\n
+        """
+        user = super(AlreadyUserSellerRegisterForm, self).save(commit=False)
+        user.seller = True
+        user.active = False  # send confirmation email via signals
+
+        if commit:
+            user.save()
+        return user
+
 
 class StoreAddForm(forms.ModelForm):
     class Meta:

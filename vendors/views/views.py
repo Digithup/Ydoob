@@ -18,7 +18,7 @@ from catalog.models.models import Products, ProductMedia
 from core.decorators import admin_required
 from user.models import User
 
-from vendors.forms import StoreEditForm, SellerRegisterForm
+from vendors.forms import StoreEditForm, SellerRegisterForm, AlreadyUserSellerRegisterForm
 from vendors.models import Store, StoreMedia
 
 
@@ -37,6 +37,20 @@ class SellerRegister(CreateView):
     model = User
     form_class = SellerRegisterForm
     template_name = 'accounts/SellerRegister.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['user_type'] = 'seller'
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('home:index')
+
+class AlreadyUserSellerRegister(CreateView):
+    model = User
+    form_class = AlreadyUserSellerRegisterForm
+    template_name = 'accounts/AlreadyUserSellerRegister.html'
 
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'seller'
