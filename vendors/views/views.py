@@ -51,6 +51,7 @@ class SellerRegister(CreateView):
 class AlreadyUserSellerRegister(UpdateView):
     model = User
     form_class = AlreadyUserSellerRegisterForm
+    #fields = ['phone','seller',]
     template_name = 'accounts/AlreadyUserSellerRegister.html'
 
     def get_context_data(self, **kwargs):

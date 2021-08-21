@@ -63,23 +63,12 @@ class AlreadyUserSellerRegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['phone', ]
-
-    def already_user(self):
-        user = User.objects.all()
-        if user.is_authenticated:
-            email = user.email
-        else:
-            email = self.cleaned_data.get("email")
-        return email
-
-
+        exclude=['email','password']
     def save(self, commit=True):
         """
         Description:Save the provided password in hashed format.\n
         """
         user = super(AlreadyUserSellerRegisterForm, self).save(commit=False)
-        user.set_password(self.cleaned_data["password1"])
 
         user.seller = True
         user.active = False  # send confirmation email via signals

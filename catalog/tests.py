@@ -1,11 +1,11 @@
 from django.test import TestCase
 
 # Create your tests here.
-from catalog.models.models import Category
 
-europe = Category.objects.translate('title').all()
 
-print(europe)
+
+
+
 """""
 
 class ProductsView(ListView):
