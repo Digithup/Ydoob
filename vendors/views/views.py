@@ -51,9 +51,16 @@ class SellerRegister(CreateView):
 class AlreadyUserSellerRegister(UpdateView):
     model = User
     form_class = AlreadyUserSellerRegisterForm
-
     template_name = 'accounts/AlreadyUserSellerRegister.html'
-    success_url = reverse_lazy('home:index')
+
+    def get_context_data(self, **kwargs):
+        kwargs['user_type'] = 'seller'
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('home:index')
 
 def s(request, slug):
     user = User.objects.get(id=request.user.id)
