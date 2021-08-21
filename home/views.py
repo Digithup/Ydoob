@@ -2,6 +2,7 @@ import json
 
 import products as products
 from django.core import serializers
+from django.db.models import Min, Max
 from django.http import HttpResponse, JsonResponse, request, HttpResponseRedirect
 from django.shortcuts import render
 from django.template.loader import render_to_string
@@ -9,6 +10,7 @@ from django.views import generic
 from django.views.generic import ListView, DetailView
 from haystack.query import SearchQuerySet
 
+from catalog.models.product_options import Color, Size
 from user.models import User
 from .models import *
 from DNigne import settings
@@ -22,6 +24,7 @@ from home.forms import SearchForm
 
 def index(request):
     all_category = Categories.objects.all()
+    data = Products.objects.filter(is_featured=True).order_by('-id')
 
     context = {
         'all_category': all_category
@@ -70,10 +73,19 @@ def CategoryDetail(request, id, slug):
     return render(request, 'category.html', context)
 
 
-class ProductsListView(ListView):
-    model = Products
-    template_name = "front/index.html"
-    paginate_by = 12
+def ProductsListView(request):
+    total_data = Products.objects.count()
+    data = Products.objects.all().order_by('-id')[:3]
+    min_price = Products.objects.aggregate(Min('price'))
+    max_price = Products.objects.aggregate(Max('price'))
+    return render(request, 'category.html',
+                  {
+                      'data': data,
+                      'total_data': total_data,
+                      'min_price': min_price,
+                      'max_price': max_price,
+                  }
+                  )
 
 
 class ProductDetailView(DetailView):
@@ -156,43 +168,54 @@ def ajaxcolor(request):
     return JsonResponse(data)
 
 
-def search(request):
-    if request.method == 'POST': # check post
-        form = SearchForm(request.POST)
-        if form.is_valid():
-            query = form.cleaned_data['query'] # get form input data
-            catid = form.cleaned_data['catid']
-            if catid==0:
-                products=Products.objects.filter(title__icontains=query)  #SELECT * FROM product WHERE title LIKE '%query%'
-            else:
-                products = Products.objects.filter(title__icontains=query,category_id=catid)
-
-            category = Categories.objects.all()
-            context = {'products': products, 'query':query,
-                       'category': category }
-            return render(request, 'search_products.html', context)
-
-    return HttpResponseRedirect('/')
-
-def search_auto(request):
-    if request.is_ajax():
-        q = request.GET.get('term', '')
-        products = Products.objects.filter(title__icontains=q)
-
-        results = []
-        for rs in products:
-            product_json = {}
-            product_json = rs.title +" > " + rs.category.title
-            results.append(product_json)
-        data = json.dumps(results)
-    else:
-        data = 'fail'
-    mimetype = 'application/json'
-    return HttpResponse(data, mimetype)
-
-
 def to_json(self, objects):
     return serializers.serialize('json', objects)
 
 
+# Search
 
+def ProductSearch(request):
+    q = request.GET['q']
+    data = Products.objects.filter(title__icontains=q).order_by('-id')
+    images = ProductMedia.objects.filter(product__title=q, )
+    context = {'data': data,
+               'images': images,
+               }
+    return render(request, 'search_products.html', context)
+
+
+# Filter Data
+def filter_data(request):
+    colors = request.GET.getlist('color[]')
+    categories = request.GET.getlist('category[]')
+    brands = request.GET.getlist('brand[]')
+    sizes = request.GET.getlist('size[]')
+    minPrice = request.GET['minPrice']
+    maxPrice = request.GET['maxPrice']
+    print(request)
+    allProducts = Products.objects.all()
+    allProducts = allProducts.filter(related__productdiscount__price__gt=minPrice)
+    allProducts = allProducts.filter(related__productdiscount__price__lte=maxPrice)
+    if len(colors) > 0:
+        allProducts = allProducts.filter(variantdetails__color_id__in=colors).distinct()
+    if len(categories) > 0:
+        allProducts = allProducts.filter(category__id__in=categories).distinct()
+    if len(brands) > 0:
+        allProducts = allProducts.filter(brand__id__in=brands).distinct()
+    if len(sizes) > 0:
+        allProducts = allProducts.filter(variantdetails__size__id__in=sizes).distinct()
+    t = render_to_string('ajax/product-list.html', {'category_product': allProducts})
+    return JsonResponse({'category_product': t})
+
+
+
+
+
+# Load More
+def load_more_data(request):
+    offset = int(request.GET['offset'])
+    limit = int(request.GET['limit'])
+    data = Products.objects.all().order_by('-id')[offset:offset + limit]
+    t = render_to_string('ajax/product-list.html', {'category_product': data})
+    return JsonResponse({'category_product': t}
+                        )

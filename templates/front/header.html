@@ -13,8 +13,14 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="header-contact">
+                        {% if setting_data == request.Language.CODE %}
 
-                        <li>Welcome to Our store &nbsp;{{ setting_data.title }}</li>
+                        <li>Welcome to Our store &nbsp;{{ setting_data_en.title }}</li>
+                        {% else %}
+
+                         <li>Welcome to Our store &nbsp;{{ setting_data_ar.title }}</li>
+
+                        {% endif %}
 
 
                         <li><i class="fa fa-phone" aria-hidden="true"></i>Call Us: &nbsp;{{ setting.phone }}</li>
@@ -89,43 +95,30 @@
                                                                   class="img-fluid blur-up lazyload" alt=""></a>
                         </div>
                     </div>
-                <script>
-                    $(function() {
-                        $("#query").autocomplete({
-                            source: "/search_auto/",
-                            select: function (event, ui) { //item selected
-                                AutoCompleteSelectHandler(event, ui)
-                            },
-                            minLength: 2,
-                        });
-                    });
-                    function AutoCompleteSelectHandler(event, ui)
-                    {
-                        var selectedObj = ui.item;
-                    }
-                </script>
-                    <div class="header-search">
-                    <form action="/search/" method="post">
-                        {% csrf_token %}
-                        <input id="query" name="query" class="input search-input" type="text" placeholder="Enter your keyword">
-                        <select name="catid"  class="input search-categories">
-                            <option value="0">{% trans "All Categories" %}</option>
 
-                        </select>
-                        <button class="search-btn"><i class="fa fa-search"></i></button>
-                    </form>
-                </div>
-                <!-- /Search -->
 
-            </div>
+                    <div>
+
+                        <form class="form_search autocomplete-me" action="{% url 'home:search'  %}"  >
+
+				  <input name="q" type="text" class="nav-search nav-search-field" placeholder="search"
+                   aria-expanded="true"/>
+
+				    <button type="submit" name="nav-submit-button" class="btn-search">
+                                <i class="ti-search"></i>
+                            </button>
+
+
+		    </form>
+                    </div>
                     <div class="menu-right pull-right">
                         <div>
                             <div class="icon-nav">
                                 <ul>
                                     <li class="onhover-div mobile-search d-xl-none d-inline-block">
-                                        <div><img src="{% static '' %}images/icon/search.png"
+                                        <div><img src="{% static '' %}images/icon/search.png" onclick="openSearch()"
                                                   class="img-fluid blur-up lazyload" alt=""> <i class="ti-search"
-                                                                                               ></i>
+                                                                                                onclick="openSearch()"></i>
                                         </div>
                                     </li>
                                     <li class="onhover-div mobile-setting">

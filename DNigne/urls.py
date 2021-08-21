@@ -14,20 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
-from django.conf.urls import url
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include, re_path
-from django.utils.translation import gettext_lazy as _
+from django.urls import path, include
 
-
-import core
-from core.views.users import AdminLogin
-from home.search import SearchView
 from home.tests import ajaxcolortest
-from home.views import search_auto
-
 from localization import views
 
 urlpatterns = [
@@ -62,8 +54,9 @@ urlpatterns += i18n_patterns(
     path('api-auth/', include('rest_framework.urls')),
     path("select2/", include("django_select2.urls")),
 path('ajaxcolor/', ajaxcolortest, name='ajaxcolor'),
-    path('search/', SearchView(), name='search'),
-    path('search_auto/', search_auto, name='search_auto'),
+    # path('search/', SearchView(), name='search'),
+    # path('search_auto/', search_auto, name='search_auto'),
+
 
     #prefix_default_language=True,
 

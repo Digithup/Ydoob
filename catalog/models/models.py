@@ -35,16 +35,14 @@ VARIANTS = (
 )
 
 
-class Categories(MPTTModel, Translatable):
+class Categories(MPTTModel):
     parent = TreeForeignKey('self', blank=True, null=True, related_name='children', on_delete=models.CASCADE)
-    title = models.CharField(verbose_name=_('title'),
-                             help_text=_('the title of the continent'),
-                             max_length=64, )
+    title = models.CharField(max_length=255)
+    title_ar = models.CharField(max_length=255)
     keywords = models.CharField(max_length=255)
     description = RichTextUploadingField()
     image = models.ImageField(blank=True, upload_to='images/category/%Y/%m/%d')
     status = models.CharField(max_length=10, choices=STATUS)
-
     slug = models.SlugField(null=False, max_length=128, unique=True)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
@@ -80,12 +78,13 @@ class Products(models.Model):
     id = models.AutoField(primary_key=True)
     seller = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Categories, on_delete=models.CASCADE, null=False)
+    is_featured = models.BooleanField(default=False)
     title = models.CharField(max_length=1500, null=False, blank=False)
     keyword = models.CharField(max_length=3500, null=False, blank=False)
     long_desc = models.TextField(null=True)
     model = models.CharField(max_length=65, null=True)
     brand = models.CharField(max_length=255, null=True)
-    price = models.DecimalField(max_digits=12, decimal_places=2,default=0)
+    price = models.PositiveIntegerField(default=0)
     quantity = models.CharField(max_length=255, default=0)
     minimum_quantity = models.CharField(max_length=255, default=1)
     subtract_stock = models.CharField(max_length=255, choices=STATUS, default='Yes', null=True)

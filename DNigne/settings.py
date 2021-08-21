@@ -46,7 +46,10 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in Productsion!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1'
+    'nigne.herokuapp.com'
+]
 
 # Application definition
 
@@ -96,13 +99,13 @@ INSTALLED_APPS = [
     'multiselectfield',
     'imagefit',
     'imagekit',
-    #'modeltranslation',
+    # 'modeltranslation',
     'rosetta',
     'translations',
     'parler',
     # 'django_database_translation',
-    #'jquery',
-    #'djangoformsetjs',
+    # 'jquery',
+    # 'djangoformsetjs',
     'django_countries',
     'django_select2',
     'currencies',
@@ -121,6 +124,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+'whitenoise.middleware.WhiteNoiseMiddleware',
 
 ]
 
@@ -147,12 +151,13 @@ TEMPLATES = [
                 'core.context_processors.core_processors',
                 'home.context_processors.home_processors',
                 'home.context_processors.user_processors',
+                'home.context_processors.filter_processors',
 
                 'sales.context_processors.cart',
                 'vendors.context_processors.vendor_processors',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-'currencies.context_processors.currencies',
+                'currencies.context_processors.currencies',
 
             ],
         },

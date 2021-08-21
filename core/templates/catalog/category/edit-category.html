@@ -9,16 +9,17 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="page-header-left">
-                        <h3>{% translate 'Edit Category' %}
+                        <h3>{% translate 'Add Category' %}
                             <small>{% translate 'Admin panel' %}</small>
                         </h3>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <ol class="breadcrumb pull-right">
-                        <li class="breadcrumb-item"><a href="{%  url 'core:AdminIndex' %}"><i data-feather="home"></i></a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'core:AdminIndex' %}"><i
+                                data-feather="home"></i></a></li>
 
-                        <li class="breadcrumb-item active">{% translate 'Edit Category' %}</li>
+                        <li class="breadcrumb-item active">{% translate 'Add Category' %}</li>
                     </ol>
                 </div>
             </div>
@@ -28,17 +29,17 @@
 
 
     <!-- Container-fluid starts-->
-            <div class="container-fluid">
-             <form class="needs-validation add-Products-form" novalidate=""
-                                      enctype="multipart/form-data" action=""
-                                      method="post">
-                                    {% csrf_token %}
-                <div class="row product-adding">
+    <div class="container-fluid">
+        <form class="needs-validation add-Products-form" novalidate=""
+              enctype="multipart/form-data" action=""
+              method="post">
+            {% csrf_token %}
+            <div class="row product-adding">
 
-                    <div class="col-xl-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <div>
+                <div class="col-xl-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
                                 {% if form.errors %}
 
                                     {% for error_field, error_message in form.errors.items %}
@@ -52,127 +53,129 @@
                                 {% endif %}
 
 
+                            </div>
+                            <h5>{% translate 'General' %}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="digital-add needs-validation">
 
-                            </div>
-                                <h5>{% translate 'General' %}</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="digital-add needs-validation">
-                                    <div class="form-group">
-                                        <label hidden for="validationCustom01" class="col-form-label pt-0"><span>*</span> Title</label>
-                                        <input hidden class="form-control" id="title" type="text" required=""
-                                         value="{{ categories.title }}" name="title">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="validationCustomtitle" class="col-form-label pt-0"><span>*</span>{% translate 'Title En '%} </label>
-                                        <input class="form-control" id="title_en" type="text" required=""
-                                        value="{{ categories.title_en }}" name="title_en" >
-                                    </div>
-                                     <div class="form-group">
-                                        <label for="validationCustomtitle" class="col-form-label pt-0"><span>*</span>{% translate 'Title Ar' %} </label>
-                                        <input class="form-control" id="validationCustomtitle" type="text" required=""
-                                        value="{{ categories.title_ar }}" name="title_ar" >
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-form-label"><span>*</span> {% translate 'Category' %}</label>
-                                        <select class="custom-select form-control" name="parent" required="">
-                                            <option value="">--Select--</option>
-                                            {% for value, text in form.parent.field.choices %}
-                                                    <option value="{{value}}">{{ text }}</option>
-                                                {% endfor %}
-                                        </select>
-                                    </div>
                                 <div class="form-group">
-                                        <label class="col-form-label"><span>*</span> {% translate 'Status' %}</label>
-                                        <div class="m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
-                                            <label class="d-block" for="edo-ani">
-                                                <input class="radio_animated" id="edo-ani" value="True" type="radio" name="status">
-                                                Enable
-                                            </label>
-                                            <label class="d-block" for="edo-ani1">
-                                                <input class="radio_animated" id="edo-ani1" value="False" type="radio" name="status">
-                                                Disable
-                                            </label>
-                                        </div>
+                                    <label for="validationCustomtitle"
+                                           class="col-form-label pt-0"><span>*</span>{% translate 'Title En ' %}
+                                    </label>
+                                    <input class="form-control" id="title" type="text" required=""
+                                           value="{{ categories.title }}" name="title">
+                                </div>
+                                <div class="form-group">
+                                    <label for="validationCustomtitle"
+                                           class="col-form-label pt-0"><span>*</span>{% translate 'Title Ar' %} </label>
+                                    <input class="form-control" id="validationCustomtitle" type="text" required=""
+                                           value="{{ categories.title_ar }}" name="title_ar">
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label"><span>*</span> {% translate 'Category' %}</label>
+                                    <select class="custom-select form-control" name="parent" required="">
+                                        <option value="">--Select--</option>
+                                        {% for value, text in form.parent.field.choices %}
+                                            <option value="{{ value }}">{{ text }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label"><span>*</span> {% translate 'Status' %}</label>
+                                    <div class="m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
+                                        <label class="d-block" for="edo-ani">
+                                            <input class="radio_animated" id="edo-ani" value="True" type="radio"
+                                                   name="status">
+                                            Enable
+                                        </label>
+                                        <label class="d-block" for="edo-ani1">
+                                            <input class="radio_animated" id="edo-ani1" value="False" type="radio"
+                                                   name="status">
+                                            Disable
+                                        </label>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
                     <div class="card">
                         <div class="card-header">
-                                <h5>{% translate 'Image Upload' %}</h5>
-                            </div>
-                        <div class="card-body media_div_row">
-                         <div class="add-product ">
-                                        <div class="row  ">
-                                            <div class="col-md-6">
-                                                <img alt=""
-                                                     class="img-fluid image_zoom_1 blur-up lazyloaded img_preview">
-                                            </div>
-                                            <div class="col-md4 pull-left">
-                                                <ul class="file-upload-product">
-
-                                                    <li>
-                                                        <div class="box-input-file"><input class="upload select_media"
-                                                                                           type="file"
-                                                                                           name="image">
-                                                            <i class="fa fa-plus " ><select hidden
-                                                                                           class="form-control media_type">
-                                                                <option value="1">Image</option>
-
-                                                            </select></i></div>
-                                                    </li>
-
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <h5>{% translate 'Image Upload' %}</h5>
                         </div>
-                    </div>
+                        <div class="card-body media_div_row">
+                            <div class="add-product ">
+                                <div class="row  ">
+                                    <div class="col-md-6">
+                                        <img alt=""
+                                             class="img-fluid image_zoom_1 blur-up lazyloaded img_preview">
+                                    </div>
+                                    <div class="col-md4 pull-left">
+                                        <ul class="file-upload-product">
 
+                                            <li>
+                                                <div class="box-input-file"><input class="upload select_media"
+                                                                                   type="file"
+                                                                                   name="image">
+                                                    <i class="fa fa-plus "><select hidden
+                                                                                   class="form-control media_type">
+                                                        <option value="1">Image</option>
 
-                    </div>
-                <div class="col-xl-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5>{% translate 'Add Description' %}</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="digital-add needs-validation">
-                                    <div class="form-group mb-0">
-                                        <div class="description-sm">
-                                            <textarea id="editor1" name="description" cols="10" rows="8"></textarea>
-                                        </div>
+                                                    </select></i></div>
+                                            </li>
+
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                      <div class="card">
-                            <div class="card-header">
-                                <h5>Meta Data</h5>
+                    </div>
+
+
+                </div>
+                <div class="col-xl-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>{% translate 'Add Description' %}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="digital-add needs-validation">
+                                <div class="form-group mb-0">
+                                    <div class="description-sm">
+                                        <textarea id="editor1" name="description" cols="10" rows="8"></textarea>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="card-body">
-                                <div class="digital-add needs-validation">
-                                    <div class="form-group">
-                                        <label for="validationCustom05" class="col-form-label pt-0">{% translate ' Slug' %}</label>
-                                        <input class="form-control" id="slug" type="text" required=""
-                                        value="{{ categories.slug }}" name="slug" >
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-form-label">{% translate 'Meta keywords' %}</label>
-                                        <textarea rows="4" cols="12" name="keywords"></textarea>
-                                    </div>
-                                    <div class="decor">
-                                         {% if field.errors %}
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Meta Data</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="digital-add needs-validation">
+                                <div class="form-group">
+                                    <label for="validationCustom05"
+                                           class="col-form-label pt-0">{% translate ' Slug' %}</label>
+                                    <input class="form-control" id="slug" type="text" required=""
+                                           value="{{ categories.slug }}" name="slug">
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label">{% translate 'Meta keywords' %}</label>
+                                    <textarea rows="4" cols="12" name="keywords"></textarea>
+                                </div>
+                                <div class="decor">
+                                    {% if field.errors %}
                                         <div class="alert alert-danger" style="margin:10px">
-                                            {{ field.errors }}
+                                        {{ field.errors }}
 
                                     {% endif %}
                                     </div>
                                     <div class="form-group mb-0">
                                         <div class="product-buttons text-center">
                                             <button type="submit" class="btn btn-primary">{% translate 'Add' %}</button>
-                                            <button type="button"  href="{% url 'core:categories' %} " class="btn btn-light">{% translate 'Discard' %}</button>
+                                            <button type="button" href="{% url 'core:categories' %} "
+                                                    class="btn btn-light">{% translate 'Discard' %}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -183,19 +186,19 @@
                 </div>
 
 
-                </div></form>
             </div>
-            <!-- Container-fluid Ends-->
-
-{% endblock %}
-
-
+        </form>
+    </div>
+    <!-- Container-fluid Ends-->
 
 {% block custom_js %}
 
     <script>
 
+document.getElementById("title").onkeyup = function () {
 
+        document.getElementById("slug").value = document.getElementById("title").value.toLowerCase().replace(/ /g,'-').replace(/[-]+/g, '-').replace(/[^\w-]+/g,'');
+    }
         $(document).on("change", ".select_media", function () {
             var media_type = $(this).parents(".media_div_row").find(".media_type").val();
             var img_preview = $(this).parents(".media_div_row").find(".img_preview");
@@ -203,7 +206,7 @@
             showPreviewMedia(this, media_type, img_preview);
         });
 
-        function showPreviewMedia(input, media_type=1, img_preview, ) {
+        function showPreviewMedia(input, media_type = 1, img_preview,) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
                 reader.onload = function (e) {
@@ -223,5 +226,8 @@
 
 {% endblock custom_js %}
 
+{% endblock %}
+
 {% block foot %} {% include 'admin/footer.html' %}  {% endblock %}
 {% block js %} {% include 'admin/js.html' %}  {% endblock %}
+

@@ -67,7 +67,7 @@ def AddCategory(request):
             print(request.POST)
             category_created = True
             title = form.cleaned_data['title']
-
+            title_ar = form.cleaned_data['title_ar']
             keywords = form.cleaned_data['keywords']
             description = form.cleaned_data['description']
             parent = form.cleaned_data['parent']
@@ -78,7 +78,7 @@ def AddCategory(request):
             category_obj = None
             if not category_id:
                 print(request)
-                category_obj = Categories.objects.create(title=title,
+                category_obj = Categories.objects.create(title=title,title_ar=title_ar,
                                                          keywords=keywords, parent=parent,
                                                          description=description, image=image,
                                                          slug=slug, status=status
@@ -88,7 +88,7 @@ def AddCategory(request):
                 print(request)
 
             category_obj.title = title
-
+            category_obj.title_ar = title_ar
             category_obj.keywords = keywords
             category_obj.description = description
             category_obj.image = image

@@ -12,7 +12,7 @@ from catalog.models.product_options import Filters, Manufacturer, Attributes, Op
 
 
 class CategoryAddForm(forms.ModelForm):
-    title = forms.CharField(widget=CKEditorWidget())
+
     category_id = forms.IntegerField(required=False)
 
     class Meta:
