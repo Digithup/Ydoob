@@ -1,26 +1,22 @@
 import json
 
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.core.validators import validate_email
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
-
 # Create your views here.
 from django.urls import reverse_lazy, reverse
-from django.utils import translation
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import is_safe_url, urlsafe_base64_encode, urlsafe_base64_decode
 from django.views import View
 from django.views.generic import CreateView
 
-from user.forms import UserLoginForm, UserRegisterForm, CustomerRegisterForm
+from user.forms import UserLoginForm, CustomerRegisterForm
 from user.models import User
-
 from user.signals import user_logged_in
 from user.utils import account_activation_token
 

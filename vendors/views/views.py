@@ -1,3 +1,4 @@
+import phone as phone
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -47,19 +48,44 @@ class SellerRegister(CreateView):
         login(self.request, user)
         return redirect('home:index')
 
-class AlreadyUserSellerRegister(CreateView):
+class AlreadyUserSellerRegister(UpdateView):
     model = User
-    form_class = AlreadyUserSellerRegisterForm
+    forms=AlreadyUserSellerRegisterForm
     template_name = 'accounts/AlreadyUserSellerRegister.html'
+    success_url = reverse_lazy('home:index')
 
-    def get_context_data(self, **kwargs):
-        kwargs['user_type'] = 'seller'
-        return super().get_context_data(**kwargs)
+def s(request, slug):
+    user = User.objects.get(id=request.user.id)
+    forms = AlreadyUserSellerRegisterForm(instance=user)
 
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect('home:index')
+    if request.method == 'POST':
+        forms = AlreadyUserSellerRegisterForm(request.POST, request.FILES, instance=user)
+        if forms.is_valid():
+
+            phone = forms.cleaned_data['phone']
+
+            forms = User.objects.get(id=request.user.id)
+
+            forms.phone = phone
+
+            forms.save()
+            return redirect('home:index', )
+        else:
+            print("Form invalid, see below error msg")
+            print(request.POST)
+            context = {
+                'user': user,
+                'forms': forms
+            }
+            messages.error(request, "Error")
+            return render(request, 'accounts/AlreadyUserSellerRegister.html', context)
+
+    else:
+        context = {
+            'user': user,
+            'forms': forms
+        }
+        return render(request, 'accounts/AlreadyUserSellerRegister.html', context)
 
 
 class CreateStore(View):

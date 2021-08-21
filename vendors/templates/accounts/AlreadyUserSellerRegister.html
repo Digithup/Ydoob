@@ -1,5 +1,6 @@
 {% extends 'front/homebase.html' %}
 {% load crispy_forms_filters %}
+{% load i18n %}
 {% load static %}
 
 
@@ -269,18 +270,60 @@
                 <div class="col-lg-12">
                     <h3>create account</h3>
                     <div class="theme-card">
-                        <form class="theme-form" action="{% url 'vendors:AlreadyUserSellerRegister' %}" method="post">
-                              {% csrf_token %}
+                        <div class=" alert-info" id="errorHeader"></div>
+                        <div>
+                            {% if forms.errors %}
+
+                                {% for error_field, error_message in forms.errors.items %}
+
+                                    <div class="alert alert-danger">
+                                        {{ error_field|striptags }}: {{ error_message|striptags }}
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+
+                            {% endif %}
+
+
+
+
+                        </div>
+                        <form class="theme-form" action="{% url 'vendors:AlreadyUserSellerRegister' user.slug %}" method="post">
+                            {% csrf_token %}
                             <div class="form-row">
-                                 {{ form|crispy }}
+
+                                <div class="form-group mb-3 row">
+                                    <label for="validationCustom01"
+                                           class="col-md-4"><span>*</span>{% translate 'Email' %}
+                                    </label>
+                                    <label for="title"></label><input
+                                        class="form-control col-sm-4 "
+                                        placeholder="title"
+                                        id="title" type="text"
+                                        name="email" value="{{ user.email }}" required
+                                        oninvalid="invalidFunction(event,'title not empty')">
+                                </div>
+                                <div class="form-group mb-3 row">
+                                    <label for="validationCustom01"
+                                           class="col-md-4"><span>*</span>{% translate 'Number' %}
+                                    </label>
+                                    <label for="title"></label><input
+                                        class="form-control col-sm-4 "
+                                        placeholder="title"
+                                        id="phone" type="text"
+                                        name="title" required
+                                        oninvalid="invalidFunction(event,'title not empty')">
                                 </div>
 
+                            </div>
 
-                                <div><input type="submit" value="create Account" class="btn btn-solid" ></div>
-                        </form></div>
 
+                            <div><input type="submit" value="create Account" class="btn btn-solid"></div>
+                        </form>
                     </div>
+
                 </div>
+            </div>
 
         </div>
     </section>

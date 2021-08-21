@@ -59,7 +59,7 @@
                                             {% endif %}
                                         {% else %}
                                             <li>
-                                                <a href="{% url 'vendors:AlreadyUserSellerRegister' %}">{% translate 'Start Selling ' %}</a>
+                                                <a href="{% url 'vendors:AlreadyUserSellerRegister' user.slug %}">{% translate 'Start Selling ' %}</a>
                                             </li>
                                         {% endif %}
 
