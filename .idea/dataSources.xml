@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="dnigne@127.0.0.100" uuid="21660f66-3071-46fa-8d2b-29c5dcb121e3">
-      <driver-ref>mysql.8</driver-ref>
+    <data-source source="LOCAL" name="ydoob_db@localhost" uuid="e99bcb41-5f53-4b82-91f5-6b5f19e68c92">
+      <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://127.0.0.100:3306/dnigne</jdbc-url>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/ydoob_db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

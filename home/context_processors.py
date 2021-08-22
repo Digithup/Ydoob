@@ -38,9 +38,9 @@ def home_processors(request):
         return {
             'setting': Setting.objects.last(),
 
-            'setting_data_en': SettingLang.objects.get(lang='en'),
-            'setting_data_ar': SettingLang.objects.get(lang='ar'),
-            'index_language': Language.objects.all(),
+            # 'setting_data_en': SettingLang.objects.get(lang='en'),
+            # 'setting_data_ar': SettingLang.objects.get(lang='ar'),
+            # 'index_language': Language.objects.all(),
 
             'store_owner': store_owner,
             'vendor_store': vendor_store,
@@ -87,6 +87,9 @@ def home_processors(request):
     except BaseException as e:
         return {
                    'setting_data': None,
+                   'setting_data_en': None,
+                   'setting_data_ar': None,
+                   'index_language': None,
                    'main_slider': SliderMedia.objects.filter(slider_id__group__title='home'),
                    'banner_left': Banners.objects.filter(media_location='left'),
                    'banner_right': Banners.objects.filter(title='right'),

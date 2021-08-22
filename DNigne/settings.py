@@ -170,12 +170,12 @@ TEMPLATES = [
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dnigne',
-        'USER': 'root',
-        'PASSWORD': 'Hitham5320826*',
-        'PORT': '3306',
-        'HOST': '127.0.0.100'
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ydoob_db',
+        'USER': 'postgres',
+        'PASSWORD': 'Y8iMJP883Nd7msG',
+        'PORT': '5432',
+        'HOST': 'localhost'
     }
 }
 
