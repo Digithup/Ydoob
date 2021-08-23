@@ -28,7 +28,7 @@ required(
 
 urlpatterns = [
 
-    path('admin/', AdminIndex, name='AdminIndex'),
+    path('', AdminIndex, name='AdminIndex'),
 
     # path('admin/logout', AdminIndex, name='AdminIndex'),
 

@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+from typing import List
+
 import django_heroku
 from django.conf import settings
 from django.contrib import messages
@@ -26,12 +28,7 @@ import tempfile
 from pathlib import Path
 import environ
 
-env = environ.Env(
-    # set casting, default value
-    DEBUG=(bool, False)
-)
-# reading .env file
-environ.Env.read_env()
+
 from django.contrib.messages import constants as message_constants
 from django.utils.translation import ugettext_lazy as _
 
@@ -42,16 +39,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in Productsion secret!
-SECRET_KEY = 'jwv-s5yx#u7bhnxh6zjt3ds=!jnvqv(qv5zu!2$g)t)n*d8zf+'
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+# reading .env file
+environ.Env.read_env()
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in Productsion!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'nigne.herokuapp.com'
-]
-
+ALLOWED_HOSTS: List[str] = ['*']
+AUTH_USER_MODEL = 'user.User'
 # ALLOWED_HOSTS = [
 #
 # ]
@@ -153,11 +153,12 @@ TEMPLATES = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ydoob_db',
-        'USER': 'postgres',
-        'PASSWORD': 'Y8iMJP883Nd7msG',
-        'PORT': '5432',
-        'HOST': 'localhost'
+
+'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
     }
 }
 
@@ -278,7 +279,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 CART_SESSION_ID = 'cart'
 SESSION_COOKIE_AGE = 85555
 SESSION_COOKIE_SECURE = False
-AUTH_USER_MODEL = 'user.User'
+
 ROOT_URLCONF = 'DNigne.urls'
 WSGI_APPLICATION = 'DNigne.wsgi.application'
 LOGOUT_REDIRECT_URL = '/'
@@ -295,7 +296,7 @@ EMAIL_HOST_PASSWORD = 'hitham5320826'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 ############Payment STRIPE########
-STRIPE_PUBLIC_KEY='pk_test_51J0RXNGtFP6X219RWcEB73bmW5TibfQxM7pdcuq6bSOp1syVZYDtIj3E3WFsGmCLy16Al7poS1WHc9aG2Sy5vrx800MYhiTw3t'
-STRIPE_SECRET_KEY='sk_test_51J0RXNGtFP6X219RvdElyf2W3bLi2r80YXYLBfxWNhiW34EyQoscHWZDY3VwqPJCGLXlNt4E9Cj8Sq3yi4mjtiDd00ncYScmmw'
-STRIPE_WEBHOOK_SECRET='whsec_9lTzxlMyPvX92OajtbFiO0olITNoK6Zi'
+STRIPE_PUBLIC_KEY=env('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY=env('STRIPE_SECRET_KEY')
+STRIPE_WEBHOOK_SECRET=env('STRIPE_WEBHOOK_SECRET')
 django_heroku.settings(locals())
