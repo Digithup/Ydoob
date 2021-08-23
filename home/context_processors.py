@@ -3,9 +3,7 @@ from django.db.models import Min, Max
 from catalog.models.models import Products, ProductMedia, Categories, Wishlist
 from catalog.models.product_options import Manufacturer
 from core.models.design import SliderMedia, Banners
-from core.models.setting import SettingLang, Setting
-from localization.models import Language
-
+from core.models.setting import Setting
 from user.models import UserAddress
 from vendors.models import Store, StoreMedia
 

@@ -116,13 +116,13 @@
                             <div class="icon-nav">
                                 <ul>
                                     <li class="onhover-div mobile-search d-xl-none d-inline-block">
-                                        <div><img src="{% static '' %}images/icon/search.png" onclick="openSearch()"
+                                        <div><img src="{%  static '' %}assets/images/icon/search.png" onclick="openSearch()"
                                                   class="img-fluid blur-up lazyload" alt=""> <i class="ti-search"
                                                                                                 onclick="openSearch()"></i>
                                         </div>
                                     </li>
                                     <li class="onhover-div mobile-setting">
-                                        <div><img src="{% static '' %}images/icon/setting.png"
+                                        <div><img src="{%  static '' %}assets/images/icon/setting.png"
                                                   class="img-fluid blur-up lazyload" alt=""> <i
                                                 class="ti-settings"></i></div>
                                         <div class="show-div setting">
@@ -197,7 +197,7 @@
                                     <li class="onhover-div mobile-cart">
                                         {% load myapptags %}
                                         {% shopcartcount user.id as count %}
-                                        <div></span><img src="{% static '' %}images/icon/cart.png"
+                                        <div></span><img src="{%  static '' %}assets/images/icon/cart.png"
                                                          class="img-fluid blur-up lazyload" alt=""> <span
                                                 class="qty">{{ count }}</span></div>
 
@@ -440,7 +440,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-12">
-                                                        <img src="{% static '' %}images/menu-banner.jpg"
+                                                        <img src="{%  static '' %}assets/images/menu-banner.jpg"
                                                              class="img-fluid mega-img">
                                                     </div>
                                                 </div>

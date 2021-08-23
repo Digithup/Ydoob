@@ -3,7 +3,7 @@ from django.contrib.auth import (
     authenticate,
     get_user_model
 )
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.contrib.auth.forms import ReadOnlyPasswordHashField, PasswordResetForm
 from django.urls import reverse_lazy
 
 from user.models import UserAddress
@@ -199,3 +199,5 @@ class CustomerRegisterForm(forms.ModelForm):
             user.save()
 
         return user
+
+

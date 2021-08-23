@@ -1,6 +1,4 @@
-from core.models.design import SliderMedia, Slider
-from core.models.setting import Setting,  SettingLang
-from core.views.setting import setting
+from core.models.setting import Setting
 from localization.models import Language
 
 

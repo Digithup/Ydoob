@@ -148,10 +148,10 @@ class User(AbstractBaseUser):
         # "Is the user an admin member?"
         return self.admin
 
-    @property
-    def is_active(self):
-        "Is the user active?"
-        return self.active
+    # @property
+    # def is_active(self):
+    #     "Is the user active?"
+    #     return self.active
 
     def image_tag(self):
         return mark_safe('<img src="{}" height="50"/>'.format(self.image.url))

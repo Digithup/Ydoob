@@ -60,7 +60,7 @@ Staff User List
         <p class="no-margin"><span class="badge badge-info"><i class="fas fa-envelope-o "></i> Email : {{ staffuser.auth_user_id.email }}</span></p>
         <div class="article-cta">
             <label class="custom-switch mt-2" style="float:left">
-                        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" {% if staffuser.auth_user_id.is_active == 1 %}checked{% endif %}>
+                        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" {% if staffuser.auth_user_id.active == 1 %}checked{% endif %}>
                         <span class="custom-switch-indicator"></span>
                         <span class="custom-switch-description">ACTIVE</span>
             </label>

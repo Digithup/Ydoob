@@ -1,5 +1,4 @@
 from catalog.models.models import Products, ProductMedia
-from user.models import User
 from vendors.models import Store, StoreMedia
 
 

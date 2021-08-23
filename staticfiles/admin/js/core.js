@@ -77,27 +77,27 @@ function findPosY(obj) {
         return (this.getHours() < 10) ? '0' + this.getHours() : this.getHours();
     };
 
-    Date.prototype.getTwoDigitMinute = function () {
+    Date.prototype.getTwoDigitMinute = function() {
         return (this.getMinutes() < 10) ? '0' + this.getMinutes() : this.getMinutes();
     };
 
-    Date.prototype.getTwoDigitSecond = function () {
+    Date.prototype.getTwoDigitSecond = function() {
         return (this.getSeconds() < 10) ? '0' + this.getSeconds() : this.getSeconds();
     };
 
-    Date.prototype.getAbbrevMonthName = function () {
+    Date.prototype.getAbbrevMonthName = function() {
         return typeof window.CalendarNamespace === "undefined"
             ? this.getTwoDigitMonth()
             : window.CalendarNamespace.monthsOfYearAbbrev[this.getMonth()];
     };
 
-    Date.prototype.getFullMonthName = function () {
+    Date.prototype.getFullMonthName = function() {
         return typeof window.CalendarNamespace === "undefined"
             ? this.getTwoDigitMonth()
             : window.CalendarNamespace.monthsOfYear[this.getMonth()];
     };
 
-    Date.prototype.strftime = function (format) {
+    Date.prototype.strftime = function(format) {
         const fields = {
             b: this.getAbbrevMonthName(),
             B: this.getFullMonthName(),
