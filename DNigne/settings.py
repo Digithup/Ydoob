@@ -74,7 +74,7 @@ INSTALLED_APPS = [
     'invoice.apps.InvoiceConfig',
     'localization.apps.LocalizationConfig',
     'home.apps.HomeConfig',
-    'media.apps.MediaConfig',
+    # 'media.apps.MediaConfig',
     'reports.apps.ReportsConfig',
     'sales.apps.SalesConfig',
     'vendors.apps.VendorsConfig',

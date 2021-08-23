@@ -2,7 +2,7 @@ from ckeditor.widgets import CKEditorWidget
 from django import forms
 
 from catalog.models.models import Categories, Products, ProductMedia, AttributesDetails, OptionsDetails, VariantDetails
-from catalog.models.product_options import Color, Size
+from catalog.models.product_options import Color, Size, OptionsType
 
 
 class CategoryAddForm(forms.ModelForm):
@@ -69,12 +69,8 @@ class AttributesDetailsForm(forms.ModelForm):
 
 
 class OptionsDetailsForm(forms.ModelForm):
-    # option_type = forms.ModelChoiceField(queryset=OptionsType.objects.all(), label=u"OptionsType",
-    #                                 widget=ModelSelect2MultipleWidget  (
-    #                                     model=OptionsType,
-    #                                     search_fields=['title__icontains'],
-    #
-    #                                    ))
+    option_type = forms.ModelChoiceField(queryset=OptionsType.objects.all(), label=u"OptionsType",
+                                    )
 
     option_price = forms.CharField(required=False)
     option_detail = forms.CharField(required=False)
