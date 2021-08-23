@@ -1,14 +1,8 @@
-import datetime
-
 from ckeditor.widgets import CKEditorWidget
 from django import forms
-from django.forms import formset_factory, modelformset_factory
-from django.http import request
-from django_select2.forms import ModelSelect2Widget, ModelSelect2MultipleWidget
-from haystack import indexes
 
 from catalog.models.models import Categories, Products, ProductMedia, AttributesDetails, OptionsDetails, VariantDetails
-from catalog.models.product_options import Filters, Manufacturer, Attributes, Options, Color, Size
+from catalog.models.product_options import Color, Size
 
 
 class CategoryAddForm(forms.ModelForm):
@@ -22,21 +16,20 @@ class CategoryAddForm(forms.ModelForm):
 
 class ProductsForm(forms.ModelForm):
     # product_id = forms.IntegerField(required=False)
-    category = forms.ModelChoiceField(queryset=Categories.objects.all(), label=u"Category", widget=ModelSelect2Widget(
-        search_fields=['title'], dependent_fields={'category': 'category'}))
-    filter = forms.ModelChoiceField(queryset=Filters.objects.all(), label=u"Filter", required=False,
-                                    widget=ModelSelect2Widget(
-                                        search_fields=['title'], dependent_fields={'filters': 'filters'}))
-
-    manufacturer = forms.ModelChoiceField(queryset=Manufacturer.objects.all(), required=False, label=u"manufacturer",
-                                          widget=ModelSelect2Widget(
-                                              search_fields=['title', 'image'],
-                                              dependent_fields={'manufacturer': 'manufacturer'}))
-
-    related = forms.ModelChoiceField(queryset=Products.objects.all(), required=False, label=u"related",
-                                     widget=ModelSelect2Widget(
-                                         search_fields=['title', 'image'],
-                                         dependent_fields={'product_related': 'product_related', 'image': 'image'}))
+    category = forms.ModelChoiceField(queryset=Categories.objects.all(), label=u"Category", )
+    # filter = forms.ModelChoiceField(queryset=Filters.objects.all(), label=u"Filter", required=False,
+    #                                 widget=ModelSelect2Widget(
+    #                                     search_fields=['title'], dependent_fields={'filters': 'filters'}))
+    #
+    # manufacturer = forms.ModelChoiceField(queryset=Manufacturer.objects.all(), required=False, label=u"manufacturer",
+    #                                       widget=ModelSelect2Widget(
+    #                                           search_fields=['title', 'image'],
+    #                                           dependent_fields={'manufacturer': 'manufacturer'}))
+    #
+    # related = forms.ModelChoiceField(queryset=Products.objects.all(), required=False, label=u"related",
+    #                                  widget=ModelSelect2Widget(
+    #                                      search_fields=['title', 'image'],
+    #                                      dependent_fields={'product_related': 'product_related', 'image': 'image'}))
 
     status = forms.ChoiceField(label="Status", choices=(
         ('True', 'Yae'),
@@ -67,11 +60,6 @@ class ProductsForm(forms.ModelForm):
 
 
 class AttributesDetailsForm(forms.ModelForm):
-    attribute = forms.ModelChoiceField(queryset=Attributes.objects.all(), required=False,label=u"attribute",
-                                       widget=ModelSelect2Widget(
-                                           search_fields=['title'],
-                                           dependent_fields={'attribute': 'attribute'
-                                                             }))
     attribute_detail = forms.CharField(required=False)
 
     class Meta:
@@ -88,13 +76,6 @@ class OptionsDetailsForm(forms.ModelForm):
     #
     #                                    ))
 
-    option = forms.ModelChoiceField(queryset=Options.objects.all(),required=False, label=u"Options",
-                                       widget=ModelSelect2Widget (
-                                           model=Options,
-                                           search_fields=['title__icontains'],
-                                           dependent_fields={'option_type': 'option_type'
-
-                                                             }) )
     option_price = forms.CharField(required=False)
     option_detail = forms.CharField(required=False)
     class Meta:
@@ -137,17 +118,7 @@ class ProductMediaForm(forms.ModelForm):
         exclude = ['product']
 
 
-class ProductsIndex(indexes.SearchIndex, indexes.Indexable):
-    text = indexes.CharField(document=True, use_template=True)
-    category = indexes.CharField(model_attr='catalog')
-    pub_date = indexes.DateTimeField(model_attr='pub_date')
 
-    def get_model(self):
-        return Products
-
-    def index_queryset(self, using=None):
-        """Used when the entire index for model is updated."""
-        return self.get_model().objects.filter(pub_date__lte=datetime.datetime.now())
 
 
 class ColorForm(forms.ModelForm):

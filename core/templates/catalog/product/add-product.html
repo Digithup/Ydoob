@@ -1,5 +1,5 @@
 {% extends 'admin/adminbase.html' %}
-{% load widget_tweaks %}
+{% load %}
 {% load crispy_forms_filters %}
 {% load static %}
 {% load i18n %}
@@ -153,41 +153,36 @@
                                                 </div>
                                                 <div class="card-body  ">
                                                     <div class="digital-add needs-validation ">
-
                                                         <div class="form-group mb-3 row">
                                                             <label for="validationCustom01"
-                                                                   class="col-md-4"><span>*</span>{% translate 'Product Name' %}
-                                                            </label>
-                                                            <label for="title"></label><input
-                                                                class="form-control col-sm-4 "
-                                                                placeholder="title"
-                                                                id="title" type="text"
-                                                                name="title" value=" test" required
-                                                                oninvalid="invalidFunction(event,'title not empty')">
+                                                                   class="col-xl-3 col-sm-4 mb-0">{% translate 'Product Name' %}
+                                                                :</label>
+                                                            <div class="col-xl-8 col-sm-7">
+                                                                <input class="form-control" id="validationCustom01"
+                                                                       type="text" required=""
+                                                                       name="title" value="{{ product.title }}"
+                                                                       oninvalid="invalidFunction(event,'title not empty')">
+                                                            </div>
+                                                            <div class="valid-feedback">Looks good!</div>
                                                         </div>
 
                                                         <div class="form-group row">
-                                                            <label for="validationCustom0"
-                                                                   class=" col-sm-4"><span>*</span>{% translate 'Description' %}
-                                                            </label>
-                                                            <label for="editor1"></label><textarea
-                                                                class="col-md-push-12 middle" content=""
-                                                                name="long_desc" id="editor1"
-                                                                cols="2" onemptied=""
-                                                                rows="2"></textarea>
-
+                                                            <label class="col-xl-3 col-sm-4">Add Description :</label>
+                                                            <div class="col-xl-8 col-sm-7 description-sm">
+                                                                <textarea id="editor1" name="long_desc" cols="10"
+                                                                          rows="4"></textarea>
+                                                            </div>
                                                         </div>
+
 
                                                         <div class="form-group row">
-                                                            <label for="validationCustom0"
-                                                                   class=" col-sm-4"><span>*</span>{% translate 'Keyword' %}
-                                                            </label>
-                                                            <textarea class="col-md-push-12 middle" content=""
-                                                                      name="keyword" id="editor1"
-                                                                      cols="2"
-                                                                      rows="2" required="required"></textarea>
-
+                                                            <label class="col-xl-3 col-sm-4">Add Keyword :</label>
+                                                            <div class="col-xl-8 col-sm-7 description-sm">
+                                                                <textarea id="editor1" name="keyword" cols="10"
+                                                                          rows="2"></textarea>
+                                                            </div>
                                                         </div>
+
 
                                                     </div>
                                                 </div>
@@ -201,187 +196,178 @@
                                     <h4>description</h4>
                                     <div class="col-xl-8">
                                         <input class="form-control col-md-6"
-                                               id="title" type="text"
+                                               id="title" type="hidden"
                                                name="seller" value="{{ request.user.id }}"
                                                required="">
 
-                                        <div class="form-group row ">
-                                            <label for="validationCustom0"
-                                                   class=" col-md-4"><span>*</span>
-                                                {% translate 'Model' %}</label>
-                                            <input class="form-control col-md-6"
-                                                   id="validationCustom0" type="text"
-                                                   name="model" value="5"
-                                                   required="" oninvalid="">
-
-
+                                        <div class="form-group mb-3 row">
+                                            <label for="validationCustom01"
+                                                   class="col-xl-3 col-sm-4 mb-0">{% translate 'Model' %} :</label>
+                                            <div class="col-xl-8 col-sm-7">
+                                                <input class="form-control" id="validationCustom01" type="text"
+                                                       required=""
+                                                       name="model">
+                                            </div>
+                                            <div class="valid-feedback">Looks good!</div>
                                         </div>
-
-                                        <div class="form-group row ">
-                                            <label for="validationCustom0"
-                                                   class=" col-md-4"><span>*</span>
-                                                {% translate 'Brand' %}</label>
-                                            <input class="form-control col-md-6"
-                                                   id="validationCustom0" type="text"
-                                                   name="brand" value="5"
-                                                   required="" oninvalid="invalidFunction(event,'brand not empty')">
-
-
-                                        </div>
-
-
-                                        <div class="form-group row ">
-                                            <label for="validationCustom0"
-                                                   class="col-md-4"><span>*</span>
-                                                {% translate 'Category' %} </label>
-                                            <select class="custom-select col-md-6" id="product_category" multiple
-                                                    name="category"
-                                                    style="width: 50%">
-                                                {% for value, text in product_form.category.field.choices %}
-                                                    <option value="{{ value }}">{{ text }}</option>
-                                                {% endfor %}
-                                            </select>
+                                        <div class="form-group mb-3 row">
+                                            <label for="validationCustom01"
+                                                   class="col-xl-3 col-sm-4 mb-0">{% translate 'Brand' %} :</label>
+                                            <div class="col-xl-8 col-sm-7">
+                                                <input class="form-control" id="validationCustom01" type="text"
+                                                       required=""
+                                                       name="brand">
+                                            </div>
+                                            <div class="valid-feedback">Looks good!</div>
                                         </div>
 
 
                                         <div class="form-group row">
-                                            <label for="validationCustom0"
-                                                   class=" col-md-4"><span>*</span>
-                                                {% translate 'Price' %}</label>
-                                            <label for="price"></label><input class="form-control col-md-6"
-                                                                              id="price" type="number"
-                                                                              name="price" value="5" min="0"
-                                                                              required="required">
+                                            <label for="exampleFormControlSelect1"
+                                                   class="col-xl-3 col-sm-4 mb-0">{% translate 'Category' %}:</label>
+                                            <div class="col-xl-8 col-sm-7">
+                                                <select class="form-control digits" id="exampleFormControlSelect1"
+                                                        name="category">
+                                                    {% for value, text in product_form.category.field.choices %}
+                                                        <option value="{{ value }}">{{ text }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-xl-3 col-sm-4 mb-0">{% translate 'Price' %} :</label>
+                                            <fieldset class="qty-box col-xl-9 col-xl-8 col-sm-7">
+                                                <div class="input-group">
+                                                    <input class="touchspin" type="text" value="1"
+                                                           name="price">
+                                                </div>
+                                            </fieldset>
                                         </div>
 
                                         <div class="form-group row">
-                                            <label for="validationCustom0"
-                                                   class=" col-md-4"><span>*</span>
-                                                {% translate 'Quantity' %}</label>
-                                            <input class="form-control col-md-6"
-                                                   id="validationCustom0" type="text"
-                                                   name="quantity" value="5" min="0"
-                                                   required="required">
+                                            <label class="col-xl-3 col-sm-4 mb-0">{% translate 'Quantity' %} :</label>
+                                            <fieldset class="qty-box col-xl-9 col-xl-8 col-sm-7">
+                                                <div class="input-group">
+                                                    <input class="touchspin" type="text" value="1"
+                                                           name="quantity">
+                                                </div>
+                                            </fieldset>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="validationCustom0"
-                                                   class=" col-md-4"><span>*</span>
-                                                {% translate 'Minimum Quantity' %}</label>
-                                            <input class="form-control col-md-6"
-                                                   id="validationCustom0" type="number"
-                                                   name="minimum_quantity" value="5" min="0"
-                                                   required="required">
-                                        </div>
-
-
-                                        <div class="form-group row">
-                                            <label for="validationCustom0"
-                                                   class=" col-md-4"><span>*</span>
-                                                {% translate 'Subtract Stock' %} </label>
-                                            <select name="subtract_stock"
-                                                    class="custom-select  col-md-6">
-
-                                                {% for value, text in product_form.subtract_stock.field.choices %}
-                                                    <option value="{{ value }}">{{ text }}</option>
-                                                {% endfor %}
-                                            </select>
-
+                                            <label class="col-xl-3 col-sm-4 mb-0">{% translate 'Minimum Quantity' %}
+                                                :</label>
+                                            <fieldset class="qty-box col-xl-9 col-xl-8 col-sm-7">
+                                                <div class="input-group">
+                                                    <input class="touchspin" type="text" value="1"
+                                                           name="minimum_quantity">
+                                                </div>
+                                            </fieldset>
                                         </div>
 
 
                                         <div class="form-group row">
-                                            <label for="validationCustom0"
-                                                   class=" col-md-4"><span>*</span>
-                                                {% translate 'Out Of Stock Status' %} </label>
-                                            <select name="out_of_stock_status"
-                                                    class="custom-select  col-md-6">
-
-                                                {% for value, text in product_form.out_of_stock_status.field.choices %}
-                                                    <option value="{{ value }}">{{ text }}</option>
-                                                {% endfor %}
-                                            </select>
+                                            <label for="exampleFormControlSelect1"
+                                                   class="col-xl-3 col-sm-4 mb-0">{% translate 'Subtract Stock' %}:</label>
+                                            <div class="col-xl-8 col-sm-7">
+                                                <select class="form-control digits" id="exampleFormControlSelect1"
+                                                        name="subtract_stock">
+                                                    {% for value, text in product_form.subtract_stock.field.choices %}
+                                                        <option value="{{ value }}">{{ text }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="exampleFormControlSelect1"
+                                                   class="col-xl-3 col-sm-4 mb-0">{% translate 'Out Of Stock Status' %}:</label>
+                                            <div class="col-xl-8 col-sm-7">
+                                                <select class="form-control digits" id="exampleFormControlSelect1"
+                                                        name="out_of_stock_status">
+                                                    {% for value, text in product_form.out_of_stock_status.field.choices %}
+                                                        <option value="{{ value }}">{{ text }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="exampleFormControlSelect1"
+                                                   class="col-xl-3 col-sm-4 mb-0">{% translate 'Requires Shipping' %}:</label>
+                                            <div class="col-xl-8 col-sm-7">
+                                                <select class="form-control digits" id="exampleFormControlSelect1"
+                                                        name="requires_shipping">
+                                                    {% for value, text in product_form.requires_shipping.field.choices %}
+                                                        <option value="{{ value }}">{{ text }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
                                         </div>
 
 
                                         <div class="form-group row">
-                                            <label for="validationCustom0"
-                                                   class=" col-md-4"><span>*</span>
-                                                {% translate 'Requires Shipping' %} </label>
-                                            <select name="requires_shipping"
-                                                    class="custom-select  col-md-6">
-
-                                                {% for value, text in product_form.requires_shipping.field.choices %}
-                                                    <option value="{{ value }}">{{ text }}</option>
-                                                {% endfor %}
-                                            </select>
-
+                                            <label class="col-xl-3 col-sm-4 mb-0">{% translate 'Weight' %} :</label>
+                                            <fieldset class="qty-box col-xl-9 col-xl-8 col-sm-7">
+                                                <div class="input-group">
+                                                    <input class="touchspin" type="text" value="1"
+                                                           name="weight">
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-xl-3 col-sm-4 mb-0">{% translate ' Length' %} :</label>
+                                            <fieldset class="qty-box col-xl-9 col-xl-8 col-sm-7">
+                                                <div class="input-group">
+                                                    <input class="touchspin" type="text" value="1"
+                                                           name="length">
+                                                </div>
+                                            </fieldset>
                                         </div>
 
 
                                         <div class="form-group row">
-                                            <label for="validationCustom0"
-                                                   class=" col-md-4"><span>*</span>
-                                                {% translate 'Weight' %}</label>
-                                            <input class="form-control col-md-6"
-                                                   id="validationCustom0" type="number"
-                                                   name="weight" value="5" min="0"
-                                                   required="required">
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label for="validationCustom0"
-                                                   class=" col-md-4"><span>*</span>
-                                                {% translate 'Length' %}</label>
-                                            <input class="form-control col-md-6"
-                                                   id="validationCustom0" type="number"
-                                                   name="length" value="5" min="0"
-                                                   required="required">
+                                            <label for="exampleFormControlSelect1"
+                                                   class="col-xl-3 col-sm-4 mb-0">{% translate 'status' %}:</label>
+                                            <div class="col-xl-8 col-sm-7">
+                                                <select class="form-control digits" id="exampleFormControlSelect1"
+                                                        name="status">
+                                                    {% for value, text in product_form.requires_shipping.field.choices %}
+                                                        <option value="{{ value }}">{{ text }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
                                         </div>
 
 
                                         <div class="form-group row">
-                                            <label for="validationCustom0"
-                                                   class=" col-md-4"><span>*</span>
-                                                {% translate 'status' %} </label>
-                                            <select name="status"
-                                                    class="custom-select  col-md-6">
-                                                {% for value, text in product_form.status.field.choices %}
-                                                    <option value="{{ value }}">{{ text }}</option>
-                                                {% endfor %}
-                                            </select>
+                                            <label class="col-xl-3 col-sm-4 mb-0">{% translate 'Sort Order' %} :</label>
+                                            <fieldset class="qty-box col-xl-9 col-xl-8 col-sm-7">
+                                                <div class="input-group">
+                                                    <input class="touchspin" type="text" value="1"
+                                                           name="sort_order">
+                                                </div>
+                                            </fieldset>
 
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label for="validationCustom0"
-                                                   class=" col-md-4"><span>*</span>
-                                                {% translate 'Sort Order' %}</label>
-                                            <input class="form-control col-md-6"
-                                                   id="validationCustom0" type="number"
-                                                   name="sort_order" value="5" min="0"
-                                                   required="required">
-                                        </div>
                                     </div>
-
-
+                                    </div>
                                 </div>
-                                <div class="tab-pane fade " id="variant" role="tabpanel"
-                                     aria-labelledby="variant-tabs">
-                                    <div class="card-header"><h4>Variant</h4></div>
-
-                                    <div class="card-body">
-                                    <div class="form-group row">
-                                            <label for="validationCustom0"
-                                                   class=" col-md-4"><span>*</span>
-                                                {% translate 'Variant System' %} </label>
-                                            <select name="variant"
-                                                    class="custom-select  col-md-6">
-                                                {% for value, text in product_form.variant.field.choices %}
-                                                    <option value="{{ value }}">{{ text }}</option>
-                                                {% endfor %}
-                                            </select>
-
+                                    <div class="tab-pane fade " id="variant" role="tabpanel"
+                                         aria-labelledby="variant-tabs">
+                                        <div class="card-header"><h4>Variant</h4></div>
+                                     <div class="card-body">
+<div class="form-group row">
+                                            <label for="exampleFormControlSelect1"
+                                                   class="col-xl-3 col-sm-4 mb-0">{% translate 'Variant System' %}:</label>
+                                            <div class="col-xl-8 col-sm-7">
+                                                <select class="form-control digits" id="exampleFormControlSelect1"
+                                                        name="variant">
+                                                    {% for value, text in product_form.variant.field.choices %}
+                                                        <option value="{{ value }}">{{ text }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
                                         </div>
+
+
+
                                         <table class="table table-responsive-md">
                                             <tr>
                                                 <th style="align-content: center">{% translate ' Title ' %}</th>
@@ -393,22 +379,22 @@
 
                                             </tr>
                                         </table>
-                                        <div>
-                                            <div class="variant_div">
-                                                <div class="variant_div_row first_variant">
-                                                    <div data-repeater-item class="table table-responsive">
-                                                        <table class="table ">
-                                                        <td style="width:5%"><input type="text"
+                                            <div>
+                                                <div class="variant_div">
+                                                    <div class="variant_div_row first_variant">
+                                                        <div data-repeater-item class="table table-responsive">
+                                                            <table class="table ">
+                                                                <td style="width:5%"><input type="text"
 
-                                                                                         name="variant_title"
+                                                                                            name="variant_title"
 
-                                                                                         placeholder="Product Title"/>
-                                                            </td>
-                                                        <td style="width:20%"><select class=""
-                                                                                          id="product_variant"
-                                                                                          name="variant_color">
+                                                                                            placeholder="Product Title"/>
+                                                                </td>
+                                                                <td style="width:20%"><select class=""
+                                                                                              id="product_variant"
+                                                                                              name="variant_color">
 
-                                                                {% for value, title in  variant_form.color.field.choices %}
+                                                                    {% for value, title in  variant_form.color.field.choices %}
                                                                     <option value="{{ value }}">{{ title }}</option>
                                                                 {% endfor %}
                                                             </select></td>
@@ -423,28 +409,28 @@
                                                             </select></td>
 
 
-                                                            <td style="width:5%"><input type="text"
+                                                                <td style="width:5%"><input type="text"
 
-                                                                                         name="variant_price"
+                                                                                            name="variant_price"
 
-                                                                                         placeholder="option amount"/>
-                                                            </td>
-                                                            <td style="width:10%">
-                                                                <input type="text"
+                                                                                            placeholder="option amount"/>
+                                                                </td>
+                                                                <td style="width:10%">
+                                                                    <input type="text"
 
-                                                                                         name="variant_quantity"
+                                                                           name="variant_quantity"
 
-                                                                                         placeholder="option amount"/>
-                                                            </td>
+                                                                           placeholder="option amount"/>
+                                                                </td>
 
 
+                                                                <td style="width:20%">
+                                                                    <div>
+                                                                        <input type="file" name="ImageVariant"
+                                                                               id="variant_image"
+                                                                               onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])">
 
-                                                            <td style="width:20%">
-                                                                <div>
-                                                                    <input type="file" name="ImageVariant" id="variant_image"
-                                                                           onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])">
-
-                                                                    <img src="{{ user.image.url }}" alt="" width="20%"
+                                                                        <img src="{{ user.image.url }}" alt="" width="20%"
                                                                          height="20%" id="blah"/>
                                                                 </div>
                                                             </td>
@@ -995,55 +981,55 @@
 
 
 
-<script>
-    $(document).ready(function () {
-        $('.repeater').repeater({
-            // (Optional)
-            // start with an empty list of repeaters. Set your first (and only)
-            // "data-repeater-item" with style="display:none;" and pass the
-            // following configuration flag
-            initEmpty: true,
-            // (Optional)
-            // "defaultValues" sets the values of added items.  The keys of
-            // defaultValues refer to the value of the input's name attribute.
-            // If a default value is not specified for an input, then it will
-            // have its value cleared.
-            defaultValues: {
-                'text-input': 'foo'
-            },
-            // (Optional)
-            // "show" is called just after an item is added.  The item is hidden
-            // at this point.  If a show callback is not given the item will
-            // have $(this).show() called on it.
-            show: function () {
-                $(this).slideDown();
-            },
-            // (Optional)
-            // "hide" is called when a user clicks on a data-repeater-delete
-            // element.  The item is still visible.  "hide" is passed a function
-            // as its first argument which will properly remove the item.
-            // "hide" allows for a confirmation step, to send a delete request
-            // to the server, etc.  If a hide callback is not given the item
-            // will be deleted.
-            hide: function (deleteElement) {
-                if(confirm('Are you sure you want to delete this element?')) {
-                    $(this).slideUp(deleteElement);
-                }
-            },
-            // (Optional)
-            // You can use this if you need to manually re-index the list
-            // for example if you are using a drag and drop library to reorder
-            // list items.
-            ready: function (setIndexes) {
-                $dragAndDrop.on('drop', setIndexes);
-            },
-            // (Optional)
-            // Removes the delete button from the first list item,
-            // defaults to false.
-            isFirstItemUndeletable: true
-        })
-    });
-</script>
+    <script>
+        $(document).ready(function () {
+            $('.repeater').repeater({
+                // (Optional)
+                // start with an empty list of repeaters. Set your first (and only)
+                // "data-repeater-item" with style="display:none;" and pass the
+                // following configuration flag
+                initEmpty: true,
+                // (Optional)
+                // "defaultValues" sets the values of added items.  The keys of
+                // defaultValues refer to the value of the input's name attribute.
+                // If a default value is not specified for an input, then it will
+                // have its value cleared.
+                defaultValues: {
+                    'text-input': 'foo'
+                },
+                // (Optional)
+                // "show" is called just after an item is added.  The item is hidden
+                // at this point.  If a show callback is not given the item will
+                // have $(this).show() called on it.
+                show: function () {
+                    $(this).slideDown();
+                },
+                // (Optional)
+                // "hide" is called when a user clicks on a data-repeater-delete
+                // element.  The item is still visible.  "hide" is passed a function
+                // as its first argument which will properly remove the item.
+                // "hide" allows for a confirmation step, to send a delete request
+                // to the server, etc.  If a hide callback is not given the item
+                // will be deleted.
+                hide: function (deleteElement) {
+                    if (confirm('Are you sure you want to delete this element?')) {
+                        $(this).slideUp(deleteElement);
+                    }
+                },
+                // (Optional)
+                // You can use this if you need to manually re-index the list
+                // for example if you are using a drag and drop library to reorder
+                // list items.
+                ready: function (setIndexes) {
+                    $dragAndDrop.on('drop', setIndexes);
+                },
+                // (Optional)
+                // Removes the delete button from the first list item,
+                // defaults to false.
+                isFirstItemUndeletable: true
+            })
+        });
+    </script>
 
 
 {% endblock custom_js %}

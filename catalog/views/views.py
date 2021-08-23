@@ -1,15 +1,10 @@
-from dal import autocomplete
-from django.http import HttpResponse, request, JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
 # Create your views here.
-from django.core.paginator import Paginator
-from django.http import HttpResponse
 from django.shortcuts import render
-# Create your views here.
-from haystack.query import SearchQuerySet
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
 from catalog.models.models import Categories, Products
 from catalog.models.product_options import Filters
 

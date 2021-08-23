@@ -42,7 +42,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in Productsion secret!
-SECRET_KEY ='jwv-s5yx#u7bhnxh6zjt3ds=!jnvqv(qv5zu!2$g)t)n*d8zf+'
+SECRET_KEY = 'jwv-s5yx#u7bhnxh6zjt3ds=!jnvqv(qv5zu!2$g)t)n*d8zf+'
 
 # SECURITY WARNING: don't run with debug turned on in Productsion!
 DEBUG = env('DEBUG')
@@ -52,11 +52,13 @@ ALLOWED_HOSTS = [
     'nigne.herokuapp.com'
 ]
 
+# ALLOWED_HOSTS = [
+#
+# ]
 # Application definition
 
 INSTALLED_APPS = [
-    'dal',
-    'dal_select2',
+    'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -65,8 +67,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
-    # Admin APPS
-    # 'debug_toolbar',
+    ## internal apps
+    'core.apps.CoreConfig',
     'catalog.apps.CatalogConfig',
     'coupons.apps.CouponsConfig',
     'invoice.apps.InvoiceConfig',
@@ -77,38 +79,18 @@ INSTALLED_APPS = [
     'sales.apps.SalesConfig',
     'vendors.apps.VendorsConfig',
     'user.apps.UserConfig',
-    'core.apps.CoreConfig',
-    # internal apps
 
     'billing',
-    # internal apps
-    'widget_tweaks',
+    # eEXTERNAL  APPS
     'ckeditor',
     'ckeditor_uploader',
     "bootstrap4",
-    # 'jet.dashboard-bases',
-    # 'jet',
-    'easy_thumbnails',
-    'filer',
     'mptt',
-    # 'whoosh',
-    # 'haystack',
     'rest_framework',
     'corsheaders',
     'crispy_forms',
-    'easy_select2',
-    'multiselectfield',
-    'imagefit',
-    'imagekit',
-    # 'modeltranslation',
     'rosetta',
-    'translations',
     'parler',
-    # 'django_database_translation',
-    # 'jquery',
-    # 'djangoformsetjs',
-    'django_countries',
-    'django_select2',
     'currencies',
 
 ]
@@ -125,6 +107,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
 
 
 ]
@@ -153,7 +136,6 @@ TEMPLATES = [
                 'home.context_processors.home_processors',
                 'home.context_processors.user_processors',
                 'home.context_processors.filter_processors',
-
                 'sales.context_processors.cart',
                 'vendors.context_processors.vendor_processors',
                 'django.contrib.auth.context_processors.auth',
@@ -219,15 +201,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
-HAYSTACK_DOCUMENT_FIELD = 'text'
-HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
-WHOOSH_INDEX = os.path.join(BASE_DIR, 'whoosh/')
-HAYSTACK_CONNECTIONS = {
-    'default': {
-        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
-    },
-}
+
 
 # dynamic data translate
 LANGUAGE_CODE = 'en'
@@ -255,58 +229,24 @@ FORCE_SESSION_TO_ONE = True  # Default is false
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-IMAGEFIT_ROOT = "public"
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-
-]
-
 MEDIA_URL = '/upload/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "upload")
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # enable/disable server cache
-
-IMAGEFIT_CACHE_ENABLED = True
-# set the cache name specific to imagefit with the cache dict
-IMAGEFIT_CACHE_BACKEND_NAME = 'imagefit'
 CACHES = {
-
     'default':
-
         {
             'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
             'KEY_PREFIX': 'DNigne.Productsion',  # Change this
             'LOCATION': '127.0.0.1:11211',
             'TIMEOUT': 24 * 3600
-
         },
-    'imagefit': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': os.path.join(tempfile.gettempdir(), 'django_imagefit')
-    },
-    "select2": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/2",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    }
-
 }
-SELECT2_CACHE_BACKEND = "select2"
-IMAGEFIT_PRESETS = {
-    'thumbnail': {'width': 64, 'height': 64, 'crop': True},
-    'my_preset1': {'width': 300, 'height': 220},
-    'my_preset2': {'width': 100},
-}
-# ...
 
 
-####################################
 ##  CKEDITOR CONFIGURATION ##
 ####################################
 
@@ -319,7 +259,6 @@ CKEDITOR_IMAGE_BACKEND = "pillow"
 
 
 CORS_ORIGIN_ALLOW_ALL = True
-
 MESSAGE_LEVEL = message_constants.DEBUG
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-info',
@@ -328,9 +267,9 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
-
 SITE_ID = 1
 BASE_URL = "http://127.0.0.1:8000"
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # SESSION_COOKIE_SECURE = True
 # LOGIN_URL = '/admin/login'
 # LOGOUT_URL = '/admin/logout'
@@ -359,7 +298,4 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 STRIPE_PUBLIC_KEY='pk_test_51J0RXNGtFP6X219RWcEB73bmW5TibfQxM7pdcuq6bSOp1syVZYDtIj3E3WFsGmCLy16Al7poS1WHc9aG2Sy5vrx800MYhiTw3t'
 STRIPE_SECRET_KEY='sk_test_51J0RXNGtFP6X219RvdElyf2W3bLi2r80YXYLBfxWNhiW34EyQoscHWZDY3VwqPJCGLXlNt4E9Cj8Sq3yi4mjtiDd00ncYScmmw'
 STRIPE_WEBHOOK_SECRET='whsec_9lTzxlMyPvX92OajtbFiO0olITNoK6Zi'
-
-
 django_heroku.settings(locals())
-DISABLE_COLLECTSTATIC=1

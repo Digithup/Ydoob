@@ -1,6 +1,6 @@
 
 
-$('.add-catalog img').elevateZoom({
+$('.add-product img').elevateZoom({
     zoomType: "inner",
     cursor: "crosshair"
 });

@@ -1,21 +1,12 @@
-import json
-
-import products as products
 from django.core import serializers
 from django.db.models import Min, Max
-from django.http import HttpResponse, JsonResponse, request, HttpResponseRedirect
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
-from django.views import generic
-from django.views.generic import ListView, DetailView
-from haystack.query import SearchQuerySet
+from django.views.generic import DetailView
 
-from catalog.models.product_options import Color, Size
-from user.models import User
-from .models import *
 from DNigne import settings
-from catalog.models.models import Categories, Products, ProductMedia, VariantDetails, Wishlist
-from home.forms import SearchForm
+from catalog.models.models import Categories, Products, ProductMedia, VariantDetails
 
 
 # if hasattr(request.user, 'lang'):

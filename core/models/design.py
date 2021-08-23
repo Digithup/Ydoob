@@ -1,24 +1,6 @@
 from django.db import models
-from ckeditor_uploader.fields import RichTextUploadingField
-from django.db import models
-from django.urls import reverse
-from django.utils.safestring import mark_safe
-from imagekit.models import ProcessedImageField, ImageSpecField
-from mptt.fields import TreeForeignKey
-from mptt.models import MPTTModel
-from pilkit.processors import ResizeToFill
-
-from user.models import User
-
-import os
-
-from PIL import Image
-from io import BytesIO
-
-from django.core.files import File
-from django.db.models import ImageField
-from django.db.models.fields.files import ImageFieldFile
 from django.utils.translation import ugettext_lazy as _
+from mptt.models import MPTTModel
 
 from catalog.models.models import Categories
 

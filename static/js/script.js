@@ -1681,11 +1681,11 @@
         $('.sidebar-popup').trigger('click');
     });
 
-    $('.users-sidebar').on('click', function (e) {
-        $('.dashboard-bases-left').css("left", "0");
+    $('.account-sidebar').on('click', function (e) {
+        $('.dashboard-left').css("left", "0");
     });
     $('.filter-back').on('click', function (e) {
-        $('.dashboard-bases-left').css("left", "-365px");
+        $('.dashboard-left').css("left", "-365px");
     });
 
     $(function () {

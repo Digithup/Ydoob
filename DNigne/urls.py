@@ -27,50 +27,43 @@ urlpatterns = [
     path('selectlanguage', views.selectlanguage, name='selectlanguage'),
 
     path('selectcurrency', views.selectcurrency, name='selectcurrency'),
-    #path('savelangcur', views.savelangcur, name='savelangcur'),
-
-
+    # path('savelangcur', views.savelangcur, name='savelangcur'),
 
 ]
 
 urlpatterns += i18n_patterns(
 
-    path('currencies/', include('currencies.urls')),
-    path('admin/', admin.site.urls ),
+    # path('currencies/', include('currencies.urls')),
+    path('admin/', admin.site.urls),
     path('', include('user.urls'), name='user'),
-    path('', include('core.urls'), name='core'),
+    path('admin', include('core.urls'), name='core'),
     path('', include('localization.urls'), name='localization'),
     path('', include('home.urls'), name='home'),
     path('', include('catalog.urls'), name='catalog'),
     path('', include('sales.urls'), name='sales'),
     path('', include('vendors.urls'), name='vendors'),
 
-
-    path('search/', include('haystack.urls'), name='haystack'),
     # USER URL
     path('ckeditor/', include('ckeditor_uploader.urls')),
     # LOGIN URL
     # API URL
     path('api-auth/', include('rest_framework.urls')),
-    path("select2/", include("django_select2.urls")),
-path('ajaxcolor/', ajaxcolortest, name='ajaxcolor'),
+
+    path('ajaxcolor/', ajaxcolortest, name='ajaxcolor'),
     # path('search/', SearchView(), name='search'),
     # path('search_auto/', search_auto, name='search_auto'),
 
-
-    #prefix_default_language=True,
+    # prefix_default_language=True,
 
 )
 
-#handler404 = error.error_handler
-#handler500 = error.error_handler
+# handler404 = error.error_handler
+# handler500 = error.error_handler
 # ... the rest of your URLconf goes here ...
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-
 if 'rosetta' in settings.INSTALLED_APPS:
     urlpatterns += [
-        path('admin/lang/rosetta/', include('rosetta.urls') )
+        path('admin/lang/rosetta/', include('rosetta.urls'))
     ]
-

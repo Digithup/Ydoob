@@ -847,7 +847,7 @@
                 id: 'jqstooltip',
                 'class': tooltipClassname
             }).appendTo(this.container);
-            // users for the container's location
+            // account for the container's location
             offset = this.tooltip.offset();
             this.offsetLeft = offset.left;
             this.offsetTop = offset.top;

@@ -6,10 +6,8 @@ from django.db import models
 # Create your models here.
 from django.template.defaultfilters import slugify
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
-from translations.models import Translatable
 
 from catalog.models.product_options import Filters, Manufacturer, Attributes, Options, \
     Color, Size

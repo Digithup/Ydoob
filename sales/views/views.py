@@ -1,9 +1,8 @@
-import stripe
+import stripe as stripe
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.sites.models import Site
-from django.http import HttpResponseRedirect, HttpResponse, request
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
