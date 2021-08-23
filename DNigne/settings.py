@@ -45,10 +45,10 @@ env = environ.Env(
 )
 # reading .env file
 environ.Env.read_env()
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY =env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in Productsion!
-DEBUG = env('DEBUG')
+DEBUG =env('DEBUG')
 
 ALLOWED_HOSTS: List[str] = ['*']
 AUTH_USER_MODEL = 'user.User'
