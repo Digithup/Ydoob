@@ -1,11 +1,13 @@
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
 
-from user.forms import UserUpdateAddressForm
-from user.models import UserAddress, User
+from user.forms.forms import UserUpdateAddressForm
+from user.models import UserAddress
 
+User = get_user_model()
 
 def address_list(request):
     user = User.objects.get(id=request.user.id)
@@ -14,7 +16,7 @@ def address_list(request):
     context = {'user': user,
                'address': address,
                }
-    return render(request, 'users/user_profile.html', context)
+    return render(request, 'users/customers/CustomerProfile.html', context)
 
 
 def save_address_form(request, form, template_name):

@@ -3,8 +3,10 @@ from django.db.models import Min, Max
 from catalog.models.models import Products, ProductMedia, Categories, Wishlist
 from catalog.models.product_options import Manufacturer
 from core.models.design import SliderMedia, Banners
-from core.models.setting import Setting
+from core.models.setting import Setting, SettingLang
+from localization.models import Language
 from user.models import UserAddress
+
 from vendors.models import Store, StoreMedia
 
 
@@ -36,9 +38,9 @@ def home_processors(request):
         return {
             'setting': Setting.objects.last(),
 
-            # 'setting_data_en': SettingLang.objects.get(lang='en'),
-            # 'setting_data_ar': SettingLang.objects.get(lang='ar'),
-            # 'index_language': Language.objects.all(),
+             'setting_data_en': SettingLang.objects.get(lang='en'),
+             'setting_data_ar': SettingLang.objects.get(lang='ar'),
+             'index_language': Language.objects.all(),
 
             'store_owner': store_owner,
             'vendor_store': vendor_store,

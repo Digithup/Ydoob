@@ -1,11 +1,14 @@
+from pyexpat import model
+
 from django.contrib import messages
+from django.contrib.sites.models import Site
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DeleteView
+from django.views.generic import ListView, DeleteView, UpdateView
 
-from core.forms.setting import SettingLangForm, SettingForm
+from core.forms.setting import SettingLangForm, SettingForm, SiteForm
 from core.models.setting import Setting, SettingLang
 from localization.models import Language
 
@@ -175,3 +178,16 @@ class SettingDelete(DeleteView):
     success_url = reverse_lazy('core:AdminSetting')
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
+
+
+class AdminSite(ListView):
+    model = Site
+
+    template_name = 'setting/site/admin-site.html'
+
+
+class AdminSiteUpdate(UpdateView):
+    model=Site
+    form_class=SiteForm
+    template_name = 'setting/site/update-site.html'
+    success_url = reverse_lazy('core:AdminSite')

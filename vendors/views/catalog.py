@@ -1,5 +1,6 @@
 import json
 
+from django.contrib.auth import get_user_model
 from django.core import serializers
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
@@ -19,9 +20,9 @@ from catalog.models.product_options import Manufacturer, FiltersGroup, Filters, 
 from core.forms.forms import SearchForm
 from core.models.setting import Setting
 from localization.models import Language
-from user.admin import User
-from vendors.models import Store
 
+from vendors.models import Store
+User = get_user_model()
 
 def VendorIndex(request):
 

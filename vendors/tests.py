@@ -15,7 +15,7 @@ from django.utils.html import format_html
 from django.views import View
 from django.views.generic import ListView
 from requests import request
-from user.models import User
+from accounts.models import User
 from vendors.models import Store, StoreMedia
 
 

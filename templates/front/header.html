@@ -15,10 +15,10 @@
                     <div class="header-contact">
                         {% if setting_data == request.Language.CODE %}
 
-                        <li>Welcome to Our store &nbsp;{{ setting_data_en.title }}</li>
+                            <li>Welcome to Our store &nbsp;{{ setting_data_en.title }}</li>
                         {% else %}
 
-                         <li>Welcome to Our store &nbsp;{{ setting_data_ar.title }}</li>
+                            <li>Welcome to Our store &nbsp;{{ setting_data_ar.title }}</li>
 
                         {% endif %}
 
@@ -29,7 +29,8 @@
                 </div>
                 <div class="col-lg-6 text-end">
                     <ul class="header-dropdown">
-                        <li class="mobile-wishlist"><a href="{% url 'sales:Wishlist' %}"><i class="fa fa-heart" aria-hidden="true"><span >{{ wish_count }}</span></i></a>
+                        <li class="mobile-wishlist"><a href="{% url 'sales:Wishlist' %}"><i class="fa fa-heart"
+                                                                                            aria-hidden="true"><span>{{ wish_count }}</span></i></a>
                         </li>
                         <li class="onhover-dropdown mobile-account"><i class="fa fa-user" aria-hidden="true"></i>
                             {% if user.is_authenticated %} {{ user.first_name }}
@@ -99,30 +100,31 @@
 
                     <div>
 
-                        <form class="form_search autocomplete-me" action="{% url 'home:search'  %}"  >
+                        <form class="form_search autocomplete-me" action="{% url 'home:search' %}">
 
-				  <input name="q" type="text" class="nav-search nav-search-field" placeholder="search"
-                   aria-expanded="true"/>
+                            <input name="q" type="text" class="nav-search nav-search-field" placeholder="search"
+                                   aria-expanded="true"/>
 
-				    <button type="submit" name="nav-submit-button" class="btn-search">
+                            <button type="submit" name="nav-submit-button" class="btn-search">
                                 <i class="ti-search"></i>
                             </button>
 
 
-		    </form>
+                        </form>
                     </div>
                     <div class="menu-right pull-right">
                         <div>
                             <div class="icon-nav">
                                 <ul>
                                     <li class="onhover-div mobile-search d-xl-none d-inline-block">
-                                        <div><img src="{%  static '' %}assets/images/icon/search.png" onclick="openSearch()"
+                                        <div><img src="{% static '' %}assets/images/icon/search.png"
+                                                  onclick="openSearch()"
                                                   class="img-fluid blur-up lazyload" alt=""> <i class="ti-search"
                                                                                                 onclick="openSearch()"></i>
                                         </div>
                                     </li>
                                     <li class="onhover-div mobile-setting">
-                                        <div><img src="{%  static '' %}assets/images/icon/setting.png"
+                                        <div><img src="{% static '' %}assets/images/icon/setting.png"
                                                   class="img-fluid blur-up lazyload" alt=""> <i
                                                 class="ti-settings"></i></div>
                                         <div class="show-div setting">
@@ -164,40 +166,11 @@
                                             </ul>
                                         </div>
                                     </li>
-                                    {#                                    <li class="onhover-dropdown"><a class="txt-dark" href="#">#}
-                                    {#                                        <h3>{{ request.LANGUAGE_CODE }}</h3>#}
-                                    {#                                        <ul class="language-dropdown onhover-show-div p-20">#}
-                                    {#                                            <div class="lan-selector">#}
-                                    {#                                                <form action="{% url 'set_language' %}" method="post" id="language-form"#}
-                                    {#                                                      name="language-form">#}
-                                    {#                                                    {% csrf_token %}#}
-                                    {#                                                    <input type="hidden" name="language" id="language" value=""/>#}
-                                    {#                                                </form>#}
-                                    {#                                                <script>#}
-                                    {#                                                    function set_language(code) {#}
-                                    {#                                                        $('#language').val(code);#}
-                                    {#                                                        $('#language-form').submit();#}
-                                    {#                                                    }#}
-                                    {#                                                </script>#}
-                                    {##}
-                                    {#                                                <li>{% for language in index_language %}#}
-                                    {#                                                    <ul>#}
-                                    {#                                                        <a href="javascript:set_language('{{ language.code }}')"><img#}
-                                    {#                                                                src="{{ language.image.url }} "#}
-                                    {#                                                                height="25px" width="25px"> {{ language.name }}#}
-                                    {#                                                        </a><hr>{% endfor %}</ul>#}
-                                    {#                                                </li>#}
-                                    {##}
-                                    {##}
-                                    {#                                            </div>#}
-                                    {#                                        </ul>#}
-                                    {#                                    </a></li>#}
-
 
                                     <li class="onhover-div mobile-cart">
                                         {% load myapptags %}
                                         {% shopcartcount user.id as count %}
-                                        <div></span><img src="{%  static '' %}assets/images/icon/cart.png"
+                                        <div></span><img src="{% static '' %}assets/images/icon/cart.png"
                                                          class="img-fluid blur-up lazyload" alt=""> <span
                                                 class="qty">{{ count }}</span></div>
 
@@ -232,13 +205,28 @@
                                                 </div>
                                                 </li>
 
+                                            {% if user.is_authenticated %}
+                                                <li>
+                                                    <div class="buttons"><a href="{% url 'sales:ShopCart' %}"
+                                                                            class="view-cart">viewcart</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-                                            <li>
-                                                <div class="buttons"><a href="{% url 'sales:ShopCart' %}"
-                                                                        class="view-cart">view
-                                                    cart</a> <a href="{% url 'sales:OrderProduct' %}" class="checkout">checkout</a>
-                                                </div>
-                                            </li>
+                                                        <a href="{% url 'sales:OrderProduct' %}"
+                                                           class="checkout">{% translate 'checkout' %}</a>
+
+                                                    </div>
+                                                </li>
+                                            {% else %}
+                                                <li>
+                                                    <div class="buttons"><a href="{% url 'sales:ShopCart' %}"
+                                                                            class="view-cart">viewcart</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                                        <a href="{% url 'user:CustomerLogin' %}">{% translate 'checkout' %}</a>
+
+                                                    </div>
+                                                </li>
+                                            {% endif %}
+
+
                                         </ul>
                                     </li>
                                 </ul>
@@ -280,8 +268,6 @@
                                     <div class="mobile-back text-end">Back<i class="fa fa-angle-right ps-2"
                                                                              aria-hidden="true"></i></div>
                                 </li>
-
-
 
 
                                 <!-- /category nav -->
@@ -440,7 +426,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-12">
-                                                        <img src="{%  static '' %}assets/images/menu-banner.jpg"
+                                                        <img src="{% static '' %}assets/images/menu-banner.jpg"
                                                              class="img-fluid mega-img">
                                                     </div>
                                                 </div>
@@ -469,7 +455,7 @@
                                         <li><a href="category-page(list-view).html">list view</a></li>
                                     </ul>
                                 </li>
-                                 <li>
+                                <li>
                                     <a href="#">{% translate ' Fashion' %}</a>
                                     <ul>
                                         <li><a href="category-page(top-filter).html">top filter<span
@@ -490,7 +476,7 @@
                                         <li><a href="category-page(list-view).html">list view</a></li>
                                     </ul>
                                 </li>
-                                 <li>
+                                <li>
                                     <a href="#">{% translate 'Mobiles & Tablets' %}</a>
                                     <ul>
                                         <li><a href="category-page(top-filter).html">top filter<span
@@ -511,7 +497,7 @@
                                         <li><a href="category-page(list-view).html">list view</a></li>
                                     </ul>
                                 </li>
-                                 <li>
+                                <li>
                                     <a href="#">{% translate 'Home & Kitchen' %}</a>
                                     <ul>
                                         <li><a href="category-page(top-filter).html">top filter<span
@@ -554,8 +540,6 @@
                                         <li><a href="category-page(list-view).html">list view</a></li>
                                     </ul>
                                 </li>
-
-
 
 
                             </ul>

@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.core.files.storage import FileSystemStorage
 from django.forms import modelformset_factory
 from django.http import request, HttpResponse, HttpResponseRedirect
@@ -11,8 +12,8 @@ from catalog.models.product_options import Filters
 from core.forms.setting import SettingForm, SettingLangForm, SettingTagForm
 from core.models.setting import Setting, SettingLang, SettingTags
 from localization.models import Language
-from user.models import User
 
+User = get_user_model()
 
 def ProductAddopencart(request):
     filter = Filters.objects.all()
@@ -180,7 +181,7 @@ def AddSetting(request):
                 messages.success(request,
                                  "Yeeew, check it out on the home page!")
 
-                return HttpResponseRedirect("/admin/setting/")
+                return HttpResponseRedirect("/dashboard/setting/")
 
             else:
                 print("Form invalid, see below error msg")

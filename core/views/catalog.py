@@ -2,6 +2,7 @@ import datetime
 import json
 
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.core import serializers
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q, Count
@@ -24,9 +25,9 @@ from catalog.models.product_options import Manufacturer, FiltersGroup, Filters, 
 from core.forms.forms import SearchForm
 from core.models.setting import Setting
 from localization.models import Language
-from user.admin import User
-from vendors.models import Store
 
+from vendors.models import Store
+User = get_user_model()
 
 def AdminIndex(request):
     categories = Categories.objects.all()
@@ -47,7 +48,7 @@ def AdminIndex(request):
         'index_language': index_language
 
     }
-    return render(request, 'admin/', context)
+    return render(request, 'admin/index.html', context)
 
 
 def categories(request):

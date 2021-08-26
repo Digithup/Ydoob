@@ -1,6 +1,8 @@
 {% extends 'front/homebase.html' %}
 {% load crispy_forms_tags %}
 {% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
 {% load static %}
 {% load i18n %}
 
@@ -64,13 +66,24 @@
 
                                 <button type="submit" class="btn btn-solid  submit_btn">{% trans "Login" %}</button>
 
-                                <a href="">
+                                <a href="{% url "user:reset_password" %}">
                                     <button type="button" class="btn btn-solid" data-toggle="modal"
                                             data-original-title="test"
                                             data-target="#exampleModal">{% trans "Forgot Password?" %}
                                     </button>
                                 </a>
                             </div>
+                       <div class="form-footer">
+                                            <span>Or Login up with social platforms</span>
+
+                                            <ul class="social">
+                                                <li><strong><a class="fa fa-facebook-f" href="{% url 'social:begin' 'facebook' %}"></a></strong></li>
+                                                <button type="button" class=" btn fa fa-facebook-f">{% trans "Login" %}</button>
+                                                <li><a class="icon-twitter" href=""></a><button type="button" class="btn fa fa-facebook-f">{% trans "Login" %}</button></li>
+                                                <li><a class="icon-instagram" href=""></a></li>
+                                                <li><a class="icon-pinterest" href=""></a></li>
+                                            </ul>
+                                        </div>
 
 
                         </form>

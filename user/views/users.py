@@ -1,7 +1,7 @@
 import json
 
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
@@ -15,12 +15,13 @@ from django.utils.http import is_safe_url, urlsafe_base64_encode, urlsafe_base64
 from django.views import View
 from django.views.generic import CreateView
 
-from user.forms import UserLoginForm, CustomerRegisterForm
-from user.models import User
+from core.decorators import anonymous_required
+from user.decorators import unauthenticated_user
 from user.signals import user_logged_in
+from user.forms.forms import UserLoginForm, CustomerRegisterForm
 from user.utils import account_activation_token
 
-
+User = get_user_model()
 @login_required(login_url='/login') # Check login
 def profile(request):
     #category = Category.objects.all()
@@ -28,7 +29,7 @@ def profile(request):
     profile = User.objects.get(user_id=current_user.id)
     context = {'current_user': current_user,
                'profile':profile}
-    return render(request, 'users/CustomerProfile.html', context)
+    return render(request, 'users/customers/CustomerProfile.html', context)
 
 
 
@@ -36,7 +37,7 @@ class CustomerLogin(View):
     """
     Description:Will be used to login and logout users.\n
     """
-    template_name = 'users/CustomerLogin.html'
+    template_name = 'users/customers/CustomerLogin.html'
 
     def get(self, request, *args, **kwargs):
         form = UserLoginForm()
@@ -100,7 +101,7 @@ class EmailValidationView(View):
 
 class RegistrationView(View):
     def get(self, request):
-        return render(request, 'users/CustomerRegister.html')
+        return render(request, 'users/customers/CustomerRegister.html')
 
     def post(self, request):
         # GET USER DATA
@@ -118,7 +119,7 @@ class RegistrationView(View):
         if not User.objects.filter(email=email).exists():
             if len(password) < 6:
                 messages.error(request, 'Password too short')
-                return render(request, 'users/CustomerRegister.html', context)
+                return render(request, 'users/customers/CustomerRegister.html', context)
 
             user = User.objects.create_user( email=email)
             user.set_password(password)
@@ -148,7 +149,7 @@ class RegistrationView(View):
             )
             email.send(fail_silently=False)
             messages.success(request, 'Account successfully created')
-            return render(request, 'users/CustomerRegister.html')
+            return render(request, 'users/customers/CustomerRegister.html')
 
 class Verification(View):
     def get(self, request, uidb64, token):
@@ -177,7 +178,7 @@ class Verification(View):
 class CustomerRegister(CreateView):
     model = User
     form_class = CustomerRegisterForm
-    template_name = 'users/CustomerRegister.html'
+    template_name = 'users/customers/CustomerRegister.html'
 
     # uccess_url =redirect('home:Products_admin')
     success_url = reverse_lazy('home:index')

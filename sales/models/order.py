@@ -1,11 +1,12 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.forms import ModelForm
 
 from catalog.models.models import Products, OptionsDetails, VariantDetails
-from user.models import User
+
 from vendors.models import Store
 
-
+User = get_user_model()
 class ShopCart(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     store = models.ForeignKey(Store, on_delete=models.SET_NULL, null=True)

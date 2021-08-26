@@ -2,6 +2,7 @@ import os
 import uuid
 
 from ckeditor_uploader.fields import RichTextUploadingField
+from django.contrib.auth import get_user_model
 from django.db import models
 # Create your models here.
 from django.template.defaultfilters import slugify
@@ -11,7 +12,7 @@ from mptt.models import MPTTModel
 
 from catalog.models.product_options import Filters, Manufacturer, Attributes, Options, \
     Color, Size
-from user.models import User
+
 
 STATUS = (
     ('True', 'Yes'),
@@ -71,7 +72,7 @@ VARIANTS = (
 
 )
 
-
+User = get_user_model()
 class Products(models.Model):
     id = models.AutoField(primary_key=True)
     seller = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from core.models.setting import Setting
 from localization.models import Language
 
@@ -12,7 +14,9 @@ def core_processors(request):
 
         }
     except Exception as e:
-        return {'setting': None,
+        return {
+
+            'setting': None,
                 'index_language': None
 
                 }

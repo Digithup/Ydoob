@@ -8,7 +8,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
-from user.models import User, UserManager
+from user.models import User
 
 
 class Store(models.Model):

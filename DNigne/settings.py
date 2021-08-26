@@ -50,7 +50,9 @@ SECRET_KEY =env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in Productsion!
 DEBUG =env('DEBUG')
 
-ALLOWED_HOSTS: List[str] = ['*']
+ALLOWED_HOSTS: List[str] = ['127.0.0.1']
+
+
 AUTH_USER_MODEL = 'user.User'
 # ALLOWED_HOSTS = [
 #
@@ -92,6 +94,7 @@ INSTALLED_APPS = [
     'rosetta',
     'parler',
     'currencies',
+    'social_django',
 
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -107,6 +110,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
     # 'whitenoise.middleware.WhiteNoiseMiddleware',
 
 
@@ -141,26 +145,51 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'currencies.context_processors.currencies',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
 
             ],
         },
     },
 ]
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.facebook.FacebookOAuth2',
+
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
 
-'NAME': env('DB_NAME'),
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'HOST': env('DB_HOST'),
-        'PORT': env('DB_PORT'),
+if 'RDS_DB_NAME' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ['RDS_DB_NAME'],
+            'USER': os.environ['RDS_USERNAME'],
+            'PASSWORD': os.environ['RDS_PASSWORD'],
+            'HOST': os.environ['RDS_HOSTNAME'],
+            'PORT': os.environ['RDS_PORT'],
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+
+            'NAME': env('DB_NAME'),
+            'USER': env('DB_USER'),
+            'PASSWORD': env('DB_PASSWORD'),
+            'HOST': env('DB_HOST'),
+            'PORT': env('DB_PORT'),
+        }
+    }
+
+#python3 -c 'import psycopg2 as db; conn = db.connect("postgres://qjyolhgk:kHMr9gkyJ8gO-j2IBj7iZ2cFVql5nWpr@chunee.db.elephantsql.com/qjyolhgk"); print(conn.get_backend_pid()); conn.close()'
+
 
 '''
 DATABASES = {
@@ -269,12 +298,18 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 SITE_ID = 1
+
 BASE_URL = "http://127.0.0.1:8000"
+
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # SESSION_COOKIE_SECURE = True
-# LOGIN_URL = '/admin/login'
-# LOGOUT_URL = '/admin/logout'
-# LOGIN_REDIRECT_URL = '/login'
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = 'home'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/settings/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/settings/'
+SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+
 # Cart
 CART_SESSION_ID = 'cart'
 SESSION_COOKIE_AGE = 85555
@@ -295,6 +330,10 @@ EMAIL_HOST_USER = 'iarbic89@gmail.com'
 EMAIL_HOST_PASSWORD = 'hitham5320826'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
+
+
+SOCIAL_AUTH_FACEBOOK_KEY = '264061255547166'  # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = 'f472f0afb70fc84333e1d8e3bed58f84'  # App Secret
 ############Payment STRIPE########
 STRIPE_PUBLIC_KEY=env('STRIPE_PUBLIC_KEY')
 STRIPE_SECRET_KEY=env('STRIPE_SECRET_KEY')

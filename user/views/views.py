@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth import login, get_user_model
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -8,9 +8,11 @@ from django.utils.http import is_safe_url
 from django.views import View
 from django.views.generic import CreateView, UpdateView
 
-from user.forms import GuestForm, UserUpdateProfileForm, UserUpdateImageForm, UserUpdateAddressForm
-from user.forms import UserRegisterForm
-from user.models import GuestEmail, User, UserAddress
+from user.forms.forms import UserUpdateProfileForm, UserUpdateAddressForm, UserUpdateImageForm, UserRegisterForm, \
+    GuestForm
+from user.models import GuestEmail, UserAddress
+
+User = get_user_model()
 
 
 def UserProfile(request, slug):
@@ -20,7 +22,7 @@ def UserProfile(request, slug):
     context = {'user': user,
                'address': address,
                }
-    return render(request, 'users/user_profile.html', context)
+    return render(request, 'users/customers/CustomerProfile.html', context)
 
 
 def user_delete(request, user_id):
@@ -63,7 +65,7 @@ def UpdateProfile(request, slug):
             'user': user,
             'forms': forms
         }
-        return render(request, 'users/UpdateProfile.html', context)
+        return render(request, 'users/customers/UpdateProfile.html', context)
 
 
 def UpdateImage(request, slug):
@@ -89,14 +91,14 @@ def UpdateImage(request, slug):
                 'user': user,
                 'forms': forms
             }
-            return render(request, 'users/user_profile_update_image.html', context)
+            return render(request, 'users/customers/user_profile_update_image.html', context)
             messages.error(request, "Error")
     else:
         context = {
             'user': user,
             'forms': forms
         }
-        return render(request, 'users/user_profile_update_image.html', context)
+        return render(request, 'users/customers/user_profile_update_image.html', context)
 
 
 def CreateAddress(request, slug):
@@ -138,7 +140,7 @@ def CreateAddress(request, slug):
             forms.save()
             messages.success(request, "SUCCESS")
             # return HttpResponseRedirect("pk")
-            # return render(request, 'users/user_profile.html')
+            # return render(request, 'users/CustomerProfile.html')
             return redirect('user:UserProfile', user.slug)
         else:
             print("Form invalid, see below error msg")
@@ -152,13 +154,13 @@ def CreateAddress(request, slug):
             'forms': forms,
             'user_address': user_address
         }
-        return render(request, 'users/UpdateAddress.html', context)
+        return render(request, 'users/customers/UpdateAddress.html', context)
     context = {
         'user': user,
         'forms': forms,
         'user_address': user_address,
     }
-    return render(request, 'users/UpdateAddress.html', context)
+    return render(request, 'users/customers/UpdateAddress.html', context)
 
 
 def address_create(request):
@@ -227,7 +229,7 @@ def UpdateAddress(request, slug):
             forms.save()
             messages.success(request, "SUCCESS")
             # return HttpResponseRedirect("pk")
-            # return render(request, 'users/user_profile.html')
+            # return render(request, 'users/CustomerProfile.html')
             return redirect('user:UserProfile', user.slug)
         else:
             print("Form invalid, see below error msg")
@@ -241,13 +243,13 @@ def UpdateAddress(request, slug):
             'forms': forms,
             'user_address': user_address
         }
-        return render(request, 'users/UpdateAddress.html', context)
+        return render(request, 'users/customers/UpdateAddress.html', context)
     context = {
         'user': user,
         'forms': forms,
         'user_address': user_address,
     }
-    html_form = render_to_string('users/UpdateAddress.html',
+    html_form = render_to_string('users/customers/UpdateAddress.html',
                                  context,
                                  request=request,
                                  )

@@ -1,9 +1,10 @@
 from django.conf.urls import url
-from django.contrib.auth import views as auth_views
+
 from django.urls import path
+from django.contrib.auth import views as auth_views
 
 from .views.address import DeleteAddress, UpdateAddress, CreateAddress, address_list
-from .views.usepassword import PasswordResetView
+from .views.auth import PasswordResetView, PasswordResetDoneView, PasswordResetCompleteView, PasswordResetConfirmView
 from .views.users import customer_logout, CustomerRegister, CustomerLogin
 from .views.views import guest_user_view, UserProfile, UpdateProfile, UpdateImage
 
@@ -21,14 +22,27 @@ urlpatterns = [
 
     ###########Password###########
 
-    path('password_reset/', PasswordResetView.
-         as_view(), name='password_reset'),
+    path('reset_password/',
+         PasswordResetView.as_view(template_name="users/password_reset/password_reset.html"),
+         name="reset_password"),
 
-    # path('reset_password/',
-    #      PasswordResetView.as_view(),
-    #      name="reset_password"),
-    #
-    # path('reset_password_sent/',
+    path('reset_password_sent/',
+         PasswordResetDoneView.as_view(template_name="users/password_reset/password_reset_sent.html"),
+         name="password_reset_done"),
+
+
+    path('reset/<uidb64>/<token>/',
+         PasswordResetConfirmView.as_view(template_name="users/password_reset/password_reset_form.html"),
+         name="password_reset_confirm"),
+
+    path('reset_password_complete/',
+         PasswordResetCompleteView.as_view(template_name="users/password_reset/password_reset_done.html"),
+         name="password_reset_complete"),
+
+
+
+
+# path('reset_password_sent/',
     #      PasswordResetDoneView.as_view(),
     #      name="password_reset_done"),
     #

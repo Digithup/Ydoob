@@ -6,8 +6,7 @@ from django.shortcuts import render
 from django.utils.text import slugify
 from requests import request
 
-from user.forms import UserRegisterForm
-
+from user.forms.forms import UserRegisterForm
 from vendors.models import Store
 
 User = get_user_model()
@@ -111,7 +110,7 @@ class StoreAddFormm(forms.ModelForm):
         if user is None:
             messages.error(
                 request, 'Account is not active,please check your email')
-            return render(request, 'front/UsersAccount/../users/templates/users/CustomerRegister.html', context={
+            return render(request, 'users/customers/CustomerRegister.html', context={
                 "title": "Register",
                 "form": UserRegisterForm
             })

@@ -1,6 +1,6 @@
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, User
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, User, AbstractUser
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 
@@ -9,6 +9,8 @@ Type = (
     ('2', 'Business'),
 
 )
+
+
 
 
 class UserManager(BaseUserManager):
@@ -90,6 +92,7 @@ class User(AbstractBaseUser):
     youtube = models.URLField(blank=True, max_length=50)
     about = RichTextUploadingField(blank=True)
     active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
     customer = models.BooleanField(default=True)
     seller = models.BooleanField(default=False)
     staff = models.BooleanField(default=False)

@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.core.files.storage import FileSystemStorage
 from django.http import request, HttpResponse
 from django.shortcuts import render, redirect
@@ -6,8 +7,8 @@ from django.views import View
 from django.views.generic import CreateView
 
 from catalog.models.models import Categories, Products, ProductMedia, ProductTags, ProductTransaction
-from user.models import User
 
+User = get_user_model()
 
 class ProductCreateTest3(CreateView):
     def get(self, request, *args, **kwargs):

@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
+from django.conf.urls import url
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -21,6 +22,7 @@ from django.urls import path, include
 
 from home.tests import ajaxcolortest
 from localization import views
+
 
 urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
@@ -32,11 +34,11 @@ urlpatterns = [
 ]
 
 urlpatterns += i18n_patterns(
-
+    url(r'^oauth/', include('social_django.urls', namespace='social')),
     # path('currencies/', include('currencies.urls')),
     path('admin/', admin.site.urls),
     path('', include('user.urls'), name='user'),
-    path('admin', include('core.urls'), name='core'),
+    path('dashboard/', include('core.urls'), name='core'),
     path('', include('localization.urls'), name='localization'),
     path('', include('home.urls'), name='home'),
     path('', include('catalog.urls'), name='catalog'),
@@ -52,6 +54,8 @@ urlpatterns += i18n_patterns(
     path('ajaxcolor/', ajaxcolortest, name='ajaxcolor'),
     # path('search/', SearchView(), name='search'),
     # path('search_auto/', search_auto, name='search_auto'),
+
+
 
     # prefix_default_language=True,
 

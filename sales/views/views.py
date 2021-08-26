@@ -1,6 +1,7 @@
 import stripe as stripe
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
@@ -10,9 +11,9 @@ from django.views import generic
 
 from catalog.models.models import Products, Categories, VariantDetails, Wishlist
 from sales.models.order import ShopCart, Order, OrderForm, OrderProduct, ShopCartForm
-from user.models import User
 
 
+User = get_user_model()
 def index(request):
     return HttpResponse("Order Page")
 
@@ -80,6 +81,8 @@ def deletefromcart(request, id):
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
+
+@login_required
 def orderproduct(request):
 
     category = Categories.objects.all()

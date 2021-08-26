@@ -1,5 +1,3 @@
-from django.db import models
-
 # Create your models here.
 
 
@@ -7,11 +5,6 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 
 # Create your models here.
-from django.urls import reverse
-from django.utils.safestring import mark_safe
-
-from user.models import User
-from localization.models import Language
 
 
 class Setting(models.Model):

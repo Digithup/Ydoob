@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -9,11 +9,12 @@ from django.utils.http import is_safe_url
 from django.views import View
 from django.views.generic import UpdateView, CreateView, ListView, DetailView, DeleteView
 
-from user.admin import User
-from user.forms import UserAdminChangeForm, UserLoginForm, UserRegisterForm
+
+from user.forms.forms import UserLoginForm, UserRegisterForm
+
 from user.signals import user_logged_in
 
-
+User = get_user_model()
 class AdminLogin(View):
     """
     Description:Will be used to login and logout users.\n
@@ -73,7 +74,7 @@ class AdminLogin(View):
 def AdminLogout(request):
     logout(request)
     messages.success(request, "Logout Successfully!")
-    return HttpResponseRedirect(reverse_lazy("accounts:AdminLogin"))
+    return HttpResponseRedirect(reverse_lazy("core:AdminLogin"))
 
 
 class AdminUsersList(ListView):
