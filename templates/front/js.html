@@ -34,6 +34,7 @@
     <script src="{%  static '' %}assets/js/theme-setting.js"></script>
     <script src="{%  static '' %}assets/js/script.js"></script>
     <script src="{%  static '' %}assets/js/custom-slick-animated.js"></script>
+ <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
 
 <!-- timer js-->
 {#    <script src="{%  static '' %}assets/js/timer1.js"></script>#}
@@ -82,3 +83,7 @@
       }(document, 'script', 'facebook-jssdk'));
     </script>
  <!-- footer end -->
+
+
+{% block javascript %}
+    {% endblock %}

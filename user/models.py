@@ -84,7 +84,7 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=200, blank=True, null=True)
     last_name = models.CharField(max_length=200, blank=True, null=True)
     phone = models.CharField(blank=True, null=True, max_length=20)
-    image = models.ImageField(upload_to='images/users/%y/%m',
+    image = models.ImageField(upload_to='images/Users/%y/%m',
                               default='images/dashboard-bases/man.png')
     facebook = models.URLField(blank=True, max_length=50)
     instagram = models.URLField(blank=True, max_length=50)

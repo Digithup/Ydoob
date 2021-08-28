@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
                 ('first_name', models.CharField(blank=True, max_length=200, null=True)),
                 ('last_name', models.CharField(blank=True, max_length=200, null=True)),
                 ('phone', models.CharField(blank=True, max_length=20, null=True)),
-                ('image', models.ImageField(default='images/dashboard-bases/man.png', upload_to='images/users/%y/%m')),
+                ('image', models.ImageField(default='images/dashboard-bases/man.png', upload_to='images/Users/%y/%m')),
                 ('facebook', models.URLField(blank=True, max_length=50)),
                 ('instagram', models.URLField(blank=True, max_length=50)),
                 ('twitter', models.URLField(blank=True, max_length=50)),

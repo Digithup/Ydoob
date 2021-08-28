@@ -86,6 +86,8 @@ def home_processors(request):
         }
     except BaseException as e:
         return {
+                   'store_owner': None,
+                   'vendor_store': None,
                    'setting_data': None,
                    'setting_data_en': None,
                    'setting_data_ar': None,

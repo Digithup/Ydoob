@@ -42,17 +42,28 @@
                                         {% if  user.seller %}
                                             {% if store_owner %}
                                                 {% for rs in store_owner %}
-                                                    {% if rs.activation %}
+
+                                                    {% if rs.activation  %}
                                                         <li>
                                                             <a href="{% url 'vendors:VendorDashboard' rs.id %}">{% translate 'Dashboard' %}</a>
                                                         </li>
-                                                        {% else %}{% if rs.status %}
+                                                        {% else %}
+
+                                                        {% if rs.status == 0  %}
                                                             <li><a href="{% url 'vendors:StoreWaiting' %}">
-                                                                <h6>{% translate 'Store need action' %}</h6></a></li>
-
-
+                                                                <h6>{% translate 'Store Disable' %}</h6></a></li>
                                                         {% endif %}
-                                                    {% endif %}{% endfor %}{% else %}
+
+
+                                                    {% endif %}
+
+                                                    {% if rs.activation == 0  and rs.status == 0 %}
+                                                        <li><a href="{% url 'vendors:StoreWaiting' %}">
+                                                                <h6>{% translate 'Store need action' %}</h6></a></li>
+                                                    {% endif %}
+
+                                                {% endfor %}
+                                            {% else %}
                                                 <li>
                                                     <a href="{% url 'vendors:CreateStore' %}">{% translate 'Create Store' %}</a>
                                                 </li>

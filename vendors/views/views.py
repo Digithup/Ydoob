@@ -53,13 +53,11 @@ def AlreadyUserSellerRegister(request, slug):
         if forms.is_valid():
 
             seller = forms.cleaned_data['seller']
-
             forms = User.objects.get(id=request.user.id)
-
             forms.seller = seller
 
             forms.save()
-            return redirect('home:index', user.slug)
+            return redirect('home:index', )
         else:
             print("Form invalid, see below error msg")
             print(request.POST)
@@ -113,7 +111,7 @@ class CreateStore(View):
         vendor_id = request.user.id
         print(request.POST)
         vendor = User.objects.filter(seller=True)
-        status = Store.objects.filter(status=False)
+        status = Store.objects.filter(status=False ,vendor_id=vendor_id)
 
         if vendor and status:
             messages.error(request,
@@ -325,12 +323,12 @@ class SellerDashboard(SellerAccountMixin, FormMixin, View):
 
     def get(self, request, *args, **kwargs):
         apply_form = self.get_form()  # NewSellerForm()
-        users = self.get_account()
-        exists = users
+        Users = self.get_account()
+        exists = Users
         active = None
         context = {}
         if exists:
-            active = users.active
+            active = Users.active
         if not exists and not active:
             context["title"] = "Apply for Account"
             context["apply_form"] = apply_form

@@ -238,7 +238,7 @@
 				// Remove the image from the gallery data array
 				this.data.splice(index, 1);
 				
-				// Remove the global rest_password
+				// Remove the global RestPassword
 				delete allImages[''+imageData.hash];
 				
 				// Remove the image's list item from the DOM

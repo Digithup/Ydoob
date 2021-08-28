@@ -10,14 +10,14 @@ from django.views import View
 from django.views.generic import UpdateView, CreateView, ListView, DetailView, DeleteView
 
 
-from user.forms.forms import UserLoginForm, UserRegisterForm
+from user.forms.forms import UserLoginForm, UserSignUpForm
 
 from user.signals import user_logged_in
 
 User = get_user_model()
 class AdminLogin(View):
     """
-    Description:Will be used to login and logout users.\n
+    Description:Will be used to login and logout Users.\n
     """
     template_name = 'admin/login.html'
 
@@ -102,10 +102,10 @@ class AdminUserCreate(View):
     """
     Description:View to create a new user.\n
     """
-    template_name = 'users/admin-user-create.html'
+    template_name = 'Users/admin-user-create.html'
 
     def get(self, request, *args, **kwargs):
-        form = UserRegisterForm()
+        form = UserSignUpForm()
         context = {
             "title": "Register",
             "form": form
@@ -113,7 +113,7 @@ class AdminUserCreate(View):
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-        form = UserRegisterForm(request.POST or None)
+        form = UserSignUpForm(request.POST or None)
         next_ = request.GET.get('next')
 
         if form.is_valid():

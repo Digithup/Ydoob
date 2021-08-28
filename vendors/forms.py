@@ -6,14 +6,14 @@ from django.shortcuts import render
 from django.utils.text import slugify
 from requests import request
 
-from user.forms.forms import UserRegisterForm
+from user.forms.forms import UserSignUpForm
 from vendors.models import Store
 
 User = get_user_model()
 
 class SellerRegisterForm(forms.ModelForm):
     """
-    Description:A form for creating new users.
+    Description:A form for creating new Users.
     Includes all the required fields, plus a repeated password
     """
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -64,20 +64,15 @@ class AlreadyUserSellerRegisterForm(forms.ModelForm):
         model = User
         # fields = '__all__'
         fields = ['seller',]
-
         def save(self, commit=True):
             """
             Description:Save the provided password in hashed format.\n
             """
             user = super(AlreadyUserSellerRegisterForm, self).save(commit=False)
-
-
             user.seller = True
             user.active = False  # send confirmation email via signals
-
             if commit:
                 user.save()
-
             return user
 
 
@@ -110,9 +105,9 @@ class StoreAddFormm(forms.ModelForm):
         if user is None:
             messages.error(
                 request, 'Account is not active,please check your email')
-            return render(request, 'users/customers/CustomerRegister.html', context={
+            return render(request, 'users/register/CustomerRegister.html', context={
                 "title": "Register",
-                "form": UserRegisterForm
+                "form": UserSignUpForm
             })
         else:
             def save(self, commit=True):

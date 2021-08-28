@@ -303,7 +303,8 @@ BASE_URL = "http://127.0.0.1:8000"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # SESSION_COOKIE_SECURE = True
-LOGIN_URL = 'login'
+LOGIN_URL = '/login'
+
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'home'
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/settings/'

@@ -54,7 +54,7 @@ def superuser_required(view_func=None, redirect_field_name=REDIRECT_FIELD_NAME,
     return actual_decorator
 
 
-def admin_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url='users:user_login'):
+def admin_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url='Users:user_login'):
     """
     Decorator for views that checks that the logged in user is a teacher,
     redirects to the log-in page if necessary.

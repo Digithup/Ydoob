@@ -1,0 +1,853 @@
+{% extends 'front/homebase.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% load i18n %}
+
+{% block body %}
+
+    <!-- breadcrumb start -->
+    <div class="breadcrumb-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="page-title">
+                        <h2>vendor dashboard</h2>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <nav aria-label="breadcrumb" class="theme-breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'home:index' %}">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Update Image</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- breadcrumb End -->
+
+
+    <!--  dashboard section start -->
+    <section class="dashboard-section section-b-space">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <form class="needs-validation" id="myform" enctype="multipart/form-data"
+                          action="{% url 'user:UpdateImage' user.slug %}"
+                          method="post">
+
+                        {% csrf_token %}
+                    <div class="error-message">
+                            {% if messages %}
+                                <ul class="messages">
+                                    {% for message in messages %}
+                                        <li {% if message.tags %}
+                                            class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {% if forms.errors %}
+                                {% for error_field, error_message in forms.errors.items %}
+                                    <div class="alert alert-danger">
+                                        {{ error_field|striptags }}: {{ error_message|striptags }}
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+
+                            {% endif %}
+                        </div>
+                        <div class="dashboard-sidebar">
+                            <div class="profile-top">
+                                <div class="metro-section portfolio-section ratio_asos">
+
+
+                                    <div class="product-box">
+                                        <div class="img-wrapper">
+                                            <div class="front">
+                                                {% if user.image %}
+                                                    <p><img src="{{ user.image.url }}" alt="" id="blah"
+                                                            class="img-fluid"></p>
+                                                {% else %}
+                                                    <p></p>
+                                                {% endif %}
+                                            </div>
+                                            <div class="cart-info cart-wrap">
+                                                <button title="Add to cart"><i class="ti-settings"></i></button>
+                                                <a href="{% url 'user:UpdateImage' user.slug %}"
+                                                   title="Add to Wishlist"><i class="ti-reload"
+                                                                              aria-hidden="true"></i></a>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row ">
+
+                                            <input type="file" required name="image"
+                                               onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])">
+
+                                            <button class="btn btn-sm btn-solid" type="submit">Save Image</button>
+
+
+                                    </div>
+
+                                </div>
+
+                                <div class="profile-detail">
+                                    <h5>{{ user.first_name }} </h5>
+
+                                    <h6>7500 followers | 10 review</h6>
+                                    <h6>{{ user.email }}</h6>
+                                </div>
+                            </div>
+                            <div class="faq-tab">
+                                <ul class="nav nav-tabs" id="top-tab" role="tablist">
+                                    <li class="nav-item"><a data-bs-toggle="tab" class="nav-link "
+                                                            href="#dashboard">dashboard</a></li>
+                                    <li class="nav-item"><a data-bs-toggle="tab" class="nav-link "
+                                                            href="#products">products</a>
+                                    </li>
+                                    <li class="nav-item"><a data-bs-toggle="tab" class="nav-link "
+                                                            href="#orders">orders</a>
+                                    </li>
+                                    <li class="nav-item"><a data-bs-toggle="tab" class="nav-link active"
+                                                            href="#profile">profile</a>
+                                    </li>
+                                    <li class="nav-item"><a data-bs-toggle="tab" class="nav-link"
+                                                            href="#settings">settings</a>
+                                    </li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="modal"
+                                                            data-bs-target="#logout"
+                                                            href="">logout</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-9">
+                    <div class="faq-content tab-content" id="top-tabContent">
+                        <div class="tab-pane fade  " id="dashboard">
+                            <div class="counter-section">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="counter-box">
+                                            <img src="{% static 'UserUpdateImage.html' %}images/icon/dashboard/order.png"
+                                                 class="img-fluid">
+                                            <div>
+
+                                                {% for rc in vendor_products_list %}
+
+
+
+                                                    <h3> {{ rc.product.products_count }}</h3>
+
+
+                                                {% endfor %}
+
+
+                                                <h5>total products</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="counter-box">
+                                            <img src="{% static 'UserUpdateImage.html' %}images/icon/dashboard/sale.png"
+                                                 class="img-fluid">
+                                            <div>
+                                                <h3>12500</h3>
+                                                <h5>total sales</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="counter-box">
+                                            <img src="{% static 'UserUpdateImage.html' %}images/icon/dashboard/homework.png"
+                                                 class="img-fluid">
+                                            <div>
+                                                <h3>50</h3>
+                                                <h5>order pending</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div id="chart"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div id="chart-order"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="card dashboard-table">
+                                        <div class="card-body">
+                                            <h3>trending products</h3>
+                                            <table class="table mb-0">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">image</th>
+                                                    <th scope="col">product name</th>
+                                                    <th scope="col">price</th>
+                                                    <th scope="col">sales</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <th scope="row"><img
+                                                            src="{% static 'UserUpdateImage.html' %}images/dashboard/product/1.jpg"
+                                                            class="blur-up lazyloaded"></th>
+                                                    <td>neck velvet dress</td>
+                                                    <td>$205</td>
+                                                    <td>1000</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row"><img
+                                                            src="{% static 'UserUpdateImage.html' %}images/dashboard/product/9.jpg"
+                                                            class="blur-up lazyloaded"></th>
+                                                    <td>belted trench coat</td>
+                                                    <td>$350</td>
+                                                    <td>800</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row"><img src="{% static 'UserUpdateImage.html' %}images/pro3/34.jpg"
+                                                                         class="blur-up lazyloaded"></th>
+                                                    <td>man print tee</td>
+                                                    <td>$150</td>
+                                                    <td>750</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="card dashboard-table">
+                                        <div class="card-body">
+                                            <h3>recent orders</h3>
+                                            <table class="table mb-0">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">order id</th>
+                                                    <th scope="col">product details</th>
+                                                    <th scope="col">status</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <th scope="row">#21515</th>
+                                                    <td>neck velvet dress</td>
+                                                    <td>confrimed</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">#78153</th>
+                                                    <td>belted trench coat</td>
+                                                    <td>shipped</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">#51512</th>
+                                                    <td>man print tee</td>
+                                                    <td>pending</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">#78153</th>
+                                                    <td>belted trench coat</td>
+                                                    <td>shipped</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">#51512</th>
+                                                    <td>man print tee</td>
+                                                    <td>pending</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="tab-pane fade  " id="products">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card dashboard-table mt-0">
+                                        <div class="card-body table-responsive-md">
+                                            <div class="top-sec">
+                                                <h3>all products</h3>
+                                                <a href="{% url 'vendors:VendorIndex' %}"
+                                                   class="btn btn-sm btn-solid">{% translate 'Go To DsshBoard' %}</a>
+                                            </div>
+                                            <table class="table mb-0">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">image</th>
+                                                    <th scope="col">product name</th>
+                                                    <th scope="col">category</th>
+                                                    <th scope="col">price</th>
+                                                    <th scope="col">stock</th>
+                                                    <th scope="col">sales</th>
+                                                    <th scope="col">edit/delete</th>
+                                                </tr>
+                                                </thead>
+
+                                                <tbody>
+
+                                                <tr>{% for rp in vendor_products_list %}
+                                                    <th scope="row"><img
+                                                            src="{{ rp.product_media.media_content }}"
+                                                            class="blur-up lazyloaded"></th>
+                                                    <td>{{ rp.product.title }}</td>
+                                                    <td>{{ rp.product.category }}</td>
+                                                    <td>${{ rp.product.product_max_price }}</td>
+                                                    <td>{{ rs.product_max_price }}</td>
+                                                    <td>{{ rp.product.seller }}</td>
+                                                    <td><i class="fa fa-pencil-square-o me-1"
+                                                           aria-hidden="true"></i><i class="fa fa-trash-o ms-1"
+                                                                                     aria-hidden="true"></i></td>
+                                                    </tr>{% endfor %}
+
+
+                                                <tr>
+                                                    <th scope="row"><img src="{% static 'UserUpdateImage.html' %}images/pro3/36.jpg"
+                                                                         class="blur-up lazyloaded"></th>
+                                                    <td>men print tee</td>
+                                                    <td>men clothes</td>
+                                                    <td>$150</td>
+                                                    <td>750</td>
+                                                    <td>150</td>
+                                                    <td><i class="fa fa-pencil-square-o me-1"
+                                                           data-action="{% url 'vendors:VendorIndex' %}"
+                                                           href="{% url 'vendors:VendorIndex' %}"
+                                                           aria-hidden="false"></i><i class="fa fa-trash-o ms-1"
+                                                                                      aria-hidden="true"></i></td>
+                                                </tr>
+                                                </tbody>
+
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="orders">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card dashboard-table mt-0">
+                                        <div class="card-body table-responsive-sm">
+                                            <div class="top-sec">
+                                                <h3>orders</h3>
+                                                <a href="#" class="btn btn-sm btn-solid">add product</a>
+                                            </div>
+                                            <table class="table mb-0">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">order id</th>
+                                                    <th scope="col">product details</th>
+                                                    <th scope="col">status</th>
+                                                    <th scope="col">price</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <th scope="row">#125021</th>
+                                                    <td>neck velvet dress</td>
+                                                    <td>shipped</td>
+                                                    <td>$205</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">#521214</th>
+                                                    <td>belted trench coat</td>
+                                                    <td>shipped</td>
+                                                    <td>$350</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">#521021</th>
+                                                    <td>men print tee</td>
+                                                    <td>pending</td>
+                                                    <td>$150</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">#245021</th>
+                                                    <td>woman print tee</td>
+                                                    <td>shipped</td>
+                                                    <td>$150</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">#122141</th>
+                                                    <td>men print tee</td>
+                                                    <td>canceled</td>
+                                                    <td>$150</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">#125015</th>
+                                                    <td>men print tee</td>
+                                                    <td>pending</td>
+                                                    <td>$150</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">#245021</th>
+                                                    <td>woman print tee</td>
+                                                    <td>shipped</td>
+                                                    <td>$150</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">#122141</th>
+                                                    <td>men print tee</td>
+                                                    <td>canceled</td>
+                                                    <td>$150</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">#125015</th>
+                                                    <td>men print tee</td>
+                                                    <td>pending</td>
+                                                    <td>$150</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade show active " id="profile">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card mt-0">
+                                        <div class="card-body">
+                                            <div class="dashboard-box">
+                                                <div class="dashboard-title row">
+                                                    <h4 class="col-md-4">profile</h4>
+                                                    <div class="col-md-6 pull-right">
+
+                                                        <a href="{% url 'user:UpdateProfile' user.slug %}"
+                                                           class="btn btn-solid">Edit Store Information</a></div>
+                                                </div>
+                                                <div class="dashboard-detail">
+                                                    <ul>
+                                                        <li>
+                                                            <div class="details">
+                                                                <div class="left">
+                                                                    <h6>First name</h6>
+                                                                </div>
+                                                                <div class="right">
+                                                                    <h6>{{ user.first_name }}</h6>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="details">
+                                                                <div class="left">
+                                                                    <h6>email address</h6>
+                                                                </div>
+                                                                <div class="right">
+                                                                    <h6>{{ user.email }}</h6>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="details">
+                                                                <div class="left">
+                                                                    <h6>Country / Region</h6>
+                                                                </div>
+                                                                <div class="right">
+                                                                    <h6>{{ user.country }}</h6>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="details">
+                                                                <div class="left">
+                                                                    <h6>Facebok</h6>
+                                                                </div>
+                                                                <div class="right">
+                                                                    <h6>{{ user.facebook }}</h6>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="details">
+                                                                <div class="left">
+                                                                    <h6>Total Employees</h6>
+                                                                </div>
+                                                                <div class="right">
+                                                                    <h6>101 - 200 People</h6>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="details">
+                                                                <div class="left">
+                                                                    <h6>category</h6>
+                                                                </div>
+                                                                <div class="right">
+                                                                    <h6>{{ rs.store.email }}</h6>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="details">
+                                                                <div class="left">
+                                                                    <h6>street address</h6>
+                                                                </div>
+                                                                <div class="right">
+                                                                    <h6>{{ rs.store.address }}</h6>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="details">
+                                                                <div class="left">
+                                                                    <h6>city/state</h6>
+                                                                </div>
+                                                                <div class="right">
+                                                                    <h6>Downers Grove, IL</h6>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="details">
+                                                                <div class="left">
+                                                                    <h6>zip</h6>
+                                                                </div>
+                                                                <div class="right">
+                                                                    <h6>60515</h6>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="settings">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card mt-0">
+                                        <div class="card-body">
+                                            <div class="dashboard-box">
+                                                <div class="dashboard-title">
+                                                    <h4>settings</h4>
+                                                </div>
+                                                <div class="dashboard-detail">
+                                                    <div class="account-setting">
+                                                        <h5>Notifications</h5>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <div class="form-check">
+                                                                    <input class="radio_animated form-check-input"
+                                                                           type="radio" name="exampleRadios"
+                                                                           id="exampleRadios1" value="option1"
+                                                                           checked>
+                                                                    <label class="form-check-label"
+                                                                           for="exampleRadios1">
+                                                                        Allow Desktop Notifications
+                                                                    </label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="radio_animated form-check-input"
+                                                                           type="radio" name="exampleRadios"
+                                                                           id="exampleRadios2" value="option2">
+                                                                    <label class="form-check-label"
+                                                                           for="exampleRadios2">
+                                                                        Enable Notifications
+                                                                    </label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="radio_animated form-check-input"
+                                                                           type="radio" name="exampleRadios"
+                                                                           id="exampleRadios3" value="option3">
+                                                                    <label class="form-check-label"
+                                                                           for="exampleRadios3">
+                                                                        Get notification for my own activity
+                                                                    </label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="radio_animated form-check-input"
+                                                                           type="radio" name="exampleRadios"
+                                                                           id="exampleRadios4" value="option4">
+                                                                    <label class="form-check-label"
+                                                                           for="exampleRadios4">
+                                                                        DND
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="account-setting">
+                                                        <h5>deactivate account</h5>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <div class="form-check">
+                                                                    <input class="radio_animated form-check-input"
+                                                                           type="radio" name="exampleRadios1"
+                                                                           id="exampleRadios4" value="option4"
+                                                                           checked>
+                                                                    <label class="form-check-label"
+                                                                           for="exampleRadios4">
+                                                                        I have a privacy concern
+                                                                    </label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="radio_animated form-check-input"
+                                                                           type="radio" name="exampleRadios1"
+                                                                           id="exampleRadios5" value="option5">
+                                                                    <label class="form-check-label"
+                                                                           for="exampleRadios5">
+                                                                        This is temporary
+                                                                    </label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="radio_animated form-check-input"
+                                                                           type="radio" name="exampleRadios1"
+                                                                           id="exampleRadios6" value="option6">
+                                                                    <label class="form-check-label"
+                                                                           for="exampleRadios6">
+                                                                        other
+                                                                    </label>
+                                                                </div>
+                                                                <button type="button"
+                                                                        class="btn btn-solid btn-xs">Deactivate
+                                                                    Account
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="account-setting">
+                                                        <h5>Delete account</h5>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <div class="form-check">
+                                                                    <input class="radio_animated form-check-input"
+                                                                           type="radio" name="exampleRadios3"
+                                                                           id="exampleRadios7" value="option7"
+                                                                           checked>
+                                                                    <label class="form-check-label"
+                                                                           for="exampleRadios7">
+                                                                        No longer usable
+                                                                    </label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="radio_animated form-check-input"
+                                                                           type="radio" name="exampleRadios3"
+                                                                           id="exampleRadios8" value="option8">
+                                                                    <label class="form-check-label"
+                                                                           for="exampleRadios8">
+                                                                        Want to switch on other account
+                                                                    </label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="radio_animated form-check-input"
+                                                                           type="radio" name="exampleRadios3"
+                                                                           id="exampleRadios9" value="option9">
+                                                                    <label class="form-check-label"
+                                                                           for="exampleRadios9">
+                                                                        other
+                                                                    </label>
+                                                                </div>
+                                                                <button type="button"
+                                                                        class="btn btn-solid btn-xs">Delete Account
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--  dashboard section end -->
+
+
+    <!-- Modal start -->
+    <div class="modal logout-modal fade" id="logout" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Logging Out</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Do you want to log out?
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-dark btn-custom" data-bs-dismiss="modal">no</a>
+                    <a href="index.html" class="btn btn-solid btn-custom">yes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modal end -->
+
+
+
+{% endblock %}
+
+
+
+{% block custom_js %}
+    <script src="//cdn.tiny.cloud/1/u6oa5pnpaa1vxho1md7uk4zmq2ai7xuf5o5wfgyrc131vpj6/tinymce/5/tinymce.min.js"
+            referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: "textarea#long_desc",
+            height: 300,
+            plugins: [
+                "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+                "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime nonbreaking",
+                "save table contextmenu directionality emoticons template paste textcolor",
+            ],
+            images_upload_url: "{% url 'core:file_upload' %}",
+            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",
+            style_formats: [
+                {title: "Bold text", inline: "b"},
+                {title: "Red text", inline: "span", styles: {color: "#ff0000"}},
+                {title: "Red header", block: "h1", styles: {color: "#ff0000"}},
+                {title: "Example 1", inline: "span", classes: "example1"},
+                {title: "Example 2", inline: "span", classes: "example2"},
+                {title: "Table styles"},
+                {title: "Table row 1", selector: "tr", classes: "tablerow1"},
+            ],
+            automatic_uploads: true,
+            file_picker_types: 'image',
+            file_picker_callback: function (cb, value, meta) {
+                var input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*');
+
+                /*
+                Note: In modern browsers input[type="file"] is functional without
+                even adding it to the DOM, but that might not be the case in some older
+                or quirky browsers like IE, so you might want to add it to the DOM
+                just in case, and visually hide it. And do not forget do remove it
+                once you do not need it anymore.
+                */
+
+                input.onchange = function () {
+                    var file = this.files[0];
+
+                    var reader = new FileReader();
+                    reader.onload = function () {
+                        /*
+                        Note: Now we need to register the blob in TinyMCEs image blob
+                        registry. In the next release this part hopefully won't be
+                        necessary, as we are looking to handle it internally.
+                        */
+                        var id = 'blobid' + (new Date()).getTime();
+                        var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                        var base64 = reader.result.split(',')[1];
+                        var blobInfo = blobCache.create(id, file, base64);
+                        blobCache.add(blobInfo);
+
+                        /* call the callback and populate the Title field with the file name */
+                        cb(blobInfo.blobUri(), {title: file.name});
+                    };
+                    reader.readAsDataURL(file);
+                };
+
+                input.click();
+            },
+        });
+    </script>
+    <script>
+        $(".add_media").click(function () {
+            var media_row = $(".first_media").clone();
+            media_row.removeClass("first_media");
+            media_row.replaceAll("src", "")
+            media_row.find(".select_media").val("");
+            media_row.find(".img_preview").attr("src", "").css({"border": "none"}).css({"border-radius": "0px"}).hide();
+            media_row.find(".video_preview").attr("src", "").css({"border": "none"}).css({"border-radius": "0px"}).hide();
+            $(".media_div").append(media_row);
+        });
+        $(".remove_media").click(function () {
+            if ($(".media_div").find(".media_div_row").length > 1) {
+                $(".media_div").children().last().remove();
+            }
+        });
+
+        $(".add_details").click(function () {
+            var details_row = $(".first_details").clone();
+            details_row.removeClass("first_details");
+            details_row.find(".title_title").val("");
+            details_row.find(".title_details").val("");
+            $(".details_div").append(details_row);
+        });
+        $(".remove_details").click(function () {
+            if ($(".details_div").find(".details_div_row").length > 1) {
+                $(".details_div").children().last().remove();
+            }
+        });
+
+        $(".add_about").click(function () {
+            var about_row = $(".first_about").clone();
+            about_row.removeClass("first_about");
+            about_row.find(".about_title").val("");
+            $(".about_div").append(about_row);
+        });
+        $(".remove_about").click(function () {
+            if ($(".about_div").find(".about_div_row").length > 1) {
+                $(".about_div").children().last().remove();
+            }
+        });
+
+        $(document).on("change", ".select_media", function () {
+            var media_type = $(this).parents(".media_div_row").find(".media_type").val();
+            var img_preview = $(this).parents(".media_div_row").find(".img_preview");
+            var vid_preview = $(this).parents(".media_div_row").find(".video_preview");
+            showPreviewMedia(this, media_type, img_preview, vid_preview);
+        });
+
+        function showPreviewMedia(input, media_type, img_preview, video_preview) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    if (media_type == "1") {
+                        img_preview.attr("src", e.target.result);
+                        img_preview.show();
+                        img_preview.css({"border": "5px solid orange"});
+                        img_preview.css({"border-radius": "10px"});
+                    }
+                    if (media_type == "2") {
+                        video_preview.show();
+                        video_preview.css({"border": "5px solid orange"});
+                        video_preview.css({"border-radius": "10px"});
+                        video_preview.attr("src", e.target.result);
+                        video_preview.load();
+                        video_preview.play();
+
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+    </script>
+    <script src="//bootstrap-tagsinput.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+{% endblock custom_js %}
+
+
+{% block foot %} {% include 'front/footer.html' %}  {% endblock %}
+{% block js %} {% include 'front/js.html' %}  {% endblock %}
