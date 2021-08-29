@@ -24,7 +24,7 @@ class Store(models.Model):
     company = models.CharField(max_length=50, default=' ', null=True)
     about = RichTextUploadingField(blank=True, default='', null=True)
     keywords = models.CharField(max_length=255 , default=' ' , null=True)
-    slug = models.SlugField(null=False)
+    slug = models.SlugField(null=False,blank=False,unique=True)
     country = models.CharField(blank=True, max_length=100, default=' ', null=True)
     city = models.CharField(blank=True, max_length=100, default=' ', null=True)
     address = models.CharField(blank=True, max_length=100 , default=' ', null=True)
@@ -66,8 +66,6 @@ def image_directory_path(instance, filename):
 class StoreMedia(models.Model):
     id=models.AutoField(primary_key=True)
     store_id=models.ForeignKey(Store,on_delete=models.CASCADE ,)
-    media_type_choice=((1,"Image"),(2,"Video"))
-    media_type=models.CharField(max_length=255)
     media_content=models.FileField(upload_to=image_directory_path ,verbose_name="Store Logo" )
     created_at=models.DateTimeField(auto_now_add=True)
     is_active=models.IntegerField(default=1)

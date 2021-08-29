@@ -12,7 +12,8 @@ from catalog.models.models import Categories, Products, ProductMedia, VariantDet
 # if hasattr(request.user, 'lang'):
 #   request.session['django_language'] = request.user.lang
 
-
+def error403(request):
+    return render(request, 'front/ErrorPage/403.html', )
 def index(request):
     all_category = Categories.objects.all()
     data = Products.objects.filter(is_featured=True).order_by('-id')

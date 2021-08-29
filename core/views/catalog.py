@@ -3,6 +3,7 @@ import json
 
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q, Count
@@ -11,6 +12,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DeleteView, DetailView, UpdateView, CreateView
@@ -22,6 +24,7 @@ from catalog.models.models import Categories, Products, ProductMedia, ProductTag
     ProductTransaction, AttributesDetails, OptionsDetails, VariantDetails
 from catalog.models.product_options import Manufacturer, FiltersGroup, Filters, AttributesGroup, Attributes, Options, \
     OptionsType, Color, Size
+from core.decorators import admin_required, allow_user, admin_only, allowed_users
 from core.forms.forms import SearchForm
 from core.models.setting import Setting
 from localization.models import Language
@@ -29,6 +32,10 @@ from localization.models import Language
 from vendors.models import Store
 User = get_user_model()
 
+
+# @admin_required
+@login_required(login_url='/login')
+@allowed_users(allowed_roles=['admin'])
 def AdminIndex(request):
     categories = Categories.objects.all()
     products = Products.objects.all()
@@ -50,7 +57,8 @@ def AdminIndex(request):
     }
     return render(request, 'admin/index.html', context)
 
-
+@login_required(login_url='/login')
+@allowed_users(allowed_roles=['admin'])
 def categories(request):
     category = Categories.objects.all().annotate(product=Count('products'))
     context = {
@@ -58,7 +66,8 @@ def categories(request):
     }
     return render(request, 'catalog/category/admin-category.html', context)
 
-
+@login_required(login_url='/login')
+@allowed_users(allowed_roles=['admin'])
 def AddCategory(request):
     if request.method == "POST":
         print(request)
@@ -124,20 +133,32 @@ class EditCategory(UpdateView):
     success_url = reverse_lazy('core:categories')
 
 
-class DeleteCategory(DeleteView):
-    model = Categories
-    fields = '__all__'
-
-    success_url = reverse_lazy('core:categories')
-
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(EditCategory, self).dispatch(*args, **kwargs)
+
+
+class DeleteCategory(DeleteView):
+    model = Categories
+    fields = '__all__'
+    success_url = reverse_lazy('core:categories')
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(DeleteCategory, self).dispatch(*args, **kwargs)
+
 
 ############## Products   ################
+
+@login_required(login_url='/login')
+@allowed_users(allowed_roles=['admin'])
 def Products_admin(request):
     products = Products.objects.filter(status='True')
-
     context = {
         'products': products,
 
@@ -150,6 +171,10 @@ class ProductsDetailView(DetailView):
     context_object_name = 'Products'
     template_name = 'catalog/product/product-detail.html'
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(ProductsDetailView, self).dispatch(*args, **kwargs)
+
 
 class ProductsDeleted(DeleteView):
     model = Products
@@ -159,24 +184,12 @@ class ProductsDeleted(DeleteView):
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(ProductsDeleted, self).dispatch(*args, **kwargs)
 
-def getNoteResponseData(Product, tags, Products_created):
-    date = datetime.datetime.now().strftime('%B') + " " + datetime.datetime.now().strftime(
-        '%d') + ", " + datetime.datetime.now().strftime('%Y')
-    Product.refresh_from_db()
-    response_data = {
-        "id": Product.id,
-        "title": Product.title,
-        "keywords": Product.product_description,
-        "price": Products.price,
-        "tags": tags,
-        "last_mod": date,
 
-    }
-    # return JsonResponse(response_data)
-    # template_name = 'admin/pages/message/category_confirm_delete.html'
-    # success_url = reverse_lazy('core:category_admin')
-    return render(Products_created, 'catalog/product/admin-products.html')
+
 
 
 class ProductsList(ListView):
@@ -206,13 +219,18 @@ class ProductsList(ListView):
         context["all_table_fields"] = Products._meta.get_fields()
         return context
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(ProductsList, self).dispatch(*args, **kwargs)
+
 
 def load_option(request):
     option_type_id = request.GET.get('option_type')
     options = Options.objects.filter(option_type_id=option_type_id).order_by('title')
     return render(request, 'catalog/option/option_dropdown_list_options.html', {'options': options})
 
-
+@login_required(login_url='/login')
+@allowed_users(allowed_roles=['admin'])
 def ProductAdd(request):  # sourcery skip: aug-assign, convert-to-enumerate
     filters = Filters.objects.all()
     manufacturer = Manufacturer.objects.all()
@@ -367,7 +385,6 @@ def ProductAdd(request):  # sourcery skip: aug-assign, convert-to-enumerate
 
 
 class ProductUpdate(View):
-
     def get(self, request, *args, **kwargs):
         product_id = kwargs["product_id"]
         product = Products.objects.get(id=product_id)
@@ -492,6 +509,9 @@ def to_json(self, objects):
     return serializers.serialize('json', objects)
 
 
+
+@login_required(login_url='/login')
+@allowed_users(allowed_roles=['admin'])
 @csrf_exempt
 def file_upload(request):
     file = request.FILES["file"]
@@ -517,6 +537,10 @@ class ManufacturerListView(ListView):
         context['now'] = timezone.now()
         return context
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(ManufacturerListView, self).dispatch(*args, **kwargs)
+
 
 class ManufacturerDetail(DetailView):
     model = Manufacturer
@@ -527,6 +551,10 @@ class ManufacturerDetail(DetailView):
         context['now'] = timezone.now()
         return context
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(ManufacturerDetail, self).dispatch(*args, **kwargs)
+
 
 class AddManufacture(CreateView):
     model = Manufacturer
@@ -534,12 +562,20 @@ class AddManufacture(CreateView):
     template_name = 'catalog/manufacture/add-manufacture.html'
     success_url = reverse_lazy('core:Manufacturers')
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(AddManufacture, self).dispatch(*args, **kwargs)
+
 
 class EditManufacture(UpdateView):
     model = Manufacturer
     fields = '__all__'
     template_name = 'catalog/manufacture/edit-manufacture.html'
     success_url = reverse_lazy('core:Manufacturers')
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(EditManufacture, self).dispatch(*args, **kwargs)
 
 
 class DeleteManufacture(DeleteView):
@@ -549,6 +585,10 @@ class DeleteManufacture(DeleteView):
 
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(DeleteManufacture, self).dispatch(*args, **kwargs)
 
 
 ############## Filters #######################
@@ -563,6 +603,10 @@ class FiltersGroupListView(ListView):
         context['now'] = timezone.now()
         return context
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(FiltersGroupListView, self).dispatch(*args, **kwargs)
+
 
 class FiltersGroupDetailView(DetailView):
     model = FiltersGroup
@@ -572,12 +616,20 @@ class FiltersGroupDetailView(DetailView):
         context['now'] = timezone.now()
         return context
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(FiltersGroupDetailView, self).dispatch(*args, **kwargs)
+
 
 class AddFiltersGroup(CreateView):
     model = FiltersGroup
     fields = '__all__'
     template_name = 'catalog/manufacture/add-manufacture.html'
     success_url = reverse_lazy('core:Filters')
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(AddFiltersGroup, self).dispatch(*args, **kwargs)
 
 
 class EditFiltersGroup(UpdateView):
@@ -586,14 +638,25 @@ class EditFiltersGroup(UpdateView):
     template_name = 'catalog/manufacture/edit-manufacture.html'
     success_url = reverse_lazy('core:Filters')
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(EditFiltersGroup, self).dispatch(*args, **kwargs)
+
 
 class DeleteFiltersGroup(DeleteView):
     model = FiltersGroup
     fields = '__all__'
     success_url = reverse_lazy('core:Filters')
 
+
+
+
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(DeleteFiltersGroup, self).dispatch(*args, **kwargs)
 
 
 class FiltersListView(ListView):
@@ -606,6 +669,10 @@ class FiltersListView(ListView):
         context['now'] = timezone.now()
         return context
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(FiltersListView, self).dispatch(*args, **kwargs)
+
 
 class FilterDetailView(DetailView):
     model = Filters
@@ -615,8 +682,17 @@ class FilterDetailView(DetailView):
         context['now'] = timezone.now()
         return context
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(FilterDetailView, self).dispatch(*args, **kwargs)
+
 
 class AddFilter(View):
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(AddFilter, self).dispatch(*args, **kwargs)
+
+
     def get(self, request, *args, **kwargs):
         filters_group = FiltersGroup.objects.all()
 
@@ -628,7 +704,6 @@ class AddFilter(View):
         sort_order = request.POST.get("sort_order")
         title_list = request.POST.getlist("title[]")
         sort_order_list = request.POST.getlist("sort[]")
-
         filters_group = FiltersGroup(title=title, sort_order=sort_order)
         filters_group.save()
 
@@ -649,6 +724,10 @@ class EditFilter(UpdateView):
     template_name = 'catalog/filter/edit-filter.html'
     success_url = reverse_lazy('core:Filters')
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(EditFilter, self).dispatch(*args, **kwargs)
+
 
 class DeleteFilter(DeleteView):
     model = Filters
@@ -657,6 +736,10 @@ class DeleteFilter(DeleteView):
 
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(DeleteFilter, self).dispatch(*args, **kwargs)
 
 
 ############## Attribute  #######################
@@ -671,6 +754,10 @@ class AttributesGroupListView(ListView):
         context['now'] = timezone.now()
         return context
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(AttributesGroupListView, self).dispatch(*args, **kwargs)
+
 
 class AttributesGroupDetailView(DetailView):
     model = AttributesGroup
@@ -680,6 +767,10 @@ class AttributesGroupDetailView(DetailView):
         context['now'] = timezone.now()
         return context
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(AttributesGroupDetailView, self).dispatch(*args, **kwargs)
+
 
 class AddAttributesGroup(CreateView):
     model = AttributesGroup
@@ -687,12 +778,20 @@ class AddAttributesGroup(CreateView):
     template_name = 'catalog/attribute/add-attribute-group.html'
     success_url = reverse_lazy('core:Attributes')
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(AddAttributesGroup, self).dispatch(*args, **kwargs)
+
 
 class EditAttributesGroup(UpdateView):
     model = AttributesGroup
     fields = '__all__'
     template_name = 'catalog/manufacture/edit-manufacture.html'
     success_url = reverse_lazy('core:Attributes')
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(EditAttributesGroup, self).dispatch(*args, **kwargs)
 
 
 class DeleteAttributesGroup(DeleteView):
@@ -702,6 +801,10 @@ class DeleteAttributesGroup(DeleteView):
 
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(DeleteAttributesGroup, self).dispatch(*args, **kwargs)
 
 
 class AttributeListView(ListView):
@@ -714,6 +817,10 @@ class AttributeListView(ListView):
         context['now'] = timezone.now()
         return context
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(AttributeListView, self).dispatch(*args, **kwargs)
+
 
 class AttributeDetailView(DetailView):
     model = Filters
@@ -723,8 +830,13 @@ class AttributeDetailView(DetailView):
         context['now'] = timezone.now()
         return context
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(AttributeDetailView, self).dispatch(*args, **kwargs)
+
 
 class AddAttribute(View):
+
     def get(self, request, *args, **kwargs):
         attributes_group = AttributesGroup.objects.all()
 
@@ -753,12 +865,20 @@ class AddAttribute(View):
         # return HttpResponse("OK")
         return HttpResponseRedirect(reverse_lazy('core:Attributes'))
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(AddAttribute, self).dispatch(*args, **kwargs)
+
 
 class EditAttribute(UpdateView):
     model = Attributes
     fields = '__all__'
     template_name = 'catalog/attribute/edit-attribute.html'
     success_url = reverse_lazy('core:Attributes')
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(EditAttribute, self).dispatch(*args, **kwargs)
 
 
 class DeleteAttribute(DeleteView):
@@ -768,6 +888,10 @@ class DeleteAttribute(DeleteView):
 
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(DeleteAttribute, self).dispatch(*args, **kwargs)
 
 
 ############## Options  #######################
@@ -782,6 +906,10 @@ class OptionsTypeListView(ListView):
         context['now'] = timezone.now()
         return context
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(OptionsTypeListView, self).dispatch(*args, **kwargs)
+
 
 class OptionsTypeDetailView(DetailView):
     model = OptionsType
@@ -791,6 +919,10 @@ class OptionsTypeDetailView(DetailView):
         context['now'] = timezone.now()
         return context
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(OptionsTypeDetailView, self).dispatch(*args, **kwargs)
+
 
 class AddOptionsType(CreateView):
     model = OptionsType
@@ -798,12 +930,20 @@ class AddOptionsType(CreateView):
     template_name = 'catalog/option/add-option-type.html'
     success_url = reverse_lazy('core:Options')
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(AddOptionsType, self).dispatch(*args, **kwargs)
+
 
 class EditOptionsType(UpdateView):
     model = OptionsType
     fields = '__all__'
     template_name = 'catalog/option/edit-option.html'
     success_url = reverse_lazy('core:Attributes')
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(EditOptionsType, self).dispatch(*args, **kwargs)
 
 
 class DeleteOptionsType(DeleteView):
@@ -813,6 +953,10 @@ class DeleteOptionsType(DeleteView):
 
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(DeleteOptionsType, self).dispatch(*args, **kwargs)
 
 
 class OptionsListView(ListView):
@@ -825,6 +969,10 @@ class OptionsListView(ListView):
         context['now'] = timezone.now()
         return context
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(OptionsListView, self).dispatch(*args, **kwargs)
+
 
 class OptionDetailView(DetailView):
     model = Options
@@ -833,6 +981,10 @@ class OptionDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['now'] = timezone.now()
         return context
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(OptionDetailView, self).dispatch(*args, **kwargs)
 
 
 class AddOption(View):
@@ -865,12 +1017,20 @@ class AddOption(View):
         # return HttpResponse("OK")
         return HttpResponseRedirect(reverse_lazy('core:Options'))
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(AddOption, self).dispatch(*args, **kwargs)
+
 
 class EditOption(UpdateView):
     model = Options
     fields = '__all__'
     template_name = 'catalog/option/edit-option.html'
     success_url = reverse_lazy('core:Options')
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(EditOption, self).dispatch(*args, **kwargs)
 
 
 class DeleteOption(DeleteView):
@@ -880,6 +1040,10 @@ class DeleteOption(DeleteView):
 
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(DeleteOption, self).dispatch(*args, **kwargs)
 
 
 ############## Color  #######################
@@ -895,6 +1059,10 @@ class VariantListView(ListView):
         context['size'] = Size.objects.all()
         return context
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(VariantListView, self).dispatch(*args, **kwargs)
+
 
 class ColorListView(ListView):
     model = Color
@@ -906,6 +1074,10 @@ class ColorListView(ListView):
         context['now'] = timezone.now()
         return context
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(ColorListView, self).dispatch(*args, **kwargs)
+
 
 class ColorDetailView(DetailView):
     model = Color
@@ -915,7 +1087,12 @@ class ColorDetailView(DetailView):
         context['now'] = timezone.now()
         return context
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(ColorDetailView, self).dispatch(*args, **kwargs)
 
+@login_required(login_url='/login')
+@allowed_users(allowed_roles=['admin'])
 def AddColor(request):  # sourcery skip: aug-assign, convert-to-enumerate
 
     color = Color.objects.all()
@@ -954,6 +1131,8 @@ def AddColor(request):  # sourcery skip: aug-assign, convert-to-enumerate
                   {'color_form': color_form, 'color': color, }
                   )
 
+
+
     # return HttpResponse("OK")
     # return redirect(reverse('vendors:ProductsList'))
 
@@ -964,6 +1143,10 @@ class EditColor(UpdateView):
     template_name = 'catalog/variant/color/edit-color.html'
     success_url = reverse_lazy('core:Color')
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(EditColor, self).dispatch(*args, **kwargs)
+
 
 class DeleteColor(DeleteView):
     model = Color
@@ -972,6 +1155,10 @@ class DeleteColor(DeleteView):
 
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(DeleteColor, self).dispatch(*args, **kwargs)
 
 
 ############## Color  #######################
@@ -986,6 +1173,10 @@ class SizeListView(ListView):
         context['now'] = timezone.now()
         return context
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(SizeListView, self).dispatch(*args, **kwargs)
+
 
 class SizeDetailView(DetailView):
     model = Size
@@ -995,7 +1186,12 @@ class SizeDetailView(DetailView):
         context['now'] = timezone.now()
         return context
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(SizeDetailView, self).dispatch(*args, **kwargs)
 
+@login_required(login_url='/login')
+@allowed_users(allowed_roles=['admin'])
 def AddSize(request):  # sourcery skip: aug-assign, convert-to-enumerate
 
     size = Size.objects.all()
@@ -1044,6 +1240,10 @@ class EditSize(UpdateView):
     template_name = 'catalog/variant/size/edit-size.html'
     success_url = reverse_lazy('core:Size')
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(EditSize, self).dispatch(*args, **kwargs)
+
 
 class DeleteSize(DeleteView):
     model = Color
@@ -1052,3 +1252,7 @@ class DeleteSize(DeleteView):
 
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(DeleteSize, self).dispatch(*args, **kwargs)

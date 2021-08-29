@@ -1,20 +1,24 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.utils.http import is_safe_url
 from django.views import View
 from django.views.generic import UpdateView, CreateView, ListView, DetailView, DeleteView
 
-
+from core.decorators import allowed_users
 from user.forms.forms import UserLoginForm, UserSignUpForm
 
 from user.signals import user_logged_in
 
 User = get_user_model()
+
+
 class AdminLogin(View):
     """
     Description:Will be used to login and logout Users.\n
@@ -70,7 +74,12 @@ class AdminLogin(View):
         }
         return render(request, self.template_name, context)
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(AdminLogin, self).dispatch(*args, **kwargs)
 
+@login_required(login_url='/login')
+@allowed_users(allowed_roles=['admin'])
 def AdminLogout(request):
     logout(request)
     messages.success(request, "Logout Successfully!")
@@ -87,6 +96,10 @@ class AdminUsersList(ListView):
         context['now'] = timezone.now()
         return context
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(AdminUsersList, self).dispatch(*args, **kwargs)
+
 
 class AdminUserDetail(DetailView):
     model = User
@@ -96,6 +109,10 @@ class AdminUserDetail(DetailView):
         context = super().get_context_data(**kwargs)
         context['now'] = timezone.now()
         return context
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(AdminUserDetail, self).dispatch(*args, **kwargs)
 
 
 class AdminUserCreate(View):
@@ -133,12 +150,20 @@ class AdminUserCreate(View):
         }
         return render(request, self.template_name, context)
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(AdminUserCreate, self).dispatch(*args, **kwargs)
+
 
 class AdminUserEdit(UpdateView):
     model = User
     fields = '__all__'
     template_name = 'users/admin-user-edit.html'
     success_url = reverse_lazy('core:AdminUsersList')
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(AdminUserEdit, self).dispatch(*args, **kwargs)
 
 
 class AdminUserDelete(DeleteView):
@@ -148,3 +173,51 @@ class AdminUserDelete(DeleteView):
 
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(AdminUserDelete, self).dispatch(*args, **kwargs)
+
+
+class AdminUserGroupList(ListView):
+    model= Group
+    template_name = 'users/UserGroup/admin-group-list.html'
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(AdminUserGroupList, self).dispatch(*args, **kwargs)
+
+
+class AdminUserGroupCreate(CreateView):
+    model = Group
+    fields = '__all__'
+    template_name = 'users/UserGroup/admin-group-create.html'
+    success_url = reverse_lazy('core:AdminUserGroupList')
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(AdminUserGroupCreate, self).dispatch(*args, **kwargs)
+
+class AdminUserGroupEdit(UpdateView):
+    model = Group
+    fields = '__all__'
+    template_name = 'users/UserGroup/admin-group-edit.html'
+    success_url = reverse_lazy('core:AdminUserGroupList')
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(AdminUserGroupEdit, self).dispatch(*args, **kwargs)
+
+
+class AdminUserGroupDelete(DeleteView):
+    model = Group
+    fields = '__all__'
+    success_url = reverse_lazy('core:AdminUserGroupList')
+
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(AdminUserGroupDelete, self).dispatch(*args, **kwargs)
+

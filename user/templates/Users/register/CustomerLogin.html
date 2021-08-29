@@ -49,7 +49,7 @@
                                 </div>
                             {% endfor %}
                         {% endif %}
-                       <form class="theme-form" action="{% url 'user:CustomerLogin' %}" method="post">
+                        <form class="theme-form" action="{% url 'user:CustomerLogin' %}" method="post">
                             {% csrf_token %}
                             <div>
                                 {{ form|as_crispy_errors:"bootstrap4" }}</div>
@@ -73,17 +73,20 @@
                                     </button>
                                 </a>
                             </div>
-                       <div class="form-footer">
-                                            <span>Or Login up with social platforms</span>
+                            <div class="form-footer">
+                                <span>Or Login up with social platforms</span>
 
-                                            <ul class="social">
-                                                <li><strong><a class="fa fa-facebook-f" href="{% url 'social:begin' 'facebook' %}"></a></strong></li>
-                                                <button type="button" class=" btn fa fa-facebook-f">{% trans "Login" %}</button>
-                                                <li><a class="icon-twitter" href=""></a><button type="button" class="btn fa fa-facebook-f">{% trans "Login" %}</button></li>
-                                                <li><a class="icon-instagram" href=""></a></li>
-                                                <li><a class="icon-pinterest" href=""></a></li>
-                                            </ul>
-                                        </div>
+                                <ul class="social">
+                                    <li><strong><a class="fa fa-facebook-f"
+                                                   href="{% url 'social:begin' 'facebook' %}"></a></strong></li>
+                                    <button type="button" class=" btn fa fa-facebook-f">{% trans "Login" %}</button>
+                                    <li><a class="icon-twitter" href=""></a>
+                                        <button type="button" class="btn fa fa-facebook-f">{% trans "Login" %}</button>
+                                    </li>
+                                    <li><a class="icon-instagram" href=""></a></li>
+                                    <li><a class="icon-pinterest" href=""></a></li>
+                                </ul>
+                            </div>
 
 
                         </form>
@@ -93,23 +96,23 @@
                 </div>
                 <div class="col-md-6 ">
 
-                        <h3>New Customer</h3>
-                        <div class="theme-card authentication-right">
-                            <h6 class="title-font">Create Account</h6>
-                            <p>Sign up for a free account at our store. Registration is quick and easy.</p><a
-                                href="{% url 'user:CustomerRegister' %}"
-                                class="btn btn-solid">Create Account</a>
+                    <h3>New Customer</h3>
+                    <div class="theme-card authentication-right">
+                        <h6 class="title-font">Create Account</h6>
+                        <p>Sign up for a free account at our store. Registration is quick and easy.</p><a
+                            href="{% url 'user:CustomerRegister' %}"
+                            class="btn btn-solid">Create Account</a>
 
-                            <h6 class="title-font">Create Seller</h6>
-                            <p>Sign up for a free account at our store. Registration is quick and easy.</p><a
-                                href="{% url 'vendors:SellerRegister' %}"
-                                class="btn btn-solid">Create Seller</a>
+                        <h6 class="title-font">Create Seller</h6>
+                        <p>Sign up for a free account at our store. Registration is quick and easy.</p><a
+                            href="{% url 'vendors:SellerRegister' %}"
+                            class="btn btn-solid">Create Seller</a>
 
-                        </div>
                     </div>
+                </div>
             </div>
         </div>
-        </section>
+    </section>
     <!--Section ends-->
 
 

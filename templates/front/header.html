@@ -43,24 +43,30 @@
                                             {% if store_owner %}
                                                 {% for rs in store_owner %}
 
-                                                    {% if rs.activation  %}
+                                                    {% if rs.activation == 1 and rs.status == 1  %}
                                                         <li>
-                                                            <a href="{% url 'vendors:VendorDashboard' rs.id %}">{% translate 'Dashboard' %}</a>
+                                                            <a href="{% url 'vendors:VendorDashboard' rs.slug %}">{% translate 'Dashboard' %}</a>
+                                                            <input type="hidden" value="rs.id">
                                                         </li>
                                                         {% else %}
 
-                                                        {% if rs.status == 0  %}
+                                                        {% if rs.activation == 1 and rs.status == 0 %}
                                                             <li><a href="{% url 'vendors:StoreWaiting' %}">
                                                                 <h6>{% translate 'Store Disable' %}</h6></a></li>
                                                         {% endif %}
+
 
 
                                                     {% endif %}
 
                                                     {% if rs.activation == 0  and rs.status == 0 %}
                                                         <li><a href="{% url 'vendors:StoreWaiting' %}">
-                                                                <h6>{% translate 'Store need action' %}</h6></a></li>
-                                                    {% endif %}
+                                                                <h6>{% translate 'Store wait activation' %}</h6></a></li>
+                                                        {% else %}
+                                                        {% if rs.activation == 0  and rs.status == 1 %}
+                                                        <li><a href="{% url 'vendors:StoreWaiting' %}">
+                                                                <h6>{% translate 'Store wait activation' %}</h6></a></li>
+                                                    {% endif %}{% endif %}
 
                                                 {% endfor %}
                                             {% else %}
@@ -247,25 +253,7 @@
                 </div>
             </div>
         </div>
-        <div class="container">
-            {% include 'admin/partials/messages.html' %}
-            {% block content %}
-            {% endblock %}
-            {% if messages %}
-                {% for message in messages %}
-                    {% if message.tags == "success" %}
-                        <div class="alert alert-success">
-                            {{ message }}
-                        </div>
-                    {% endif %}
-                    {% if message.tags == "error" %}
-                        <div class="alert alert-danger">
-                            {{ message }}
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        </div>
+
     </div>
     <div class="bottom-part bottom-light">
         <div class="container">
@@ -576,6 +564,25 @@
             </div>
         </div>
     </div>
+ <div class="container">
+            {% include 'admin/partials/messages.html' %}
+            {% block content %}
+            {% endblock %}
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == "success" %}
+                        <div class="alert alert-success">
+                            {{ message }}
+                        </div>
+                    {% endif %}
+                    {% if message.tags == "error" %}
+                        <div class="alert alert-danger">
+                            {{ message }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
 </header>
 <!-- header end -->
 

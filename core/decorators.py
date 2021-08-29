@@ -5,9 +5,65 @@ import time
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseBadRequest, HttpResponseForbidden
+from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponse
+from django.shortcuts import redirect
 
 from DNigne import settings
+
+
+def unauthenticated_user(view_func):
+    def wrapper_func(request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('home:index')
+        else:
+            return view_func(request, *args, **kwargs)
+
+    return wrapper_func
+
+
+def allowed_users(allowed_roles=[]):
+    def decorator(view_func):
+        def wrapper_func(request, *args, **kwargs):
+
+            group = None
+            if request.user.groups.exists():
+                group = request.user.groups.all()[0].name
+
+            if group in allowed_roles:
+                return view_func(request, *args, **kwargs)
+            else:
+                return redirect('home:Error403')
+
+        return wrapper_func
+
+    return decorator
+
+
+def admin_only(view_func):
+    def wrapper_function(request, *args, **kwargs):
+        group = None
+        if request.user.groups.exists():
+            group = request.user.groups.all()[0].name
+
+
+
+        if group == 'customer':
+            return redirect('home:Error403')
+
+        if group == 'admin':
+            return view_func(request, *args, **kwargs)
+
+    return wrapper_function
+
+
+def allow_user(view_func):
+    def wrapper_func(request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('home:Error403')
+        else:
+            return view_func(request, *args, **kwargs)
+
+    return wrapper_func
 
 
 def superuser_only(function):
@@ -54,7 +110,7 @@ def superuser_required(view_func=None, redirect_field_name=REDIRECT_FIELD_NAME,
     return actual_decorator
 
 
-def admin_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url='Users:user_login'):
+def admin_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url='user:CustomerLogin'):
     """
     Decorator for views that checks that the logged in user is a teacher,
     redirects to the log-in page if necessary.
@@ -67,6 +123,7 @@ def admin_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login
     if function:
         return actual_decorator(function)
     return actual_decorator
+
 
 def group_required(*group_names):
     """Requires user membership in at least one of the groups passed in."""
@@ -144,7 +201,7 @@ def user_can_write_a_review(func):
     return wrapper
 
 
-def required(wrapping_functions,patterns_rslt):
+def required(wrapping_functions, patterns_rslt):
     '''
     Used to require 1..n decorators in any view returned by a url tree
 
@@ -165,32 +222,33 @@ def required(wrapping_functions,patterns_rslt):
           patterns(...)
       )
     '''
-    if not hasattr(wrapping_functions,'__iter__'):
+    if not hasattr(wrapping_functions, '__iter__'):
         wrapping_functions = (wrapping_functions,)
 
     return [
-        _wrap_instance__resolve(wrapping_functions,instance)
+        _wrap_instance__resolve(wrapping_functions, instance)
         for instance in patterns_rslt
     ]
 
-def _wrap_instance__resolve(wrapping_functions,instance):
-    if not hasattr(instance,'resolve'): return instance
-    resolve = getattr(instance,'resolve')
 
-    def _wrap_func_in_returned_resolver_match(*args,**kwargs):
-        rslt = resolve(*args,**kwargs)
+def _wrap_instance__resolve(wrapping_functions, instance):
+    if not hasattr(instance, 'resolve'): return instance
+    resolve = getattr(instance, 'resolve')
 
-        if not hasattr(rslt,'func'):return rslt
-        f = getattr(rslt,'func')
+    def _wrap_func_in_returned_resolver_match(*args, **kwargs):
+        rslt = resolve(*args, **kwargs)
+
+        if not hasattr(rslt, 'func'): return rslt
+        f = getattr(rslt, 'func')
 
         for _f in reversed(wrapping_functions):
             # @decorate the function from inner to outter
             f = _f(f)
 
-        setattr(rslt,'func',f)
+        setattr(rslt, 'func', f)
 
         return rslt
 
-    setattr(instance,'resolve',_wrap_func_in_returned_resolver_match)
+    setattr(instance, 'resolve', _wrap_func_in_returned_resolver_match)
 
     return instance

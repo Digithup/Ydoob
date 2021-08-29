@@ -1,8 +1,11 @@
+import objects as objects
 from django.contrib import messages
 from django.contrib import messages
 from django.contrib.auth import login, get_user_model
+from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.template.context_processors import request
@@ -18,15 +21,6 @@ from vendors.forms import SellerRegisterForm, AlreadyUserSellerRegisterForm
 from vendors.models import Store, StoreMedia
 
 User = get_user_model()
-@admin_required
-# @method_decorator([login_required, admin_required], name='dispatch')
-def store_list(request):
-    stores = Store.objects.all()
-    current_user = request.user  # Access User Session information
-    # setting = Store.objects.get(pk=1)
-    # profile = User.objects.get(user.id)
-    context = {'stores': stores, }
-    return render(request, 'stores-list.html', context)
 
 
 class SellerRegister(CreateView):
@@ -43,7 +37,7 @@ class SellerRegister(CreateView):
         login(self.request, user)
         return redirect('home:index')
 
-
+@login_required(login_url='/login')  # Check login
 def AlreadyUserSellerRegister(request, slug):
     user = User.objects.get(id=request.user.id)
     forms = AlreadyUserSellerRegisterForm(instance=user)
@@ -76,33 +70,18 @@ def AlreadyUserSellerRegister(request, slug):
         return render(request, 'accounts/AlreadyUserSellerRegister.html', context)
 
 
-
-class dd(UpdateView):
-    model = User
-    form_class = AlreadyUserSellerRegisterForm
-    #fields = ['phone','seller',]
-    template_name = 'accounts/AlreadyUserSellerRegister.html'
-
-
-
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect('home:index')
-
-
-
-
 class CreateStore(View):
     def get(self, request, *args, **kwargs):
-        print(request)
-        # vendor = Store.objects.get_or_create()
-        # seller = request.user
+        if request.user.is_authenticated:
+            return render(request, "store-page/create-store.html", )
 
-        return render(request, "store-page/create-store.html", )
-
-    print(request)
-
+        else:
+            if request.user.is_authenticated and request.user.seller:
+                messages.error(request,
+                               format_html('''You already have a store wait for activate &nbsp; &nbsp;  or learn how to sell &nbsp; 
+                                <a href=""> Edit</a> ''',
+                                           reverse('home:index', )))
+            return redirect('user:CustomerLogin')
     def post(self, request, *args, **kwargs):
         title_group = request.POST.get("title")
         address = request.POST.get("address")
@@ -126,69 +105,77 @@ class CreateStore(View):
             store.save()
             # return HttpResponse("OK")
             return render(request, 'store-page/create-success.html', )
-            # return HttpResponseRedirect(reverse_lazy('home:index'))
+            #return HttpResponseRedirect(reverse_lazy('vendors:CreateSuccess'))
 
 
-def CreateSuccess(request, id):
-    user = User.objects.filter(user_id=id)
+def CreateSuccess(request, ):
+    is_seller = User.objects.filter(id=request.user.id ,seller=True)
+    if request.user.is_authenticated and is_seller  :
+        return render(request, 'store-page/create-success.html')
+    else:
+        return render(request, 'front/404.html')
 
-    context = {'user': user,
-               }
-    return render(request, 'store-page/create-success.html', context)
 
 
 def StoreWaiting(request):
+    if not request.user.is_authenticated:
+        return render(request, 'front/404.html')
     status = Store.objects.filter(status='Disable')
-
     context = {'status': status,
                }
     return render(request, 'store-page/store-waiting.html', context)
 
 
-class VendorDashboard(View):
 
+class VendorDashboard(View):
     def get_context_data(self, **kwargs):
         context = super(VendorDashboard, self).get_context_data(**kwargs)
-        store_id = kwargs["store_id"]
-        seller = Store.objects.filter(store_id=store_id)
-
-
-
-
+        slug = kwargs["slug"]
+        seller = Store.objects.filter(slug=slug)
         return context
 
     def get(self, request, *args, **kwargs, ):
-        store_id = kwargs["store_id"]
+        slug = kwargs["slug"]
+        user = request.user.id
+        try:
+            if request.user.is_authenticated and Store.objects.get(slug=slug, vendor__id=user):
+                store = Store.objects.get(slug=slug, vendor__id=user)
+                store_media = StoreMedia.objects.filter(store_id=store.id).first()
 
-        store = Store.objects.get(id=store_id)
-        store_media = StoreMedia.objects.filter(store_id=store_id)
-        # media_id = kwargs["store_medias"]
-        # media_store = StoreMedia.objects.filter(id=media_id)
-
-        return render(request, "vendor/vendor-dashboard.html",
-                      {"store": store, 'store_media': store_media})
+                return render(request, "vendor/vendor-dashboard.html",
+                              {"store": store, 'store_media': store_media})
+            else:
+                return render(request, 'front/404.html')
+        except:
+            return render(request, 'front/ErrorPage/403.html')
 
 
 class EditStore(View):
 
     def get(self, request, *args, **kwargs, ):
-        store_id = kwargs["store_id"]
+        slug = kwargs["slug"]
+        user = request.user.id
 
-        store = Store.objects.get(id=store_id)
-        store_media = StoreMedia.objects.filter(store_id=store_id).first()
-        # media_id = kwargs["store_medias"]
-        # media_store = StoreMedia.objects.filter(id=media_id)
+        try:
+            if request.user.is_authenticated and Store.objects.get(slug=slug, vendor__id=user):
+                store = Store.objects.get(slug=slug, vendor__id=user)
+                store_media = StoreMedia.objects.filter(store_id=store.id).first()
 
-        return render(request, "vendor/vendor-edit-store-profile.html",
-                      {"store": store, 'store_media': store_media})
+                return render(request, "vendor/vendor-edit-store-profile.html",
+                              {"store": store, 'store_media': store_media})
+            else:
+                return render(request, 'front/404.html')
+        except:
+            return render(request, 'front/ErrorPage/403.html')
+
 
     def post(self, request, *args, **kwargs):
         title = request.POST.get("title")
         phone = request.POST.get("phone")
         company = request.POST.get("company")
-        media_type_list = request.POST.getlist("media_type[]")
+
         media_content_list = request.FILES.getlist("media_content[]")
-        media_content_ids = request.POST.getlist("media_content_id[]")
+
         about = request.POST.get("about")
         keywords = request.POST.get("keywords")
         slug = request.POST.get("slug")
@@ -200,15 +187,7 @@ class EditStore(View):
         twitter = request.POST.get("twitter")
         youtube = request.POST.get("youtube")
         print(request.POST)
-        # status = request.POST.get("status")
-
-        store_id = kwargs["store_id"]
-        # vendor = User.objects.get(id=User.id)
-        vendor = request.user.id
-
-        store_id = kwargs["store_id"]
-        store = Store.objects.get(id=store_id)
-        # store.vendor=stores
+        store = Store.objects.get(slug=slug)
         store.title = title
         store.phone = phone
         store.company = company
@@ -229,7 +208,7 @@ class EditStore(View):
             fs = FileSystemStorage()
             filename = fs.save(media_content.name, media_content)
             media_url = fs.url(filename)
-            store_media = StoreMedia(store_id=store, media_type=media_type_list[i], media_content=media_url)
+            store_media = StoreMedia(store_id=store, media_content=media_url)
             store_media.save()
 
             i = i + 1
@@ -237,12 +216,8 @@ class EditStore(View):
             print(request.POST)
             print(request)
             messages.error(request, "Error")
-            store_id = kwargs["store_id"]
 
-            # media_id = kwargs["store_medias"]
-            # media_store = StoreMedia.objects.filter(id=media_id)
-
-        return redirect(reverse_lazy('vendors:VendorDashboard')
+        return redirect(reverse('vendors:VendorDashboard',kwargs={"slug": slug},)
                         )
 
         # return HttpResponse("OK")
@@ -257,33 +232,7 @@ def store_delete(request, user_id):
     return redirect('vendors')
 
 
-class VendorAdminDashboard(ListView):
-    model = Store
-    template_name = "vendor/dashboard-bases/../templates/vendor/vendor-base/index.html"
-    paginate_by = 3
 
-    def get_queryset(self):
-        filter_val = self.request.GET.get("filter", "")
-        order_by = self.request.GET.get("orderby", "id")
-        if filter_val != "":
-            stores = Store.objects.filter(
-                Q(store_name__contains=filter_val) | Q(store_description__contains=filter_val)).order_by(order_by)
-        else:
-            stores = Store.objects.all().order_by(order_by)
-
-        stores_list = []
-        for store in stores:
-            store_media = StoreMedia.objects.filter(store_id=store.id, media_type=1, is_active=1).first()
-            stores_list.append({"store": store, "media": store_media})
-
-        return stores_list
-
-    def get_context_data(self, **kwargs):
-        context = super(VendorAdminDashboard, self).get_context_data(**kwargs)
-        context["filter"] = self.request.GET.get("filter", "")
-        context["orderby"] = self.request.GET.get("orderby", "id")
-        context["all_table_fields"] = Store._meta.get_fields()
-        return context
 
 
 # Seller catalog list and details

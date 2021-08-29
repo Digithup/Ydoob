@@ -1,13 +1,16 @@
 from pyexpat import model
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DeleteView, UpdateView
 
+from core.decorators import allowed_users
 from core.forms.setting import SettingLangForm, SettingForm, SiteForm
 from core.models.setting import Setting, SettingLang
 from localization.models import Language
@@ -20,7 +23,8 @@ class AdminSetting(ListView):
 
     template_name = 'setting/admin-setting.html'
 
-
+@login_required(login_url='/login')
+@allowed_users(allowed_roles=['admin'])
 def setting(request):
     setting = Setting.objects.first()
     setting_lang = SettingLang.objects.first()
@@ -39,7 +43,8 @@ def setting(request):
 
     return render(request, 'setting.html', context)
 
-
+@login_required(login_url='/login')
+@allowed_users(allowed_roles=['admin'])
 def add_setting(request):
 
     langlist = Language.objects.filter(status=True)
@@ -127,7 +132,8 @@ def add_setting(request):
     # return HttpResponseRedirect('/')
     return render(request, 'setting/add-setting.html', {'langlist': langlist})
 
-
+@login_required(login_url='/login')
+@allowed_users(allowed_roles=['admin'])
 def update_setting(request):
     lang = Language.objects.all()
     try:
@@ -179,6 +185,10 @@ class SettingDelete(DeleteView):
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
 
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(SettingDelete, self).dispatch(*args, **kwargs)
+
 
 class AdminSite(ListView):
     model = Site
@@ -191,3 +201,7 @@ class AdminSiteUpdate(UpdateView):
     form_class=SiteForm
     template_name = 'setting/site/update-site.html'
     success_url = reverse_lazy('core:AdminSite')
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(AdminSiteUpdate, self).dispatch(*args, **kwargs)

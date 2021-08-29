@@ -2,7 +2,7 @@ from django.urls import path
 
 from . import search, views
 from .tests import product_detailtest
-from .views import CategoriesDetail, CategoryDetail, ProductsListView, ProductSearch
+from .views import CategoriesDetail, CategoryDetail, ProductsListView, ProductSearch, error403
 
 app_name = 'home'
 urlpatterns = [
@@ -27,5 +27,11 @@ urlpatterns = [
     # path('product/filter', FilterCategoryView.as_view(), name='FilterCategory'),
     path('filter-data',views.filter_data,name='filter_data'),
     path('product/load-more-data', views.load_more_data, name='load_more_data'),
+
+
+
+    ###############ErrorPage#############
+path('403', error403, name='Error403'),
+
 
 ]

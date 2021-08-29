@@ -1,6 +1,7 @@
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, User, AbstractUser
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, User, AbstractUser, Permission, Group
+from django.db.models.manager import EmptyManager
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 
@@ -11,12 +12,10 @@ Type = (
 )
 
 
-
-
 class UserManager(BaseUserManager):
     def create_user(self, email, first_name=None, last_name=None, password=None, is_active=True, is_staff=False
                     , is_seller=False,
-                    is_admin=False, is_customer=True):
+                    is_admin=False, is_customer=True, ):
         if not email:
             raise ValueError("Users must have an email address")
         if not password:
@@ -97,6 +96,7 @@ class User(AbstractBaseUser):
     seller = models.BooleanField(default=False)
     staff = models.BooleanField(default=False)
     admin = models.BooleanField(default=False)
+    groups = models.ManyToManyField(Group,blank=True,null=True)
     slug = models.SlugField(unique=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 

@@ -21,33 +21,49 @@ from core.forms.forms import SearchForm
 from core.models.setting import Setting
 from localization.models import Language
 
-from vendors.models import Store
+from vendors.models import Store, StoreMedia
+
 User = get_user_model()
 
-def VendorIndex(request):
+def VendorIndex(request, *args, **kwargs,):
 
-    categories = Categories.objects.all()
-    setting = Setting.objects.all()
-    index_language =[]
-    if index_language is not None:
-        index_language = Language.objects.filter(status=True)
-    else:
-        pass
-    context = {
-        'categories': categories,
+    user = request.user.id
 
-        'catalog': Products,
+    try:
 
-        'setting': setting,
-        'index_language': index_language
+        if request.user.is_authenticated and Store.objects.get(vendor__id=user):
+            store = Store.objects.get( vendor__id=user)
+            store_media = StoreMedia.objects.filter(store_id=store.id).first()
 
-    }
-    return render(request, 'vendor/vendor-base/index.html', context)
+            categories = Categories.objects.all()
+            setting = Setting.objects.all()
+            index_language = []
+            if index_language is not None:
+                index_language = Language.objects.filter(status=True)
+            else:
+                pass
 
-class Vendorindexx(DetailView):
-    model = Store
-    context_object_name = 'store'
-    template_name = 'vendor/vendor-base/index.html'
+            context = {
+                'categories': categories,
+
+                'catalog': Products,
+
+                'setting': setting,
+                'index_language': index_language
+
+            }
+
+            return render(request, "vendor/vendor-base/index.html",
+                          context)
+        else:
+            return render(request, 'front/404.html')
+    except:
+        return render(request, 'front/ErrorPage/403.html')
+
+
+
+
+
 
 
 ############## Products   ################

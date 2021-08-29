@@ -262,20 +262,7 @@
                                                         </tr>{% endfor %}
 
 
-                                                    <tr>
-                                                        <th scope="row"><img src="{%  static '' %}assets/images/pro3/36.jpg"
-                                                                             class="blur-up lazyloaded"></th>
-                                                        <td>men print tee</td>
-                                                        <td>men clothes</td>
-                                                        <td>$150</td>
-                                                        <td>750</td>
-                                                        <td>150</td>
-                                                        <td><i class="fa fa-pencil-square-o me-1"
-                                                               data-action="{% url 'vendors:VendorIndex' %}"
-                                                               href="{% url 'vendors:VendorIndex' %}"
-                                                               aria-hidden="false"></i><i class="fa fa-trash-o ms-1"
-                                                                                          aria-hidden="true"></i></td>
-                                                    </tr>
+
                                                     </tbody>
 
                                                 </table>
@@ -374,7 +361,7 @@
                                                         <h4 class="col-md-4">profile</h4>
                                                         <div class="col-md-6 pull-right">
 
-                                                            <a href="{% url 'vendors:EditStore' rs.store.id %}"
+                                                            <a href="{% url 'vendors:EditStore' rs.store.slug %}"
                                                                class="btn btn-solid">Edit Store Information</a></div>
                                                     </div>
                                                     <div class="dashboard-detail">

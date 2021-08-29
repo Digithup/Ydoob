@@ -18,8 +18,8 @@ urlpatterns = [
     path('startselling/', CreateStore.as_view(), name='CreateStore'),
     path('CreateSuccess/', CreateSuccess, name='CreateSuccess'),
     path('StoreWaiting/', StoreWaiting, name='StoreWaiting'),
-    path('store/<str:store_id>', VendorDashboard.as_view(), name='VendorDashboard'),
-    path('store/edit/<str:store_id>', EditStore.as_view(), name='EditStore'),
+    path('store/<slug:slug>', VendorDashboard.as_view(), name='VendorDashboard'),
+    path('store/edit/<slug:slug>', EditStore.as_view(), name='EditStore'),
 
 ############## Back ######################
 

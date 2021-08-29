@@ -17,7 +17,8 @@ from core.views.design import BannerDetailView, BannerDelete, \
 from core.views.order import OrdersListView, EditOrder, OrderDetailView
 from core.views.setting import SettingDelete, AdminSetting, AdminSite, AdminSiteUpdate
 from core.views.users import AdminLogin, AdminLogout, AdminUserCreate, \
-    AdminUserDetail, AdminUserEdit, AdminUserDelete, AdminUsersList
+    AdminUserDetail, AdminUserEdit, AdminUserDelete, AdminUsersList, AdminUserGroupList, AdminUserGroupCreate, \
+    AdminUserGroupDelete, AdminUserGroupEdit
 
 app_name = 'core'
 
@@ -121,11 +122,17 @@ urlpatterns = [
     ################ Users ################
     path('', AdminLogin.as_view(), name='AdminLogin'),
     path('logout/', AdminLogout, name='AdminLogout'),
+
     path('Users/', AdminUsersList.as_view(), name='AdminUsersList'),
     path('Users/create/', AdminUserCreate.as_view(), name='AdminUserCreate'),
     path('Users/profile/<int:pk>', AdminUserDetail.as_view(), name='AdminUserDetail'),
     path('Users/uprofile/<int:pk>/', AdminUserEdit.as_view(), name='AdminUserEdit'),
     path('Users/dprofile/<int:id>', AdminUserDelete.as_view(), name='AdminUserDelete'),
+
+    path('group/', AdminUserGroupList.as_view(), name='AdminUserGroupList'),
+    path('group/create/', AdminUserGroupCreate.as_view(), name='AdminUserGroupCreate'),
+    path('group/edit/<int:pk>', AdminUserGroupEdit.as_view(), name='AdminUserGroupEdit'),
+    path('group/delete/<int:id>', AdminUserGroupDelete.as_view(), name='AdminUserGroupDelete'),
 
     ########## setting   #########
     path('setting/', AdminSetting.as_view(), name='AdminSetting'),
