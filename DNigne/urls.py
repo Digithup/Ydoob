@@ -21,7 +21,7 @@ from django.contrib import admin
 
 from django.urls import path, include
 
-from home.tests import ajaxcolortest
+from home.tests import ajaxcolortest,  ajaxpricetest
 from localization import views
 
 
@@ -54,6 +54,7 @@ urlpatterns += i18n_patterns(
     path('api-auth/', include('rest_framework.urls')),
 
     path('ajaxcolor/', ajaxcolortest, name='ajaxcolor'),
+path('ajaxprice/', ajaxpricetest, name='ajaxprice'),
     # path('search/', SearchView(), name='search'),
     # path('search_auto/', search_auto, name='search_auto'),
 
