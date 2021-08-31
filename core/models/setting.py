@@ -5,6 +5,9 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 
 # Create your models here.
+from notifications.base.models import AbstractNotification
+
+from catalog.models.models import Categories
 
 
 class Setting(models.Model):
@@ -52,3 +55,13 @@ class SettingTags(models.Model):
     meta_keywords = models.CharField(max_length=255)
     tags = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+# class Notification(AbstractNotification):
+#     # custom field example
+#     category = models.ForeignKey(Categories,
+#                                  on_delete=models.CASCADE)
+#
+#     class Meta(AbstractNotification.Meta):
+#         abstract = False
+

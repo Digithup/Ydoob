@@ -21,7 +21,7 @@ from DNigne.settings import BASE_URL
 from catalog.forms.forms import CategoryAddForm, ProductsForm, ProductMediaForm, AttributesDetailsForm, \
     OptionsDetailsForm, ColorForm, SizeForm, VariantDetailsForm
 from catalog.models.models import Categories, Products, ProductMedia, ProductTags, \
-    ProductTransaction, AttributesDetails, OptionsDetails, VariantDetails
+    ProductTransaction, AttributesDetails, OptionsDetails, Variants
 from catalog.models.product_options import Manufacturer, FiltersGroup, Filters, AttributesGroup, Attributes, Options, \
     OptionsType, Color, Size
 from core.decorators import admin_required, allow_user, admin_only, allowed_users
@@ -110,7 +110,7 @@ def AddCategory(request):
             category_obj.save()  # last_modified field won't update on changing other model field, save() trigger change
             # return reverse('core:catalog')
 
-            return HttpResponseRedirect('/admin/category', category_created)
+            return HttpResponseRedirect('/dashboard/category', category_created)
 
             # return render(request,template_name='admin/pages/Products-admin.html')
             # return getNoteResponseData(Products_obj, tags, Products_created)
@@ -337,12 +337,12 @@ def ProductAdd(request):  # sourcery skip: aug-assign, convert-to-enumerate
                     y = ''.join(x)  # converting list into string
                     variant_size = y
 
-                    variant_form = VariantDetails(product=product_form, title=variant_title[z],
-                                                  color=Color.objects.get(id=variant_color[z]),
-                                                  size=Size.objects.get(id=variant_size[z]),
+                    variant_form = Variants(product=product_form, title=variant_title[z],
+                                            color=Color.objects.get(id=variant_color[z]),
+                                            size=Size.objects.get(id=variant_size[z]),
 
-                                                  price=variant_price[z],
-                                                  quantity=variant_quantity[z], image=variant_image)
+                                            price=variant_price[z],
+                                            quantity=variant_quantity[z], image=variant_image)
                     variant_form.save()
                     z = z + 1
 
@@ -357,7 +357,7 @@ def ProductAdd(request):  # sourcery skip: aug-assign, convert-to-enumerate
                 messages.success(request,
                                  "Yeeew, check it out on the home page!")
 
-                return HttpResponseRedirect("/admin/products/")
+                return HttpResponseRedirect("/dashboard/products/")
 
             else:
                 print("Form invalid, see below error msg")

@@ -1,4 +1,5 @@
 from ckeditor_uploader.fields import RichTextUploadingField
+from currencies.models import Currency
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, User, AbstractUser, Permission, Group
 from django.db.models.manager import EmptyManager
@@ -96,7 +97,8 @@ class User(AbstractBaseUser):
     seller = models.BooleanField(default=False)
     staff = models.BooleanField(default=False)
     admin = models.BooleanField(default=False)
-    groups = models.ManyToManyField(Group,blank=True,null=True)
+    groups = models.ManyToManyField(Group,blank=True)
+    currency = models.ForeignKey(Currency, on_delete=models.CASCADE, null=True, blank=True)
     slug = models.SlugField(unique=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 

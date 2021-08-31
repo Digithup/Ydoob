@@ -1,17 +1,20 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.forms import ModelForm
+from django import forms
 
-from catalog.models.models import Products, OptionsDetails, VariantDetails
+from catalog.models.models import Products, OptionsDetails, Variants
+from user.models import UserAddress
 
 from vendors.models import Store
 
 User = get_user_model()
+
 class ShopCart(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     store = models.ForeignKey(Store, on_delete=models.SET_NULL, null=True)
-    product = models.ForeignKey(Products, on_delete=models.SET_NULL, null=True)
-    variant = models.ForeignKey(VariantDetails, on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(Products, on_delete=models.SET_NULL, null=True,blank=True)
+    variant  = models.ForeignKey(Variants, on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField()
 
     def __str__(self):
@@ -37,14 +40,14 @@ class ShopCart(models.Model):
 class ShopCartForm(ModelForm):
     class Meta:
         model = ShopCart
-        fields = ['quantity']
+        fields = ['quantity',]
 
 
 class Order(models.Model):
     STATUS = (
         ('New', 'New'),
         ('Accepted', 'Accepted'),
-        ('Preaparing', 'Preaparing'),
+        ('Preparing', 'Preparing'),
         ('OnShipping', 'OnShipping'),
         ('Completed', 'Completed'),
         ('Canceled', 'Canceled'),
@@ -54,7 +57,7 @@ class Order(models.Model):
     first_name = models.CharField(max_length=10)
     last_name = models.CharField(max_length=10)
     phone = models.CharField(blank=True, max_length=20)
-    address = models.CharField(blank=True, max_length=150)
+    address = models.ForeignKey(UserAddress, on_delete=models.SET_NULL, null=True)
     city = models.CharField(blank=True, max_length=20)
     country = models.CharField(blank=True, max_length=20)
     total = models.FloatField()
@@ -69,9 +72,14 @@ class Order(models.Model):
 
 
 class OrderForm(ModelForm):
+
     class Meta:
         model = Order
-        fields = ['first_name', 'last_name', 'address', 'phone', 'city', 'country']
+        fields = [ 'status', ]
+        # widgets = {
+        #            'address': forms.RadioSelect(attrs={'class': 'custom-select'}),
+        #            }
+
 
 
 class OrderProduct(models.Model):

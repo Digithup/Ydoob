@@ -36,7 +36,7 @@ urlpatterns = [
 
 urlpatterns += i18n_patterns(
     url(r'^oauth/', include('social_django.urls', namespace='social')),
-    # path('currencies/', include('currencies.urls')),
+     path('currencies/', include('currencies.urls')),
     path('admin/', admin.site.urls),
     path('', include('user.urls'), name='user'),
     path('dashboard/', include('core.urls'), name='core'),
@@ -44,6 +44,7 @@ urlpatterns += i18n_patterns(
     path('', include('home.urls'), name='home'),
     path('', include('catalog.urls'), name='catalog'),
     path('', include('sales.urls'), name='sales'),
+#path('', include('sales.urls'), name='sales'),
     path('', include('vendors.urls'), name='vendors'),
 
     # USER URL

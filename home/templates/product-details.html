@@ -519,11 +519,16 @@
                                             {% if  product.variant != 'None' %}
                                                 <div class="row col-md-15">
                                                  <div class="col-md-6">
-                                                     <form action="{% url 'sales:AddToCart' product.id product.slug %}"
+                                                     <form action="{% url 'sales:AddToCart' product.id  %}"
                                                       method="post"
                                                       id="addchart-form">
                                                     {% csrf_token %}
+                                                      <input type="" name="variant" id="variantid" value="{{ variant.id }}">
+                                                     <input type="" name="store" id="storeid" value="{{ store.id }}">
+                                                     <span class="text-uppercase">QTY: </span>
+                                            <input class="input" name="quantity" type="number" value="1" min="1" max="{{ variant.quantity }}">
                                                     <div class="product-buttons">
+
                                                         <button type="submit" {% if variant.quantity < 1 %}
                                                                 disabled {% endif %}
                                                                 class="btn btn-solid hover-solid btn-animation">
@@ -537,6 +542,7 @@
                                                         <form action="{% url 'sales:AddWishlist' %}" method="post">
                                                     {% csrf_token %}
                                                     <input type="hidden" name="product-id" value="{{ product.id }}">
+
                                                     <button type="submit"
                                                             class="btn btn-solid hover-solid btn-animation">
                                                         <i class="fa fa-bookmark fz-16 me-2"
@@ -552,11 +558,15 @@
 
                                               <div class="row col-md-15">
                                                  <div class="col-md-6">
-                                                     <form action="{% url 'sales:AddToCart' product.id product.slug %}"
+                                                     <form action="{% url 'sales:AddToCart' product.id %}"
                                                       method="post"
                                                       id="addchart-form">
                                                     {% csrf_token %}
+                                                      <input type="" name="variant" id="variantid" value="{{ variant.id }}">
+                                                     <input type="" name="store" id="storeid" value="{{ store.id }}">
                                                     <div class="product-buttons">
+                                                    <span class="text-uppercase">QTY: </span>
+                                            <input class="input" name="quantity" type="number" value="1" min="1" max="{{ variant.quantity }}">
                                                         <button type="submit" {% if variant.quantity < 1 %}
                                                                 disabled {% endif %}
                                                                 class="btn btn-solid hover-solid btn-animation">

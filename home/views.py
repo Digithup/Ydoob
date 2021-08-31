@@ -1,12 +1,12 @@
 from django.core import serializers
 from django.db.models import Min, Max
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.views.generic import DetailView
 
 from DNigne import settings
-from catalog.models.models import Categories, Products, ProductMedia, VariantDetails
+from catalog.models.models import Categories, Products, ProductMedia, Variants
 
 
 # if hasattr(request.user, 'lang'):
@@ -14,6 +14,7 @@ from catalog.models.models import Categories, Products, ProductMedia, VariantDet
 
 def error403(request):
     return render(request, 'front/ErrorPage/403.html', )
+
 def index(request):
     all_category = Categories.objects.all()
     data = Products.objects.filter(is_featured=True).order_by('-id')
@@ -91,7 +92,7 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         # slug = kwargs["slug"]
         context = super(ProductDetailView, self).get_context_data(**kwargs)
-        context['product_variant'] = VariantDetails.objects.all()
+        context['product_variant'] = Variants.objects.all()
         # context['CategoryChilled'] = Categories.objects.filter(slug='slug')
         return context
 
@@ -127,21 +128,21 @@ def product_detail(request, slug, id):
     if product.variantdetails_set.all != "None":  # Product have variants
         if request.method == 'POST':  # if we select color
             variant_id = request.POST.get('variantid')
-            variant = VariantDetails.objects.get(id=variant_id)  # selected product by click color radio
-            colors = VariantDetails.objects.filter(product_id=id, size_id=variant.size_id)
-            sizes = VariantDetails.objects.raw(
+            variant = Variants.objects.get(id=variant_id)  # selected product by click color radio
+            colors = Variants.objects.filter(product_id=id, size_id=variant.size_id)
+            sizes = Variants.objects.raw(
                 'SELECT * FROM catalog_variantdetails WHERE product_id=%s group by size_id', [id])
             query += variant.title + ' Size:' + str(variant.size) + ' Color:' + str(variant.color)
         else:
-            variants = VariantDetails.objects.filter(product=product)
-            colors = VariantDetails.objects.filter(product=product, )
-            sizes = VariantDetails.objects.raw(
+            variants = Variants.objects.filter(product=product)
+            colors = Variants.objects.filter(product=product, )
+            sizes = Variants.objects.raw(
                 'SELECT * FROM  catalog_variantdetails WHERE product_id=%s group by size_id', [id])
-            variant = VariantDetails.objects.get(id=variants[0].id)
+            variant = Variants.objects.get(id=variants[0].id)
         context.update({'sizes': sizes, 'colors': colors,
                         'variant': variant, 'query': query
                         })
-    return render(request, 'product-details.html', context)
+    return render(request, 'pd3.html', context)
 
 
 def ajaxcolor(request):
@@ -149,7 +150,7 @@ def ajaxcolor(request):
     if request.POST.get('action') == 'post':
         size_id = request.POST.get('size')
         productid = request.POST.get('productid')
-        colors = VariantDetails.objects.filter(product_id=productid, variant__title=size_id)
+        colors = Variants.objects.filter(product_id=productid, variant__title=size_id)
         context = {
             'size_id': size_id,
             'productid': productid,
@@ -211,3 +212,8 @@ def load_more_data(request):
     t = render_to_string('ajax/product-list.html', {'category_product': data})
     return JsonResponse({'category_product': t}
                         )
+def selectcurrency(request):
+    lasturl = request.META.get('HTTP_REFERER')
+    if request.method == 'POST':  # check post
+        request.session['currency'] = request.POST['currency']
+    return HttpResponseRedirect(lasturl)

@@ -36,12 +36,10 @@ def home_processors(request):
 
     try:
         return {
-            'setting': Setting.objects.last(),
-
-             'setting_data_en': SettingLang.objects.get(lang='en'),
-             'setting_data_ar': SettingLang.objects.get(lang='ar'),
-             'index_language': Language.objects.all(),
-
+            # 'setting': Setting.objects.last(),
+            #  'setting_data_en': SettingLang.objects.get(lang='en'),
+            #  'setting_data_ar': SettingLang.objects.get(lang='ar'),
+            #  'index_language': Language.objects.all(),
             'store_owner': store_owner,
             'vendor_store': vendor_store,
             'vendor_products_list': vendor_products_list,
@@ -86,20 +84,22 @@ def home_processors(request):
         }
     except BaseException as e:
         return {
-                   'store_owner': None,
-                   'vendor_store': None,
-                   'setting_data': None,
+                   'setting': None,
                    'setting_data_en': None,
                    'setting_data_ar': None,
                    'index_language': None,
-                   'main_slider': SliderMedia.objects.filter(slider_id__group__title='home'),
-                   'banner_left': Banners.objects.filter(media_location='left'),
-                   'banner_right': Banners.objects.filter(title='right'),
-                   'banner_down': Banners.objects.filter(title='down'),
-                   'manufacture': Manufacturer.objects.filter(status='True'),
+                   'store_owner': None,
+                   'vendor_store': None,
+                   'setting_data': None,
+
+                   'main_slider': None,
+                   'banner_left': None,
+                   'banner_right': None,
+                   'banner_down': None,
+                   'manufacture': None,
                    ####### products###########
-                   'products_media': Products.objects.all(),  # New Products,
-                   'side_products': product_list[:3],  # New Products
+                   'products_media': None,  # New Products,
+                   'side_products': None,  # New Products
                    'side_products2': product_list[:3],  # New Products
                    'new_products': product_list,  # New Products
                    'new_products_updated': product_list,  # New Products Update
@@ -127,6 +127,7 @@ def user_processors(request):
     else:
         return {
             'user_address': None,
+            'wish_count':None,
 
         }
 
@@ -134,8 +135,8 @@ def user_processors(request):
 def filter_processors(request):
     category_p = Products.objects.distinct().values('category__title', 'category__id')
     brands_p= Products.objects.distinct().values('manufacturer__title', 'manufacturer__id')
-    colors_p=Products.objects.distinct().values('variantdetails__color__name','variantdetails__color__id','variantdetails__color__code', )
-    size_p=Products.objects.distinct().values('variantdetails__size__name','variantdetails__size__id','variantdetails__size__code',)
+    colors_p=Products.objects.distinct().values('variants__color__name','variants__color__id','variants__color__code', )
+    size_p=Products.objects.distinct().values('variants__size__name','variants__size__id','variants__size__code',)
     minMaxPrice = Products.objects.aggregate(Min('price'), Max('price'))
     data={
         'category_p':category_p,

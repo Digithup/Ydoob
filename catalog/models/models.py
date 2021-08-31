@@ -153,7 +153,7 @@ class OptionsDetails(models.Model):
         verbose_name_plural = "Options Detail"
 
 
-class VariantDetails(models.Model):
+class Variants(models.Model):
     title = models.CharField(max_length=100, blank=True,null=True)
     product = models.ForeignKey(Products, on_delete=models.CASCADE, null=True, blank=True)
     size = models.ForeignKey(Size, on_delete=models.CASCADE, blank=True, null=True)

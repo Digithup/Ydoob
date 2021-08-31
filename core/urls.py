@@ -1,5 +1,6 @@
+from django.urls import path, include
 from django.urls import path
-
+import notifications.urls
 from core.tests import AddSetting, UpdateSetting
 from core.views.catalog import AddCategory, categories, EditCategory, DeleteCategory, \
     ProductsAddMedia, ProductEditMedia, ProductMediaDelete, ProductsAddStocks, file_upload, AdminIndex, \
@@ -120,7 +121,7 @@ urlpatterns = [
     path('design/delete/<int:pk>/', BannerDelete.as_view(), name='BannerDelete'),
 
     ################ Users ################
-    path('', AdminLogin.as_view(), name='AdminLogin'),
+    path('login/', AdminLogin.as_view(), name='AdminLogin'),
     path('logout/', AdminLogout, name='AdminLogout'),
 
     path('Users/', AdminUsersList.as_view(), name='AdminUsersList'),
@@ -142,4 +143,7 @@ urlpatterns = [
 
     path('site/', AdminSite.as_view(), name='AdminSite'),
     path('site/update/<int:pk>', AdminSiteUpdate.as_view(), name='AdminSiteUpdate'),
+
+
+path('inbox/notifications/', include(notifications.urls, namespace='notifications')),
 ]

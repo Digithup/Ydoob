@@ -123,7 +123,8 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 
-from catalog.models.models import Categories, Products, ProductMedia, VariantDetails
+from catalog.models.models import Categories, Products, ProductMedia, Variants
+from vendors.models import Store
 
 
 def product_detailtest(request, id, slug):
@@ -135,6 +136,7 @@ def product_detailtest(request, id, slug):
     category = Categories.objects.all()
 
     product = Products.objects.get(slug=slug)
+    store=Store.objects.get(vendor__id=product.seller.id)
 
     if defaultlang != currentlang:
         try:
@@ -152,28 +154,28 @@ def product_detailtest(request, id, slug):
     images = ProductMedia.objects.filter(product=product)
     # comments = Comment.objects.filter(product_id=id,status='True')
     context = {'product': product, 'category': category,
-               'images': images,
+               'images': images,'store':store,
                }
     if product.variant != "None":  # Product have variants
         if request.method == 'POST':  # if we select color
             variant_id = request.POST.get('variantid')
-            variant = VariantDetails.objects.get(id=variant_id)  # selected product by click color radio
-            colors = VariantDetails.objects.filter(product=product, size_id=variant.size_id)
-            images = VariantDetails.objects.filter(product=product, size_id=variant.size_id)
-            sizes = VariantDetails.objects.raw(
-                'SELECT * FROM  catalog_variantdetails  WHERE product_id=%s GROUP BY size_id', [id])
+            variant = Variants.objects.get(id=variant_id)  # selected product by click color radio
+            colors = Variants.objects.filter(product=product, size_id=variant.size_id)
+            images = Variants.objects.filter(product=product, size_id=variant.size_id)
+            sizes = Variants.objects.raw(
+                'SELECT * FROM  catalog_variants  WHERE product_id=%s GROUP BY size_id', [id])
             query += variant.title + ' Size:' + str(variant.size) + ' Color:' + str(variant.color )
 
         else:
-            variants = VariantDetails.objects.filter(product=product)
-            colors = VariantDetails.objects.filter(product=product, size_id=variants[0].size_id)
-            images = VariantDetails.objects.filter(product=product, size_id=variants[0].size_id)
-            sizes = VariantDetails.objects.raw(
-                'SELECT * FROM  catalog_variantdetails  WHERE product_id=%s GROUP BY size_id', [id])
-            variant = VariantDetails.objects.get(id=variants[0].id)
+            variants = Variants.objects.filter(product=product)
+            colors = Variants.objects.filter(product=product, size_id=variants[0].size_id)
+            images = Variants.objects.filter(product=product, size_id=variants[0].size_id)
+            sizes = Variants.objects.raw(
+                'SELECT * FROM  catalog_variants  WHERE product_id=%s GROUP BY size_id', [id])
+            variant = Variants.objects.get(id=variants[0].id)
         context.update({'sizes': sizes, 'colors': colors,
                         'variant': variant, 'query': query,
-                        'images':images})
+                        'images':images,'store':store,})
     return render(request, 'product-details.html', context)
 
 
@@ -182,8 +184,8 @@ def ajaxcolortest(request):
     if request.POST.get('action') == 'post':
         size_id = request.POST.get('size')
         productid = request.POST.get('productid')
-        colors = VariantDetails.objects.filter(product_id=productid, size_id=size_id)
-        images = VariantDetails.objects.filter(product_id=productid, size_id=size_id)
+        colors = Variants.objects.filter(product_id=productid, size_id=size_id)
+        images = Variants.objects.filter(product_id=productid, size_id=size_id)
         context = {
             'size_id': size_id,
             'productid': productid,

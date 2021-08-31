@@ -1,7 +1,7 @@
 from ckeditor.widgets import CKEditorWidget
 from django import forms
 
-from catalog.models.models import Categories, Products, ProductMedia, AttributesDetails, OptionsDetails, VariantDetails
+from catalog.models.models import Categories, Products, ProductMedia, AttributesDetails, OptionsDetails, Variants
 from catalog.models.product_options import Color, Size, OptionsType
 
 
@@ -16,6 +16,7 @@ class CategoryAddForm(forms.ModelForm):
 
 class ProductsForm(forms.ModelForm):
     # product_id = forms.IntegerField(required=False)
+
     category = forms.ModelChoiceField(queryset=Categories.objects.all(), label=u"Category", )
     # filter = forms.ModelChoiceField(queryset=Filters.objects.all(), label=u"Filter", required=False,
     #                                 widget=ModelSelect2Widget(
@@ -69,7 +70,7 @@ class AttributesDetailsForm(forms.ModelForm):
 
 
 class OptionsDetailsForm(forms.ModelForm):
-    option_type = forms.ModelChoiceField(queryset=OptionsType.objects.all(), label=u"OptionsType",
+    option_type = forms.ModelChoiceField(queryset=OptionsType.objects.all(), label=u"OptionsType",required=False
                                     )
 
     option_price = forms.CharField(required=False)
@@ -94,7 +95,7 @@ class VariantDetailsForm(forms.ModelForm):
     variant_quantity = forms.CharField(required=False)
     variant_image = forms.CharField(required=False)
     class Meta:
-        model = VariantDetails
+        model = Variants
         fields = '__all__'
         exclude = ['product']
 

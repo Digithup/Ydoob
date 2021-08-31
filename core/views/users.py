@@ -62,11 +62,11 @@ class AdminLogin(View):
                     return redirect(redirect_path)
 
                 else:
-                    return redirect("/admin/")
+                    return redirect("/dashboard/")
 
             else:
                 print("error")
-                return redirect("/admin/login/")
+                return redirect("/dashboard/login/")
 
         context = {
             "title": "Login",

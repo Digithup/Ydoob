@@ -81,8 +81,8 @@ INSTALLED_APPS = [
     'sales.apps.SalesConfig',
     'vendors.apps.VendorsConfig',
     'user.apps.UserConfig',
-
     'billing',
+
     # eEXTERNAL  APPS
     'ckeditor',
     'ckeditor_uploader',
@@ -95,13 +95,15 @@ INSTALLED_APPS = [
     'parler',
     'currencies',
     'social_django',
+'notifications',
 
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+NOTIFICATIONS_NOTIFICATION_MODEL = 'apps.core.Notification'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
