@@ -11,6 +11,8 @@ from catalog.models.models import Categories, Products, ProductMedia, Variants
 
 # if hasattr(request.user, 'lang'):
 #   request.session['django_language'] = request.user.lang
+from vendors.models import Store
+
 
 def error403(request):
     return render(request, 'front/ErrorPage/403.html', )
@@ -33,7 +35,7 @@ def CategoriesDetail(request):
         'all_category': all_category
     }
     # return HttpResponse(1)
-    return render(request, 'categories.html', context)
+    return render(request, 'Category/categories.html', context)
 
 
 def CategoryDetail(request, id, slug):
@@ -63,7 +65,7 @@ def CategoryDetail(request, id, slug):
                'category': category,
                'categories': categories,
                'category_product': category_product}
-    return render(request, 'category.html', context)
+    return render(request, 'Category/category.html', context)
 
 
 def ProductsListView(request):
@@ -71,7 +73,7 @@ def ProductsListView(request):
     data = Products.objects.all().order_by('-id')[:3]
     min_price = Products.objects.aggregate(Min('price'))
     max_price = Products.objects.aggregate(Max('price'))
-    return render(request, 'category.html',
+    return render(request, 'Category/category.html',
                   {
                       'data': data,
                       'total_data': total_data,
@@ -97,7 +99,7 @@ class ProductDetailView(DetailView):
         return context
 
 
-def product_detail(request, slug, id):
+def product_detail(request, id, slug):
     query = request.GET.get('q')
     # >>>>>>>>>>>>>>>> M U L T I   L A N G U G A E >>>>>> START
     defaultlang = settings.LANGUAGE_CODE[0:2]  # en-EN
@@ -106,6 +108,7 @@ def product_detail(request, slug, id):
     category = Categories.objects.all()
 
     product = Products.objects.get(slug=slug)
+    store=Store.objects.get(vendor__id=product.seller.id)
 
     if defaultlang != currentlang:
         try:
@@ -123,26 +126,29 @@ def product_detail(request, slug, id):
     images = ProductMedia.objects.filter(product=product)
     # comments = Comment.objects.filter(product_id=id,status='True')
     context = {'product': product, 'category': category,
-               'images': images,
+               'images': images,'store':store,
                }
-    if product.variantdetails_set.all != "None":  # Product have variants
+    if product.variant != "None":  # Product have variants
         if request.method == 'POST':  # if we select color
             variant_id = request.POST.get('variantid')
             variant = Variants.objects.get(id=variant_id)  # selected product by click color radio
-            colors = Variants.objects.filter(product_id=id, size_id=variant.size_id)
+            colors = Variants.objects.filter(product=product, size_id=variant.size_id)
+            images = Variants.objects.filter(product=product, size_id=variant.size_id)
             sizes = Variants.objects.raw(
-                'SELECT * FROM catalog_variantdetails WHERE product_id=%s group by size_id', [id])
-            query += variant.title + ' Size:' + str(variant.size) + ' Color:' + str(variant.color)
+                'SELECT * FROM  catalog_variants  WHERE product_id=%s GROUP BY size_id', [id])
+            query += variant.title + ' Size:' + str(variant.size) + ' Color:' + str(variant.color )
+
         else:
             variants = Variants.objects.filter(product=product)
-            colors = Variants.objects.filter(product=product, )
+            colors = Variants.objects.filter(product=product, size_id=variants[0].size_id)
+            images = Variants.objects.filter(product=product, size_id=variants[0].size_id)
             sizes = Variants.objects.raw(
-                'SELECT * FROM  catalog_variantdetails WHERE product_id=%s group by size_id', [id])
+                'SELECT * FROM  catalog_variants  WHERE product_id=%s GROUP BY size_id', [id])
             variant = Variants.objects.get(id=variants[0].id)
         context.update({'sizes': sizes, 'colors': colors,
-                        'variant': variant, 'query': query
-                        })
-    return render(request, 'pd3.html', context)
+                        'variant': variant, 'query': query,
+                        'images':images,'store':store,})
+    return render(request, 'Products-Page/product-detail-finich1.html', context)
 
 
 def ajaxcolor(request):
@@ -156,7 +162,7 @@ def ajaxcolor(request):
             'productid': productid,
             'colors': colors,
         }
-        data = {'rendered_table': render_to_string('color_list.html', context=context)}
+        data = {'rendered_table': render_to_string('Product-Page/templates/Products-Page/color_list.html', context=context)}
         return JsonResponse(data)
     return JsonResponse(data)
 
@@ -174,7 +180,7 @@ def ProductSearch(request):
     context = {'data': data,
                'images': images,
                }
-    return render(request, 'search_products.html', context)
+    return render(request, 'Search/search_products.html', context)
 
 
 # Filter Data

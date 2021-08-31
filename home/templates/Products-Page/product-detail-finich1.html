@@ -6,8 +6,8 @@
 {% load bootstrap4 %}
 {% load currency %}
 <!--Slick slider css-->
-<link rel="stylesheet" type="text/css" href="{%  static '' %}assets/css/slick.css">
-<link rel="stylesheet" type="text/css" href="{%  static '' %}assets/css/slick-theme.css">
+<link rel="stylesheet" type="text/css" href="{% static 'product-detail-finich1.html' %}assets/css/slick.css">
+<link rel="stylesheet" type="text/css" href="{% static 'product-detail-finich1.html' %}assets/css/slick-theme.css">
 {% block body %}
 
 
@@ -65,7 +65,7 @@
                             <div class="product-service">
                                 <div class="media">
                                     <svg>
-                                        <use xlink:href="{% static '' %}assets/svg/icons.svg#returnable"></use>
+                                        <use xlink:href="{% static 'product-detail-finich1.html' %}assets/svg/icons.svg#returnable"></use>
                                     </svg>
                                     <div class="media-body">
                                         <h4>10 days returnable</h4>
@@ -103,7 +103,7 @@
                                 </div>
                                 <div class="media">
                                     <svg>
-                                        <use xlink:href="{% static '' %}assets/svg/icons.svg#warranty"></use>
+                                        <use xlink:href="{% static 'product-detail-finich1.html' %}assets/svg/icons.svg#warranty"></use>
                                     </svg>
                                     <div class="media-body">
                                         <h4>1 Year Warranty</h4>
@@ -205,7 +205,19 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="product-slick">
-                                        {% for rs in product.productmedia_set.all %}
+                                        {% if variant.image_id > 0 %}
+                                            <div>
+                                                <img src="{{ variant.image.url }}" alt="" style="height: 400px">
+                                            </div>
+                                        {% else %}
+                                             {% for rs in images %}
+                                            <div>
+                                                <img src="{{ rs.image.url }}" alt="" height="50px" width="50%"
+                                                     class="img-fluid blur-up lazyload image_zoom_cls-0">
+                                            </div>{% endfor %}
+                                        {% endif %}
+
+                                        {% for rs in Media %}
                                             <div>
                                                 <img src="{{ rs.image.url }}" alt="" height="50px" width="50%"
                                                      class="img-fluid blur-up lazyload image_zoom_cls-0">
@@ -220,16 +232,27 @@
                                     <div class="row">
                                         <div class="col-12 p-0">
                                             <div class="slider-nav">
-                                                {% for rs in product.productmedia_set.all %}
-                                                    <div>
-                                                        <img src="{{ rs.image.url }}" alt=""
-                                                             class="img-fluid blur-up lazyload image_zoom_cls-0">
-                                                    </div>{% endfor %}
+                                                {% if variant.image_id > 0 %}
+                                            <div>
+                                                <img src="{{ variant.image }}" alt="" style="height: 400px">
+                                            </div>
+                                        {% else %}
+                                             {% for rs in images %}
+                                            <div>
+                                                <img src="{{ rs.image.url }}" alt="" height="50px" width="50%"
+                                                     class="img-fluid blur-up lazyload image_zoom_cls-0">
+                                            </div>{% endfor %}
+                                        {% endif %}
+                                            {% for rs in Media %}
+                                            <div>
+                                                <img src="{{ rs.image.url }}" alt="" height="50px" width="50%"
+                                                     class="img-fluid blur-up lazyload image_zoom_cls-0">
+                                            </div>{% endfor %}
 
 
                                                 <div>
                                                     <div class="video-icon">
-                                                        <img src="{% static '' %}assets/images/pro3/27.jpg" alt=""
+                                                        <img src="{% static 'product-detail-finich1.html' %}assets/images/pro3/27.jpg" alt=""
                                                              class="img-fluid blur-up lazyload">
                                                         <i class="fa fa-play" aria-hidden="true"></i>
                                                     </div>
@@ -243,13 +266,13 @@
                                         <div class="product-count">
                                             <ul>
                                                 <li>
-                                                    <img src="{% static '' %}assets/images/fire.gif" class="img-fluid"
+                                                    <img src="{% static 'product-detail-finich1.html' %}assets/images/fire.gif" class="img-fluid"
                                                          alt="image">
                                                     <span class="p-counter">37</span>
                                                     <span class="lang">orders in last 24 hours</span>
                                                 </li>
                                                 <li>
-                                                    <img src="{% static '' %}assets/images/person.gif"
+                                                    <img src="{% static 'product-detail-finich1.html' %}assets/images/person.gif"
                                                          class="img-fluid user_img"
                                                          alt="image">
                                                     <span class="p-counter">44</span>
@@ -298,7 +321,6 @@
                                         <div class="product-btns">
                                             <div class="row">
                                                 {% if product.variant == 'Size-Color' %}
-
                                                     <div class="product-options">
                                                         <div class="size-option">
                                                             <form method="POST" id="post-form">
@@ -333,7 +355,7 @@
                                                                                     </button>
                                                                                 </div>
                                                                                 <div class="modal-body"><img
-                                                                                        src="{% static '' %}assets/images/size-chart.jpg"
+                                                                                        src="{% static 'product-detail-finich1.html' %}assets/images/size-chart.jpg"
                                                                                         alt=""
                                                                                         class="img-fluid blur-up lazyload">
                                                                                 </div>
@@ -344,7 +366,6 @@
                                                                     <div class="size-box">
                                                                         <ul><select class="product-box" id="size"
                                                                                     name="size">
-
                                                                             {% for rs in sizes %}
                                                                                 <option
                                                                                         {% if variant.size_id == rs.size_id %}
@@ -363,70 +384,22 @@
                                                         <form method="post" action="?q=selectvariant" id="post-color">
                                                             {% csrf_token %}
                                                             <div id="appendHere">
-                                                                <input type="hidden" name="size" id="size"
-                                                                       value="{{ size_id }}">
-
-                                                                <ul class="color-option">
-                                                                    <div class="">
-                                                                        <li><span class="text-uppercase">Color:</span>
-                                                                            <a
-                                                                                    style="background-color:{{ variant.color }};   width: 70px">
-                                                                                {{ variant.color }}
-                                                                            </a>
-                                                                        </li>
-                                                                    </div>
-                                                                    {% for rs in colors %}
-
-
-                                                                        <li>
-
-                                                                            <ul class="color-variant">
-
-                                                                                <button class="bg-light0 "
-
-
-                                                                                        name="variantid"
-                                                                                        id="variantid"
-                                                                                        style="background:{{ rs.color.code }} ;border-radius:60%;height:30px;width:30px
-                                                                                                "
-                                                                                        value="{{ rs.id }}"
-                                                                                        title="{{ rs.title }}"
-                                                                                        onclick="this.form.submit();">
-                                                                                    <li class="icon-nav d-none d-sm-block"></li>
-
-                                                                                </button>
-
-
-                                                                            </ul>
-                                                                            <ul class="image-swatch">
-                                                                                <button class="datepicker--button"
-
-                                                                                        name="variantid"
-                                                                                        id="variantid"
-                                                                                        value="{{ rs.id }}"
-                                                                                        title="{{ rs.title }}"
-
-                                                                                        onclick="this.form.submit();">
-                                                                                    {% if variant.id == rs.id %}
-                                                                                    {% endif %}
-                                                                                    <img class="imgSwatch" type="image"
-                                                                                         src="{{ rs.image.url }}"
-                                                                                         style="height:50px; width:38px"
-
-                                                                                    />
-                                                                                </button>
-
-                                                                            </ul>
-
-                                                                            {#                                                                            <img src="{{ rs.image.url }}"#}
-                                                                            {#                                                                                 style="height: 70px">#}
-                                                                        </li>
-                                                                    {% endfor %}
-                                                                </ul>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-
+                                                              <input type="hidden" name="size" id="size" value="{{ size_id }}">
+                                                    <ul class="color-option" >
+                                                        <li><span class="text-uppercase">Color:</span></li>
+                                                        {% for rs in colors %}
+                                                            <input type="radio"  {% if variant.id == rs.id %} checked {% endif %} name="variantid" id="variantid" value="{{ rs.id }}" onchange="this.form.submit();">
+                                                            <li  {% if variant.id == rs.id %} class="active" {% endif %}>
+                                                                <a style="background-color:{{ rs.color.code }}; color: #D9D9D9; text-shadow: 1px 1px #000000; width: 90px">
+                                                                    {{ rs.price }}  {{ rs.color }}
+                                                                </a>
+                                                                <img src="{{ rs.image.url }}" style="height: 70px">
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            </form>
+                                        </div>
 
                                                 {% elif product.variant == 'Size' %}
                                                     <form method="post" action="?q=selectvariant" id="post-color">
@@ -516,86 +489,97 @@
                                                     </div>
                                                 {% endif %}
 
+
                                             {% if  product.variant != 'None' %}
                                                 <div class="row col-md-15">
-                                                 <div class="col-md-6">
-                                                     <form action="{% url 'sales:AddToCart' product.id  %}"
-                                                      method="post"
-                                                      id="addchart-form">
-                                                    {% csrf_token %}
-                                                      <input type="hidden" name="variant" id="variantid" value="{{ variant.id }}">
-                                                     <input type="hidden" name="store" id="storeid" value="{{ store.id }}">
-                                                      <div class="qty-box">
+                                                    <div class="col-md-10">
+                                                        <form action="{% url 'sales:AddToCart' product.id %}"
+                                                              method="post"
+                                                              id="addchart-form">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="variant" id="variantid"
+                                                                   value="{{ variant.id }}">
+                                                            <input type="hidden" name="store" id="storeid"
+                                                                   value="{{ store.id }}">
+                                                            <div class="qty-box">
+
+                                                            </div>
+                                                           <h6 class="product-title">quantity</h6>
+                                                         <div class="qty-box">
                                     <div class="input-group"><span class="input-group-prepend"><button type="button"
                                                 class="btn quantity-left-minus" data-type="minus" data-field=""><i
                                                     class="ti-angle-left"></i></button> </span>
-                                        <input type="number" name="quantity" class="form-control input-number" value="1" max="{{ variant.quantity }}">
-                                        <span class="input-group-prepend"><button type="button" {% if product_variant > product_variant %}disabled{% endif %}
-                                                class="btn quantity-right-plus" data-type="plus" data-field="" data-parent="{{ variant.quantity }}"><i
+                                        <input type="text" name="quantity" class="form-control input-number" value="1">
+                                        <span class="input-group-prepend"><button type="button"
+                                                class="btn quantity-right-plus" data-type="plus" data-field=""><i
                                                     class="ti-angle-right"></i></button></span>
                                     </div>
                                 </div>
-                                                     <span class="text-uppercase">QTY: </span>
-                                            <input class="input" name="quantity" type="number" value="1" min="1" max="{{ variant.quantity }}">
-                                                    <div class="product-buttons">
-                                                        <button type="submit" {% if variant.quantity < 1 %}
-                                                                disabled {% endif %}
-                                                                class="btn btn-solid hover-solid btn-animation">
-                                                            <i class="fa fa-shopping-cart me-1"
-                                                               aria-hidden="true"></i> Add to Cart
-                                                        </button>
+
+                                                            <div class="product-buttons">
+                                                                <button type="submit" {% if variant.quantity < 1 %}
+                                                                        disabled {% endif %}
+                                                                        class="btn btn-solid hover-solid btn-animation">
+                                                                    <i class="fa fa-shopping-cart me-1"
+                                                                       aria-hidden="true"></i> Add to Cart
+                                                                </button>
+                                                            </div>
+                                                        </form>
                                                     </div>
-                                                </form>
-                                                 </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4">
                                                         <form action="{% url 'sales:AddWishlist' %}" method="post">
-                                                    {% csrf_token %}
-                                                    <input type="hidden" name="product-id" value="{{ product.id }}">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="product-id"
+                                                                   value="{{ product.id }}">
 
-                                                    <button type="submit"
-                                                            class="btn btn-solid hover-solid btn-animation">
-                                                        <i class="fa fa-bookmark fz-16 me-2"
-                                                           aria-hidden="true"></i> wishlist
-                                                        </button>
+                                                            <button type="submit"
+                                                                    class="btn btn-solid hover-solid btn-animation">
+                                                                <i class="fa fa-bookmark fz-16 me-2"
+                                                                   aria-hidden="true"></i> wishlist
+                                                            </button>
 
-                                                </form>
+                                                        </form>
                                                     </div>
 
                                                 </div>
                                                 </div>
                                             {% else %}
 
-                                              <div class="row col-md-15">
-                                                 <div class="col-md-6">
-                                                     <form action="{% url 'sales:AddToCart' product.id %}"
-                                                      method="post"
-                                                      id="addchart-form">
-                                                    {% csrf_token %}
-                                                      <input type="hidden" name="variant" id="variantid" value="{{ variant.id }}">
-                                                     <input type="hidden" name="store" id="storeid" value="{{ store.id }}">
-                                                    <div class="product-buttons">
-                                                    <span class="text-uppercase">QTY: </span>
-                                            <input class="input" name="quantity" type="number" value="1" min="1" max="{{ variant.quantity }}">
-                                                        <button type="submit" {% if variant.quantity < 1 %}
-                                                                disabled {% endif %}
-                                                                class="btn btn-solid hover-solid btn-animation">
-                                                            <i class="fa fa-shopping-cart me-1"
-                                                               aria-hidden="true"></i> Add to Cart
-                                                        </button>
+                                                <div class="row col-md-15">
+                                                    <div class="col-md-6">
+                                                        <form action="{% url 'sales:AddToCart' product.id %}"
+                                                              method="post"
+                                                              id="addchart-form">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="variant" id="variantid"
+                                                                   value="{{ variant.id }}">
+                                                            <input type="hidden" name="store" id="storeid"
+                                                                   value="{{ store.id }}">
+                                                            <div class="product-buttons">
+                                                                <span class="text-uppercase">QTY: </span>
+                                                                <input class="input" name="quantity" type="number"
+                                                                       value="1" min="1" max="{{ variant.quantity }}">
+                                                                <button type="submit" {% if variant.quantity < 1 %}
+                                                                        disabled {% endif %}
+                                                                        class="btn btn-solid hover-solid btn-animation">
+                                                                    <i class="fa fa-shopping-cart me-1"
+                                                                       aria-hidden="true"></i> Add to Cart
+                                                                </button>
+                                                            </div>
+                                                        </form>
                                                     </div>
-                                                </form>
-                                                 </div>
                                                     <div class="col-md-6">
                                                         <form action="{% url 'sales:AddWishlist' %}" method="post">
-                                                    {% csrf_token %}
-                                                    <input type="hidden" name="product-id" value="{{ product.id }}">
-                                                    <button type="submit"
-                                                            class="btn btn-solid hover-solid btn-animation">
-                                                        <i class="fa fa-bookmark fz-16 me-2"
-                                                           aria-hidden="true"></i> wishlist
-                                                        </button>
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="product-id"
+                                                                   value="{{ product.id }}">
+                                                            <button type="submit"
+                                                                    class="btn btn-solid hover-solid btn-animation">
+                                                                <i class="fa fa-bookmark fz-16 me-2"
+                                                                   aria-hidden="true"></i> wishlist
+                                                            </button>
 
-                                                </form>
+                                                        </form>
                                                     </div>
 
                                                 </div>
@@ -606,7 +590,7 @@
                                     <div class="product-count">
                                         <ul>
                                             <li>
-                                                <img src="{% static '' %}assets/images/icon/truck.png" class="img-fluid"
+                                                <img src="{% static 'product-detail-finich1.html' %}assets/images/icon/truck.png" class="img-fluid"
                                                      alt="image">
                                                 <span class="lang">Free shipping for orders above $500 USD</span>
                                             </li>
@@ -805,7 +789,7 @@
                                                      class="img-fluid blur-up lazyload bg-img" alt=""></a>
                                 </div>
                                 <div class="back">
-                                    <a href="#"><img src="{% static '' %}assets/images/pro3/34.jpg"
+                                    <a href="#"><img src="{% static 'product-detail-finich1.html' %}assets/images/pro3/34.jpg"
                                                      class="img-fluid blur-up lazyload bg-img" alt=""></a>
                                 </div>
                                 <div class="cart-info cart-wrap">
@@ -858,7 +842,7 @@
                                     <div class="media">
                                         <a href="#">
                                             <img class="img-fluid blur-up lazyload pro-img"
-                                                 src="{% static '' %}assets/images/fashion/product/43.jpg" alt="">
+                                                 src="{% static 'product-detail-finich1.html' %}assets/images/fashion/product/43.jpg" alt="">
                                         </a>
                                         <div class="media-body align-self-center text-center">
                                             <a href="#">
@@ -877,7 +861,7 @@
                                             </div>
 
                                             <div class="upsell_payment">
-                                                <img src="{% static '' %}assets/images/payment_cart.png"
+                                                <img src="{% static 'product-detail-finich1.html' %}assets/images/payment_cart.png"
                                                      class="img-fluid blur-up lazyload" alt="">
                                             </div>
                                         </div>
@@ -891,7 +875,7 @@
                                                 <div class="img-wrapper">
                                                     <div class="front">
                                                         <a href="#">
-                                                            <img src="{% static '' %}assets/images/fashion/product/1.jpg"
+                                                            <img src="{% static 'product-detail-finich1.html' %}assets/images/fashion/product/1.jpg"
                                                                  class="img-fluid blur-up lazyload mb-1"
                                                                  alt="cotton top">
                                                         </a>
@@ -906,7 +890,7 @@
                                                 <div class="img-wrapper">
                                                     <div class="front">
                                                         <a href="#">
-                                                            <img src="{% static '' %}assets/images/fashion/product/34.jpg"
+                                                            <img src="{% static 'product-detail-finich1.html' %}assets/images/fashion/product/34.jpg"
                                                                  class="img-fluid blur-up lazyload mb-1"
                                                                  alt="cotton top">
                                                         </a>
@@ -921,7 +905,7 @@
                                                 <div class="img-wrapper">
                                                     <div class="front">
                                                         <a href="#">
-                                                            <img src="{% static '' %}assets/images/fashion/product/13.jpg"
+                                                            <img src="{% static 'product-detail-finich1.html' %}assets/images/fashion/product/13.jpg"
                                                                  class="img-fluid blur-up lazyload mb-1"
                                                                  alt="cotton top">
                                                         </a>
@@ -936,7 +920,7 @@
                                                 <div class="img-wrapper">
                                                     <div class="front">
                                                         <a href="#">
-                                                            <img src="{% static '' %}assets/images/fashion/product/19.jpg"
+                                                            <img src="{% static 'product-detail-finich1.html' %}assets/images/fashion/product/19.jpg"
                                                                  class="img-fluid blur-up lazyload mb-1"
                                                                  alt="cotton top">
                                                         </a>
@@ -965,7 +949,7 @@
         <div class="container">
             <div class="cart-content">
                 <div class="product-image">
-                    <img src="{% static '' %}assets/images/pro3/1.jpg" class="img-fluid" alt="">
+                    <img src="{% static 'product-detail-finich1.html' %}assets/images/pro3/1.jpg" class="img-fluid" alt="">
                     <div class="content d-lg-block d-none">
                         <h5>WOMEN PINK SHIRT</h5>
                         <h6>$32.96
@@ -1003,7 +987,7 @@
 
     <!-- recently purchase product -->
     <div class="media recently-purchase">
-        <img src="{% static '' %}assets/images/pro3/sm.jpg" alt="Floral Dress ">
+        <img src="{% static 'product-detail-finich1.html' %}assets/images/pro3/sm.jpg" alt="Floral Dress ">
         <div class="media-body">
             <div>
                 <div class="title">
@@ -1028,7 +1012,7 @@
 {% block custom_js %}
 
     <!-- sticky cart bottom js-->
-    <script src="{%  static '' %}assets/js/sticky-cart-bottom.js"></script>
+    <script src="{% static 'product-detail-finich1.html' %}assets/js/sticky-cart-bottom.js"></script>
 
 {% endblock custom_js %}
 
