@@ -251,7 +251,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # dynamic data translate
 LANGUAGE_CODE = 'en'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'UTC+2'
 USE_I18N = True  # use internationalization
 USE_L10N = True  # use localization
 USE_TZ = True

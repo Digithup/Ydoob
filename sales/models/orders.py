@@ -7,6 +7,7 @@ from catalog.models.models import Products
 from helper import modelHelper
 
 from sales.models.cart import Location
+from sales.models.payment import Payment
 from user.models import UserAddress
 from vendors.models import Vendor
 
@@ -46,18 +47,14 @@ class Order(models.Model):
 
     code = models.CharField(max_length=5, editable=False)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    payment_method = models.ForeignKey(
-        PaymentMethods, on_delete=models.PROTECT, null=False, blank=False)
-    payment_status = models.CharField(
-        max_length=100, null=False, blank=False, default="1", choices=payment_status_choice)
-    first_name = models.CharField(max_length=10)
-    last_name = models.CharField(max_length=10)
-    phone = models.CharField(blank=True, max_length=20)
+    payment_method = models.ForeignKey(PaymentMethods, on_delete=models.PROTECT, null=False, blank=False)
+    payment_status = models.CharField( max_length=100, null=False, blank=False, default="1", choices=payment_status_choice)
+    payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, blank=True, null=True)
+
     address = models.ForeignKey(UserAddress, on_delete=models.SET_NULL, null=True)
-    city = models.CharField(blank=True, max_length=20)
-    country = models.CharField(blank=True, max_length=20)
     total = models.FloatField()
     status = models.CharField(max_length=10, choices=STATUS, default='New')
+    ordered = models.BooleanField(default=False)
     ip = models.CharField(blank=True, max_length=20)
     adminnote = models.CharField(blank=True, max_length=100)
     create_at = models.DateTimeField(auto_now_add=True)
@@ -68,7 +65,6 @@ class Order(models.Model):
 
 
 class OrderProduct(models.Model):
-
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Products, on_delete=models.CASCADE)

@@ -57,13 +57,16 @@
                         <div class="card-header">
                             <div class="row col-md-12">
                                 <div class="col-md3">
-                                    {% for rs in vendor_order %}
-                                        <td>Payment Stats:
-                                {{ rs.order.payment_status.title }}</td>
-                                        <td>Payment Method:
-                                {{ rs.order.payment_method }}</td>
-                                      {% endfor %}
-                                        <td class="pull-right"> {{ form }}</td>
+                                    <span style="padding-left:20px">
+                                        <td> Payment Stats: {{ object.order.payment.paid }}</td>
+                                        &#160;&#160;&#160;&#160;&#160;
+
+                                        <td>Payment Method: {{ object.order.payment_method }}</td>
+                                        &#160;&#160;&#160;&#160;&#160;
+
+                                        <td class="pull-right"> {{ form }}</td></span>
+
+
 
                                 <button  type="submit" class="btn btn-primary pull-right">Change</button>
                                 </div>
@@ -106,12 +109,12 @@
                                             <div class="card-body  ">
                                                <h5 class="f-w-600">Profile</h5>
                                         <div class="table-responsive profile-table">
-                                            {% for rs in vendor_order %}
+                                            {% for rs in order %}
                                             <table class="table table-borderless">
                                                 <tbody>
                                                 <tr>
                                                     <td>First Name:</td>
-                                                    <td>{{ rs.user.first_name }}</td>
+                                                    <td>{{ rs.orderproduct.user.last_name }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Last Name:</td>

@@ -2,7 +2,8 @@
 {% load crispy_forms_filters %}
 {% load static %}
 {% block javascript %}
-  <script src="{% static 'CustomFile/AddressJs.js' %}"></script>
+
+
 {% endblock %}
 {% load i18n %}
 {% block body %}
@@ -179,14 +180,8 @@ button:hover {
 
 {% endblock %}
 {% endblock %}
-{% block foot %} {% include 'front/footer.html' %}  {% endblock %}
-{% block js %}{% include 'front/js.html' %}{% endblock %}
-
-
-
-
- {% block extra_scripts %}
-<script src="https://js.stripe.com/v3/"></script>
+{% block custom_js %}
+    <script src="https://js.stripe.com/v3/"></script>
 <script nonce="">  // Create a Stripe client.
   var stripe = Stripe("pk_test_51J0RXNGtFP6X219RWcEB73bmW5TibfQxM7pdcuq6bSOp1syVZYDtIj3E3WFsGmCLy16Al7poS1WHc9aG2Sy5vrx800MYhiTw3t");
    console.log(stripe)
@@ -273,6 +268,9 @@ button:hover {
 
 </script>
 
-</script>
 
-</script> {% endblock %}
+{% endblock custom_js %}
+{% block foot %} {% include 'front/footer.html' %}  {% endblock %}
+{% block js %}{% include 'front/js.html' %}{% endblock %}
+
+

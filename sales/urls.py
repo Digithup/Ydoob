@@ -28,14 +28,16 @@ urlpatterns = [
 
     ##############Payment#####################
     path('payment/<payment_option>/', PaymentView.as_view(), name='payment'),
-    path('payment/<payment_option>/', PaymentStripe.as_view(), name='PaymentStripe'),
+    path('payment/', PaymentStripe.as_view(), name='PaymentStripe'),
+
+
+
+    path('api/checkout-session/', create_checkout_session.as_view(), name='OrderStripe'),
+    path('api/webhookstripe/', my_webhook_view, name='WebhookStripe'),
 
     path('cart/success/', PaymentSuccess, name='PaymentSuccess'),
     path('failed/', PaymentFailedView.as_view(), name='PaymentFailed'),
     path('history/', OrderHistoryListView.as_view(), name='history'),
-
-    path('api/checkout-session/', create_checkout_session.as_view(), name='OrderStripe'),
-    path('api/webhookstripe/', my_webhook_view, name='WebhookStripe'),
 
     path('create-payment-intent/<pk>/', StripeIntentView.as_view(), name='create-payment-intent'),
     path('webhooks/stripe/', stripe_webhook, name='stripe-webhook'),

@@ -1,4 +1,3 @@
-
 import stripe as stripe
 from django.conf import settings
 from django.contrib import messages
@@ -11,14 +10,15 @@ from django.template.context_processors import request
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.views import View
+from stripe.api_resources import source
 
 from catalog.models.models import Products, Categories, Variants
-from sales.forms.forms import  CheckoutForm
+from sales.forms.forms import CheckoutForm
 from sales.models.cart import ShopCart
-
 
 from sales.models.orders import OrderProduct, PaymentMethods, Order
 from sales.models.payment import Payment
+from sales.views.payment import create_checkout_session
 from sales.views.stripe_payment import stripe_payment
 from user.models import UserAddress
 from vendors.models import Vendor
@@ -149,7 +149,6 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 @login_required
 def Checkout(request):
-
     current_user = request.user
     shopcart = ShopCart.objects.filter(user_id=current_user.id)
     total = 0
@@ -171,11 +170,9 @@ def Checkout(request):
             address = UserAddress.objects.get(id=address)
             payment_method = request.POST.get('payment_method')
             payment_method = PaymentMethods.objects.get(id=payment_method)
-
-
             data = Order()
             data.address = address
-            data.payment_method=payment_method
+            data.payment_method = payment_method
             print(request.POST)
 
             data.user_id = current_user.id
@@ -189,8 +186,8 @@ def Checkout(request):
                 detail = OrderProduct()
                 detail.order_id = data.id  # Orders Id
                 detail.product_id = rs.product_id
-                vendor=Vendor.objects.get(vendor=rs.product.seller)
-                detail.vendor=vendor
+                vendor = Vendor.objects.get(vendor=rs.product.seller)
+                detail.vendor = vendor
                 detail.user_id = current_user.id
                 detail.quantity = rs.quantity
                 if rs.product.variant == 'None':
@@ -216,8 +213,8 @@ def Checkout(request):
             request.session['cart_items'] = 0
             messages.success(request, "Your Orders has been completed. Thank you ")
 
-            #return render(request, 'payments/payment_success.html',{'ordercode':ordercode,'category': category})
-            return redirect('sales:payment',payment_option= payment_method )
+            # return render(request, 'payments/payment_success.html',{'ordercode':ordercode,'category': category})
+            return redirect('sales:payment', payment_option=payment_method)
         else:
             messages.warning(request, form.errors)
             return HttpResponseRedirect(reverse('sales:OrderProduct'))
@@ -236,60 +233,47 @@ def Checkout(request):
     return render(request, 'checkout.html', context)
 
 
-
-class PaymentView (LoginRequiredMixin, View):
+class PaymentView(LoginRequiredMixin, View):
     '''
     Handle Stripe payment (Stripe API)
     '''
-    def get (self,request, *args, **kwargs):
-        #payment_method = request.POST.get('payment_method')
-        #print(request.POST)
-        #payment_method = kwargs["payment_method"]
-        #print(payment_method)
-        #payment_method=PaymentMethods.objects.get(method=payment_method)
-        #print(payment_method)
 
-
-        order = Order.objects.filter(user=self.request.user, status='New'  ).last()
-        payment_method=PaymentMethods.objects.get(id=order.payment_method.id)
+    def get(self, request, *args, **kwargs):
+        order = Order.objects.filter(user=self.request.user, status='New').last()
+        payment_method = PaymentMethods.objects.get(id=order.payment_method.id)
         print(payment_method)
-        if payment_method.method == "COD" :
+        if payment_method.method == "COD":
             print(payment_method)
-            return render( request,'payments/payment_success.html',)
+            return render(request, 'payments/payment_success.html', )
         elif payment_method.method == 'Stripe':
             print(payment_method)
-
-            return HttpResponse('Stripe')
-
+            # return HttpResponseRedirect(reverse('sales:PaymentStripe', payment_option= payment_method))
+            return redirect('sales:PaymentStripe', )
         elif payment_method.method == None:
             print(payment_method)
             return HttpResponse('error')
         else:
-            return HttpResponse('error thing' )
+            return HttpResponse('error thing')
 
 
-
-
-
-
-
-class PaymentStripe (LoginRequiredMixin, View):
+class PaymentStripe(LoginRequiredMixin, View):
     '''
     Handle Stripe payment (Stripe API)
     '''
-    def get (self, *args, **kwargs):
-        order = Order.objects.get(user=self.request.user, status='New' )
+
+    def get(self, *args, **kwargs):
+        order = Order.objects.get(user=self.request.user, ordered=False)
         context = {
             'STRIPE_PUBLIC_KEY': settings.STRIPE_PUBLIC_KEY,
             'order': order
         }
-        return render (self.request, 'payments/payment.html', context)
+        return render(self.request, 'payments/payment.html', context)
 
-    def post(self,*args, **kwargs):
+    def post(self, *args, **kwargs):
         # Create Stripe payment
         order = Order.objects.get(user=self.request.user, ordered=False)
         token = self.request.POST.get('stripeToken')
-        chargeID = stripe_payment(settings.STRIPE_SECRET_KEY,token, order.get_total(),str(order.id))
+        chargeID = stripe_payment(settings.STRIPE_SECRET_KEY, token, order.total, str(order.code))
         if (chargeID is not None):
             order.ordered = True
 
@@ -297,11 +281,13 @@ class PaymentStripe (LoginRequiredMixin, View):
             payment = Payment()
             payment.stripe_charge_id = chargeID
             payment.user = self.request.user
-            payment.price = order.get_total() * 100
+            payment.price = order.total
+            payment.paid= 'True'
             payment.save()
             order.payment = payment
             order.save()
+            #return render(request, 'payments/payment_success.html', )
             return redirect('/')
         else:
             messages.error(self.request, "Something went wrong with Stripe. Please try again later")
-            return redirect ('dj_e_commerce:payment', payment_option= 'S')
+            return redirect('sales:PaymentStripe',)

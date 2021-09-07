@@ -1,9 +1,9 @@
 from django.forms import ModelForm
 
-from sales.models.orders import Order
+from sales.models.orders import Order, OrderProduct
 
 
 class OrderStatusForm(ModelForm):
     class Meta:
-        model = Order
+        model = OrderProduct
         fields = ['status']

@@ -4,7 +4,7 @@ import stripe
 from django.conf import settings
 from django.contrib import messages
 from django.core.mail import send_mail
-from django.http import HttpResponseNotFound, JsonResponse, request, HttpResponse
+from django.http import HttpResponseNotFound, JsonResponse, request, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import generic, View
@@ -12,6 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, ListView
 from stripe import Product
 
+from sales.models.cart import ShopCart
 from sales.models.orders import Order
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -19,32 +20,63 @@ endpoint_secret=settings.STRIPE_WEBHOOK_SECRET
 
 class create_checkout_session(generic.View):
     def post(self, request, *args, **kwargs):
-        host = request.META['HTTP_HOST']
-        checkout_session = stripe.checkout.Session.create(
-            # Customer Email is optional,
-            # It is not safe to accept email directly from the client side
-            # customer_email=request_data['email'],
-            payment_method_types=['card'],
-            line_items=[
-                {
-                    'price_data': {
-                        'currency': 'usd',
-                        'unit_amount': 100,
-                        'product_data': {
-                            'name': 'product title',
+        current_user = request.user
+        shopcart = ShopCart.objects.filter(user_id=current_user.id)
+        total = 0
+
+        for rs in shopcart:
+            if rs.product.variant == 'None':
+                product = stripe.Product.create(
+                    name=rs.product.title,
+                    description=rs.product.keyword,
+                )
+                price = stripe.Price.create(
+                    product=product.id,
+                    unit_amount=int(total * 100),
+                    currency='usd',
+                )
+                total += rs.product.price * rs.quantity
+            else:
+                total += rs.variant.price * rs.quantity
+
+        if request.method == 'POST':  # if there is a post
+
+        # return HttpResponse(request.POST.items())
+
+            # Send Credit card to bank,  If the bank responds ok, continue, if not, show the error
+            # ..............
+            #######Payment
+
+            host = request.META['HTTP_HOST']
+
+            checkout_session = stripe.checkout.Session.create(
+                # Customer Email is optional,
+                # It is not safe to accept email directly from the client side
+                # customer_email=request_data['email'],
+                payment_method_types=['card'],
+                line_items=[
+                    {
+                        'price_data': {
+                            'currency': 'usd',
+                            'unit_amount': int(total * 100),
+                            'product_data': {
+                                'name': 'product',
+                            },
+
                         },
+                        'quantity': 1,
+                    }
+                ],
+                mode='payment',
+                success_url="http://{}{}".format(host, reverse('sales:PaymentSuccess')),
+                cancel_url="http://{}{}".format(host, reverse('sales:PaymentFailed')),
+            )
+            ShopCart.objects.filter(user_id=current_user.id).delete()  # Clear & Delete shopcart
+            return redirect(checkout_session.url, code=303)
 
-                    },
-                    'quantity': 2,
-                }
-            ],
-            mode='payment',
-            success_url="http://{}{}".format(host, reverse('sales:PaymentSuccess')),
-            cancel_url="http://{}{}".format(host, reverse('sales:PaymentFailed')),
-        )
+        else:
 
-        # return JsonResponse({'data': checkout_session})
-        return redirect(checkout_session.url, code=303)
+            return HttpResponseRedirect(reverse('sales:OrderProduct'))
 
 class SuccessView(TemplateView):
     template_name = "payments/payment_success.html"
