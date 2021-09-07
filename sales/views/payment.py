@@ -12,7 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, ListView
 from stripe import Product
 
-from sales.models.order import Order
+from sales.models.orders import Order
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 endpoint_secret=settings.STRIPE_WEBHOOK_SECRET
@@ -172,7 +172,7 @@ class PaymentSuccessView(TemplateView):
 
         stripe.api_key = settings.STRIPE_SECRET_KEY
         session = stripe.checkout.Session.retrieve(session_id)
-        messages.success(request, "Your Order has been completed. Thank you ")
+        messages.success(request, "Your Orders has been completed. Thank you ")
         order = get_object_or_404(Order, stripe_payment_intent=session.payment_intent)
         order.has_paid = True
         order.save()

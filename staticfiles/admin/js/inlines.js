@@ -82,7 +82,7 @@
                 addButton.parent().hide();
             }
             // Show the remove buttons if there are more than min_num.
-            toggleDeleteButtonVisibility(row.closest('.inline-group'));
+            toggleDeleteButtonVisibility(row.closest('.inline-groups'));
 
             // Pass the new form to the post-add callback, if provided.
             if (options.added) {
@@ -117,7 +117,7 @@
             e1.preventDefault();
             const deleteButton = $(e1.target);
             const row = deleteButton.closest('.' + options.formCssClass);
-            const inlineGroup = row.closest('.inline-group');
+            const inlineGroup = row.closest('.inline-groups');
             // Remove the parent form containing this button,
             // and also remove the relevant row with non-field errors:
             const prevRow = row.prev();
@@ -335,11 +335,11 @@
             let selector;
             switch(data.inlineType) {
             case "stacked":
-                selector = inlineOptions.name + "-group .inline-related";
+                selector = inlineOptions.name + "-groups .inline-related";
                 $(selector).stackedFormset(selector, inlineOptions.options);
                 break;
             case "tabular":
-                selector = inlineOptions.name + "-group .tabular.inline-related tbody:first > tr.form-row";
+                selector = inlineOptions.name + "-groups .tabular.inline-related tbody:first > tr.form-row";
                 $(selector).tabularFormset(selector, inlineOptions.options);
                 break;
             }

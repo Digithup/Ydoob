@@ -150,7 +150,7 @@
         }
         originalinput.data('initvalue', initval).val(initval);
         originalinput.addClass('form-control');
-        if (parentelement.hasClass('input-group')) {
+        if (parentelement.hasClass('input-groups')) {
           _advanceInputGroup(parentelement);
         }
         else {
@@ -163,22 +163,22 @@
         next = originalinput.next();
         var downhtml,
         uphtml,
-        prefixhtml = '<div class="input-group-prepend"><span class="input-group-text bootstrap-touchspin-prefix">' + settings.prefix + '</span></div>',
-        postfixhtml = '<div class="input-group-append"><span class="input-group-text bootstrap-touchspin-postfix">' + settings.postfix + '</span></div>';
-        if (prev.hasClass('input-group-btn')) {
-          downhtml = '<div class="input-group-prepend"><button class="' + settings.buttondown_class + ' bootstrap-touchspin-down" type="button">' + settings.buttondown_txt + '</button></div>';
+        prefixhtml = '<div class="input-groups-prepend"><span class="input-groups-text bootstrap-touchspin-prefix">' + settings.prefix + '</span></div>',
+        postfixhtml = '<div class="input-groups-append"><span class="input-groups-text bootstrap-touchspin-postfix">' + settings.postfix + '</span></div>';
+        if (prev.hasClass('input-groups-btn')) {
+          downhtml = '<div class="input-groups-prepend"><button class="' + settings.buttondown_class + ' bootstrap-touchspin-down" type="button">' + settings.buttondown_txt + '</button></div>';
           prev.append(downhtml);
         }
         else {
-          downhtml = '<div class="input-group-prepend"><button class="' + settings.buttondown_class + ' bootstrap-touchspin-down" type="button">' + settings.buttondown_txt + '</button></div>';
+          downhtml = '<div class="input-groups-prepend"><button class="' + settings.buttondown_class + ' bootstrap-touchspin-down" type="button">' + settings.buttondown_txt + '</button></div>';
           $(downhtml).insertBefore(originalinput);
         }
-        if (next.hasClass('input-group-btn')) {
-          uphtml = '<div class="input-group-append"><button class="' + settings.buttonup_class + ' bootstrap-touchspin-up" type="button">' + settings.buttonup_txt + '</button></div>';
+        if (next.hasClass('input-groups-btn')) {
+          uphtml = '<div class="input-groups-append"><button class="' + settings.buttonup_class + ' bootstrap-touchspin-up" type="button">' + settings.buttonup_txt + '</button></div>';
           next.prepend(uphtml);
         }
         else {
-          uphtml = '<div class="input-group-append ml-0"><button class="' + settings.buttonup_class + ' bootstrap-touchspin-up" type="button">' + settings.buttonup_txt + '</button></div>';
+          uphtml = '<div class="input-groups-append ml-0"><button class="' + settings.buttonup_class + ' bootstrap-touchspin-up" type="button">' + settings.buttonup_txt + '</button></div>';
           $(uphtml).insertAfter(originalinput);
         }
         $(prefixhtml).insertBefore(originalinput);
@@ -188,18 +188,18 @@
       function _buildInputGroup() {
         var html;
         if (settings.verticalbuttons) {
-          html = '<div class="input-group bootstrap-touchspin"><span class="input-group-text bootstrap-touchspin-prefix">' + settings.prefix + '</span><span class="input-group-text bootstrap-touchspin-postfix">' + settings.postfix + '</span><span class="input-group-btn-vertical"><button class="' + settings.buttondown_class + ' bootstrap-touchspin-up" type="button"><i class="' + settings.verticalupclass + '"></i></button><button class="' + settings.buttonup_class + ' bootstrap-touchspin-down" type="button"><i class="' + settings.verticaldownclass + '"></i></button></span></div>';
+          html = '<div class="input-groups bootstrap-touchspin"><span class="input-groups-text bootstrap-touchspin-prefix">' + settings.prefix + '</span><span class="input-groups-text bootstrap-touchspin-postfix">' + settings.postfix + '</span><span class="input-groups-btn-vertical"><button class="' + settings.buttondown_class + ' bootstrap-touchspin-up" type="button"><i class="' + settings.verticalupclass + '"></i></button><button class="' + settings.buttonup_class + ' bootstrap-touchspin-down" type="button"><i class="' + settings.verticaldownclass + '"></i></button></span></div>';
         }
         else {
-          html = '<div class="input-group bootstrap-touchspin"><div class="input-group-prepend"><button class="' + settings.buttondown_class + ' bootstrap-touchspin-down" type="button">' + settings.buttondown_txt + '</button><span class="input-group-text bootstrap-touchspin-prefix">' + settings.prefix + '</span></div><div class="input-group-append"><span class="input-group-text bootstrap-touchspin-postfix">' + settings.postfix + '</span><button class="' + settings.buttonup_class + ' bootstrap-touchspin-up" type="button">' + settings.buttonup_txt + '</button></div></div>';
+          html = '<div class="input-groups bootstrap-touchspin"><div class="input-groups-prepend"><button class="' + settings.buttondown_class + ' bootstrap-touchspin-down" type="button">' + settings.buttondown_txt + '</button><span class="input-groups-text bootstrap-touchspin-prefix">' + settings.prefix + '</span></div><div class="input-groups-append"><span class="input-groups-text bootstrap-touchspin-postfix">' + settings.postfix + '</span><button class="' + settings.buttonup_class + ' bootstrap-touchspin-up" type="button">' + settings.buttonup_txt + '</button></div></div>';
         }
         container = $(html).insertBefore(originalinput);
         $('.bootstrap-touchspin-prefix', container).after(originalinput);
         if (originalinput.hasClass('input-sm')) {
-          container.addClass('input-group-sm');
+          container.addClass('input-groups-sm');
         }
         else if (originalinput.hasClass('input-lg')) {
-          container.addClass('input-group-lg');
+          container.addClass('input-groups-lg');
         }
       }
       function _initElements() {

@@ -3308,7 +3308,7 @@ var Chartist = {
     areaBase: 0,
     // Specify if the lines should be smoothed. This value can be true or false where true will result in smoothing using the default smoothing interpolation function Chartist.Interpolation.cardinal and false results in Chartist.Interpolation.none. You can also choose other smoothing / interpolation functions available in the Chartist.Interpolation module, or write your own interpolation function. Check the examples for a brief description.
     lineSmooth: true,
-    // If the line chart should add a background fill to the .ct-grids group.
+    // If the line chart should add a background fill to the .ct-grids groups.
     showGridBackground: false,
     // Overriding the natural low of the chart allows you to zoom in or limit the charts lowest displayed value
     low: undefined,
@@ -3390,7 +3390,7 @@ var Chartist = {
     data.raw.series.forEach(function(series, seriesIndex) {
       var seriesElement = seriesGroup.elem('g');
 
-      // Write attributes to series group element. If series name or meta is undefined the attributes will not be written
+      // Write attributes to series groups element. If series name or meta is undefined the attributes will not be written
       seriesElement.attr({
         'ct:series-name': series.name,
         'ct:meta': Chartist.serialize(series.meta)
@@ -3518,7 +3518,7 @@ var Chartist = {
 
         }).forEach(function createArea(areaPath) {
           // For each of our newly created area paths, we'll now create path elements by stringifying our path objects
-          // and adding the created DOM elements to the correct series group
+          // and adding the created DOM elements to the correct series groups
           var area = seriesElement.elem('path', {
             d: areaPath.stringify()
           }, options.classNames.area, true);
@@ -3724,7 +3724,7 @@ var Chartist = {
       bottom: 5,
       left: 10
     },
-    // Specify the distance in pixel of bars in a group
+    // Specify the distance in pixel of bars in a groups
     seriesBarDistance: 15,
     // If set to true this property will cause the series bars to be stacked. Check the `stackMode` option for further stacking options.
     stackBars: false,
@@ -3737,7 +3737,7 @@ var Chartist = {
     distributeSeries: false,
     // If true the whole data is reversed including labels, the series order as well as the whole series data arrays.
     reverseData: false,
-    // If the bar chart should add a background fill to the .ct-grids group.
+    // If the bar chart should add a background fill to the .ct-grids groups.
     showGridBackground: false,
     // Override the class names that get used to generate the SVG structure of the chart
     classNames: {
@@ -3910,10 +3910,10 @@ var Chartist = {
         periodHalfLength = labelAxis.axisLength / data.normalized.series[seriesIndex].length / 2;
       }
 
-      // Adding the series group to the series element
+      // Adding the series groups to the series element
       seriesElement = seriesGroup.elem('g');
 
-      // Write attributes to series group element. If series name or meta is undefined the attributes will not be written
+      // Write attributes to series groups element. If series name or meta is undefined the attributes will not be written
       seriesElement.attr({
         'ct:series-name': series.name,
         'ct:meta': Chartist.serialize(series.meta)
@@ -4239,7 +4239,7 @@ var Chartist = {
     data.raw.series.forEach(function(series, index) {
       seriesGroups[index] = this.svg.elem('g', null, null);
     }.bind(this));
-    //if we need to show labels we create the label group now
+    //if we need to show labels we create the label groups now
     if(options.showLabel) {
       labelsGroup = this.svg.elem('g', null, null);
     }
@@ -4402,7 +4402,7 @@ var Chartist = {
    *
    * @memberof Chartist.Pie
    * @param {String|Node} query A selector query string or directly a DOM element
-   * @param {Object} data The data object in the pie chart needs to have a series property with a one dimensional data array. The values will be normalized against each other and don't necessarily need to be in percentage. The series property can also be an array of value objects that contain a value property and a className property to override the CSS class name for the series group.
+   * @param {Object} data The data object in the pie chart needs to have a series property with a one dimensional data array. The values will be normalized against each other and don't necessarily need to be in percentage. The series property can also be an array of value objects that contain a value property and a className property to override the CSS class name for the series groups.
    * @param {Object} [options] The options object with options that override the default options. Check the examples for a detailed list.
    * @param {Array} [responsiveOptions] Specify an array of responsive option arrays which are a media query and options object pair => [[mediaQueryString, optionsObject],[more...]]
    * @return {Object} An object with a version and an update method to manually redraw the chart

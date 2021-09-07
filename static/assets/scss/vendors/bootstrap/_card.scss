@@ -34,7 +34,7 @@
     }
   }
 
-  // Due to specificity of the above selector (`.card > .list-group`), we must
+  // Due to specificity of the above selector (`.card > .list-groups`), we must
   // use a child selector here to prevent double borders.
   > .card-header + .list-group,
   > .list-group + .card-footer {
@@ -157,7 +157,7 @@
 //
 
 .card-group {
-  // The child selector allows nested `.card` within `.card-group`
+  // The child selector allows nested `.card` within `.card-groups`
   // to display properly.
   > .card {
     margin-bottom: $card-group-margin;
@@ -166,7 +166,7 @@
   @include media-breakpoint-up(sm) {
     display: flex;
     flex-flow: row wrap;
-    // The child selector allows nested `.card` within `.card-group`
+    // The child selector allows nested `.card` within `.card-groups`
     // to display properly.
     > .card {
       // Flexbugs #4: https://github.com/philipwalton/flexbugs#flexbug-4

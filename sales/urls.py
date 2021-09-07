@@ -1,21 +1,23 @@
 from django.urls import path
 
+import sales.views.cart
 from sales.views import views
-from sales.views.cart import updateItem
+from sales.views.cart import  WishlistView, addWishlist, deletefromWishlist, shopcart
 from sales.views.payment import PaymentFailedView, OrderHistoryListView, create_checkout_session, \
     PaymentSuccess, my_webhook_view, StripeIntentView, CreateCheckoutSessionView, stripe_webhook, CancelView, \
     SuccessView
-from sales.views.views import shopcart, WishlistView, addWishlist, deletefromWishlist
+from sales.views.views import PaymentView, PaymentStripe
 
 app_name = 'sales'
 
 urlpatterns = [
-    path('cart/', views.index, name='index'),
-    path('cart/addtoshopcart/<int:id>', views.AddToCart, name='AddToCart'),
-    path('cart/deletefromcart/<int:id>', views.deletefromcart, name='DeleteFromCart'),
-    path('cart/orderproduct/', views.orderproduct, name='OrderProduct'),
+    path('cart/', sales.views.cart.index, name='index'),
+    path('cart/addtoshopcart/<int:id>', sales.views.cart.AddToCart, name='AddToCart'),
+    path('cart/deletefromcart/<int:id>', sales.views.cart.deletefromcart, name='DeleteFromCart'),
+    #path('cart/orderproduct/', views.orderproduct, name='Checkout'),
+    path('cart/orderproduct/', views.Checkout, name='Checkout'),
     path('shopcart/', shopcart, name='ShopCart'),
-    path('cart/update_item/', updateItem, name="update_item"),
+    #path('cart/update_item/', updateItem, name="update_item"),
 
 ##############wishlist#####################
     path('cart/wishlist/', WishlistView.as_view(), name="Wishlist"),
@@ -25,6 +27,9 @@ urlpatterns = [
 
 
     ##############Payment#####################
+    path('payment/<payment_option>/', PaymentView.as_view(), name='payment'),
+    path('payment/<payment_option>/', PaymentStripe.as_view(), name='PaymentStripe'),
+
     path('cart/success/', PaymentSuccess, name='PaymentSuccess'),
     path('failed/', PaymentFailedView.as_view(), name='PaymentFailed'),
     path('history/', OrderHistoryListView.as_view(), name='history'),

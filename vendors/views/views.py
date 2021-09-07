@@ -14,11 +14,12 @@ from django.utils.html import format_html
 from django.views.generic import CreateView, UpdateView, ListView
 from django.views.generic.base import RedirectView, View
 
-from catalog.models.models import Products
+from catalog.models.models import Products, ProductMedia
 from core.decorators import admin_required
+from sales.models.orders import OrderProduct
 
 from vendors.forms import SellerRegisterForm, AlreadyUserSellerRegisterForm
-from vendors.models import Store, StoreMedia
+from vendors.models import Vendor, StoreMedia
 
 User = get_user_model()
 
@@ -78,7 +79,7 @@ class CreateStore(View):
         else:
             if request.user.is_authenticated and request.user.seller:
                 messages.error(request,
-                               format_html('''You already have a store wait for activate &nbsp; &nbsp;  or learn how to sell &nbsp; 
+                               format_html('''You already have a vendor wait for activate &nbsp; &nbsp;  or learn how to sell &nbsp; 
                                 <a href=""> Edit</a> ''',
                                            reverse('home:index', )))
             return redirect('user:CustomerLogin')
@@ -90,18 +91,18 @@ class CreateStore(View):
         vendor_id = request.user.id
         print(request.POST)
         vendor = User.objects.filter(seller=True)
-        status = Store.objects.filter(status=False ,vendor_id=vendor_id)
+        status = Vendor.objects.filter(status=False, vendor_id=vendor_id)
 
         if vendor and status:
             messages.error(request,
-                           format_html('''You already have a store wait for activate &nbsp; &nbsp;  or learn how to sell &nbsp; 
+                           format_html('''You already have a vendor wait for activate &nbsp; &nbsp;  or learn how to sell &nbsp; 
                 <a href=""> Edit</a> ''',
                                        reverse('home:index', )))
 
             return render(request, "store-page/create-store.html", )
 
         else:
-            store = Store(title=title_group, address=address, phone=phone, email=email, vendor_id=vendor_id)
+            store = Vendor(title=title_group, address=address, phone=phone, email=email, vendor_id=vendor_id)
             store.save()
             # return HttpResponse("OK")
             return render(request, 'store-page/create-success.html', )
@@ -113,14 +114,14 @@ def CreateSuccess(request, ):
     if request.user.is_authenticated and is_seller  :
         return render(request, 'store-page/create-success.html')
     else:
-        return render(request, 'front/404.html')
+        return render(request, 'front/ErrorPage/404.html')
 
 
 
 def StoreWaiting(request):
     if not request.user.is_authenticated:
-        return render(request, 'front/404.html')
-    status = Store.objects.filter(status='Disable')
+        return render(request, 'front/ErrorPage/404.html')
+    status = Vendor.objects.filter(status='Disable')
     context = {'status': status,
                }
     return render(request, 'store-page/store-waiting.html', context)
@@ -131,23 +132,31 @@ class VendorDashboard(View):
     def get_context_data(self, **kwargs):
         context = super(VendorDashboard, self).get_context_data(**kwargs)
         slug = kwargs["slug"]
-        seller = Store.objects.filter(slug=slug)
+        seller = Vendor.objects.filter(slug=slug)
         return context
 
     def get(self, request, *args, **kwargs, ):
         slug = kwargs["slug"]
         user = request.user.id
+
         try:
-            if request.user.is_authenticated and Store.objects.get(slug=slug, vendor__id=user):
-                store = Store.objects.get(slug=slug, vendor__id=user)
-                store_media = StoreMedia.objects.filter(store_id=store.id).first()
+            if request.user.is_authenticated and Vendor.objects.get(slug=slug, vendor__id=user):
+                vendor_item = []
+                vendor = Vendor.objects.get(slug=slug, vendor__id=user)
+                vendor_media = StoreMedia.objects.filter(store_id=vendor.id).first()
+                products = Products.objects.filter(seller=vendor.vendor.id)
+
+                vendor_order = OrderProduct.objects.filter(vendor=vendor)
+                vendor_item.append({"vendor": vendor, "vendor_media": vendor_media, "products": products,
+                                    "vendor_order": vendor_order})
 
                 return render(request, "vendor/vendor-dashboard.html",
-                              {"store": store, 'store_media': store_media})
+                              {"vendor_item": vendor_item, })
             else:
-                return render(request, 'front/404.html')
+                return render(request, 'front/ErrorPage/403.html')
         except:
             return render(request, 'front/ErrorPage/403.html')
+
 
 
 class EditStore(View):
@@ -157,14 +166,14 @@ class EditStore(View):
         user = request.user.id
 
         try:
-            if request.user.is_authenticated and Store.objects.get(slug=slug, vendor__id=user):
-                store = Store.objects.get(slug=slug, vendor__id=user)
+            if request.user.is_authenticated and Vendor.objects.get(slug=slug, vendor__id=user):
+                store = Vendor.objects.get(slug=slug, vendor__id=user)
                 store_media = StoreMedia.objects.filter(store_id=store.id).first()
 
                 return render(request, "vendor/vendor-edit-store-profile.html",
-                              {"store": store, 'store_media': store_media})
+                              {"vendor": store, 'store_media': store_media})
             else:
-                return render(request, 'front/404.html')
+                return render(request, 'front/ErrorPage/404.html')
         except:
             return render(request, 'front/ErrorPage/403.html')
 
@@ -187,7 +196,7 @@ class EditStore(View):
         twitter = request.POST.get("twitter")
         youtube = request.POST.get("youtube")
         print(request.POST)
-        store = Store.objects.get(slug=slug)
+        store = Vendor.objects.get(slug=slug)
         store.title = title
         store.phone = phone
         store.company = company
@@ -226,7 +235,7 @@ class EditStore(View):
 
 
 def store_delete(request, user_id):
-    store = Store.objects.get(id=user_id)
+    store = Vendor.objects.get(id=user_id)
     store.is_delete = True
     store.save()
     return redirect('vendors')

@@ -29,7 +29,7 @@ from core.forms.forms import SearchForm
 from core.models.setting import Setting
 from localization.models import Language
 
-from vendors.models import Store
+from vendors.models import Vendor
 User = get_user_model()
 
 
@@ -39,7 +39,7 @@ User = get_user_model()
 def AdminIndex(request):
     categories = Categories.objects.all()
     products = Products.objects.all()
-    store = Store.objects.all()
+    store = Vendor.objects.all()
     setting = Setting.objects.all()
     index_language = []
     if index_language is not None:
@@ -50,7 +50,7 @@ def AdminIndex(request):
         'categories': categories,
         'products': products,
         'catalog': Products,
-        'store': store,
+        'vendor': store,
         'setting': setting,
         'index_language': index_language
 

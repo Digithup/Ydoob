@@ -59,7 +59,7 @@ def orderproduct(request):
 
             for rs in shopcart:
                 detail = OrderProduct()
-                detail.order_id = data.id  # Order Id
+                detail.order_id = data.id  # Orders Id
                 detail.product_id = rs.product_id
                 detail.user_id = current_user.id
                 detail.quantity = rs.quantity
@@ -83,7 +83,7 @@ def orderproduct(request):
 
             ShopCart.objects.filter(user_id=current_user.id).delete()  # Clear & Delete shopcart
             request.session['cart_items'] = 0
-            messages.success(request, "Your Order has been completed. Thank you ")
+            messages.success(request, "Your Orders has been completed. Thank you ")
             return redirect(checkout_session.url, code=303)
             # return render(request, 'payments/payment_success.html', {'ordercode': ordercode, 'category': category})
         else:

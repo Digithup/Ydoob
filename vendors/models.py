@@ -11,7 +11,7 @@ from django.utils.safestring import mark_safe
 from user.models import User
 
 
-class Store(models.Model):
+class Vendor(models.Model):
     STATUS = (
         ('True', 'Enable'),
         ('False', 'Disable'),
@@ -19,8 +19,8 @@ class Store(models.Model):
     id = models.AutoField(primary_key=True)
     vendor = models.ForeignKey(User, on_delete=models.CASCADE, blank=True ,)
     title = models.CharField(max_length=150 , null=True ,default='Nigne' ,)
-    email = models.EmailField( max_length=50,  null=True, unique=True, verbose_name='Store Email')
-    phone = models.IntegerField(blank=True, default='510', verbose_name='Store Phone')
+    email = models.EmailField( max_length=50,  null=True, unique=True, verbose_name='Vendor Email')
+    phone = models.IntegerField(blank=True, default='510', verbose_name='Vendor Phone')
     company = models.CharField(max_length=50, default=' ', null=True)
     about = RichTextUploadingField(blank=True, default='', null=True)
     keywords = models.CharField(max_length=255 , default=' ' , null=True)
@@ -49,7 +49,7 @@ class Store(models.Model):
             return ""
 
     def get_absolute_url(self):
-        view_name = "store:detail_slug"
+        view_name = "vendor:detail_slug"
         return reverse(view_name, kwargs={"slug": self.slug})
 
 
@@ -65,8 +65,8 @@ def image_directory_path(instance, filename):
 
 class StoreMedia(models.Model):
     id=models.AutoField(primary_key=True)
-    store_id=models.ForeignKey(Store,on_delete=models.CASCADE ,)
-    media_content=models.FileField(upload_to=image_directory_path ,verbose_name="Store Logo" )
+    store_id=models.ForeignKey(Vendor, on_delete=models.CASCADE, )
+    media_content=models.FileField(upload_to=image_directory_path ,verbose_name="Vendor Logo" )
     created_at=models.DateTimeField(auto_now_add=True)
     is_active=models.IntegerField(default=1)
 

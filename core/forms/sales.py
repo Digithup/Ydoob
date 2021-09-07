@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 
-from sales.models.order import Order
+from sales.models.orders import Order
 
 
 class OrderStatusForm(ModelForm):

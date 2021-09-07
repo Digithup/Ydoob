@@ -18,7 +18,7 @@
                     <nav aria-label="breadcrumb" class="theme-breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{% url 'home:index' %}">Home</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">vendor dashboard</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ vendor.title }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -27,7 +27,7 @@
     </div>
     <!-- breadcrumb End -->
 
-    {% for rs in vendor_store %}
+    {% for rs in vendor_item %}
         <!--  dashboard section start -->
         <section class="dashboard-section section-b-space">
             <div class="container">
@@ -40,23 +40,23 @@
                                 </div>
 
                                 <div class="profile-detail">
-                                    <h5>{{ rs.store.title }} </h5>
+                                    <h5>{{ rs.vendor.title }} </h5>
 
                                     <h6>7500 followers | 10 review</h6>
-                                    <h6>{{ rs.store.email }}</h6>
+                                    <h6>{{ rs.vendor.email }}</h6>
                                 </div>
                             </div>
                             <div class="faq-tab">
                                 <ul class="nav nav-tabs" id="top-tab" role="tablist">
-                                    <li class="nav-item"><a data-bs-toggle="tab" class="nav-link "
+                                    <li class="nav-item"><a data-bs-toggle="tab" class="nav-link active  "
                                                             href="#dashboard">dashboard</a></li>
-                                    <li class="nav-item"><a data-bs-toggle="tab" class="nav-link "
+                                    <li class="nav-item"><a data-bs-toggle="tab" class="nav-link  "
                                                             href="#products">products</a>
                                     </li>
-                                    <li class="nav-item"><a data-bs-toggle="tab" class="nav-link "
+                                    <li class="nav-item"><a data-bs-toggle="tab" class="nav-link  "
                                                             href="#orders">orders</a>
                                     </li>
-                                    <li class="nav-item"><a data-bs-toggle="tab" class="nav-link active"
+                                    <li class="nav-item"><a data-bs-toggle="tab" class="nav-link "
                                                             href="#profile">profile</a>
                                     </li>
                                     <li class="nav-item"><a data-bs-toggle="tab" class="nav-link"
@@ -72,7 +72,7 @@
                     </div>
                     <div class="col-lg-9">
                         <div class="faq-content tab-content" id="top-tabContent">
-                            <div class="tab-pane fade  " id="dashboard">
+                            <div class="tab-pane fade active show " id="dashboard">
                                 <div class="counter-section">
                                     <div class="row">
                                         <div class="col-md-4">
@@ -80,17 +80,7 @@
                                                 <img src="{%  static '' %}assets/images/icon/dashboard/order.png"
                                                      class="img-fluid">
                                                 <div>
-
-                                                    {% for rc in vendor_products_list %}
-
-
-
-                                                        <h3> {{ rc.product.products_count }}</h3>
-
-
-                                                    {% endfor %}
-
-
+                                                        <h3> {{ rs.products.count }}</h3>
                                                     <h5>total products</h5>
                                                 </div>
                                             </div>
@@ -100,7 +90,7 @@
                                                 <img src="{%  static '' %}assets/images/icon/dashboard/sale.png"
                                                      class="img-fluid">
                                                 <div>
-                                                    <h3>12500</h3>
+                                                    <h3>{{ rs.vendor_order.count }}</h3>
                                                     <h5>total sales</h5>
                                                 </div>
                                             </div>
@@ -110,7 +100,7 @@
                                                 <img src="{%  static '' %}assets/images/icon/dashboard/homework.png"
                                                      class="img-fluid">
                                                 <div>
-                                                    <h3>50</h3>
+                                                    <h3>{{ rs.vendor_order.count }}</h3>
                                                     <h5>order pending</h5>
                                                 </div>
                                             </div>
@@ -156,21 +146,7 @@
                                                         <td>$205</td>
                                                         <td>1000</td>
                                                     </tr>
-                                                    <tr>
-                                                        <th scope="row"><img
-                                                                src="{%  static '' %}assets/images/dashboard/product/9.jpg"
-                                                                class="blur-up lazyloaded"></th>
-                                                        <td>belted trench coat</td>
-                                                        <td>$350</td>
-                                                        <td>800</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row"><img src="{%  static '' %}assets/images/pro3/34.jpg"
-                                                                             class="blur-up lazyloaded"></th>
-                                                        <td>man print tee</td>
-                                                        <td>$150</td>
-                                                        <td>750</td>
-                                                    </tr>
+
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -179,7 +155,13 @@
                                     <div class="col-lg-6">
                                         <div class="card dashboard-table">
                                             <div class="card-body">
-                                                <h3>recent orders</h3>
+                                                <h3>recent orders
+                                                     <a href="{% url 'vendors:VendorIndex'  %}"
+                                                       class="   pull-right" style="color: red">{% translate 'Go To DsshBoard' %}</a>
+
+
+                                                </h3>
+
                                                 <table class="table mb-0">
                                                     <thead>
                                                     <tr>
@@ -189,31 +171,14 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <tr>
-                                                        <th scope="row">#21515</th>
-                                                        <td>neck velvet dress</td>
-                                                        <td>confrimed</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">#78153</th>
-                                                        <td>belted trench coat</td>
-                                                        <td>shipped</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">#51512</th>
-                                                        <td>man print tee</td>
-                                                        <td>pending</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">#78153</th>
-                                                        <td>belted trench coat</td>
-                                                        <td>shipped</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">#51512</th>
-                                                        <td>man print tee</td>
-                                                        <td>pending</td>
-                                                    </tr>
+
+
+                                                    <tr> {% for vo in rs.vendor_order %}
+                                                        <th scope="row">#{{ vo.order.code }}</th>
+                                                        <td>{{ vo.product.title|truncatewords:2 }}</td>
+                                                        <td>{{ vo.status }}</td>
+                                                    </tr>{% endfor %}
+
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -222,7 +187,7 @@
 
                                 </div>
                             </div>
-                            <div class="tab-pane fade  " id="products">
+                            <div class="tab-pane fade   " id="products">
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="card dashboard-table mt-0">
@@ -247,14 +212,16 @@
 
                                                     <tbody>
 
-                                                    <tr>{% for rp in vendor_products_list %}
+                                                    <tr>
+                                                        <tr>{% for rp in rs.products %}
+
                                                         <th scope="row"><img
-                                                                src="{{ rp.product_media.media_content }}"
+                                                                src="{{ rp.image.url }}"
                                                                 class="blur-up lazyloaded"></th>
-                                                        <td>{{ rp.product.title }}</td>
-                                                        <td>{{ rp.product.category }}</td>
-                                                        <td>${{ rp.product.product_max_price }}</td>
-                                                        <td>{{ rs.product_max_price }}</td>
+                                                        <td>{{ rp.title|truncatewords:2 }}</td>
+                                                        <td>{{ rp.category }}</td>
+                                                        <td>${{ rp.price}}</td>
+                                                        <td>{{ rrp.product }}</td>
                                                         <td>{{ rp.product.seller }}</td>
                                                         <td><i class="fa fa-pencil-square-o me-1"
                                                                aria-hidden="true"></i><i class="fa fa-trash-o ms-1"
@@ -271,14 +238,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="orders">
+                            <div class="tab-pane fade  " id="orders">
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="card dashboard-table mt-0">
                                             <div class="card-body table-responsive-sm">
                                                 <div class="top-sec">
                                                     <h3>orders</h3>
-                                                    <a href="#" class="btn btn-sm btn-solid">add product</a>
+
                                                 </div>
                                                 <table class="table mb-0">
                                                     <thead>
@@ -287,63 +254,21 @@
                                                         <th scope="col">product details</th>
                                                         <th scope="col">status</th>
                                                         <th scope="col">price</th>
+                                                        <th scope="col">quantity</th>
+
                                                     </tr>
                                                     </thead>
                                                     <tbody>
                                                     <tr>
-                                                        <th scope="row">#125021</th>
-                                                        <td>neck velvet dress</td>
-                                                        <td>shipped</td>
-                                                        <td>$205</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">#521214</th>
-                                                        <td>belted trench coat</td>
-                                                        <td>shipped</td>
-                                                        <td>$350</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">#521021</th>
-                                                        <td>men print tee</td>
-                                                        <td>pending</td>
-                                                        <td>$150</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">#245021</th>
-                                                        <td>woman print tee</td>
-                                                        <td>shipped</td>
-                                                        <td>$150</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">#122141</th>
-                                                        <td>men print tee</td>
-                                                        <td>canceled</td>
-                                                        <td>$150</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">#125015</th>
-                                                        <td>men print tee</td>
-                                                        <td>pending</td>
-                                                        <td>$150</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">#245021</th>
-                                                        <td>woman print tee</td>
-                                                        <td>shipped</td>
-                                                        <td>$150</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">#122141</th>
-                                                        <td>men print tee</td>
-                                                        <td>canceled</td>
-                                                        <td>$150</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">#125015</th>
-                                                        <td>men print tee</td>
-                                                        <td>pending</td>
-                                                        <td>$150</td>
-                                                    </tr>
+                                                        {% for vo in rs.vendor_order %}
+                                                        <th scope="row">#{{ vo.order.code }}</th>
+                                                        <td>{{ vo.product.title|truncatewords:2 }}</td>
+                                                        <td>{{ vo.status }}</td>
+                                                        <td>${{ vo.price }}</td>
+                                                        <td>{{ vo.quantity }}</td>
+
+                                                    </tr>{% endfor %}
+
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -351,7 +276,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade show active " id="profile">
+                            <div class="tab-pane fade  " id="profile">
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="card mt-0">
@@ -361,7 +286,7 @@
                                                         <h4 class="col-md-4">profile</h4>
                                                         <div class="col-md-6 pull-right">
 
-                                                            <a href="{% url 'vendors:EditStore' rs.store.slug %}"
+                                                            <a href="{% url 'vendors:EditStore' rs.vendor.slug %}"
                                                                class="btn btn-solid">Edit Store Information</a></div>
                                                     </div>
                                                     <div class="dashboard-detail">

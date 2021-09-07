@@ -4,7 +4,7 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.sites.models import Site
 
 from core.models.setting import Setting, SettingLang, SettingTags
-from vendors.models import Store
+from vendors.models import Vendor
 
 
 class SettingForm(forms.ModelForm):

@@ -662,7 +662,7 @@ msgstr[1] ""
 
 #: .\project\Lib\site-packages\django\forms\formsets.py:379
 #: .\project\Lib\site-packages\django\forms\formsets.py:386
-msgid "Order"
+msgid "Orders"
 msgstr ""
 
 #: .\project\Lib\site-packages\django\forms\formsets.py:391
@@ -1481,7 +1481,7 @@ msgid "special offer"
 msgstr "عرض خاص"
 
 #: .\templates\front\header.html:36
-msgid "My Store"
+msgid "My Vendor"
 msgstr "متجري هيثم"
 
 #: .\templates\front\header.html:41

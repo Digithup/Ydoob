@@ -40,7 +40,7 @@
             <li><a class="sidebar-header" href=""><i data-feather="dollar-sign"></i><span>Sales</span><i
                     class="fa fa-angle-right pull-right"></i></a>
                 <ul class="sidebar-submenu">
-                    <li><a href="{% url 'core:Orders' %}"><i class="fa fa-circle"></i>Orders</a></li>
+                    <li><a href="{% url 'core:Order' %}"><i class="fa fa-circle"></i>Orders</a></li>
                     <li><a href="transactions.html"><i class="fa fa-circle"></i>Transactions</a></li>
                 </ul>
             </li>
@@ -101,6 +101,7 @@
 
                     <li><a href="{%  url 'core:AdminSetting'  %}"><i class="fa fa-circle"></i>Settings</a></li>
                     <li><a href="{%  url 'core:AdminSite'  %}"><i class="fa fa-circle"></i>Site</a></li>
+                     <li><a href="{%  url 'core:PaymentMethodsList'  %}"><i class="fa fa-circle"></i>Payment Method</a></li>
                      <li><a href="profile.html"><i class="fa fa-circle"></i>Profile</a></li>
                 </ul>
             </li>

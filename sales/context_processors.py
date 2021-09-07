@@ -1,6 +1,5 @@
-from sales.models.order import ShopCart
-from sales.views.cart import Cart
-from sales.views.views import shopcart
+from sales.models.cart import ShopCart
+from sales.views.cart import Cart, shopcart
 
 
 def cart(request):

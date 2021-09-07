@@ -5,7 +5,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 
 from core.decorators import allowed_users
 from core.forms.sales import OrderStatusForm
-from sales.models.order import Order
+from sales.models.orders import Order
 
 
 class OrdersListView(ListView):
@@ -41,8 +41,9 @@ class EditOrder(UpdateView):
     model = Order
     form_class = OrderStatusForm
 
+
     template_name = 'sales/orders/edit-order.html'
-    success_url = reverse_lazy('core:Orders')
+    success_url = reverse_lazy('core:Order')
 
     @method_decorator(allowed_users(allowed_roles=['admin']))
     def dispatch(self, *args, **kwargs):

@@ -1,5 +1,6 @@
 import json
 
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.core import serializers
 from django.core.files.storage import FileSystemStorage
@@ -9,19 +10,24 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DeleteView, DetailView, UpdateView, CreateView
 
 from DNigne.settings import BASE_URL
+from catalog.forms.forms import ProductsForm, AttributesDetailsForm, VariantDetailsForm, OptionsDetailsForm, \
+    ProductMediaForm
 from catalog.models.models import Categories, Products, ProductMedia, ProductTags, \
-    ProductTransaction
-from catalog.models.product_options import Manufacturer, FiltersGroup, Filters, AttributesGroup, Attributes
+    ProductTransaction, Variants, OptionsDetails, AttributesDetails
+from catalog.models.product_options import Manufacturer, FiltersGroup, Filters, AttributesGroup, Attributes, Options, \
+    OptionsType, Color, Size
+from core.decorators import allowed_users, vendor_only
 from core.forms.forms import SearchForm
 from core.models.setting import Setting
 from localization.models import Language
 
-from vendors.models import Store, StoreMedia
+from vendors.models import Vendor, StoreMedia
 
 User = get_user_model()
 
@@ -30,11 +36,9 @@ def VendorIndex(request, *args, **kwargs,):
     user = request.user.id
 
     try:
-
-        if request.user.is_authenticated and Store.objects.get(vendor__id=user):
-            store = Store.objects.get( vendor__id=user)
+        if request.user.is_authenticated and Vendor.objects.get(vendor__id=user):
+            store = Vendor.objects.get(vendor__id=user)
             store_media = StoreMedia.objects.filter(store_id=store.id).first()
-
             categories = Categories.objects.all()
             setting = Setting.objects.all()
             index_language = []
@@ -56,7 +60,7 @@ def VendorIndex(request, *args, **kwargs,):
             return render(request, "vendor/vendor-base/index.html",
                           context)
         else:
-            return render(request, 'front/404.html')
+            return render(request, 'front/ErrorPage/404.html')
     except:
         return render(request, 'front/ErrorPage/403.html')
 
@@ -70,7 +74,6 @@ def VendorIndex(request, *args, **kwargs,):
 class ProductsList(ListView):
     model = Products
     template_name = "vendor/catalog/product/vendor-products.html"
-
     paginate_by = 12
 
     def get_queryset(self):
@@ -80,10 +83,12 @@ class ProductsList(ListView):
             products = Products.objects.filter(
                 Q(Products_name__contains=filter_val) | Q(Products_description__contains=filter_val)).order_by(order_by)
         else:
-            products = Products.objects.all().order_by(order_by)
+
+            seller=self.request.user.id
+            products = Products.objects.filter(seller=seller)
         product_list = []
         for product in products:
-            product_media = ProductMedia.objects.filter(product_id=product.id, media_type=1, is_active=1).first()
+            product_media = ProductMedia.objects.filter(product=product.id, ).first()
             product_list.append({"product": product, "media": product_media})
 
         return product_list
@@ -94,6 +99,10 @@ class ProductsList(ListView):
         context["orderby"] = self.request.GET.get("orderby", "id")
         context["all_table_fields"] = Products._meta.get_fields()
         return context
+    #
+    # @method_decorator(allowed_users(allowed_roles=['vendor']))
+    # def dispatch(self, *args, **kwargs):
+    #     return super(ProductsList, self).dispatch(*args, **kwargs)
 
 
 class ProductsDetailView(DetailView):
@@ -111,70 +120,157 @@ class ProductsDeleted(DeleteView):
         return self.post(*args, **kwargs)
 
 
-class ProductCreate(View):
-    def get(self, request, *args, **kwargs):
+def VendorProductAdd(request):  # sourcery skip: aug-assign, convert-to-enumerate
+    filters = Filters.objects.all()
+    manufacturer = Manufacturer.objects.all()
+    relates = Products.objects.all()
+    attributes_group = request.GET.get('attributes_group')
+    attribute = Attributes.objects.all()
+    option_type = OptionsType.objects.all()
+    option = Options.objects.all()
+
+    if request.method == "POST":
         print(request)
-        category = Categories.objects.filter(status=True)
-        sellers = request.user.id
+        product_form = ProductsForm(request.POST or None, request.FILES or None)
+        media_form = ProductMediaForm(request.POST or None, request.FILES or None)
+        attribute_form = AttributesDetailsForm(request.POST or None, request.FILES or None)
+        option_form = OptionsDetailsForm(request.POST or None, request.FILES or None)
+        variant_form = VariantDetailsForm(request.POST or None, request.FILES or None)
 
-        return render(request, "vendor/catalog/product/add-product.html",
-                      {"categories": category, "sellers": sellers})
+        if product_form.is_valid() and media_form.is_valid() and attribute_form.is_valid() \
+                and variant_form.is_valid() and option_form.is_valid():
 
-    print(request)
+            print(request.POST)
+            product_created = True
+            seller = request.user.id
+            category = product_form.cleaned_data['category']
+            title = product_form.cleaned_data['title']
+            long_desc = product_form.cleaned_data['long_desc']
+            keyword = product_form.cleaned_data['keyword']
+            model = product_form.cleaned_data['model']
+            brand = product_form.cleaned_data['brand']
+            price = product_form.cleaned_data['price']
+            quantity = product_form.cleaned_data['quantity']
+            out_of_stock_status = product_form.cleaned_data['out_of_stock_status']
+            requires_shipping = product_form.cleaned_data['requires_shipping']
+            weight = product_form.cleaned_data['weight']
+            length = product_form.cleaned_data['length']
+            status = product_form.cleaned_data['status']
+            filters = request.POST.getlist('filter')
+            manufacturers = request.POST.getlist('manufacturer')
+            relates = request.POST.getlist('related')
+            attributes = request.POST.getlist('attribute')
+            attribute_details = request.POST.getlist('attribute_detail')
+            options = request.POST.getlist('option')
+            option_details = request.POST.getlist('option_detail')
+            option_prices = request.POST.getlist('option_price')
+            variant_title = request.POST.getlist('variant_title')
+            variant = product_form.cleaned_data['variant']
+            variant_size = request.POST.getlist('variant_size')
+            variant_color = request.POST.getlist('variant_color')
+            variant_price = request.POST.getlist('variant_price')
+            variant_quantity = request.POST.getlist('variant_quantity')
+            variant_images = request.FILES.getlist('ImageVariant')
+            slug = product_form.cleaned_data['slug']
+            media_content_list = request.FILES.getlist("image")
+            category = Categories.objects.get(title=category)
 
-    def post(self, request, *args, **kwargs):
-        title = request.POST.get("title")
-        brand = request.POST.get("brand")
-        slug = request.POST.get("slug")
-        category = request.POST.get("category")
-        product_description = request.POST.get("product_description")
-        long_desc = request.POST.get("long_desc")
-        product_max_price = request.POST.get("product_max_price")
-        product_discount_price = request.POST.get("product_discount_price")
-        seller = request.POST.get("seller")
-        in_stock_total = request.POST.get("in_stock_total")
-        media_type_list = request.POST.getlist("media_type[]")
-        media_content_list = request.FILES.getlist("media_content[]")
-        title_title_list = request.POST.getlist("title_title[]")
-        title_details_list = request.POST.getlist("title_details[]")
-        about_title_list = request.POST.getlist("about_title[]")
-        product_tags = request.POST.get("product_tags")
-        print(request.POST)
+            seller = User.objects.get(id=seller)
+            product_form = None
+            if not product_form:
 
-        # status = request.POST.get("status")
+                print(request)
+                print(request.POST)
 
-        category = Categories.objects.get(id=category)
-        seller = User.objects.get(id=seller)
-        product = Products(title=title, in_stock_total=in_stock_total, slug=slug, brand=brand,
-                           product_description=product_description, category=category,
-                           product_max_price=product_max_price, product_discount_price=product_discount_price,
-                           product_long_description=long_desc, seller=seller)
-        product.save()
+                product_form = Products(seller=seller, category=category, title=title, long_desc=long_desc,
+                                        model=model, brand=brand, price=price, quantity=quantity,
+                                        out_of_stock_status=out_of_stock_status, keyword=keyword,
+                                        requires_shipping=requires_shipping, weight=weight,
+                                        length=length, status=status, slug=slug ,variant=variant)
 
-        i = 0
-        for media_content in media_content_list:
-            fs = FileSystemStorage()
-            filename = fs.save(media_content.name, media_content)
-            media_url = fs.url(filename)
-            product_media = ProductMedia(product_id=product, media_type=media_type_list[i], media_content=media_url)
-            product_media.save()
-            i = i + 1
+                product_form.save()
+                j = 0
+                for filter in filters:
+                    product_form.filter.add(filter)
+                    j = j + 1
+                k = 0
+                for manufacturer in manufacturers:
+                    product_form.manufacturer.add(manufacturer)
+                    k = k + 1
+                r = 0
+                for related in relates:
+                    product_form.related.add(related)
+                    r = r + 1
 
-        j = 0
+                a = 0
+                for attribute_detail in attribute_details:
+                    attribute_form = AttributesDetails(product=product_form, attribute_detail=attribute_detail,
+                                                       attribute_id=attributes[a])
+                    attribute_form.save()
+                    a = a + 1
 
-        product_tags_list = product_tags.split(",")
+                c = 0
+                for option_detail in option_details:
+                    option_form = OptionsDetails(product=product_form, option_detail=option_detail,
+                                                 option_price=option_prices[c], option_id=options[c])
+                    option_form.save()
+                    c = c + 1
 
-        for product_tag in product_tags_list:
-            product_tag_obj = ProductTags(product_id=product, title=product_tag)
-            product_tag_obj.save()
+                z = 0
+                for variant_image in variant_images:
+                    m = variant_color
+                    n = ''.join(m)  # converting list into string
+                    variant_color = n
 
-        product_transaction = ProductTransaction(product_id=product, transaction_type=1,
-                                                 transaction_product_count=in_stock_total,
-                                                 transaction_description="Intially Item Added in Stocks")
-        product_transaction.save()
-        # return HttpResponse("OK")
-        return redirect(reverse('vendors:ProductsList')
-                        )
+                    x = variant_size
+                    y = ''.join(x)  # converting list into string
+                    variant_size = y
+
+                    variant_form = Variants(product=product_form, title=variant_title[z],
+                                            color=Color.objects.get(id=variant_color[z]),
+                                            size=Size.objects.get(id=variant_size[z]),
+
+                                            price=variant_price[z],
+                                            quantity=variant_quantity[z], image=variant_image)
+                    variant_form.save()
+                    z = z + 1
+
+                i = 0
+                for image in media_content_list:
+                    media_form = ProductMedia(product=product_form,
+                                              image=image)
+                    media_form.save()
+                    i = i + 1
+                    print(request.POST)
+                    # use django messages framework
+                messages.success(request,
+                                 "Yeeew, check it out on the home page!")
+
+                return redirect(reverse_lazy('vendors:ProductsList'))
+
+            else:
+                print("Form invalid, see below error msg")
+                print(request.POST)
+                messages.error(request, "Error")
+
+    else:
+
+        product_form = ProductsForm()
+        attribute_form = AttributesDetailsForm()
+        media_form = ProductMediaForm()
+        option_form = OptionsDetailsForm()
+        variant_form = VariantDetailsForm()
+        # return redirect(reverse('core:ProductAdd'))
+
+    return render(request, 'vendor/catalog/product/add-product.html',
+                  {'manufacturer': manufacturer, 'product_form': product_form, 'media_form': media_form,
+                   'filter': filters, 'option_type': option_type,
+                   'relates': relates, 'attributes_group': attributes_group, 'attribute': attribute,
+                   'attribute_form': attribute_form, 'option_form': option_form, 'variant_form': variant_form, }
+                  )
+
+    # return HttpResponse("OK")
+    # return redirect(reverse('vendors:ProductsList'))
 
 
 class ProductUpdate(View):

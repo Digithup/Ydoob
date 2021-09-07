@@ -50,7 +50,7 @@
                             user Name
                         </th>
                         <th style="width: 10%">
-                            Team Members
+                            user group
                         </th>
                         <th style="width: 10%">
                             Team Members
@@ -78,14 +78,8 @@
                                 </small>
                             </td>
                             <td>
-                                <ul class="list-inline">
-                                    <li class="list-inline-item">
-                                        <img alt="Avatar" class="table-avatar"
-                                                {% if rs.image %}
-                                             src="{{ rs.image.url }}" height="40px" width="40px">
-                                                {% endif %}
-                                    </li>
 
+                                 {{rs.user_group }}
                                 </ul>
                             </td>
                             <td class="project_progress">

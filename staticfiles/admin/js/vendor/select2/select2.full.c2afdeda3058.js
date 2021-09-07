@@ -5314,7 +5314,7 @@ S2.define('select2/options',[
         // camelCase the attribute name to match the spec
         var camelDataName = dataName.replace(/-([a-z])/g, upperCaseLetter);
 
-        // Store the data attribute contents into the dataset since
+        // Vendor the data attribute contents into the dataset since
         dataset[camelDataName] = dataValue;
       }
     }
@@ -6562,7 +6562,7 @@ S2.define('select2/selection/stopPropagation',[
             } else {
                 this.onmousewheel = handler;
             }
-            // Store the line height and page height for this particular element
+            // Vendor the line height and page height for this particular element
             $.data(this, 'mousewheel-line-height', special.getLineHeight(this));
             $.data(this, 'mousewheel-page-height', special.getPageHeight(this));
         },
@@ -6667,7 +6667,7 @@ S2.define('select2/selection/stopPropagation',[
             deltaX *= pageHeight;
         }
 
-        // Store lowest absolute delta to normalize the delta values
+        // Vendor lowest absolute delta to normalize the delta values
         absDelta = Math.max( Math.abs(deltaY), Math.abs(deltaX) );
 
         if ( !lowestDelta || absDelta < lowestDelta ) {

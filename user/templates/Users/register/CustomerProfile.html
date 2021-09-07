@@ -106,11 +106,11 @@
                                                  class="img-fluid">
                                             <div>
 
-                                                {% for rc in vendor_products_list %}
+                                                {% for rc in user.orderproduct_set.all %}
 
 
 
-                                                    <h3> {{ rc.product.products_count }}</h3>
+                                                    <h3> {{ rc.products_count }}</h3>
 
 
                                                 {% endfor %}

@@ -1,6 +1,9 @@
 {% extends 'front/homebase.html' %}
+{% load crispy_forms_filters %}
 {% load static %}
-
+{% block javascript %}
+  <script src="{% static 'CustomFile/AddressJs.js' %}"></script>
+{% endblock %}
 {% load i18n %}
 {% block body %}
 
@@ -33,10 +36,6 @@
     <section class="section-b-space">
         <div class="container">
             <div class="checkout-page">
-
-
-
-
                 <div class="checkout-form">
                     <Form action="" method="post">
                         {% csrf_token %}
@@ -48,33 +47,38 @@
                                        class="btn btn-sm btn-solid  js-create-book pull-right">{% translate 'Add New Address' %}</a>
                                     <h3>Billing Details</h3>
                                     <div class="modal fade" id="modal-book">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
 
-                                            </div>
                                         </div>
                                     </div>
+                                </div>
                                 </div>
                                 <div class="typo-content">
                                     <div class="row">
 {#                                        {{ form }}#}
-                                        {% for rs in user_address %}
+                                        {% for rs in address %}
                                             <div class="col-sm-6">
                                                 <div class="card">
                                                     <div class="card-header">
                                                         <div>
-                                                            <input type="radio" name="user_address" id="one">
-                                                            <label for="one">{{ rs.address_title }}</label>
+                                                           <input type="radio" name="address" value="{{ rs.id }}" >
+                                                            <label for="one">{{ rs }}</label>
+
+
                                                         </div>
                                                     </div>
 
                                                     <div class="card-body">
-                                                        <h5 class="card-title">{{ rs.address_title }}</h5>
+
 
 
                                                         <ol>
                                                             <li>
-                                                                <i class="fa fa-angle-double-right me-2 "></i>{{ rs.location_type.text }}
+                                                                <i class="fa fa-angle-double-right me-2 "></i>{{ rs.id }}
+                                                            </li>
+                                                            <li>
+                                                                <i class="fa fa-angle-double-right me-2 "></i>{{ rs.location_type.title }}
                                                             </li>
                                                             <li>
                                                                 <i class="fa fa-angle-double-right me-2"></i>{{ rs.address_title }}
@@ -144,33 +148,17 @@
                                         <div class="upper-box">
                                             <div class="payment-options">
                                                 <ul>
-                                                    <li>
-                                                        <div class="radio-option">
-                                                            <input type="radio" name="payment-group" id="payment-1"
-                                                                   checked="checked">
-                                                            <label for="payment-1">Check Payments<span
-                                                                    class="small-text">Please send a check to Store
-                                                                    Name, Store Street, Store Town, Store State /
-                                                                    County, Store Postcode.</span></label>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="radio-option">
-                                                            <input type="radio" name="payment-group" id="payment-2">
-                                                            <label for="payment-2">Cash On Delivery<span
-                                                                    class="small-text">Please send a check to Store
-                                                                    Name, Store Street, Store Town, Store State /
-                                                                    County, Store Postcode.</span></label>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="radio-option paypal">
-                                                            <input type="radio" name="payment-group" id="payment-3">
-                                                            <label for="payment-3">PayPal<span class="image"><img
-                                                                    src="{% static '' %}images/paypal.png"
-                                                                    alt=""></span></label>
-                                                        </div>
-                                                    </li>
+{#                                                    {{ form }}#}
+                                                {{ form.payment_method|as_crispy_field }}
+{#                                                    <li>{% for rs in payment_method %}#}
+{#                                                        <div class="radio-option">#}
+{#                                                            <input type="radio" name="payment_method" id="payment-1"#}
+{#                                                                   checked="checked" value="{{ rs.method }}">#}
+{#                                                            <label for="payment-1">{{ rs.title }}</label>#}
+{#                                                        </div>#}
+{##}
+{#                                                    </li> {% endfor %}#}
+
                                                 </ul>
                                             </div>
                                         </div>
@@ -178,7 +166,7 @@
 
                                         <div class="text-end">
                                             <button type="submit" id="checkout-button"
-                                                    class="btn-solid btn buy-button">{% translate 'Place Order' %}</button>
+                                                    class="btn-solid btn buy-button">{% translate 'Place Orders' %}</button>
 
 
                                         </div>
@@ -201,58 +189,62 @@
 
 
 {% endblock %}
-<script type="text/javascript">
-    // Create an instance of the Stripe object with your publishable API key
-    var stripe = Stripe('pk_test_51IuUC4K.........voa9');
 
-    // Gets all buy buttons
-    var buttons = document.getElementsByClassName('buy-button');
-    for (i = 0; i < buttons.length; i++) {
 
-   // for every button we will add a Stripe POST request action
-    buttons[i].addEventListener('click', function(event) {
-    var targetElement = event.target || event.srcElement;
-    var productName =  targetElement.value;
-    console.log('Buying: ' + productName);
+{#<script type="text/javascript">#}
+{#    // Create an instance of the Stripe object with your publishable API key#}
+{#    var stripe = Stripe('pk_test_51IuUC4K.........voa9');#}
+{##}
+{#    // Gets all buy buttons#}
+{#    var buttons = document.getElementsByClassName('buy-button');#}
+{#    for (i = 0; i < buttons.length; i++) {#}
+{##}
+{#   // for every button we will add a Stripe POST request action#}
+{#    buttons[i].addEventListener('click', function(event) {#}
+{#    var targetElement = event.target || event.srcElement;#}
+{#    var productName =  targetElement.value;#}
+{#    console.log('Buying: ' + productName);#}
+{##}
+{#    var data = JSON.stringify({#}
+{#    item: ["item_1", "item_2"],#}
+{#    item_quantity: [1, 3]#}
+{#    })#}
+{##}
+{#    // Our endpoint with the chosen product name#}
+{#    var url = '{% url 'sales:Checkout' %}' + productName#}
+{#    console.log(url);#}
+{#    // Create a new Checkout Session#}
+{#    fetch(url, {#}
+{#      method: 'POST',#}
+{#      body: data,#}
+{#      headers: { 'Accept': 'application/json, text/plain, */*','Content-Type': 'application/json'#}
+{#        }#}
+{#    })#}
+{#    .then(function(response) {#}
+{#      return response.json();#}
+{#    })#}
+{#    .then(function(session) {#}
+{#      return stripe.redirectToCheckout({ sessionId: session.id });#}
+{##}
+{#    })#}
+{#    .then(function(result) {#}
+{#      // If `redirectToCheckout` fails due to a browser or network#}
+{#      // error, you should display the localized error message to your#}
+{#      // customer using `error.message`.#}
+{#      if (result.error) {#}
+{#        alert(result.error.message);#}
+{#      }#}
+{#    })#}
+{#    .catch(function(error) {#}
+{#      console.error('Error:', error);#}
+{#    });#}
+{##}
+{#    });#}
+{##}
+{#    }#}
+{#</script>#}
 
-    var data = JSON.stringify({
-    item: ["item_1", "item_2"],
-    item_quantity: [1, 3]
-    })
 
-    // Our endpoint with the chosen product name
-    var url = '{% url 'sales:OrderProduct' %}' + productName
-    console.log(url);
-    // Create a new Checkout Session
-    fetch(url, {
-      method: 'POST',
-      body: data,
-      headers: { 'Accept': 'application/json, text/plain, */*','Content-Type': 'application/json'
-        }
-    })
-    .then(function(response) {
-      return response.json();
-    })
-    .then(function(session) {
-      return stripe.redirectToCheckout({ sessionId: session.id });
-
-    })
-    .then(function(result) {
-      // If `redirectToCheckout` fails due to a browser or network
-      // error, you should display the localized error message to your
-      // customer using `error.message`.
-      if (result.error) {
-        alert(result.error.message);
-      }
-    })
-    .catch(function(error) {
-      console.error('Error:', error);
-    });
-
-    });
-
-    }
-</script>
 {% block foot %} {% include 'front/footer.html' %}  {% endblock %}
 {% block js %}{% include 'front/js.html' %}{% endblock %}
 

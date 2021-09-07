@@ -2,8 +2,9 @@
 {% load crispy_forms_filters %}
 {% load static %}
 {% load  i18n %}
-{% load %}
+
 {% block body %}
+
     <div class="page-body">
     <!-- Container-fluid starts-->
     <div class="container-fluid">
@@ -11,10 +12,10 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="page-header-left">
-                        <h3>Add Products
+                        <h3>{% translate 'Add Products' %}
                             <small>
-                                {% if not edit %}🆕 Add a new Learned Language {% else %} ✏ Edit a
-                                    Language{% endif %}</small>
+                                {% if not edit %}🆕 Add a new product {% else %} ✏ Edit a
+                                    product{% endif %}</small>
                         </h3>
                     </div>
                 </div>
@@ -22,7 +23,7 @@
                     <ol class="breadcrumb pull-right">
                         <li class="breadcrumb-item"><a href="{% url 'vendors:VendorIndex' %}"><i
                                 data-feather="home"></i></a></li>
-
+                        <li class="breadcrumb-item">{% translate 'Physical' %}</li>
                         <li class="breadcrumb-item active">{% translate 'Add Product' %}</li>
                     </ol>
                 </div>
@@ -31,27 +32,78 @@
     </div>
     <!-- Container-fluid Ends-->
 
-
-
     <!-- Container-fluid starts-->
     <div class="container-fluid">
         <div class="row product-adding">
             <div class="col-xl-12">
-                <div class="card">
-                    <form class="needs-validation add-product-form" novalidate="" id="myform"
-                          enctype="multipart/form-data" action="{% url 'vendors:ProductCreate' %}"
-                          method="post">
-                        {% csrf_token %}
+                <form class="needs-validation repeater" enctype="multipart/form-data"
+                      action="{% url 'vendors:ProductCreate' %}"
+                      name="ProductForm" id="ProductForm"
+                      method="post">
+                    {% csrf_token %}
+                    <div class="card">
+
+
+                        <div class=" alert-info" id="errorHeader"></div>
+                        <div>
+                            {% if product_form.errors %}
+
+                                {% for error_field, error_message in product_form.errors.items %}
+
+                                    <div class="alert alert-danger">
+                                        {{ error_field|striptags }}: {{ error_message|striptags }}
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+
+                            {% endif %}
+                            {% if media_form.errors %}
+                                {% for error_field, error_message in media_form.errors.items %}
+
+                                    <div class="alert alert-danger">
+                                        {{ error_field|striptags }}: {{ error_message|striptags }}
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+
+                            {% endif %}
+                            {% if attribute_form.errors %}
+                                {% for error_field, error_message in attribute_form.errors.items %}
+
+                                    <div class="alert alert-danger">
+                                        {{ error_field|striptags }}: {{ error_message|striptags }}
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+
+                            {% endif %}
+                            {% if option_form.errors %}
+                                {% for error_field, error_message in option_form.errors.items %}
+
+                                    <div class="alert alert-danger">
+                                        {{ error_field|striptags }}: {{ error_message|striptags }}
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+
+                            {% endif %}
+                            {% if variant_form.errors %}
+                                {% for error_field, error_message in variant_form.errors.items %}
+
+                                    <div class="alert alert-danger">
+                                        {{ error_field|striptags }}: {{ error_message|striptags }}
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+
+                            {% endif %}
+
+
+                        </div>
+
+
                         <div class="card-body">
-                            <div>
-                                {% if messages %}
-                                    <ul class="messages">
-                                        {% for message in messages %}
-                                            <li class="{{ message.tags }}">{{ message }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                {% endif %}
-                            </div>
+
 
                             <ul class="nav nav-tabs tab-coupon" id="myTab" role="tablist">
                                 <li class="nav-item"><a class="nav-link active show" id="general-tab"
@@ -64,20 +116,29 @@
                                                         href="#description"
                                                         role="tab" aria-controls="description" aria-selected="false"
                                                         data-original-title=""
-                                                        title="">{% translate 'description' %}</a></li>
+                                                        title="">{% translate 'Description' %}</a></li>
+                                <li class="nav-item"><a class="nav-link" id="variant-tabs" data-toggle="tab"
+                                                        href="#variant"
+                                                        role="tab" aria-controls="data" aria-selected="false"
+                                                        data-original-title=""
+                                                        title="">{% translate 'Variant' %}</a>
+                                </li>
                                 <li class="nav-item"><a class="nav-link" id="description-tabs" data-toggle="tab"
                                                         href="#data"
                                                         role="tab" aria-controls="data" aria-selected="false"
-                                                        data-original-title="" title="">{% translate 'Data' %}</a></li>
-                                <li class="nav-item"><a class="nav-link " id="image-tabs" data-toggle="tab"
+                                                        data-original-title="" title="">{% translate 'Data' %}</a>
+                                </li>
+                                <li class="nav-item"><a class="nav-link" id="image-tabs" data-toggle="tab"
                                                         href="#image"
                                                         role="tab" aria-controls="image" aria-selected="false"
-                                                        data-original-title="" title="">{% translate 'Image' %}</a></li>
+                                                        data-original-title="" title="">{% translate 'Image' %}</a>
+                                </li>
 
 
                                 <li class="nav-item"><a class="nav-link" id="seo-tabs" data-toggle="tab" href="#seo"
                                                         role="tab" aria-controls="seo" aria-selected="false"
-                                                        data-original-title="" title="">{% translate 'SEO' %}</a></li>
+                                                        data-original-title="" title="">{% translate 'SEO' %}</a>
+                                </li>
                             </ul>
                             <div class="tab-content" id="myTabContent">
                                 <div class="tab-pane fade active show" id="general" role="tabpanel"
@@ -86,39 +147,42 @@
                                     <div class="container-fluid">
                                         <div class=" product-adding">
                                             <div class="card ">
+
                                                 <div class="card-header">
                                                     <h5>{% translate 'General' %}</h5>
                                                 </div>
-                                                <div class="card-body form ">
+                                                <div class="card-body  ">
                                                     <div class="digital-add needs-validation ">
-
-
                                                         <div class="form-group mb-3 row">
                                                             <label for="validationCustom01"
-                                                                   class="col-md-4"><span>*</span>{% translate 'Product Name' %}
-                                                            </label>
-                                                            <input class="form-control col-sm-4 "
-                                                                   placeholder="title"
-                                                                   id="validationCustom01" type="text"
-                                                                   name="title" required="">
+                                                                   class="col-xl-3 col-sm-4 mb-0">{% translate 'Product Name' %}
+                                                                :</label>
+                                                            <div class="col-xl-8 col-sm-7">
+                                                                <input class="form-control" id="validationCustom01"
+                                                                       type="text" required=""
+                                                                       name="title" value="{{ product.title }}"
+                                                                       oninvalid="invalidFunction(event,'title not empty')">
+                                                            </div>
+                                                            <div class="valid-feedback">Looks good!</div>
                                                         </div>
-                                                        <div class="valid-feedback">Looks good!</div>
-                                                        <div class="invalid-feedback offset-sm-4 offset-xl-3">Please
-                                                            choose Valid Code.
-                                                        </div>
 
-
-
-                                                            <div class="form-group row">
-                                                                <label for="validationCustom0"
-                                                                       class=" col-sm-4"><span>*</span>{% translate 'Description' %}
-                                                                </label>
-                                                                <textarea class="col-md-push-12 middle" content=""
-                                                                          name="description" id="editor1"
-                                                                          cols="4"
+                                                        <div class="form-group row">
+                                                            <label class="col-xl-3 col-sm-4">Add Description :</label>
+                                                            <div class="col-xl-8 col-sm-7 description-sm">
+                                                                <textarea id="editor1" name="long_desc" cols="10"
                                                                           rows="4"></textarea>
-
+                                                            </div>
                                                         </div>
+
+
+                                                        <div class="form-group row">
+                                                            <label class="col-xl-3 col-sm-4">Add Keyword :</label>
+                                                            <div class="col-xl-8 col-sm-7 description-sm">
+                                                                <textarea id="editor1" name="keyword" cols="10"
+                                                                          rows="2"></textarea>
+                                                            </div>
+                                                        </div>
+
 
                                                     </div>
                                                 </div>
@@ -129,216 +193,423 @@
                                 </div>
                                 <div class="tab-pane fade" id="description" role="tabpanel"
                                      aria-labelledby="description-tabs">
-                                    <!-- Container-fluid starts-->
-                                    <div class="container-fluid">
-                                        <div class=" product-adding">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h5>{% translate 'Description' %}</h5>
+                                    <h4>description</h4>
+                                    <div class="col-xl-8">
+                                        <input class="form-control col-md-6"
+                                               id="title" type="hidden"
+                                               name="seller" value="{{ request.user.id }}"
+                                               required="">
+
+                                        <div class="form-group mb-3 row">
+                                            <label for="validationCustom01"
+                                                   class="col-xl-3 col-sm-4 mb-0">{% translate 'Model' %} :</label>
+                                            <div class="col-xl-8 col-sm-7">
+                                                <input class="form-control" id="validationCustom01" type="text"
+                                                       required=""
+                                                       name="model">
+                                            </div>
+                                            <div class="valid-feedback">Looks good!</div>
+                                        </div>
+                                        <div class="form-group mb-3 row">
+                                            <label for="validationCustom01"
+                                                   class="col-xl-3 col-sm-4 mb-0">{% translate 'Brand' %} :</label>
+                                            <div class="col-xl-8 col-sm-7">
+                                                <input class="form-control" id="validationCustom01" type="text"
+                                                       required=""
+                                                       name="brand">
+                                            </div>
+                                            <div class="valid-feedback">Looks good!</div>
+                                        </div>
+
+
+                                        <div class="form-group row">
+                                            <label for="exampleFormControlSelect1"
+                                                   class="col-xl-3 col-sm-4 mb-0">{% translate 'Category' %}:</label>
+                                            <div class="col-xl-8 col-sm-7">
+                                                <select class="form-control digits" id="exampleFormControlSelect1"
+                                                        name="category">
+                                                    {% for value, text in product_form.category.field.choices %}
+                                                        <option value="{{ value }}">{{ text }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-xl-3 col-sm-4 mb-0">{% translate 'Price' %} :</label>
+                                            <fieldset class="qty-box col-xl-9 col-xl-8 col-sm-7">
+                                                <div class="input-group">
+                                                    <input class="touchspin" type="text" value="1"
+                                                           name="price">
                                                 </div>
-                                                <div class="card-body ">
-                                                    <div class="col-xl-8">
+                                            </fieldset>
+                                        </div>
 
-                                                            <div class="form-group row ">
-                                                                <label for="validationCustom0"
-                                                                       class=" col-md-4"><span>*</span>
-                                                                    {% translate 'Model' %}</label>
-                                                                <input class="form-control col-md-6"
-                                                                       id="validationCustom0" type="text"
-                                                                       name="model" value="5"
-                                                                       required="">
-
-
-                                                        </div>
-
-                                                            <div class="form-group row ">
-                                                                <label for="validationCustom0"
-                                                                       class=" col-md-4"><span>*</span>
-                                                                    {% translate 'Brand' %}</label>
-                                                                <input class="form-control col-md-6"
-                                                                       id="validationCustom0" type="text"
-                                                                       name="brand" value="5"
-                                                                       required="">
-
-
-                                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-xl-3 col-sm-4 mb-0">{% translate 'Quantity' %} :</label>
+                                            <fieldset class="qty-box col-xl-9 col-xl-8 col-sm-7">
+                                                <div class="input-group">
+                                                    <input class="touchspin" type="text" value="1"
+                                                           name="quantity">
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-xl-3 col-sm-4 mb-0">{% translate 'Minimum Quantity' %}
+                                                :</label>
+                                            <fieldset class="qty-box col-xl-9 col-xl-8 col-sm-7">
+                                                <div class="input-group">
+                                                    <input class="touchspin" type="text" value="1"
+                                                           name="minimum_quantity">
+                                                </div>
+                                            </fieldset>
+                                        </div>
 
 
-                                                            <div class="form-group row">
-                                                                <label for="validationCustom0"
-                                                                       class="col-md-4">{% translate 'Category' %}</label>
-                                                                <select name="category" class="form-control  col-md-6">
-
-                                                                    {% for category in categories %}
-                                                                        <optgroup label={{ category.title }}>
-                                                                            <option value="{{ category.id }}">{{ category.title }}</option>
-                                                                        </optgroup>
-                                                                    {% endfor %}
-                                                                </select>
-                                                        </div>
-
-                                                            <div class="form-group row ">
-                                                                <label for="validationCustom0"
-                                                                       class=" col-md-4"><span>*</span>
-                                                                    Seller</label>
-                                                                <input class="form-control col-md-6"
-                                                                       id="validationCustom0" type="text"
-                                                                       name="seller" value="{{ request.user.id }}"
-                                                                       required="">
-
-
-                                                        </div>
-
-                                                        <div class="form-group row">
-                                                            <label for="validationCustom0"
-                                                                   class=" col-md-4"><span>*</span>
-                                                                {% translate 'Price' %}</label>
-                                                            <input class="form-control col-md-6"
-                                                                   id="validationCustom0" type="number"
-                                                                   name="price" value="5" min="0"
-                                                                   required="required">
-                                                        </div>
-
-                                                        <div class="form-group row">
-                                                            <label for="validationCustom0"
-                                                                   class=" col-md-4"><span>*</span>
-                                                                {% translate 'Quantity' %}</label>
-                                                            <input class="form-control col-md-6"
-                                                                   id="validationCustom0" type="text"
-                                                                   name="quantity" value="5" min="0"
-                                                                   required="required">
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label for="validationCustom0"
-                                                                   class=" col-md-4"><span>*</span>
-                                                                {% translate 'Minimum Quantity' %}</label>
-                                                            <input class="form-control col-md-6"
-                                                                   id="validationCustom0" type="number"
-                                                                   name="minimum_quantity" value="5" min="0"
-                                                                   required="required">
-                                                        </div>
+                                        <div class="form-group row">
+                                            <label for="exampleFormControlSelect1"
+                                                   class="col-xl-3 col-sm-4 mb-0">{% translate 'Subtract Stock' %}:</label>
+                                            <div class="col-xl-8 col-sm-7">
+                                                <select class="form-control digits" id="exampleFormControlSelect1"
+                                                        name="subtract_stock">
+                                                    {% for value, text in product_form.subtract_stock.field.choices %}
+                                                        <option value="{{ value }}">{{ text }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="exampleFormControlSelect1"
+                                                   class="col-xl-3 col-sm-4 mb-0">{% translate 'Out Of Stock Status' %}:</label>
+                                            <div class="col-xl-8 col-sm-7">
+                                                <select class="form-control digits" id="exampleFormControlSelect1"
+                                                        name="out_of_stock_status">
+                                                    {% for value, text in product_form.out_of_stock_status.field.choices %}
+                                                        <option value="{{ value }}">{{ text }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="exampleFormControlSelect1"
+                                                   class="col-xl-3 col-sm-4 mb-0">{% translate 'Requires Shipping' %}:</label>
+                                            <div class="col-xl-8 col-sm-7">
+                                                <select class="form-control digits" id="exampleFormControlSelect1"
+                                                        name="requires_shipping">
+                                                    {% for value, text in product_form.requires_shipping.field.choices %}
+                                                        <option value="{{ value }}">{{ text }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
 
 
-
-                                                            <div class="form-group row">
-                                                                <label for="validationCustom0"
-                                                                       class=" col-md-4"><span>*</span>
-                                                                    {% translate 'Subtract Stock' %} </label>
-                                                                <select name="subtract_stock"
-                                                                        class="custom-select form-control  col-md-6"
-                                                                        required="required">
-                                                                    <option value="{{ True }}">{{ 'Yes' }}</option>
-                                                                    <option value="{{ False }}">{{ 'NO' }}</option>
-
-                                                                </select>
-
-                                                        </div>
-
-
-                                                            <div class="form-group row">
-                                                                <label for="validationCustom0"
-                                                                       class=" col-md-4"><span>*</span>
-                                                                    {% translate 'Out Of Stock Status' %} </label>
-                                                                <select name="out_of_stock_status"
-                                                                        class="custom-select form-control  col-md-6"
-                                                                        required="required">
-                                                                    <option value="{{ 1 }}">{{ '2-3 Day' }}</option>
-                                                                    <option value="{{ 2 }}">{{ 'In Stock' }}</option>
-                                                                    <option value="{{ 3 }}">{{ 'Out Stock' }}</option>
-                                                                    <option value="{{ 4 }}">{{ 'Pre-order' }}</option>
-                                                                </select>
-                                                            </div>
+                                        <div class="form-group row">
+                                            <label class="col-xl-3 col-sm-4 mb-0">{% translate 'Weight' %} :</label>
+                                            <fieldset class="qty-box col-xl-9 col-xl-8 col-sm-7">
+                                                <div class="input-group">
+                                                    <input class="touchspin" type="text" value="1"
+                                                           name="weight">
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-xl-3 col-sm-4 mb-0">{% translate ' Length' %} :</label>
+                                            <fieldset class="qty-box col-xl-9 col-xl-8 col-sm-7">
+                                                <div class="input-group">
+                                                    <input class="touchspin" type="text" value="1"
+                                                           name="length">
+                                                </div>
+                                            </fieldset>
+                                        </div>
 
 
-
-                                                            <div class="form-group row">
-                                                                <label for="validationCustom0"
-                                                                       class=" col-md-4"><span>*</span>
-                                                                    {% translate 'Requires Shipping' %} </label>
-                                                                <select name="requires_shipping"
-                                                                        class="custom-select form-control  col-md-6"
-                                                                        required="required">
-                                                                    <option value="{{ True }}">{{ 'Yes' }}</option>
-                                                                    <option value="{{ False }}">{{ 'NO' }}</option>
-
-                                                                </select>
-
-                                                        </div>
+                                        <div class="form-group row">
+                                            <label for="exampleFormControlSelect1"
+                                                   class="col-xl-3 col-sm-4 mb-0">{% translate 'status' %}:</label>
+                                            <div class="col-xl-8 col-sm-7">
+                                                <select class="form-control digits" id="exampleFormControlSelect1"
+                                                        name="status">
+                                                    {% for value, text in product_form.requires_shipping.field.choices %}
+                                                        <option value="{{ value }}">{{ text }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
 
 
-                                                        <div class="form-group row">
-                                                            <label for="validationCustom0"
-                                                                   class=" col-md-4"><span>*</span>
-                                                                {% translate 'Weight' %}</label>
-                                                            <input class="form-control col-md-6"
-                                                                   id="validationCustom0" type="number"
-                                                                   name="weight" value="5" min="0"
-                                                                   required="required">
-                                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-xl-3 col-sm-4 mb-0">{% translate 'Sort Orders' %} :</label>
+                                            <fieldset class="qty-box col-xl-9 col-xl-8 col-sm-7">
+                                                <div class="input-group">
+                                                    <input class="touchspin" type="text" value="1"
+                                                           name="sort_order">
+                                                </div>
+                                            </fieldset>
 
-                                                        <div class="form-group row">
-                                                            <label for="validationCustom0"
-                                                                   class=" col-md-4"><span>*</span>
-                                                                {% translate 'Length' %}</label>
-                                                            <input class="form-control col-md-6"
-                                                                   id="validationCustom0" type="number"
-                                                                   name="length" value="5" min="0"
-                                                                   required="required">
-                                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade " id="variant" role="tabpanel"
+                                     aria-labelledby="variant-tabs">
+                                    <div class="card-header"><h4>Variant</h4></div>
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <label for="exampleFormControlSelect1"
+                                                   class="col-xl-3 col-sm-4 mb-0">{% translate 'Variant System' %}:</label>
+                                            <div class="col-xl-8 col-sm-7">
+                                                <select class="form-control digits" id="exampleFormControlSelect1"
+                                                        name="variant">
+                                                    {% for value, text in product_form.variant.field.choices %}
+                                                        <option value="{{ value }}">{{ text }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
 
 
+                                        <table class="table table-responsive-md">
+                                            <tr>
+                                                <th style="align-content: center">{% translate ' Title ' %}</th>
+                                                <th style="align-content: center">{% translate ' Size ' %}</th>
+                                                <th style="align-content: center">{% translate ' Color ' %}</th>
+                                                <th style="align-content: center">{% translate ' Price ' %}</th>
+                                                <th style="align-content: center">{% translate ' Quantity ' %}</th>
+                                                <th style="align-content: center">{% translate ' Image ' %}</th>
 
-                                                            <div class="form-group row">
-                                                                <label for="validationCustom0"
-                                                                       class=" col-md-4"><span>*</span>
-                                                                    {% translate 'status' %} </label>
-                                                                <select name="status"
-                                                                        class="custom-select form-control  col-md-6"
-                                                                        required="required">
-                                                                    <option>{% translate 'Yes' %}</option>
-                                                                    <option>{% translate 'Yes' %}</option>
-                                                                </select>
+                                            </tr>
+                                        </table>
+                                        <div>
+                                            <div class="variant_div">
+                                                <div class="variant_div_row first_variant">
+                                                    <div data-repeater-item class="table table-responsive">
+                                                        <table class="table ">
+                                                            <td style="width:5%"><input type="text"
 
-                                                        </div>
+                                                                                        name="variant_title"
 
-                                                        <div class="form-group row">
-                                                            <label for="validationCustom0"
-                                                                   class=" col-md-4"><span>*</span>
-                                                                {% translate 'Sort Order' %}</label>
-                                                            <input class="form-control col-md-6"
-                                                                   id="validationCustom0" type="number"
-                                                                   name="sort_order" value="5" min="0"
-                                                                   required="required">
-                                                        </div>
+                                                                                        placeholder="Product Title"/>
+                                                            </td>
+                                                            <td style="width:20%"><select class=""
+                                                                                          id="product_variant"
+                                                                                          name="variant_color">
+
+                                                                {% for value, title in  variant_form.color.field.choices %}
+                                                                    <option value="{{ value }}">{{ title }}</option>
+                                                                {% endfor %}
+                                                            </select></td>
+
+                                                            <td style="width:20%"><select class=""
+                                                                                          id="product_variant"
+                                                                                          name="variant_size">
+
+                                                                {% for value, title in  variant_form.size.field.choices %}
+                                                                    <option value="{{ value }}">{{ title }}</option>
+                                                                {% endfor %}
+                                                            </select></td>
+
+
+                                                            <td style="width:5%"><input type="text"
+
+                                                                                        name="variant_price"
+
+                                                                                        placeholder="option amount"/>
+                                                            </td>
+                                                            <td style="width:10%">
+                                                                <input type="text"
+
+                                                                       name="variant_quantity"
+
+                                                                       placeholder="option amount"/>
+                                                            </td>
+
+
+                                                            <td style="width:20%">
+                                                                <div>
+                                                                    <input type="file" name="ImageVariant"
+                                                                           id="variant_image"
+                                                                           onchange="document.getElementById('blah').src = window.URL.createObjectURL(this.files[0])">
+
+                                                                    <img src="{{ user.image.url }}" alt="" width="20%"
+                                                                         height="20%" id="blah"/>
+                                                                </div>
+                                                            </td>
+
+
+                                                        </table>
                                                     </div>
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="form-group mb-0">
+                                                <div class="product-buttons text-center">
+
+                                                    <button class="btn btn-primary fa fa-plus  add_variant"
+                                                            type="button">
+                                                    </button>
+                                                    <button class="btn btn-light fa fa-minus-circle  remove_variant"
+                                                            type="button">
+
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-
                                 </div>
                                 <div class="tab-pane fade " id="data" role="tabpanel" aria-labelledby="data-tabs">
+                                    <div class="card-header"> detail</div>
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <label for="exampleFormControlSelect1"
+                                                   class="col-xl-3 col-sm-4 mb-0">{% translate 'Product Filter' %}:</label>
+                                            <div class="col-xl-8 col-sm-7">
+                                                <select class="form-control digits" id="exampleFormControlSelect1"
+                                                        name="filter">
+                                                    {% for value, text in product_form.filter.field.choices %}
+                                                        <option value="{{ value }}">{{ text }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="exampleFormControlSelect1"
+                                                   class="col-xl-3 col-sm-4 mb-0">{% translate 'Product Manufacturer' %}:</label>
+                                            <div class="col-xl-8 col-sm-7">
+                                                <select class="form-control digits" id="exampleFormControlSelect1"
+                                                        name="manufacturer">
+                                                    {% for value, text in product_form.manufacturer.field.choices %}
+                                                        <option value="{{ value }}">{{ text }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="exampleFormControlSelect1"
+                                                   class="col-xl-3 col-sm-4 mb-0">{% translate 'Product Related' %}:</label>
+                                            <div class="col-xl-8 col-sm-7">
+                                                <select class="form-control digits" id="exampleFormControlSelect1"
+                                                        name="related">
+                                                    {% for value, text in product_form.related.field.choices %}
+                                                        <option value="{{ value }}">{{ text }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
 
 
+                                        <div>
+                                            <div class="form-group row  col-md-12 attributes_div">
+                                                <div class="row col-md-12 attributes_div_row first_attributes">
+                                                    <div class=" col-md-6">
+                                                        <label for="exampleFormControlSelect1"
+                                                               class="">{% translate 'Product Attributes' %}:</label>
+                                                        <div class="col-xl-8 col-sm-7">
+                                                            <select class="form-control digits"
+                                                                    id="exampleFormControlSelect1"
+                                                                    name="attribute">
+                                                                {% for value, text in attribute_form.attribute.field.choices %}
+                                                                    <option value="{{ value }}">{{ text }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="validationCustom01"
+                                                               class="">{% translate 'Attributes Detail' %} :</label>
+                                                        <div class="col-xl-8 col-sm-7">
+                                                            <input class="form-control" id="validationCustom01"
+                                                                   type="text"
+                                                                   required=""
+                                                                   name="attribute_detail">
+                                                        </div>
+                                                        <div class="valid-feedback">Looks good!</div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group mb-0">
+                                                <div class="product-buttons text-center">
+
+                                                    <button class="btn btn-primary fa fa-plus  add_attributes"
+                                                            type="button">
+                                                    </button>
+                                                    <button class="btn btn-light fa fa-minus-circle  remove_attributes"
+                                                            type="button">
+
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div>
+                                            <div class="form-group row  col-md-12 option_div">
+                                                <div class="row col-md-12 option_div_row first_option">
+                                                    <div class=" col-md-4">
+                                                        <label for="exampleFormControlSelect1"
+                                                               class="">{% translate 'Product option' %}:</label>
+                                                        <div class="col-xl-8 col-sm-7">
+                                                            <select class="form-control digits attributes"
+                                                                    id="product_option"
+                                                                    name="option">
+                                                                {% for value, text in option_form.option.field.choices %}
+                                                                    <option value="{{ value }}">{{ text }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <label for="validationCustom01"
+                                                               class="">{% translate 'option Detail' %} :</label>
+                                                        <div class="">
+                                                            <input class="form-control" id="validationCustom01"
+                                                                   type="text"
+                                                                   required=""
+                                                                   name="option_detail">
+                                                        </div>
+                                                        <div class="valid-feedback">Looks good!</div>
+                                                    </div>
+
+                                                    <div class="form-group col-md-4">
+                                                        <label class="">{% translate ' option Price ' %} :</label>
+                                                        <fieldset class="qty-box col-xl-9 col-xl-8 col-sm-7">
+                                                            <div class="input-group">
+                                                                <input class="touchspin" type="text" value="1"
+                                                                       name="option_price">
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group mb-0">
+                                                <div class="product-buttons text-center">
+
+                                                    <button class="btn btn-primary fa fa-plus  add_option"
+                                                            type="button">
+                                                    </button>
+                                                    <button class="btn btn-light fa fa-minus-circle  remove_option"
+                                                            type="button">
+
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                        </div>
+
+                                    </div>
                                 </div>
                                 <div class="tab-pane fade" id="option" role="tabpanel"
                                      aria-labelledby="option-tabs">
                                     <h4>Option</h4>
-                                    <div class="form-group row">
-                                        <label class="col-xl-3 col-md-4">variant
-                                        </label>
-                                        <select name="variant"
-                                                class="custom-select  col-md-7" required="">
 
-                                            <option value="">--Select--</option>
-                                            {% for value, text in form.variant.field.choices %}
-                                                <option value="{{ value }}">{{ text }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
                                 </div>
                                 <div class="tab-pane fade" id="image" role="tabpanel" aria-labelledby="image-tabs">
+                                    {{ formset.management_form }}
                                     <div class="add-product">
                                         <div class="row media_div_row ">
                                             <div class="col-xl-4 xl-50 col-sm-12 col-12">
@@ -350,7 +621,14 @@
                                                     <li>
                                                         <div class="box-input-file"><input class="upload select_media"
                                                                                            type="file"
-                                                                                           name="media_content[]">
+                                                                                           id="Product image"
+                                                                                           name="image">
+                                                            <i class="fa fa-plus "></i></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="box-input-file"><input class="upload select_media"
+                                                                                           type="file"
+                                                                                           name="image">
                                                             <i class="fa fa-plus "><select hidden name="media_type[]"
                                                                                            class="form-control media_type">
                                                                 <option value="1">Image</option>
@@ -360,7 +638,7 @@
                                                     <li>
                                                         <div class="box-input-file"><input class="upload select_media"
                                                                                            type="file"
-                                                                                           name="media_content[]">
+                                                                                           name="image">
                                                             <i class="fa fa-plus "><select hidden name="media_type[]"
                                                                                            class="form-control media_type">
                                                                 <option value="1">Image</option>
@@ -370,7 +648,7 @@
                                                     <li>
                                                         <div class="box-input-file"><input class="upload select_media"
                                                                                            type="file"
-                                                                                           name="media_content[]">
+                                                                                           name="image">
                                                             <i class="fa fa-plus "><select hidden name="media_type[]"
                                                                                            class="form-control media_type">
                                                                 <option value="1">Image</option>
@@ -380,7 +658,7 @@
                                                     <li>
                                                         <div class="box-input-file"><input class="upload select_media"
                                                                                            type="file"
-                                                                                           name="media_content[]">
+                                                                                           name="image">
                                                             <i class="fa fa-plus "><select hidden name="media_type[]"
                                                                                            class="form-control media_type">
                                                                 <option value="1">Image</option>
@@ -390,17 +668,7 @@
                                                     <li>
                                                         <div class="box-input-file"><input class="upload select_media"
                                                                                            type="file"
-                                                                                           name="media_content[]">
-                                                            <i class="fa fa-plus "><select hidden name="media_type[]"
-                                                                                           class="form-control media_type">
-                                                                <option value="1">Image</option>
-                                                                <option value="2">Video</option>
-                                                            </select></i></div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="box-input-file"><input class="upload select_media"
-                                                                                           type="file"
-                                                                                           name="media_content[]">
+                                                                                           name="image">
                                                             <i class="fa fa-plus "><select hidden name="media_type[]"
                                                                                            class="form-control media_type">
                                                                 <option value="1">Image</option>
@@ -411,156 +679,147 @@
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
                                 <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo-tabs">
 
                                     <h4>{% translate 'SEO' %}</h4>
                                     <div class="form-group mb-3 row">
-                                        <label for="validationCustom02"
-                                               class="col-xl-3 col-sm-4 mb-0">{% translate 'Slug' %}
+                                        <label for="validationCustom01"
+                                               class="col-xl-3 col-sm-4 mb-0">{% translate 'Slug' %} :</label>
+                                        <div class="col-xl-8 col-sm-7">
+                                            <input class="form-control" id="validationCustom01" type="text" required=""
+                                                   name="slug">
+                                        </div>
+                                        <div class="valid-feedback">Looks good!</div>
+                                    </div>
+                                    <div class="form-group mb-3 row">
+                                        <label for="validationCustom01"
+                                               class="col-xl-3 col-sm-4 mb-0">{% translate 'Meta Tag Title' %} :</label>
+                                        <div class="col-xl-8 col-sm-7">
+                                            <input class="form-control" id="validationCustom01" type="text" required=""
+                                                   name="meta_title">
+                                        </div>
+                                        <div class="valid-feedback">Looks good!</div>
+                                    </div>
+                                    <div class="form-group mb-3 row">
+                                        <label for="validationCustom01"
+                                               class="col-xl-3 col-sm-4 mb-0">{% translate 'Meta Tag Description' %}
                                             :</label>
-                                        <input class="form-control col-xl-8 col-sm-7" id="validationCustom02"
-                                               name="slug" type="text" required="">
+                                        <div class="col-xl-8 col-sm-7">
+                                            <input class="form-control" id="validationCustom01" type="text" required=""
+                                                   name="meta_description">
+                                        </div>
+                                        <div class="valid-feedback">Looks good!</div>
+                                    </div>
+                                    <div class="form-group mb-3 row">
+                                        <label for="validationCustom01"
+                                               class="col-xl-3 col-sm-4 mb-0">{% translate 'Meta Tag Keywords' %}
+                                            :</label>
+                                        <div class="col-xl-8 col-sm-7">
+                                            <input class="form-control" id="validationCustom01" type="text" required=""
+                                                   name="meta_keywords">
+                                        </div>
+                                        <div class="valid-feedback">Looks good!</div>
+                                    </div>
+                                    <div class="form-group mb-3 row">
+                                        <label for="validationCustom01"
+                                               class="col-xl-3 col-sm-4 mb-0">{% translate 'Product Tags' %} :</label>
+                                        <div class="col-xl-8 col-sm-7">
+                                            <input class="tag" id="tags" type="text"  data-role="tagsinput" required=""
+                                                   name="tags">
+                                        </div>
                                         <div class="valid-feedback">Looks good!</div>
                                     </div>
 
 
-                                        <div class="form-group row ">
-                                            <label for="validationCustom0"
-                                                   class=" col-md-4"><span>*</span>
-                                                {% translate 'Meta Tag Title' %}</label>
-                                            <input class="form-control col-md-6"
-                                                   id="validationCustom0" type="text"
-                                                   name="meta_title" value="5" required="">
 
-
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class='progress mb-3' style="height:auto">
+                                            <div class="progress-bar bg-warning" id="progressbar"
+                                                 role="progressbar" data-width="0%" aria-valuenow="0"
+                                                 aria-valuemin="0" aria-valuemax="100"
+                                                 style="display:none;width: 0%;height: 30px;border-radius: 10px;">
+                                                0%
+                                            </div>
+                                        </div>
                                     </div>
 
-                                        <div class="form-group row ">
-                                            <label for="validationCustom0"
-                                                   class=" col-md-4"><span>*</span>
-                                                {% translate 'Meta Tag Description' %}</label>
-                                            <input class="form-control col-md-6"
-                                                   id="validationCustom0" type="text"
-                                                   name="meta_description" value="5" required="">
 
+                                </div>
 
-                                    </div>
+                            </div>
+                            {% if field.errors %}
+                                <div class="alert alert-danger" style="margin:10px">
+                                {{ field.errors }}
+                            {% endif %}
+                            </div>
 
-                                        <div class="form-group row ">
-                                            <label for="validationCustom0"
-                                                   class=" col-md-4"><span>*</span>
-                                                {% translate 'Meta Tag Keywords' %}</label>
-                                            <input class="form-control col-md-6"
-                                                   id="validationCustom0" type="text"
-                                                   name="meta_keywords" value="5" required="">
-
-
-                                    </div>
-
-                                        <div class="form-group row ">
-
-                                            <label for="validationCustom0"
-                                                   class=" col-md-4"><span>*</span>
-                                                {% translate 'Product Tags' %}</label>
-                                            <input class="form-control col-md-6"
-                                                   id="validationCustom0" type="text"
-                                                   name="tags" value="5" data-role="tagsinput"
-                                                   required="">
-
-                                    </div>
+                            <div class="form-group mb-0">
+                                <div class="product-buttons text-center">
+                                    <button type="submit" class="btn btn-primary">{% translate 'Add' %}</button>
+                                    <button type="button" href="{% url 'vendors:ProductsList' %} "
+                                            class="btn btn-light">{% translate 'Discard' %}</button>
                                 </div>
                             </div>
-                        <div class="product-buttons text-center">
-                             <a href="{% url 'vendors:ProductsList' %}">
-                                    <button type="submit" class="btn btn-primary  submit_btn">Add</button> </a>
-
-                                    <a href="{% url 'core:Products_list' %}">
-                                        <button type="button" class="btn btn-light" data-toggle="modal"
-                                                data-original-title="test" data-target="#exampleModal">Discard
-                                        </button>
-                                    </a>
-
-                                </div>
-
                         </div>
 
 
+                </form>
 
-                    </form>
                 <!-- Container-fluid Ends-->
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="modelhhh" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
     {% if uploaded_file_url %}
         <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
     {% endif %}
+
+
+
+
 {% endblock %}
+
+
+
 {% block custom_js %}
-    <script src="//cdn.tiny.cloud/1/u6oa5pnpaa1vxho1md7uk4zmq2ai7xuf5o5wfgyrc131vpj6/tinymce/5/tinymce.min.js"
-            referrerpolicy="origin"></script>
     <script>
-        tinymce.init({
-            selector: "textarea#long_desc",
-            height: 300,
-            plugins: [
-                "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
-                "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime nonbreaking",
-                "save table contextmenu directionality emoticons template paste textcolor",
-            ],
-            images_upload_url: "{% url 'core:file_upload' %}",
-            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",
-            style_formats: [
-                {title: "Bold text", inline: "b"},
-                {title: "Red text", inline: "span", styles: {color: "#ff0000"}},
-                {title: "Red header", block: "h1", styles: {color: "#ff0000"}},
-                {title: "Example 1", inline: "span", classes: "example1"},
-                {title: "Example 2", inline: "span", classes: "example2"},
-                {title: "Table styles"},
-                {title: "Table row 1", selector: "tr", classes: "tablerow1"},
-            ],
-            automatic_uploads: true,
-            file_picker_types: 'image',
-            file_picker_callback: function (cb, value, meta) {
-                var input = document.createElement('input');
-                input.setAttribute('type', 'file');
-                input.setAttribute('accept', 'image/*');
+        document.getElementById("title").onchange = function () {
+            document.getElementById("slug").value = document.getElementById("title").value.toLowerCase().replaceAll(" ", "-")
+                .replace(/[^a-z0-9 -]/g, "") // remove invalid chars
+                .replace(/\s+/g, "-") // collapse whitespace and replace by -
+                .replace(/-+/g, "-") // collapse dashes
+                .replace(/^-+/, "") // trim - from start of text
+                .replace(/-+$/, ""); // trim - from end of text
+        }
 
-                /*
-                Note: In modern browsers input[type="file"] is functional without
-                even adding it to the DOM, but that might not be the case in some older
-                or quirky browsers like IE, so you might want to add it to the DOM
-                just in case, and visually hide it. And do not forget do remove it
-                once you do not need it anymore.
-                */
+        function invalidFunction(e, message) {
+            e.preventDefault();
+            document.getElementById('errorHeader').innerText = message;
 
-                input.onchange = function () {
-                    var file = this.files[0];
+        }
 
-                    var reader = new FileReader();
-                    reader.onload = function () {
-                        /*
-                        Note: Now we need to register the blob in TinyMCEs image blob
-                        registry. In the next release this part hopefully won't be
-                        necessary, as we are looking to handle it internally.
-                        */
-                        var id = 'blobid' + (new Date()).getTime();
-                        var blobCache = tinymce.activeEditor.editorUpload.blobCache;
-                        var base64 = reader.result.split(',')[1];
-                        var blobInfo = blobCache.create(id, file, base64);
-                        blobCache.add(blobInfo);
-
-                        /* call the callback and populate the Title field with the file name */
-                        cb(blobInfo.blobUri(), {title: file.name});
-                    };
-                    reader.readAsDataURL(file);
-                };
-
-                input.click();
-            },
-        });
-    </script>
-    <script>
         $(".add_media").click(function () {
             var media_row = $(".first_media").clone();
             media_row.removeClass("first_media");
@@ -575,32 +834,6 @@
                 $(".media_div").children().last().remove();
             }
         });
-
-        $(".add_details").click(function () {
-            var details_row = $(".first_details").clone();
-            details_row.removeClass("first_details");
-            details_row.find(".title_title").val("");
-            details_row.find(".title_details").val("");
-            $(".details_div").append(details_row);
-        });
-        $(".remove_details").click(function () {
-            if ($(".details_div").find(".details_div_row").length > 1) {
-                $(".details_div").children().last().remove();
-            }
-        });
-
-        $(".add_about").click(function () {
-            var about_row = $(".first_about").clone();
-            about_row.removeClass("first_about");
-            about_row.find(".about_title").val("");
-            $(".about_div").append(about_row);
-        });
-        $(".remove_about").click(function () {
-            if ($(".about_div").find(".about_div_row").length > 1) {
-                $(".about_div").children().last().remove();
-            }
-        });
-
         $(document).on("change", ".select_media", function () {
             var media_type = $(this).parents(".media_div_row").find(".media_type").val();
             var img_preview = $(this).parents(".media_div_row").find(".img_preview");
@@ -632,35 +865,65 @@
             }
         }
 
+        $(".add_attributes").click(function () {
+            var attributes_row = $(".first_attributes").clone();
+            attributes_row.removeClass("first_attributes");
+            attributes_row.find(".first_attributes").val("");
 
-        $(".submit_btn").click(function () {
-            var form = new FormData($("#myform")[0]);
-            form.append("long_desc", tinyMCE.activeEditor.getContent());
-
-            //AJAX CODE
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function () {
-                if (xhr.status == 200) {
-                    console.log(xhr.responseText);
-                }
+            attributes_row.find(".attribute_details").val("");
+            $(".attributes_div").append(attributes_row);
+        });
+        $(".remove_attributes").click(function () {
+            if ($(".attributes_div").find(".attributes_div_row").length > 1) {
+                $(".attributes_div").children().last().remove();
             }
-            xhr.open("POST", "{% url 'vendors:ProductCreate' %}", true);
-            $("#progressbar").show();
+        });
 
-            //UPDATING PROGRESS BAR
-            xhr.upload.addEventListener("progress", function (ev) {
-                if (ev.lengthComputable) {
-                    var percentage = (ev.loaded / ev.total * 100 | 0);
-                    $("#progressbar").css({"width": "" + percentage + "%"}).text("Uploading .." + percentage + "%");
-                    console.log(percentage);
+
+        $(".add_option").click(function () {
+            var option_row = $(".first_option").clone();
+            option_row.removeClass("first_option").val("");
+            option_row.removeClass("product_option");
+
+            $(".option_div").append(option_row);
+        });
+        $(".remove_option").click(function () {
+            if ($(".option_div").find(".option_div_row").length > 1) {
+                $(".option_div").children().last().remove();
+            }
+        });
+
+        $(".add_variant").click(function () {
+            var variant_row = $(".first_variant").clone();
+            variant_row.removeClass("first_variant").val("");
+            variant_row.removeClass("product_variant");
+            variant_row.find('#category1').hide();
+            variant_row.find('#group').change(function (e) {
+                var group = $(this).val();
+                if (group == 'Premium') {
+                    $('#category1').show();
+                } else {
+                    $('#category1').hide();
                 }
             });
 
-            xhr.send(form);
-        })
+
+            $(".variant_div").append(variant_row);
+        });
+        $(".remove_variant").click(function () {
+            if ($(".variant_div").find(".variant_div_row").length > 1) {
+                $(".variant_div").children().last().remove();
+            }
+        });
+
+
+        $('input#tags').tagsinput('remove', 'some tag');
 
     </script>
-    <script src="//bootstrap-tagsinput.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+
+
+
+
 {% endblock custom_js %}
 
 {% block foot %} {% include 'vendor/vendor-base/footer.html' %}  {% endblock %}

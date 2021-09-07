@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 
 from catalog.models.models import Categories, Products, ProductMedia, Variants
-from vendors.models import Store
+from vendors.models import Vendor
 
 
 def product_detailtest(request, id, slug):
@@ -17,7 +17,7 @@ def product_detailtest(request, id, slug):
     category = Categories.objects.all()
 
     product = Products.objects.get(slug=slug)
-    store=Store.objects.get(vendor__id=product.seller.id)
+    store=Vendor.objects.get(vendor__id=product.seller.id)
 
     if defaultlang != currentlang:
         try:
@@ -35,7 +35,7 @@ def product_detailtest(request, id, slug):
     images = ProductMedia.objects.filter(product=product)
     # comments = Comment.objects.filter(product_id=id,status='True')
     context = {'product': product, 'category': category,
-               'images': images,'store':store,
+               'images': images,'vendor':store,
                }
     if product.variant != "None":  # Product have variants
         if request.method == 'POST':  # if we select color
@@ -58,7 +58,7 @@ def product_detailtest(request, id, slug):
             variant = Variants.objects.get(id=variants[0].id)
         context.update({'sizes': sizes, 'colors': colors,
                         'variant': variant, 'query': query,
-                        'images':images,'store':store,})
+                        'images':images,'vendor':store,})
     return render(request, 'Products-Page/product-detail-finich1.html', context)
 
 

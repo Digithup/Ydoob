@@ -1,4 +1,4 @@
-{% extends 'admin/adminbase.html' %}
+{% extends 'vendor/vendor-base/vendorbase.html' %}
 {% load crispy_forms_filters %}
 {% load static %}
 {% load i18n %}
@@ -19,7 +19,7 @@
                     </div>
                     <div class="col-lg-6">
                         <ol class="breadcrumb pull-right">
-                            <li class="breadcrumb-item"><a href="{% url 'core:AdminIndex' %}"><i
+                            <li class="breadcrumb-item"><a href="{% url 'vendors:VendorIndex' %}"><i
                                     data-feather="home"></i></a>
                             </li>
 
@@ -47,6 +47,32 @@
                     {% endfor %}
 
                 {% endif %}</div>
+         <div class="col-xl-12">
+                <form class="needs-validation add-product-form" novalidate=""
+                      enctype="multipart/form-data" action="{% url 'vendors:EditOrder' object.pk %}"
+                      method="post">
+                    {% csrf_token %}
+
+                    <div class="card ">
+                        <div class="card-header">
+                            <div class="row col-md-12">
+                                <div class="col-md3">
+                                    {% for rs in vendor_order %}
+                                        <td>Payment Stats:
+                                {{ rs.order.payment_status.title }}</td>
+                                        <td>Payment Method:
+                                {{ rs.order.payment_method }}</td>
+                                      {% endfor %}
+                                        <td class="pull-right"> {{ form }}</td>
+
+                                <button  type="submit" class="btn btn-primary pull-right">Change</button>
+                                </div>
+
+
+
+                            </div></div></div></form>
+
+            </div>
             <div class="col-xl-12">
                 <div class="card tab2-card">
                     <div class="card-body">
@@ -80,36 +106,36 @@
                                             <div class="card-body  ">
                                                <h5 class="f-w-600">Profile</h5>
                                         <div class="table-responsive profile-table">
-                                            {% for rs in order.orderproduct_set.all %}
+                                            {% for rs in vendor_order %}
                                             <table class="table table-borderless">
                                                 <tbody>
                                                 <tr>
                                                     <td>First Name:</td>
-                                                    <td>{{ rs.order.first_name }}</td>
+                                                    <td>{{ rs.user.first_name }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Last Name:</td>
-                                                    <td>{{  rs.order.last_name }}</td>
+                                                    <td>{{  rs.user.last_name }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Email:</td>
-                                                    <td>johndeo@gmail.com</td>
+                                                    <td>{{  rs.order.user.email }}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Gender:</td>
-                                                    <td>Male</td>
+                                                    <td>Address:</td>
+                                                    <td>{{  rs.address.address_title }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Mobile Number:</td>
-                                                    <td>{{  rs.order.phone }}</td>
+                                                    <td>{{  rs.address.address_title }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>DOB:</td>
-                                                    <td>{{ rs.order.create_at }}</td>
+                                                    <td>{{ rs.create_at }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Location:</td>
-                                                    <td>{{  rs.order.city }}</td>
+                                                    <td>{{  rs.city }}</td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -125,12 +151,12 @@
                                  aria-labelledby="description-tabs">
                                 <h4>description</h4>
                                 <div class="table-responsive profile-table">
-                                            {% for rs in order.orderproduct_set.all %}
+                                            {% for rs in vendor_order %}
                                             <table class="table table-borderless">
                                                 <tbody>
                                                 <tr>
                                                     <td>Product:</td>
-                                                    <td>{{ rs.product }}</td>
+                                                    <td>{{ rs.product.title }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Quantity:</td>
@@ -142,7 +168,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Status:</td>
-                                                    <td>{{ rs.status }}</td>
+                                                    <td>{{ rs.order.status }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Mobile Number:</td>
@@ -171,101 +197,7 @@
 
             </div>
 
-            <div class="col-xl-12">
-                <form class="needs-validation add-product-form" novalidate=""
-                      enctype="multipart/form-data" action="{% url 'core:EditOrder' object.pk %}"
-                      method="post">
-                    {% csrf_token %}
 
-                    <div class="card ">
-                        <div class="card-body">
-
-                        </div>
-                        <div class="card-body  ">
-                            <div class="container-fluid">
-                                <div class=" product-adding">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5>Filter</h5>
-                                        </div>
-
-                                        <div class="card-body ">
-{{ form }}
-                                            <div class="digital-add needs-validation ">
-                                                <div class="form-group row">
-                                                    <label for="validationCustom0"
-                                                           class="col-md-4"><span>*</span>Group Title</label>
-                                                    <input class="form-control col-md-6 "
-                                                           placeholder="title" value="{{ object.option_type.title }}"
-                                                           id="title" type="text"
-                                                           name="title" required="">
-                                                </div>
-
-                                                <div class="form-group row ">
-                                                    <label for="validationCustom0"
-                                                           class=" col-md-4"><span>*</span>
-                                                        sort order</label>
-                                                    <input class="form-control col-md-6"
-                                                           id="validationCustom0" type="number" min="0" max="10"
-                                                           name="sort_order" value="{{ object.option_type.sort_order }}"
-                                                           required="">
-
-                                                </div>
-                                                <h5>Filter Details</h5>
-                                                <hr>
-
-                                                <div class="details_div">
-                                                    <div class="row details_div_row first_details">
-                                                        <div class="col-lg-6">
-                                                            <label>Title</label>
-                                                            <input type="text" name="title[]"
-                                                                   class="form-control title" value="{{ object.title }}"
-                                                                   placeholder="Title">
-                                                        </div>
-                                                        <div class="col-lg-6">
-                                                            <label>Sort</label>
-                                                            <input type="number" min="0" name="sort[]"
-                                                                   class="form-control sort"
-                                                                   value="{{ object.sort_order }}"
-                                                                   placeholder="sort order"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <div class="row">
-                                                    <div class="col-lg-6">
-                                                        <button class="btn btn-success btn-block add_details"
-                                                                type="button">ADD
-                                                            DETAILS
-                                                        </button>
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <button class="btn btn-danger btn-block remove_details"
-                                                                type="button">
-                                                            REMOVE DETAILS
-                                                        </button>
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
-                                            <div class="card-header">
-                                                <div class="form-group mb-0 align-content-end">
-                                                    <div class="product-buttons text-center">
-                                                        <button type="submit" class="btn btn-primary">Add</button>
-                                                        <a href="{% url 'core:Options' %}">
-                                                            <button type="button" class="btn btn-primary"
-                                                                    data-toggle="modal"
-                                                                    data-original-title="test"
-                                                                    data-target="#exampleModal">Discard
-                                                            </button>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                </form>
-
-
-            </div>
         </div>
     </div>
 
@@ -276,6 +208,6 @@
 
 
 
-{% block foot %} {% include 'admin/footer.html' %}  {% endblock %}
-{% block js %} {% include 'admin/js.html' %}  {% endblock %}
+{% block foot %} {% include 'vendor/vendor-base/footer.html' %}  {% endblock %}
+{% block js %}{% include 'vendor/vendor-base/js.html' %}{% endblock %}
 

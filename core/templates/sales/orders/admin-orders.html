@@ -44,11 +44,12 @@
                                     <tr>
                                         <th>Order Id</th>
                                         <th>Product</th>
+                                         <th>Total</th>
                                         <th>Payment Status</th>
                                         <th>Payment Method</th>
                                         <th>Order Status</th>
                                         <th>Date</th>
-                                        <th>Total</th>
+
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -59,16 +60,15 @@
                                         <td>
                                             {% for rm in rs.orderproduct_set.all %}
 
-                                               {{ rm.product.title  }}
-
-
+                                               {{ rm.product.title|truncatewords:1  }}
                                                 {% endfor %}
                                         </td>
-                                        <td><span class="badge badge-secondary">Cash On Delivery</span></td>
-                                        <td>Paypal</td>
+                                    <td>${{ rs.total }}</td>
+                                        <td><span class="badge badge-secondary">{{ rs.payment_status }}</span></td>
+                                        <td>{{ rs.payment_method }}</td>
                                         <td><span class="badge badge-success">{{ rs.status }}</span></td>
                                         <td>{{ rs.update_at }}</td>
-                                        <td>${{ rs.total }}</td>
+
                                     </tr>
                                {% endfor %}
                                     </tbody>

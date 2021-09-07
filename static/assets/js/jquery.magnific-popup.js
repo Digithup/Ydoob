@@ -602,7 +602,7 @@ MagnificPopup.prototype = {
 
 
 	/**
-	 * Initializes single popup or a group of popups
+	 * Initializes single popup or a groups of popups
 	 */
 	addGroup: function(el, options) {
 		var eHandler = function(e) {

@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from DNigne import settings
 from catalog.models.models import Categories
-from sales.models.order import ShopCart
+from sales.models.cart import ShopCart
 
 register = template.Library()
 

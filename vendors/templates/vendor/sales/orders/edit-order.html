@@ -1,0 +1,213 @@
+{% extends 'admin/adminbase.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% load i18n %}
+{% block body %}
+
+    <div class="page-body">
+
+        <!-- Container-fluid starts-->
+        <div class="container-fluid">
+            <div class="page-header">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="page-header-left">
+                            <h3>Add Filters
+                                <small>Multikart Admin panel</small>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <ol class="breadcrumb pull-right">
+                            <li class="breadcrumb-item"><a href="{% url 'core:AdminIndex' %}"><i
+                                    data-feather="home"></i></a>
+                            </li>
+
+                            <li class="breadcrumb-item active">Add Filter</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Container-fluid Ends-->
+
+
+        <!-- Container-fluid starts-->
+        <div class="container-fluid">
+            <div class="row product-adding">
+                {% if form_show_errors %}
+                {% endif %}
+                {% if form.errors %}
+                    {% for error_field, error_message in form.errors.items %}
+
+                        <div class="alert alert-danger">
+                            {{ error_field|striptags }}: {{ error_message|striptags }}
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+
+                {% endif %}</div>
+         <div class="col-xl-12">
+                <form class="needs-validation add-product-form" novalidate=""
+                      enctype="multipart/form-data" action="{% url 'core:EditOrder' object.pk %}"
+                      method="post">
+                    {% csrf_token %}
+
+                    <div class="card ">
+                        <div class="card-header">
+                            <div class="row col-md-12">
+                                <div class="col-md3">
+                                    {% for rs in order.orderproduct_set.all %}
+                                        <td>Payment Stats:
+                                {{ rs.order.payment_status.title }}</td>
+                                        <td>Payment Method:
+                                {{ rs.order.payment_method }}</td>
+                                      {% endfor %}
+                                        <td class="pull-right"> {{ form }}</td>
+
+                                <button  type="submit" class="btn btn-primary pull-right">Change</button>
+                                </div>
+
+
+
+                            </div></div>
+
+            </div>
+            <div class="col-xl-12">
+                <div class="card tab2-card">
+                    <div class="card-body">
+
+
+                        <ul class="nav nav-tabs nav-material" id="myTab" role="tablist">
+
+                            <li class="nav-item"><a class="nav-link active show" id="general-tab"
+                                                    data-toggle="tab"
+                                                    href="#general" role="tab" aria-controls="general"
+                                                    aria-selected="true" data-original-title=""
+                                                    title=""><i data-feather="user"
+                                                                class="me-2"></i>{% translate 'General' %}</a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" id="data-tabs" data-toggle="tab"
+                                                    href="#description"
+                                                    role="tab" aria-controls="description" aria-selected="false"
+                                                    data-original-title=""
+                                                    title="">{% translate 'Description' %}</a></li>
+
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade active show" id="general" role="tabpanel"
+                                 aria-labelledby="general-tab">
+                                <!-- Container-fluid starts-->
+                                <div class="container-fluid">
+                                    <div class=" product-adding">
+                                        <div class="card ">
+
+
+                                            <div class="card-body  ">
+                                               <h5 class="f-w-600">Profile</h5>
+                                        <div class="table-responsive profile-table">
+                                            {% for rs in order.orderproduct_set.all %}
+                                            <table class="table table-borderless">
+                                                <tbody>
+                                                <tr>
+                                                    <td>First Name:</td>
+                                                    <td>{{ rs.order.user.first_name }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Last Name:</td>
+                                                    <td>{{  rs.order.user.last_name }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Email:</td>
+                                                    <td>{{  rs.order.user.email }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Address:</td>
+                                                    <td>{{  rs.order.address.address_title }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Mobile Number:</td>
+                                                    <td>{{  rs.order.address.address_title }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>DOB:</td>
+                                                    <td>{{ rs.order.create_at }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Location:</td>
+                                                    <td>{{  rs.order.city }}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            {% endfor %}
+                                        </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Container-fluid Ends-->
+                            </div>
+                            <div class="tab-pane fade" id="description" role="tabpanel"
+                                 aria-labelledby="description-tabs">
+                                <h4>description</h4>
+                                <div class="table-responsive profile-table">
+                                            {% for rs in order.orderproduct_set.all %}
+                                            <table class="table table-borderless">
+                                                <tbody>
+                                                <tr>
+                                                    <td>Product:</td>
+                                                    <td>{{ rs.product.title }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Quantity:</td>
+                                                    <td>{{  rs.quantity }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Amount:</td>
+                                                    <td>{{ rs.amount }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Status:</td>
+                                                    <td>{{ rs.order.status }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Mobile Number:</td>
+                                                    <td>{{  rs.order.phone }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>DOB:</td>
+                                                    <td>{{ rs.order.create_at }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Location:</td>
+                                                    <td>{{  rs.order.city }}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            {% endfor %}
+                                        </div>
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- Container-fluid Ends-->
+
+
+{% endblock %}
+
+
+
+{% block foot %} {% include 'admin/footer.html' %}  {% endblock %}
+{% block js %} {% include 'admin/js.html' %}  {% endblock %}
+

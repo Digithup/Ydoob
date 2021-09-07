@@ -97,7 +97,7 @@ class User(AbstractBaseUser):
     seller = models.BooleanField(default=False)
     staff = models.BooleanField(default=False)
     admin = models.BooleanField(default=False)
-    groups = models.ManyToManyField(Group,blank=True)
+    groups = models.ManyToManyField(Group, blank=True)
     currency = models.ForeignKey(Currency, on_delete=models.CASCADE, null=True, blank=True)
     slug = models.SlugField(unique=True)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -114,10 +114,12 @@ class User(AbstractBaseUser):
         return self.email
 
     def get_full_name(self):
-        # The user is identified by their email address or full name
-        if self.first_name:
-            return self.first_name
-        return self.email
+        full_name = None
+        if self.first_name or self.last_name:
+            full_name = self.first_name + " " + self.last_name
+        else:
+            full_name = self.email
+        return full_name
 
     def get_short_name(self):
         # The user is identified by their email address

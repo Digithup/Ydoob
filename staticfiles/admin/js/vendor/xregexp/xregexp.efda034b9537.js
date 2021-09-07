@@ -136,11 +136,11 @@ module.exports = function(XRegExp) {
                 if (!data.hasOwnProperty(subName)) {
                     throw new ReferenceError('Undefined property ' + $0);
                 }
-                // Named subpattern was wrapped in a capturing group
+                // Named subpattern was wrapped in a capturing groups
                 if ($1) {
                     capName = outerCapNames[numOuterCaps];
                     outerCapsMap[++numOuterCaps] = ++numCaps;
-                    // If it's a named group, preserve the name. Otherwise, use the subpattern name
+                    // If it's a named groups, preserve the name. Otherwise, use the subpattern name
                     // as the capture name
                     intro = '(?<' + (capName || subName) + '>';
                 } else {
@@ -148,7 +148,7 @@ module.exports = function(XRegExp) {
                 }
                 numPriorCaps = numCaps;
                 return intro + data[subName].pattern.replace(subParts, function(match, paren, backref) {
-                    // Capturing group
+                    // Capturing groups
                     if (paren) {
                         capName = data[subName].names[numCaps - numPriorCaps];
                         ++numCaps;
@@ -168,7 +168,7 @@ module.exports = function(XRegExp) {
                     return match;
                 }) + ')';
             }
-            // Capturing group
+            // Capturing groups
             if ($3) {
                 capName = outerCapNames[numOuterCaps];
                 outerCapsMap[++numOuterCaps] = ++numCaps;
@@ -2965,7 +2965,7 @@ function dec(hex) {
  */
 function getContextualTokenSeparator(match, scope, flags) {
     if (
-        // No need to separate tokens if at the beginning or end of a group
+        // No need to separate tokens if at the beginning or end of a groups
         match.input.charAt(match.index - 1) === '(' ||
         match.input.charAt(match.index + match[0].length) === ')' ||
         // Avoid separating tokens when the following token is a quantifier
@@ -3362,11 +3362,11 @@ function XRegExp(pattern, flags) {
         patternCache[pattern][flags] = {
             // Use basic cleanup to collapse repeated empty groups like `(?:)(?:)` to `(?:)`. Empty
             // groups are sometimes inserted during regex transpilation in order to keep tokens
-            // separated. However, more than one empty group in a row is never needed.
+            // separated. However, more than one empty groups in a row is never needed.
             pattern: nativ.replace.call(output, /(?:\(\?:\))+/g, '(?:)'),
             // Strip all but native flags
             flags: nativ.replace.call(appliedFlags, /[^gimuy]+/g, ''),
-            // `context.captureNames` has an item for each capturing group, even if unnamed
+            // `context.captureNames` has an item for each capturing groups, even if unnamed
             captures: context.hasNamedCapture ? context.captureNames : null
         };
     }
@@ -3845,7 +3845,7 @@ XRegExp.matchChain = function(str, chain) {
                 // the exception, so also check if the backreference is a number that is within the
                 // bounds of the array.
                 if (!(match.hasOwnProperty(item.backref) || +item.backref < match.length)) {
-                    throw new ReferenceError('Backreference to undefined group: ' + item.backref);
+                    throw new ReferenceError('Backreference to undefined groups: ' + item.backref);
                 }
 
                 matches.push(match[item.backref] || '');
@@ -3881,10 +3881,10 @@ XRegExp.matchChain = function(str, chain) {
  *     - $&, $0 - Inserts the matched substring.
  *     - $` - Inserts the string that precedes the matched substring (left context).
  *     - $' - Inserts the string that follows the matched substring (right context).
- *     - $n, $nn - Where n/nn are digits referencing an existent capturing group, inserts
+ *     - $n, $nn - Where n/nn are digits referencing an existent capturing groups, inserts
  *       backreference n/nn.
  *     - ${n} - Where n is a name or any number of digits that reference an existent capturing
- *       group, inserts backreference n.
+ *       groups, inserts backreference n.
  *   Replacement functions are invoked with three or more arguments:
  *     - The matched substring (corresponds to $& above). Named backreferences are accessible as
  *       properties of this first argument.
@@ -4102,7 +4102,7 @@ XRegExp.union = function(patterns, flags, options) {
     function rewrite(match, paren, backref) {
         var name = captureNames[numCaptures - numPriorCaptures];
 
-        // Capturing group
+        // Capturing groups
         if (paren) {
             ++numCaptures;
             // If the current capture has a name, preserve the name
@@ -4290,10 +4290,10 @@ fixed.replace = function(search, replacement) {
             var args = arguments;
             var i;
             if (captureNames) {
-                // Change the `arguments[0]` string primitive to a `String` object that can store
+                // Change the `arguments[0]` string primitive to a `String` object that can vendor
                 // properties. This really does need to use `String` as a constructor
                 args[0] = new String(args[0]);
-                // Store named backreferences on the first argument
+                // Vendor named backreferences on the first argument
                 for (i = 0; i < captureNames.length; ++i) {
                     if (captureNames[i]) {
                         args[0][captureNames[i]] = args[i + 1];
@@ -4325,7 +4325,7 @@ fixed.replace = function(search, replacement) {
                     //    overridden by numbered capture. In practice, this does not overlap with
                     //    numbered capture since XRegExp does not allow named capture to use a bare
                     //    integer as the name.
-                    // 3. If the name or number does not refer to an existing capturing group, it's
+                    // 3. If the name or number does not refer to an existing capturing groups, it's
                     //    an error.
                     n = +$1; // Type-convert; drop leading zeros
                     if (n <= args.length - 3) {
@@ -4334,7 +4334,7 @@ fixed.replace = function(search, replacement) {
                     // Groups with the same name is an error, else would need `lastIndexOf`
                     n = captureNames ? indexOf(captureNames, $1) : -1;
                     if (n < 0) {
-                        throw new SyntaxError('Backreference to undefined group ' + $0);
+                        throw new SyntaxError('Backreference to undefined groups ' + $0);
                     }
                     return args[n + 1] || '';
                 }
@@ -4357,17 +4357,17 @@ fixed.replace = function(search, replacement) {
                 // - Backrefs end after 1 or 2 digits. Use `${..}` for more digits.
                 // - `$1` is an error if no capturing groups.
                 // - `$10` is an error if less than 10 capturing groups. Use `${1}0` instead.
-                // - `$01` is `$1` if at least one capturing group, else it's an error.
+                // - `$01` is `$1` if at least one capturing groups, else it's an error.
                 // - `$0` (not followed by 1-9) and `$00` are the entire match.
                 // Native behavior, for comparison:
-                // - Backrefs end after 1 or 2 digits. Cannot reference capturing group 100+.
+                // - Backrefs end after 1 or 2 digits. Cannot reference capturing groups 100+.
                 // - `$1` is a literal `$1` if no capturing groups.
                 // - `$10` is `$1` followed by a literal `0` if less than 10 capturing groups.
-                // - `$01` is `$1` if at least one capturing group, else it's a literal `$01`.
+                // - `$01` is `$1` if at least one capturing groups, else it's a literal `$01`.
                 // - `$0` is a literal `$0`.
                 if (!isNaN($2)) {
                     if ($2 > args.length - 3) {
-                        throw new SyntaxError('Backreference to undefined group ' + $0);
+                        throw new SyntaxError('Backreference to undefined groups ' + $0);
                     }
                     return args[$2] || '';
                 }
@@ -4560,7 +4560,7 @@ XRegExp.addToken(
         var index = isNaN(match[1]) ? (indexOf(this.captureNames, match[1]) + 1) : +match[1];
         var endIndex = match.index + match[0].length;
         if (!index || index > this.captureNames.length) {
-            throw new SyntaxError('Backreference to undefined group ' + match[0]);
+            throw new SyntaxError('Backreference to undefined groups ' + match[0]);
         }
         // Keep backreferences separate from subsequent literal numbers. This avoids e.g.
         // inadvertedly changing `(?<n>)\k<n>1` to `()\11`.
@@ -4588,7 +4588,7 @@ XRegExp.addToken(
             ) &&
             match[1] !== '0'
         ) {
-            throw new SyntaxError('Cannot use octal escape or backreference to undefined group ' +
+            throw new SyntaxError('Cannot use octal escape or backreference to undefined groups ' +
                 match[0]);
         }
         return match[0];
@@ -4600,7 +4600,7 @@ XRegExp.addToken(
 );
 
 /*
- * Named capturing group; match the opening delimiter only: `(?<name>`. Capture names can use the
+ * Named capturing groups; match the opening delimiter only: `(?<name>`. Capture names can use the
  * characters A-Z, a-z, 0-9, _, and $ only. Names can't be integers. Supports Python-style
  * `(?P<name>` as an alternate syntax to avoid issues in some older versions of Opera which natively
  * supported the Python-style syntax. Otherwise, XRegExp might treat numbered backreferences to
@@ -4628,7 +4628,7 @@ XRegExp.addToken(
 );
 
 /*
- * Capturing group; match the opening parenthesis only. Required for support of named capturing
+ * Capturing groups; match the opening parenthesis only. Required for support of named capturing
  * groups. Also adds explicit capture mode (flag n).
  */
 XRegExp.addToken(

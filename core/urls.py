@@ -16,7 +16,8 @@ from core.views.design import BannerDetailView, BannerDelete, \
     SliderView, SliderDelete, SliderGroupCreate, SliderDetailView, BannersView, BannerCreate, \
     SliderCreate
 from core.views.order import OrdersListView, EditOrder, OrderDetailView
-from core.views.setting import SettingDelete, AdminSetting, AdminSite, AdminSiteUpdate
+from core.views.setting import SettingDelete, AdminSetting, AdminSite, AdminSiteUpdate, PaymentMethodsList, \
+    PaymentMethodsDelete, PaymentMethodsUpdate, PaymentMethodsCreate
 from core.views.users import AdminLogin, AdminLogout, AdminUserCreate, \
     AdminUserDetail, AdminUserEdit, AdminUserDelete, AdminUsersList, AdminUserGroupList, AdminUserGroupCreate, \
     AdminUserGroupDelete, AdminUserGroupEdit
@@ -103,14 +104,14 @@ urlpatterns = [
     path('manufacture/delete/<int:pk>/', DeleteManufacture.as_view(), name='DeleteManufacture'),
 
     ########## Sales   #########
-    path('sales/', OrdersListView.as_view(), name='Orders'),
+    path('sales/', OrdersListView.as_view(), name='Order'),
     path('sales/edit/<int:pk>/', EditOrder.as_view(), name='EditOrder'),
-    path('sales/edit/<int:pk>/', OrderDetailView.as_view(), name='OrderDetail'),
+    path('sales/<int:pk>/', OrderDetailView.as_view(), name='OrderDetail'),
 
     ########## Slider   #########
     path('slider', SliderView.as_view(), name='SliderView'),
     path('slider/<int:pk>/', SliderDetailView.as_view(), name='SliderDetailView'),
-    path('slider/group/', SliderGroupCreate.as_view(), name='SliderGroupCreate'),
+    path('slider/groups/', SliderGroupCreate.as_view(), name='SliderGroupCreate'),
     path('slider/create/', SliderCreate.as_view(), name='SliderCreate'),
     path('slider/delete//<int:pk>/', SliderDelete.as_view(), name='SliderDelete'),
 
@@ -130,16 +131,21 @@ urlpatterns = [
     path('Users/uprofile/<int:pk>/', AdminUserEdit.as_view(), name='AdminUserEdit'),
     path('Users/dprofile/<int:id>', AdminUserDelete.as_view(), name='AdminUserDelete'),
 
-    path('group/', AdminUserGroupList.as_view(), name='AdminUserGroupList'),
-    path('group/create/', AdminUserGroupCreate.as_view(), name='AdminUserGroupCreate'),
-    path('group/edit/<int:pk>', AdminUserGroupEdit.as_view(), name='AdminUserGroupEdit'),
-    path('group/delete/<int:id>', AdminUserGroupDelete.as_view(), name='AdminUserGroupDelete'),
+    path('groups/', AdminUserGroupList.as_view(), name='AdminUserGroupList'),
+    path('groups/create/', AdminUserGroupCreate.as_view(), name='AdminUserGroupCreate'),
+    path('groups/edit/<int:pk>', AdminUserGroupEdit.as_view(), name='AdminUserGroupEdit'),
+    path('groups/delete/<int:id>', AdminUserGroupDelete.as_view(), name='AdminUserGroupDelete'),
 
     ########## setting   #########
     path('setting/', AdminSetting.as_view(), name='AdminSetting'),
     path('setting/add', AddSetting, name='AdminSiteAddSetting'),
     path('setting/update/<slug:slug>', UpdateSetting.as_view(), name='UpdateSetting'),
     path('setting/delete/<slug:slug>/', SettingDelete.as_view(), name='SettingDelete'),
+
+    path('setting/payment/', PaymentMethodsList.as_view(), name='PaymentMethodsList'),
+    path('setting/payment', PaymentMethodsCreate.as_view(), name='PaymentMethodsCreate'),
+    path('setting/payment/update/<slug:slug>', PaymentMethodsUpdate.as_view(), name='PaymentMethodsUpdate'),
+    path('setting/payment/delete/<slug:slug>/', PaymentMethodsDelete.as_view(), name='PaymentMethodsDelete'),
 
     path('site/', AdminSite.as_view(), name='AdminSite'),
     path('site/update/<int:pk>', AdminSiteUpdate.as_view(), name='AdminSiteUpdate'),

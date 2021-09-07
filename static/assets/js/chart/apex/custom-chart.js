@@ -121,7 +121,7 @@ dataLabels: {
 title: {
   text: "Overall Sales"
 },
-labels: ['Recent Order', 'Panding Payments', 'Recived Payments'],
+labels: ['Recent Orders', 'Panding Payments', 'Recived Payments'],
 colors: ['#f7bfc1', '#c8c8c8', '#ff8181'],
 responsive: [{
   breakpoint: 1430,

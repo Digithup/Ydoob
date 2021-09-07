@@ -69,7 +69,31 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
-    ## internal apps
+
+
+    # eEXTERNAL  APPS
+
+
+]
+
+THIRD_PARTY_APPS = [
+'ckeditor',
+    'ckeditor_uploader',
+    "bootstrap4",
+    'mptt',
+    'rest_framework',
+    'corsheaders',
+    'crispy_forms',
+    'rosetta',
+    'parler',
+    'currencies',
+    'social_django',
+'notifications',
+'formtools',
+
+]
+OWN_APPS = [
+## internal apps
     'core.apps.CoreConfig',
     'catalog.apps.CatalogConfig',
     'coupons.apps.CouponsConfig',
@@ -82,22 +106,12 @@ INSTALLED_APPS = [
     'vendors.apps.VendorsConfig',
     'user.apps.UserConfig',
     'billing',
-
-    # eEXTERNAL  APPS
-    'ckeditor',
-    'ckeditor_uploader',
-    "bootstrap4",
-    'mptt',
-    'rest_framework',
-    'corsheaders',
-    'crispy_forms',
-    'rosetta',
-    'parler',
-    'currencies',
-    'social_django',
-'notifications',
+    'DeliverySystem'
 
 ]
+
+
+INSTALLED_APPS += THIRD_PARTY_APPS + OWN_APPS
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 NOTIFICATIONS_NOTIFICATION_MODEL = 'apps.core.Notification'
 

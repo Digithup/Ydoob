@@ -7,7 +7,7 @@ from django.utils.text import slugify
 from requests import request
 
 from user.forms.forms import UserSignUpForm
-from vendors.models import Store
+from vendors.models import Vendor
 
 User = get_user_model()
 
@@ -78,20 +78,20 @@ class AlreadyUserSellerRegisterForm(forms.ModelForm):
 
 class StoreAddForm(forms.ModelForm):
     class Meta:
-        model = Store
+        model = Vendor
         # fields = '__all__'
         fields = ['title', 'email', 'phone', ]
         exclude = ['vendor']
 
         def clean_title(self, title):
             email = slugify(title)
-            if Store.objects.filter(email=email).exists():
-                raise ValidationError('Store with this Email already exists.')
+            if Vendor.objects.filter(email=email).exists():
+                raise ValidationError('Vendor with this Email already exists.')
 
 
 class StoreAddFormm(forms.ModelForm):
     class Meta:
-        model = Store
+        model = Vendor
 
         # fields = '__all__'
         fields = ['email', 'phone', 'vendor']
@@ -119,5 +119,5 @@ class StoreAddFormm(forms.ModelForm):
 
 class StoreEditForm(forms.ModelForm):
     class Meta:
-        model = Store
+        model = Vendor
         fields = '__all__'

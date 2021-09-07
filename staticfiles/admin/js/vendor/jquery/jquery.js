@@ -4540,7 +4540,7 @@ jQuery.fn.extend( {
 			// Set the data...
 			this.each( function() {
 
-				// We always store the camelCased key
+				// We always vendor the camelCased key
 				dataUser.set( this, key, value );
 			} );
 		}, null, value, arguments.length > 1, null, true );
@@ -5634,7 +5634,7 @@ function leverageNative( el, type, expectSync ) {
 				// from an async native handler (gh-4350)
 				if ( !saved.length ) {
 
-					// Store arguments for use when handling the inner native event
+					// Vendor arguments for use when handling the inner native event
 					// There will always be at least one argument (an event object), so this array
 					// will not be confused with a leftover capture object.
 					saved = slice.call( arguments );
@@ -7454,7 +7454,7 @@ function defaultPrefilter( elem, props, opts ) {
 				dataShow = dataPriv.access( elem, "fxshow", { display: restoreDisplay } );
 			}
 
-			// Store hidden/visible for toggle so `.stop().toggle()` "reverses"
+			// Vendor hidden/visible for toggle so `.stop().toggle()` "reverses"
 			if ( toggle ) {
 				dataShow.hidden = !hidden;
 			}
@@ -8390,7 +8390,7 @@ jQuery.fn.extend( {
 				className = getClass( this );
 				if ( className ) {
 
-					// Store className if set
+					// Vendor className if set
 					dataPriv.set( this, "__className__", className );
 				}
 

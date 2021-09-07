@@ -178,7 +178,7 @@ django.jQuery(function($){
                                 'top': offset.top + (targetLoc == BEFORE ? 0 : rowHeight)
                             }).find('span').text(DraggableMPTTAdmin.messages[targetLoc] || '');
 
-                            // Store the found row and options
+                            // Vendor the found row and options
                             moveTo.hovering = element;
                             moveTo.relativeTo = targetRow;
                             moveTo.side = targetLoc;

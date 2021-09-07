@@ -1,13 +1,14 @@
 from django.db.models import Min, Max
 
-from catalog.models.models import Products, ProductMedia, Categories, Wishlist
+from catalog.models.models import Products, ProductMedia, Categories
+from sales.models.cart import Wishlist
 from catalog.models.product_options import Manufacturer
 from core.models.design import SliderMedia, Banners
 from core.models.setting import Setting, SettingLang
 from localization.models import Language
 from user.models import UserAddress
 
-from vendors.models import Store, StoreMedia
+from vendors.models import Vendor, StoreMedia
 
 
 def home_processors(request):
@@ -19,11 +20,11 @@ def home_processors(request):
 
         ##############Vendor###########  ##############Vendor###########
 
-    store_owner = Store.objects.filter(vendor__id=request.user.id)
+    store_owner = Vendor.objects.filter(vendor__id=request.user.id)
     vendor_store = []
     for store in store_owner:
         vendor_media = StoreMedia.objects.filter(store_id=store_owner[0], ).first()
-        vendor_store.append({"store": store, "vendor_media": vendor_media, })
+        vendor_store.append({"vendor": store, "vendor_media": vendor_media, })
     products_count = Products.objects.filter(seller__id=request.user.id).count()
     products = Products.objects.filter(seller__id=request.user.id)
     vendor_products_list = []

@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, DeleteView, UpdateView
+from django.views.generic import ListView, DeleteView, UpdateView, CreateView
 
 from core.decorators import allowed_users
 from core.forms.setting import SettingLangForm, SettingForm, SiteForm
@@ -17,6 +17,9 @@ from localization.models import Language
 
 
 # Create your views here.
+from sales.forms.order import PaymentMethodsForm
+from sales.models.orders import PaymentMethods
+
 
 class AdminSetting(ListView):
     model = Setting
@@ -205,3 +208,39 @@ class AdminSiteUpdate(UpdateView):
     @method_decorator(allowed_users(allowed_roles=['admin']))
     def dispatch(self, *args, **kwargs):
         return super(AdminSiteUpdate, self).dispatch(*args, **kwargs)
+
+class PaymentMethodsList(ListView):
+    model = PaymentMethods
+
+    template_name = 'setting/PaymentMethods/admin-PaymentMethods.html'
+
+
+class PaymentMethodsCreate(CreateView):
+    model = PaymentMethods
+    #fields = '__all__'
+    form_class = PaymentMethodsForm
+    template_name = 'setting/PaymentMethods/add-PaymentMethods.html'
+    success_url = reverse_lazy('core:PaymentMethodsList')
+
+    # @method_decorator(allowed_users(allowed_roles=['admin']))
+    # def dispatch(self, *args, **kwargs):
+    #     return super(PaymentMethodsCreate, self).dispatch(*args, **kwargs)
+
+
+class PaymentMethodsUpdate(UpdateView):
+    model=PaymentMethods
+    form_class=SiteForm
+    template_name = 'setting/PaymentMethods/update-PaymentMethods.html'
+    success_url = reverse_lazy('core:PaymentMethodsList')
+
+    @method_decorator(allowed_users(allowed_roles=['admin']))
+    def dispatch(self, *args, **kwargs):
+        return super(PaymentMethodsUpdate, self).dispatch(*args, **kwargs)
+
+class PaymentMethodsDelete(DeleteView):
+    model = PaymentMethods
+    fields = '__all__'
+    success_url = reverse_lazy('core:PaymentMethodsList')
+
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)

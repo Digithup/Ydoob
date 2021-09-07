@@ -382,7 +382,7 @@ class PasswordResetConfirmView(PasswordContextMixin, FormView):
                     return super().dispatch(*args, **kwargs)
             else:
                 if self.token_generator.check_token(self.user, token):
-                    # Store the token in the session and redirect to the
+                    # Vendor the token in the session and redirect to the
                     # password reset form at a URL without the token. That
                     # avoids the possibility of leaking the token in the
                     # HTTP Referer header.

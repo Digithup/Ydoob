@@ -94,6 +94,7 @@ class AdminUsersList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['now'] = timezone.now()
+        context['groups'] = Group.objects.all()
         return context
 
     @method_decorator(allowed_users(allowed_roles=['admin']))

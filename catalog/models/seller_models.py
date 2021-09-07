@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 from accounts.models import User
-from vendors.models import Store
+from vendors.models import Vendor
 
 """
 def download_media_location(instance, filename):
@@ -15,7 +15,7 @@ def download_media_location(instance, filename):
 
 
 class SellerProducts(models.Model):
-    #store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    #vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     media = models.ImageField(blank=True,
                               null=True,
                               upload_to=download_media_location

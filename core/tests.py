@@ -317,7 +317,7 @@ class UpdateSetting(View):
 
 def banner_create(request):
     qs = Slider.objects.none()
-    BannersFormSet = modelformset_factory(Slider, form=BannerAddForm, exclude=['group', 'status'], extra=1,
+    BannersFormSet = modelformset_factory(Slider, form=BannerAddForm, exclude=['groups', 'status'], extra=1,
                                           can_delete=True)
 
     if request.method == 'POST':
@@ -328,7 +328,7 @@ def banner_create(request):
         if formset.is_valid() and banner_form.is_valid():
             # Generate a workday object
             banner = banner_form.save(commit=False)
-            banner.group = banner_form.cleaned_data['group']
+            banner.groups = banner_form.cleaned_data['groups']
             banner.status = banner_form.cleaned_data['status']
             banner.save()
 
@@ -341,8 +341,8 @@ def banner_create(request):
 
                 messages.add_message(request, messages.SUCCESS,
                                      "Banner add successfully " +
-                                     e.banner.group +
-                                     ": " + e.caption + " (" + str(e.group) + ") - "
+                                     e.banner.groups +
+                                     ": " + e.caption + " (" + str(e.groups) + ") - "
                                      )
 
             return redirect('core:BannerView')

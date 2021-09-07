@@ -52,7 +52,7 @@
 
                                                         {% if rs.activation == 1 and rs.status == 0 %}
                                                             <li><a href="{% url 'vendors:StoreWaiting' %}">
-                                                                <h6>{% translate 'Store Disable' %}</h6></a></li>
+                                                                <h6>{% translate 'Vendor Disable' %}</h6></a></li>
                                                         {% endif %}
 
 
@@ -61,17 +61,17 @@
 
                                                     {% if rs.activation == 0  and rs.status == 0 %}
                                                         <li><a href="{% url 'vendors:StoreWaiting' %}">
-                                                                <h6>{% translate 'Store wait activation' %}</h6></a></li>
+                                                                <h6>{% translate 'Vendor wait activation' %}</h6></a></li>
                                                         {% else %}
                                                         {% if rs.activation == 0  and rs.status == 1 %}
                                                         <li><a href="{% url 'vendors:StoreWaiting' %}">
-                                                                <h6>{% translate 'Store wait activation' %}</h6></a></li>
+                                                                <h6>{% translate 'Vendor wait activation' %}</h6></a></li>
                                                     {% endif %}{% endif %}
 
                                                 {% endfor %}
                                             {% else %}
                                                 <li>
-                                                    <a href="{% url 'vendors:CreateStore' %}">{% translate 'Create Store' %}</a>
+                                                    <a href="{% url 'vendors:CreateStore' %}">{% translate 'Create Vendor' %}</a>
                                                 </li>
 
                                             {% endif %}
@@ -227,7 +227,7 @@
                                                     <div class="buttons"><a href="{% url 'sales:ShopCart' %}"
                                                                             class="view-cart">viewcart</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-                                                        <a href="{% url 'sales:OrderProduct' %}"
+                                                        <a href="{% url 'sales:Checkout' %}"
                                                            class="checkout">{% translate 'checkout' %}</a>
 
                                                     </div>

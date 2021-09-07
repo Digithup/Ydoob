@@ -2455,7 +2455,7 @@ jQuery.event = {
 			// Create unique handler function, wrapped around original handler
 			handler = this.proxy( fn );
 
-			// Store data in unique handler
+			// Vendor data in unique handler
 			handler.data = data;
 		}
 
@@ -2713,7 +2713,7 @@ jQuery.event = {
 		if ( event[expando] )
 			return event;
 
-		// store a copy of the original event object
+		// vendor a copy of the original event object
 		// and "clone" to set read-only properties
 		var originalEvent = event;
 		event = jQuery.Event( originalEvent );
@@ -3876,7 +3876,7 @@ jQuery.fn.extend({
 					return opt.complete.call(this);
 
 				if ( ( p == "height" || p == "width" ) && this.style ) {
-					// Store display property
+					// Vendor display property
 					opt.display = jQuery.css(this, "display");
 
 					// Make sure that nothing sneaks out

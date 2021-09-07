@@ -1,0 +1,88 @@
+{% extends 'vendor/vendor-base/vendorbase.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block body %}
+
+
+
+
+  <!-- Container-fluid starts-->
+            <div class="container-fluid">
+                <div class="page-header">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="page-header-left">
+                                <h3>Orders
+                                    <small>Multikart Admin panel</small>
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <ol class="breadcrumb pull-right">
+                                <li class="breadcrumb-item"><a href="index.html"><i data-feather="home"></i></a></li>
+                                <li class="breadcrumb-item">Sales</li>
+                                <li class="breadcrumb-item active">Orders</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Container-fluid Ends-->
+
+            <!-- Container-fluid starts-->
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Manage Order</h5>
+                            </div>
+                            <div class="card-body order-datatable">
+                                <table class="display" id="basic-1">
+                                    <thead>
+                                    <tr>
+                                        <th>Order Id</th>
+                                        <th>Product</th>
+                                         <th>Total</th>
+                                        <th>Payment Status</th>
+                                        <th>Payment Method</th>
+                                        <th>Order Status</th>
+                                        <th>Date</th>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for rs in vendor_order %}
+                                    <tr>
+                                        <td><a  href="{% url 'vendors:EditOrder' rs.id  %}">#{{ rs.order.code }}</a></td>
+
+                                        <td>
+
+
+                                               {{ rs.product.title|truncatewords:1  }}
+
+                                        </td>
+                                    <td>${{ rs.price }}</td>
+                                        <td><span class="badge badge-secondary">{{ rs.order.payment_status }}</span></td>
+                                        <td>{{ rs.order.payment_method }}</td>
+                                        <td><span class="badge badge-success">{{ rs.status }}</span></td>
+                                        <td>{{ rs.update_at }}</td>
+
+                                    </tr>
+                               {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Container-fluid Ends-->
+
+{% endblock %}
+
+
+
+{% block foot %} {% include 'vendor/vendor-base/footer.html' %}  {% endblock %}
+{% block js %}{% include 'vendor/vendor-base/js.html' %}{% endblock %}

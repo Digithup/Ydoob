@@ -110,7 +110,7 @@ $(document).ready(function() {
             // Prevent default anchor click behavior
             event.preventDefault();
 
-            // Store hash (#)
+            // Vendor hash (#)
             var hash = this.hash;
 
             // Ensure no section has relevant class

@@ -243,11 +243,3 @@ class ProductReviewVoting(models.Model):
     status = models.CharField(max_length=10, choices=STATUS)
 
 
-class Wishlist(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(Products, on_delete=models.CASCADE)
-    quantity=models.SmallIntegerField(default='1')
-    def __str__(self):
-        return f"{self.quantity} of {self.product}"
-    def get_item_price(self):
-        return self.quantity * self.product.price

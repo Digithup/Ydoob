@@ -992,7 +992,7 @@
 						'aria-expanded': 'true',
 						'aria-hidden': 'false'
 					});
-					// store sub menu in visible array
+					// vendor sub menu in visible array
 					this.visibleSubMenus.push($sub);
 					this.$root.triggerHandler('show.smapi', $sub[0]);
 				}

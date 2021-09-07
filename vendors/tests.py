@@ -16,7 +16,7 @@ from django.views import View
 from django.views.generic import ListView
 from requests import request
 from accounts.models import User
-from vendors.models import Store, StoreMedia
+from vendors.models import Vendor, StoreMedia
 
 
 def clean(self):
@@ -37,7 +37,7 @@ def clean(self):
 
         lockup[str(field)] = value
 
-    qs = Store.objects.filter(**lockup)
+    qs = Vendor.objects.filter(**lockup)
 
     if qs.exists and self._state.adding:
         raise ValidationError(
@@ -48,7 +48,7 @@ def clean(self):
 class CreateStoreTest(View):
     def get(self, request, *args, **kwargs):
         print(request)
-        # vendor = Store.objects.get_or_create()
+        # vendor = Vendor.objects.get_or_create()
         # seller = request.user
 
         return render(request, "store-page/create-store.html", )
@@ -63,18 +63,18 @@ class CreateStoreTest(View):
         vendor_id = request.user.id
         print(request.POST)
         vendor = User.objects.filter(seller=True)
-        status = Store.objects.filter(status='Disable')
+        status = Vendor.objects.filter(status='Disable')
 
         if vendor and status:
             messages.error(request,
-                           format_html('''You already have a store wait for activate &nbsp; &nbsp;  or learn how to sell &nbsp; 
+                           format_html('''You already have a vendor wait for activate &nbsp; &nbsp;  or learn how to sell &nbsp; 
                 <a href=""> Edit</a> ''',
                                        reverse('home:index', )))
 
             return render(request, "store-page/create-store.html", )
 
         else:
-            store = Store(title=title_group, address=address, phone=phone, email=email, vendor_id=vendor_id)
+            store = Vendor(title=title_group, address=address, phone=phone, email=email, vendor_id=vendor_id)
             store.save()
             # return HttpResponse("OK")
             return render(request, 'store-page/create-success.html', )
@@ -89,16 +89,16 @@ def become_sellers(request, id):
         print(request.POST)
         forms = StoreAddForm(request.POST, request.FILES)
         if forms.is_valid():
-            store = forms.save(commit=False)
-            store.vendor = request.user
-            store.save()
+            vendor = forms.save(commit=False)
+            vendor.vendor = request.user
+            vendor.save()
             # Add this to check if the email already exists in your database or not
-            # store.save()
-            return render(request, 'store-page/create-success.html', )
+            # vendor.save()
+            return render(request, 'vendor-page/create-success.html', )
     else:
         forms = StoreAddForm(request.POST, request.FILES)
-        return render(request, 'store-page/create-store.html', {'forms': forms})
-    return render(request, 'store-page/create-store.html', {'forms': forms})
+        return render(request, 'vendor-page/create-vendor.html', {'forms': forms})
+    return render(request, 'vendor-page/create-vendor.html', {'forms': forms})
 
 
 @login_required
@@ -138,7 +138,7 @@ class EditStoreTestt(View):
 
     def get(self, request, *args, **kwargs, ):
         store_id = kwargs["store_id"]
-        stores = Store.objects.get(id=store_id)
+        stores = Vendor.objects.get(id=store_id)
         store_media = StoreMedia.objects.filter(store_id=store_id)
 
         return render(request, "vendor/vendor-edit-store-profile.html",
@@ -146,7 +146,7 @@ class EditStoreTestt(View):
 
     def post(self, request, *args, **kwargs):
         store_id = kwargs["store_id"]
-        stores = Store.objects.get(id=store_id)
+        stores = Vendor.objects.get(id=store_id)
         title = request.POST.get("title")
         phone = request.POST.get("phone")
         company = request.POST.get("company")
@@ -169,12 +169,12 @@ class EditStoreTestt(View):
         vendor = User.objects.get(id=seller)
 
         # vendor = seller
-        # vendor =Store.objects.get(vendor=owner)
-        # vendor_id = Store.objects.filter(vendor_id=request.user.id)
+        # vendor =Vendor.objects.get(vendor=owner)
+        # vendor_id = Vendor.objects.filter(vendor_id=request.user.id)
 
-        store_obj = Store(title=title, phone=phone, company=company, about=about,
-                          keywords=keywords, slug=slug, country=country, city=city, address=address,
-                          facebook=facebook, instagram=instagram, twitter=twitter, youtube=youtube, vendor=vendor)
+        store_obj = Vendor(title=title, phone=phone, company=company, about=about,
+                           keywords=keywords, slug=slug, country=country, city=city, address=address,
+                           facebook=facebook, instagram=instagram, twitter=twitter, youtube=youtube, vendor=vendor)
         store_obj.save()
 
         i = 0
@@ -209,7 +209,7 @@ class EditStoreTest(View):
     def get(self, request, *args, **kwargs, ):
         store_id = kwargs["store_id"]
 
-        stores = Store.objects.get(id=store_id)
+        stores = Vendor.objects.get(id=store_id)
         store_medias = StoreMedia.objects.get(store_id=store_id)
         #media_id = kwargs["store_medias"]
         #media_store = StoreMedia.objects.filter(id=media_id)
@@ -242,8 +242,8 @@ class EditStoreTest(View):
         vendor = request.user.id
 
         store_id = kwargs["store_id"]
-        store = Store.objects.get(id=store_id)
-        # store.vendor=stores
+        store = Vendor.objects.get(id=store_id)
+        # vendor.vendor=stores
         store.title = title
         store.phone = phone
         store.company = company
@@ -272,7 +272,7 @@ class EditStoreTest(View):
                 if media_content != "":
                     store_media = StoreMedia.objects.get(id=media_content_id)
                     store_media.media_content = media_content
-                    #store_media.store_id = store.id
+                    #store_media.store_id = vendor.id
                     store_media.save()
 
             i = i + 1

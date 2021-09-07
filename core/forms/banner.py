@@ -21,7 +21,7 @@ class BannerGroupAddForm(forms.ModelForm):
 #         exclude = ['image','link','sort_order','caption']
 #
 #
-# BannersFormSet = modelformset_factory(Slider, form=BannerAddForm, exclude=['group', 'status'], extra=1, can_delete=True)
+# BannersFormSet = modelformset_factory(Slider, form=BannerAddForm, exclude=['groups', 'status'], extra=1, can_delete=True)
 
 
 class BannersAddForm(forms.ModelForm):

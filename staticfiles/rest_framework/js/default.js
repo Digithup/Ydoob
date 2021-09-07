@@ -21,7 +21,7 @@ $(document).ready(function() {
     document.cookie = "tabstyle=" + this.name + "; path=/";
   });
 
-  // Store tab preference in cookies & display appropriate tab on load.
+  // Vendor tab preference in cookies & display appropriate tab on load.
   var selectedTab = null;
   var selectedTabName = getCookie('tabstyle');
 

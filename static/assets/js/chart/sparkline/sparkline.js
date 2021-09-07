@@ -111,9 +111,9 @@
 *   tooltipValueLookups - An object or range map to map field values to tooltip strings
 *       (eg. to map -1 to "Lost", 0 to "Draw", and 1 to "Win")
 *   numberFormatter - Optional callback for formatting numbers in tooltips
-*   numberDigitGroupSep - Character to use for group separator in numbers "1,234" - Defaults to ","
+*   numberDigitGroupSep - Character to use for groups separator in numbers "1,234" - Defaults to ","
 *   numberDecimalMark - Character to use for the decimal point when formatting numbers - Defaults to "."
-*   numberDigitGroupCount - Number of digits between group separator - Defaults to 3
+*   numberDigitGroupCount - Number of digits between groups separator - Defaults to 3
 *
 * There are 7 types of sparkline, selected by supplying a "type" option of 'line' (default),
 * 'bar', 'tristate', 'bullet', 'discrete', 'pie' or 'box'
@@ -1336,7 +1336,7 @@
                         regionShapes[i] = ids;
                     } else {
                         shapes.append();
-                        regionShapes[i] = shapes.id; // store just the shapeid
+                        regionShapes[i] = shapes.id; // vendor just the shapeid
                     }
                 } else {
                     // null value
@@ -2352,7 +2352,7 @@
             for (i = values.length; i--;) {
                 if (values[i]) { // don't render zero values
                     shape = this.renderSlice(i).append();
-                    this.valueShapes[i] = shape.id; // store just the shapeid
+                    this.valueShapes[i] = shape.id; // vendor just the shapeid
                     this.shapes[shape.id] = i;
                 }
             }
@@ -2900,8 +2900,8 @@
             this._calculatePixelDims(width, height, this.canvas);
             this.canvas.width = this.pixelWidth;
             this.canvas.height = this.pixelHeight;
-            groupel = '<v:group coordorigin="0 0" coordsize="' + this.pixelWidth + ' ' + this.pixelHeight + '"' +
-                    ' style="position:absolute;top:0;left:0;width:' + this.pixelWidth + 'px;height=' + this.pixelHeight + 'px;"></v:group>';
+            groupel = '<v:groups coordorigin="0 0" coordsize="' + this.pixelWidth + ' ' + this.pixelHeight + '"' +
+                    ' style="position:absolute;top:0;left:0;width:' + this.pixelWidth + 'px;height=' + this.pixelHeight + 'px;"></v:groups>';
             this.canvas.insertAdjacentHTML('beforeEnd', groupel);
             this.group = $(this.canvas).children()[0];
             this.rendered = false;

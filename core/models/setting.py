@@ -17,7 +17,7 @@ class Setting(models.Model):
     )
     phone = models.IntegerField(blank=True, default='510')
     email = models.EmailField(blank=True, max_length=50, default='', null=True)
-    image = models.ImageField(upload_to='images/setting/%Y/%m/%d',   default='images/store/nigne.png')
+    image = models.ImageField(upload_to='images/setting/%Y/%m/%d',   default='images/vendor/nigne.png')
     facebook = models.URLField(blank=True, max_length=50, default='', null=True)
     instagram = models.URLField(blank=True, max_length=50, default='', null=True)
     twitter = models.URLField(blank=True, max_length=50, default='', null=True)
