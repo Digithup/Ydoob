@@ -15,6 +15,8 @@ import django_heroku
 from django.conf import settings
 from django.contrib import messages
 
+import notification.apps
+
 STRIPE_API_KEY_PUBLISHABLE = "pk_test_51HIHiuKBJV2qfWbD2gQe6aqanfw6Eyul5P02KeOuSR1UMuaV4TxEtaQyzr9DbLITSZweL7XjK3p74swcGYrE2qEX00Hz7GmhMI"
 STRIPE_API_KEY_HIDDEN = "sk_test_51HIHiuKBJV2qfWbD4I9pAODack7r7r9LJOY65zSFx7jUUwgy2nfKEgQGvorv1p2xP7tgMsJ5N9EW7K1lBdPnFnyK00kdrS27cj"
 
@@ -27,7 +29,6 @@ import os
 import tempfile
 from pathlib import Path
 import environ
-
 
 from django.contrib.messages import constants as message_constants
 from django.utils.translation import ugettext_lazy as _
@@ -45,13 +46,12 @@ env = environ.Env(
 )
 # reading .env file
 environ.Env.read_env()
-SECRET_KEY =env('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in Productsion!
-DEBUG =env('DEBUG')
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS: List[str] = ['127.0.0.1']
-
 
 AUTH_USER_MODEL = 'user.User'
 # ALLOWED_HOSTS = [
@@ -60,24 +60,21 @@ AUTH_USER_MODEL = 'user.User'
 # Application definition
 
 INSTALLED_APPS = [
-    'whitenoise.runserver_nostatic',
-    'django.contrib.admin',
+
     'django.contrib.auth',
+    'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
-
-
     # eEXTERNAL  APPS
-
 
 ]
 
 THIRD_PARTY_APPS = [
-'ckeditor',
+    'ckeditor',
     'ckeditor_uploader',
     "bootstrap4",
     'mptt',
@@ -88,12 +85,12 @@ THIRD_PARTY_APPS = [
     'parler',
     'currencies',
     'social_django',
-'notifications',
-'formtools',
+    'whitenoise.runserver_nostatic',
+    'formtools',
 
 ]
 OWN_APPS = [
-## internal apps
+    ## internal apps
     'core.apps.CoreConfig',
     'catalog.apps.CatalogConfig',
     'coupons.apps.CouponsConfig',
@@ -104,16 +101,18 @@ OWN_APPS = [
     'reports.apps.ReportsConfig',
     'sales.apps.SalesConfig',
     'vendors.apps.VendorsConfig',
+    'notification',
+
     'user.apps.UserConfig',
     'billing',
     'DeliverySystem'
 
 ]
 
-
 INSTALLED_APPS += THIRD_PARTY_APPS + OWN_APPS
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-NOTIFICATIONS_NOTIFICATION_MODEL = 'apps.core.Notification'
+
+DJANGO_NOTIFICATIONS_CONFIG = {'USE_JSONFIELD': True}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -128,7 +127,6 @@ MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
     # 'whitenoise.middleware.WhiteNoiseMiddleware',
-
 
 ]
 
@@ -163,6 +161,7 @@ TEMPLATES = [
                 'currencies.context_processors.currencies',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
+                'notification.context_processors.notifications'
 
             ],
         },
@@ -204,7 +203,7 @@ else:
         }
     }
 
-#python3 -c 'import psycopg2 as db; conn = db.connect("postgres://qjyolhgk:kHMr9gkyJ8gO-j2IBj7iZ2cFVql5nWpr@chunee.db.elephantsql.com/qjyolhgk"); print(conn.get_backend_pid()); conn.close()'
+# python3 -c 'import psycopg2 as db; conn = db.connect("postgres://qjyolhgk:kHMr9gkyJ8gO-j2IBj7iZ2cFVql5nWpr@chunee.db.elephantsql.com/qjyolhgk"); print(conn.get_backend_pid()); conn.close()'
 
 
 '''
@@ -251,7 +250,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # dynamic data translate
 LANGUAGE_CODE = 'en'
-TIME_ZONE = 'UTC+2'
+TIME_ZONE = 'Egypt'
 USE_I18N = True  # use internationalization
 USE_L10N = True  # use localization
 USE_TZ = True
@@ -291,7 +290,6 @@ CACHES = {
             'TIMEOUT': 24 * 3600
         },
 }
-
 
 ##  CKEDITOR CONFIGURATION ##
 ####################################
@@ -347,12 +345,16 @@ EMAIL_HOST_USER = 'iarbic89@gmail.com'
 EMAIL_HOST_PASSWORD = 'hitham5320826'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-
-
 SOCIAL_AUTH_FACEBOOK_KEY = '264061255547166'  # App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = 'f472f0afb70fc84333e1d8e3bed58f84'  # App Secret
+
 ############Payment STRIPE########
-STRIPE_PUBLIC_KEY=env('STRIPE_PUBLIC_KEY')
-STRIPE_SECRET_KEY=env('STRIPE_SECRET_KEY')
-STRIPE_WEBHOOK_SECRET=env('STRIPE_WEBHOOK_SECRET')
+STRIPE_PUBLIC_KEY = env('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
+STRIPE_WEBHOOK_SECRET = env('STRIPE_WEBHOOK_SECRET')
+
+MyFatoorah_base_url = env('MyFatoorah_base_url')
+MyFatoorah_api_key = env('MyFatoorah_api_key')
+MyFatoorah_WEBHOOK_SECRET = env('MyFatoorah_WEBHOOK_SECRET')
+
 django_heroku.settings(locals())

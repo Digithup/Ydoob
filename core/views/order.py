@@ -41,14 +41,9 @@ class EditOrder(UpdateView):
     model = Order
     form_class = OrderStatusForm
 
-
-    template_name = 'sales/orders/edit-order.html'
+    template_name = 'sales/orders/admin_edit-order.html'
     success_url = reverse_lazy('core:Order')
 
     @method_decorator(allowed_users(allowed_roles=['admin']))
     def dispatch(self, *args, **kwargs):
         return super(EditOrder, self).dispatch(*args, **kwargs)
-
-
-
-

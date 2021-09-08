@@ -118,10 +118,11 @@
                             </div>
                         </ul>
                     </li>
-                    <li class="onhover-dropdown"><i data-feather="bell"></i><span class="badge badge-pill badge-primary pull-right notification-badge">3</span><span class="dot"></span>
+                    <li class="onhover-dropdown"><i data-feather="bell"></i><span class="badge badge-pill badge-primary pull-right notification-badge">{{ notifications.count }}</span><span class="dot"></span>
                         <ul class="notification-dropdown onhover-show-div p-0">
-                            <li>Notification <span class="badge badge-pill badge-primary pull-right">3</span></li>
-                            <li>
+                            <li>Notification <span class="badge badge-pill badge-primary pull-right">{{ notifications.count }}</span></li>
+                            {% if not notifications %}
+        <li>
                                 <div class="media">
                                     <div class="media-body">
                                         <h6 class="mt-0"><span><i class="shopping-color" data-feather="shopping-bag"></i></span>Your order ready for Ship..!</h6>
@@ -129,14 +130,31 @@
                                     </div>
                                 </div>
                             </li>
+        {% endif %}
+                              {% for notification in notifications %}
+                                    {% if notification.notification_type == 'message' %}
+                            <li>
+                                <div class="media">
+                                    <div class="media-body">
+                                        <h6 class="mt-0"><span><i class="shopping-color" data-feather="shopping-bag"></i></span>Your order ready for Ship..!</h6>
+                                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetuer.</p>
+                                         <strong>{{ notification.created_by.username }}</strong> sent you a message<br>
+                                        <small>{{ notification.created_at|timesince }} ago</small>
+                                    </div>
+                                </div>
+                            </li>
+                                    {% elif notification.notification_type == 'application' %}
                             <li>
                                 <div class="media">
                                     <div class="media-body">
                                         <h6 class="mt-0 txt-success"><span><i class="download-color font-success" data-feather="download"></i></span>Download Complete</h6>
                                         <p class="mb-0">Lorem ipsum dolor sit amet, consectetuer.</p>
+                                        <strong>{{ notification.created_by.email }}</strong> sent you a message<br>
+                                         <small>{{ notification.created_at|timesince }} ago</small>
                                     </div>
                                 </div>
                             </li>
+                                   {% endif %}
                             <li>
                                 <div class="media">
                                     <div class="media-body">
@@ -145,7 +163,8 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="txt-dark"><a href="#">All</a> notification</li>
+                        {% endfor %}
+                            <li class="txt-dark"><a href="{% url 'notifications:notifications' %}">All</a> notification</li>
                         </ul>
                     </li>
                     <li><a href="#"><i class="right_side_toggle" data-feather="message-square"></i><span class="dot"></span></a></li>

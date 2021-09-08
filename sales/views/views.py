@@ -6,20 +6,16 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
-from django.template.context_processors import request
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.views import View
-from stripe.api_resources import source
 
-from catalog.models.models import Products, Categories, Variants
+from catalog.models.models import Products, Variants
+from notification.utilities import create_notification
 from sales.forms.forms import CheckoutForm
 from sales.models.cart import ShopCart
 
 from sales.models.orders import OrderProduct, PaymentMethods, Order
-from sales.models.payment import Payment
-from sales.views.payment import create_checkout_session
-from sales.views.stripe_payment import stripe_payment
 from user.models import UserAddress
 from vendors.models import Vendor
 
@@ -208,6 +204,7 @@ def Checkout(request):
                     # variant.quantity -= int(rs.quantity)
                     variant.save()
                 # ************ <> *****************
+                create_notification(request, detail.vendor.vendor, 'NewOrder', extra_id=detail.id,extra_info=rs.product)
 
             ShopCart.objects.filter(user_id=current_user.id).delete()  # Clear & Delete shopcart
             request.session['cart_items'] = 0
@@ -217,7 +214,7 @@ def Checkout(request):
             return redirect('sales:payment', payment_option=payment_method)
         else:
             messages.warning(request, form.errors)
-            return HttpResponseRedirect(reverse('sales:OrderProduct'))
+            return HttpResponseRedirect(reverse('sales:Checkout'))
 
     form = CheckoutForm()
     profile = User.objects.get(id=current_user.id)
@@ -243,51 +240,24 @@ class PaymentView(LoginRequiredMixin, View):
         payment_method = PaymentMethods.objects.get(id=order.payment_method.id)
         print(payment_method)
         if payment_method.method == "COD":
-            print(payment_method)
+            print('cod')
             return render(request, 'payments/payment_success.html', )
         elif payment_method.method == 'Stripe':
-            print(payment_method)
-            # return HttpResponseRedirect(reverse('sales:PaymentStripe', payment_option= payment_method))
+            print('Stripe')
             return redirect('sales:PaymentStripe', )
-        elif payment_method.method == None:
+        elif payment_method.method == 'Fawry':
+            print('Fawry')
+            return redirect('sales:PaymentFawry', )
+
+        elif payment_method.method == 'Paymob':
             print(payment_method)
+            return redirect('sales:PaymentMyPaymob', )
+        elif payment_method.method is None:
+            print('none')
             return HttpResponse('error')
         else:
             return HttpResponse('error thing')
 
 
-class PaymentStripe(LoginRequiredMixin, View):
-    '''
-    Handle Stripe payment (Stripe API)
-    '''
 
-    def get(self, *args, **kwargs):
-        order = Order.objects.get(user=self.request.user, ordered=False)
-        context = {
-            'STRIPE_PUBLIC_KEY': settings.STRIPE_PUBLIC_KEY,
-            'order': order
-        }
-        return render(self.request, 'payments/payment.html', context)
 
-    def post(self, *args, **kwargs):
-        # Create Stripe payment
-        order = Order.objects.get(user=self.request.user, ordered=False)
-        token = self.request.POST.get('stripeToken')
-        chargeID = stripe_payment(settings.STRIPE_SECRET_KEY, token, order.total, str(order.code))
-        if (chargeID is not None):
-            order.ordered = True
-
-            # Save the payment
-            payment = Payment()
-            payment.stripe_charge_id = chargeID
-            payment.user = self.request.user
-            payment.price = order.total
-            payment.paid= 'True'
-            payment.save()
-            order.payment = payment
-            order.save()
-            #return render(request, 'payments/payment_success.html', )
-            return redirect('/')
-        else:
-            messages.error(self.request, "Something went wrong with Stripe. Please try again later")
-            return redirect('sales:PaymentStripe',)

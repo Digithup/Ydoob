@@ -1,6 +1,6 @@
 from django.urls import path, include
 from django.urls import path
-import notifications.urls
+
 from core.tests import AddSetting, UpdateSetting
 from core.views.catalog import AddCategory, categories, EditCategory, DeleteCategory, \
     ProductsAddMedia, ProductEditMedia, ProductMediaDelete, ProductsAddStocks, file_upload, AdminIndex, \
@@ -144,12 +144,12 @@ urlpatterns = [
 
     path('setting/payment/', PaymentMethodsList.as_view(), name='PaymentMethodsList'),
     path('setting/payment', PaymentMethodsCreate.as_view(), name='PaymentMethodsCreate'),
-    path('setting/payment/update/<slug:slug>', PaymentMethodsUpdate.as_view(), name='PaymentMethodsUpdate'),
-    path('setting/payment/delete/<slug:slug>/', PaymentMethodsDelete.as_view(), name='PaymentMethodsDelete'),
+    path('setting/payment/update/<int:pk>', PaymentMethodsUpdate.as_view(), name='PaymentMethodsUpdate'),
+    path('setting/payment/delete/<int:pk>/', PaymentMethodsDelete.as_view(), name='PaymentMethodsDelete'),
 
     path('site/', AdminSite.as_view(), name='AdminSite'),
     path('site/update/<int:pk>', AdminSiteUpdate.as_view(), name='AdminSiteUpdate'),
 
 
-path('inbox/notifications/', include(notifications.urls, namespace='notifications')),
+
 ]

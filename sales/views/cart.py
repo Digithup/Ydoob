@@ -151,9 +151,9 @@ def AddToCart(request, id):
         if form.is_valid():
             if control == 1:  # Update  shopcart
                 if product.variant == 'None':
-                    data = ShopCart.objects.get(product_id=id, user_id=current_user.id,store__id=vendorid)
+                    data = ShopCart.objects.get(product_id=id, user_id=current_user.id,vendor_id=vendorid)
                 else:
-                    data = ShopCart.objects.get(product_id=id, variant_id=variantid, user_id=current_user.id,store__id=vendorid)
+                    data = ShopCart.objects.get(product_id=id, variant_id=variantid, user_id=current_user.id,vendor_id=vendorid)
                 data.quantity += form.cleaned_data['quantity']
                 data.save()  # save data
             else:  # Inser to Shopcart

@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
+from django.utils.text import slugify
 
 from DeliverySystem.models import DeliveryPerson
 from catalog.models.models import Products
@@ -14,6 +15,10 @@ from vendors.models import Vendor
 User = get_user_model()
 user_models= get_user_model()
 
+STATUS = (
+    ('True', 'Yes'),
+    ('False', 'NO'),
+)
 payment_status_choice = (
         ("Pending", "Pending"),
         ("Online Payment", "Online Payment"),
@@ -24,11 +29,18 @@ class PaymentMethods(models.Model):
     method = models.CharField(max_length=255, null=False, blank=False)
     title=models.CharField(max_length=255, null=False, blank=False)
     count = models.BigIntegerField(null=False, blank=False, default=0)
+    status = models.CharField(max_length=10, choices=STATUS,default='False')
+    slug = models.SlugField(null=False, max_length=128,default='nigne')
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
 
+
     def __str__(self):
         return self.method
+    def save(self, *args, **kwargs):  # new
+        if not self.slug:
+            self.slug = slugify(self.title)
+        return super().save(*args, **kwargs)
 
     # class Meta:
     #     ordering = ['-count']

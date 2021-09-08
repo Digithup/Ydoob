@@ -13,14 +13,15 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.conf import settings
 from django.conf.urls import url
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
-
 from django.urls import path, include
 
+import notification
 from home.tests import ajaxcolortest,  ajaxpricetest
 from localization import views
 
@@ -28,7 +29,6 @@ from localization import views
 urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
     path('selectlanguage', views.selectlanguage, name='selectlanguage'),
-
     path('selectcurrency', views.selectcurrency, name='selectcurrency'),
     # path('savelangcur', views.savelangcur, name='savelangcur'),
 
@@ -41,20 +41,18 @@ urlpatterns += i18n_patterns(
     path('', include('user.urls'), name='user'),
     path('dashboard/', include('core.urls'), name='core'),
     path('', include('localization.urls'), name='localization'),
+    path('', include('notification.urls'),name='notifications'),
     path('', include('home.urls'), name='home'),
     path('', include('catalog.urls'), name='catalog'),
     path('', include('sales.urls'), name='sales'),
-#path('', include('sales.urls'), name='sales'),
     path('', include('vendors.urls'), name='vendors'),
 
-    # USER URL
     path('ckeditor/', include('ckeditor_uploader.urls')),
-    # LOGIN URL
-    # API URL
     path('api-auth/', include('rest_framework.urls')),
-
     path('ajaxcolor/', ajaxcolortest, name='ajaxcolor'),
-path('ajaxprice/', ajaxpricetest, name='ajaxprice'),
+    path('ajaxprice/', ajaxpricetest, name='ajaxprice'),
+
+
     # path('search/', SearchView(), name='search'),
     # path('search_auto/', search_auto, name='search_auto'),
 

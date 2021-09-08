@@ -5,9 +5,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 
 # Create your models here.
-from notifications.base.models import AbstractNotification
 
-from catalog.models.models import Categories
 
 
 class Setting(models.Model):
