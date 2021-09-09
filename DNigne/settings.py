@@ -29,6 +29,7 @@ import os
 import tempfile
 from pathlib import Path
 import environ
+import django_heroku
 
 from django.contrib.messages import constants as message_constants
 from django.utils.translation import ugettext_lazy as _
