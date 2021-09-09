@@ -341,9 +341,10 @@ EMAIL_USE_SSL = False
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'iarbic89@gmail.com'
-EMAIL_HOST_PASSWORD = 'hitham5320826'
+EMAIL_HOST_USER = 'nigneegypt@gmail.com'
+EMAIL_HOST_PASSWORD = 'Hitham5320826*'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_EMAIL_FROM = 'Multi Vendor Site <oreply@ydoob.com>'
 
 SOCIAL_AUTH_FACEBOOK_KEY = '264061255547166'  # App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = 'f472f0afb70fc84333e1d8e3bed58f84'  # App Secret

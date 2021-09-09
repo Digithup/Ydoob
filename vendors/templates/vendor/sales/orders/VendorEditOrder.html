@@ -57,23 +57,20 @@
                         <div class="card-header">
                             <div class="row col-md-12">
                                 <div class="col-md3">
-                                    <span style="padding-left:20px">
-                                        <td> Payment Stats: {{ object.order.payment.paid }}</td>
-                                        &#160;&#160;&#160;&#160;&#160;
-
-                                        <td>Payment Method: {{ object.order.payment_method }}</td>
-                                        &#160;&#160;&#160;&#160;&#160;
-
-                                        <td class="pull-right"> {{ form }}</td></span>
-
-
+                                    {% for rs in order.orderproduct_set.all %}
+                                        <td>Payment Stats:
+                                {{ rs.order.payment_status.title }}</td>
+                                        <td>Payment Method:
+                                {{ rs.order.payment_method }}</td>
+                                      {% endfor %}
+                                        <td class="pull-right"> {{ form }}</td>
 
                                 <button  type="submit" class="btn btn-primary pull-right">Change</button>
-                                </div>
+                                </div></div></form>
 
 
 
-                            </div></div></div></form>
+                            </div></div>
 
             </div>
             <div class="col-xl-12">
@@ -109,16 +106,16 @@
                                             <div class="card-body  ">
                                                <h5 class="f-w-600">Profile</h5>
                                         <div class="table-responsive profile-table">
-                                            {% for rs in order %}
+                                            {% for rs in order.orderproduct_set.all %}
                                             <table class="table table-borderless">
                                                 <tbody>
                                                 <tr>
                                                     <td>First Name:</td>
-                                                    <td>{{ rs.orderproduct.user.last_name }}</td>
+                                                    <td>{{ rs.order.user.first_name }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Last Name:</td>
-                                                    <td>{{  rs.user.last_name }}</td>
+                                                    <td>{{  rs.order.user.last_name }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Email:</td>
@@ -126,19 +123,19 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Address:</td>
-                                                    <td>{{  rs.address.address_title }}</td>
+                                                    <td>{{  rs.order.address.address_title }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Mobile Number:</td>
-                                                    <td>{{  rs.address.address_title }}</td>
+                                                    <td>{{  rs.order.address.address_title }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>DOB:</td>
-                                                    <td>{{ rs.create_at }}</td>
+                                                    <td>{{ rs.order.create_at }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Location:</td>
-                                                    <td>{{  rs.city }}</td>
+                                                    <td>{{  rs.order.city }}</td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -154,7 +151,7 @@
                                  aria-labelledby="description-tabs">
                                 <h4>description</h4>
                                 <div class="table-responsive profile-table">
-                                            {% for rs in vendor_order %}
+                                            {% for rs in order.orderproduct_set.all %}
                                             <table class="table table-borderless">
                                                 <tbody>
                                                 <tr>

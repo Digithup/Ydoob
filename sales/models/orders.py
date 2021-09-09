@@ -62,11 +62,11 @@ class Order(models.Model):
     payment_method = models.ForeignKey(PaymentMethods, on_delete=models.PROTECT, null=False, blank=False)
     payment_status = models.CharField( max_length=100, null=False, blank=False, default="1", choices=payment_status_choice)
     payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, blank=True, null=True)
-
     address = models.ForeignKey(UserAddress, on_delete=models.SET_NULL, null=True)
     total = models.FloatField()
     status = models.CharField(max_length=10, choices=STATUS, default='New')
     ordered = models.BooleanField(default=False)
+    email = models.CharField(max_length=100)
     ip = models.CharField(blank=True, max_length=20)
     adminnote = models.CharField(blank=True, max_length=100)
     create_at = models.DateTimeField(auto_now_add=True)

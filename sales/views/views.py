@@ -16,6 +16,7 @@ from sales.forms.forms import CheckoutForm
 from sales.models.cart import ShopCart
 
 from sales.models.orders import OrderProduct, PaymentMethods, Order
+from sales.utilities import notify_vendor, notify_customer
 from user.models import UserAddress
 from vendors.models import Vendor
 
@@ -148,20 +149,14 @@ def Checkout(request):
     current_user = request.user
     shopcart = ShopCart.objects.filter(user_id=current_user.id)
     total = 0
-
     for rs in shopcart:
         if rs.product.variant == 'None':
-
             total += rs.product.price * rs.quantity
         else:
             total += rs.variant.price * rs.quantity
-
     if request.method == 'POST':  # if there is a post
         form = CheckoutForm(request.POST)
-
         if form.is_valid():
-
-            print(request.POST)
             address = request.POST.get('address')
             address = UserAddress.objects.get(id=address)
             payment_method = request.POST.get('payment_method')
@@ -169,15 +164,15 @@ def Checkout(request):
             data = Order()
             data.address = address
             data.payment_method = payment_method
-            print(request.POST)
-
             data.user_id = current_user.id
+            data.email=current_user.email
             data.total = total
             data.ip = request.META.get('REMOTE_ADDR')
             ordercode = get_random_string(5).upper()  # random cod
             data.code = ordercode
             data.save()  #
 
+            print(notify_customer(data))
             for rs in shopcart:
                 detail = OrderProduct()
                 detail.order_id = data.id  # Orders Id
@@ -192,7 +187,6 @@ def Checkout(request):
                     detail.price = rs.variant.price
                 detail.variant_id = rs.variant_id
                 detail.amount = rs.amount
-                print(request.POST)
                 detail.save()
                 # ***Reduce quantity of sold product from Amount of Product
                 if rs.product.variant == 'None':
@@ -205,10 +199,14 @@ def Checkout(request):
                     variant.save()
                 # ************ <> *****************
                 create_notification(request, detail.vendor.vendor, 'NewOrder', extra_id=detail.id,extra_info=rs.product)
+                notify_customer(data)
+                notify_vendor(detail)
 
             ShopCart.objects.filter(user_id=current_user.id).delete()  # Clear & Delete shopcart
             request.session['cart_items'] = 0
             messages.success(request, "Your Orders has been completed. Thank you ")
+            # SEnd Email Notification
+
 
             # return render(request, 'payments/payment_success.html',{'ordercode':ordercode,'category': category})
             return redirect('sales:payment', payment_option=payment_method)
