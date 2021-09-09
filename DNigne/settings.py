@@ -155,6 +155,7 @@ TEMPLATES = [
                 'home.context_processors.home_processors',
                 'home.context_processors.user_processors',
                 'home.context_processors.filter_processors',
+                'home.context_processors.language_processors',
                 'sales.context_processors.cart',
                 'vendors.context_processors.vendor_processors',
                 'django.contrib.auth.context_processors.auth',
