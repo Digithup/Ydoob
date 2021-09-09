@@ -1,1 +1,1 @@
-web: gunicorn DNigne.wsgi --log-file -
+web gunicorn DNigne.wsgi --log-file -

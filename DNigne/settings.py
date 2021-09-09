@@ -51,7 +51,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in Productsion!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS: List[str] = ['127.0.0.1']
+ALLOWED_HOSTS: List[str] = ['127.0.0.1','dnigne.herokuapp.com']
 
 AUTH_USER_MODEL = 'user.User'
 # ALLOWED_HOSTS = [
