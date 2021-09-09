@@ -40,7 +40,7 @@ urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
     path('', include('user.urls'), name='user'),
     path('dashboard/', include('core.urls'), name='core'),
-    path('', include('localization.urls'), name='localization'),
+    path('dashboard/', include('localization.urls'), name='localization'),
     path('', include('notification.urls'),name='notifications'),
     path('', include('home.urls'), name='home'),
     path('', include('catalog.urls'), name='catalog'),

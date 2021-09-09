@@ -37,10 +37,11 @@ def home_processors(request):
 
     try:
         return {
-            # 'setting': Setting.objects.last(),
-            #  'setting_data_en': SettingLang.objects.get(lang='en'),
-            #  'setting_data_ar': SettingLang.objects.get(lang='ar'),
-            #  'index_language': Language.objects.all(),
+            'setting': Setting.objects.last(),
+            'setting_data':request.LANGUAGE_CODE,
+             'setting_data_en': SettingLang.objects.get(lang='en'),
+             'setting_data_ar': SettingLang.objects.get(lang='ar'),
+             'index_language': Language.objects.all(),
             'store_owner': store_owner,
             'vendor_store': vendor_store,
             'vendor_products_list': vendor_products_list,
@@ -92,7 +93,6 @@ def home_processors(request):
                    'store_owner': None,
                    'vendor_store': None,
                    'setting_data': None,
-
                    'main_slider': None,
                    'banner_left': None,
                    'banner_right': None,

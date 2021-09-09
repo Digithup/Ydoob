@@ -184,9 +184,9 @@ class AdminUserGroupList(ListView):
     model= Group
     template_name = 'users/UserGroup/admin-group-list.html'
 
-    @method_decorator(allowed_users(allowed_roles=['admin']))
-    def dispatch(self, *args, **kwargs):
-        return super(AdminUserGroupList, self).dispatch(*args, **kwargs)
+    # @method_decorator(allowed_users(allowed_roles=['admin']))
+    # def dispatch(self, *args, **kwargs):
+    #     return super(AdminUserGroupList, self).dispatch(*args, **kwargs)
 
 
 class AdminUserGroupCreate(CreateView):
@@ -195,9 +195,9 @@ class AdminUserGroupCreate(CreateView):
     template_name = 'users/UserGroup/admin-group-create.html'
     success_url = reverse_lazy('core:AdminUserGroupList')
 
-    @method_decorator(allowed_users(allowed_roles=['admin']))
-    def dispatch(self, *args, **kwargs):
-        return super(AdminUserGroupCreate, self).dispatch(*args, **kwargs)
+    # @method_decorator(allowed_users(allowed_roles=['admin']))
+    # def dispatch(self, *args, **kwargs):
+    #     return super(AdminUserGroupCreate, self).dispatch(*args, **kwargs)
 
 class AdminUserGroupEdit(UpdateView):
     model = Group

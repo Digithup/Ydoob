@@ -1,6 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
-
+{#{% if request.Language.CODE == 'en' %}#}
+{#<html  lang="en" >#}
+{# {% else %}#}
+{# <html lang="ar" dir="rtl" >#}
+{# {% endif %}#}
+<html  lang="en" >
 {% load myapptags %}
 {% load static %}
 {% load bootstrap4 %}
@@ -47,7 +51,13 @@
 
 
 </head>
+{% if setting_data == 'en' %}
 <body>
+ {% elif setting_data == 'ar' %}
+ <html lang="ar" dir="rtl" >
+<body class="rtl">
+{% endif %}
+{#<body>#}
 {% include 'front/header.html' %}
 {% block sidebar %} {% endblock %}
 

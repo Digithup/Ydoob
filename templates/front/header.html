@@ -13,12 +13,13 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="header-contact">
-                        {% if setting_data == request.Language.CODE %}
+                        {% if setting_data == 'en' %}
 
                             <li>Welcome to Our store &nbsp;{{ setting_data_en.title }}</li>
-                        {% else %}
+                        {% elif setting_data  == 'ar' %}
 
-                            <li>Welcome to Our store &nbsp;{{ setting_data_ar.title }}</li>
+                            <li>Welcome to Our store &nbsp;{{ setting_data_ar.title }}  </li>
+
 
                         {% endif %}
 

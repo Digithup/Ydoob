@@ -9,8 +9,7 @@ def core_processors(request):
         return {
 
                 'setting': Setting.objects.filter(status=True),
-            'setting_lang': SettingLang.objects.all(),
-                'index_language': Language.objects.all()
+
 
 
         }
@@ -18,7 +17,6 @@ def core_processors(request):
         return {
 
             'setting': None,
-            'setting_lang':None,
-            'index_language': None
+
 
                 }

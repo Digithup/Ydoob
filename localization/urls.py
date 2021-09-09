@@ -10,10 +10,10 @@ urlpatterns = [
 
 
     ########## categories  #########
-    path('admin/lang/', all_lang, name='all_lang'),
-    path('admin/lang/edit/<pk>', EditLang.as_view(), name='EditLang'),
-    path('admin/lang/add/', AddLang.as_view(), name='AddLang'),
-    path('admin/lang/delete/<pk>/', DeleteLang.as_view(), name='DeleteLang'),
+    path('lang/', all_lang, name='all_lang'),
+    path('lang/edit/<pk>', EditLang.as_view(), name='EditLang'),
+    path('lang/add/', AddLang.as_view(), name='AddLang'),
+    path('lang/delete/<pk>/', DeleteLang.as_view(), name='DeleteLang'),
 
 
 
