@@ -37,11 +37,7 @@ def home_processors(request):
 
     try:
         return {
-            'setting': Setting.objects.last(),
-            'setting_data':request.LANGUAGE_CODE,
-             'setting_data_en': SettingLang.objects.get(lang='en'),
-             'setting_data_ar': SettingLang.objects.get(lang='ar'),
-             'index_language': Language.objects.all(),
+
             'store_owner': store_owner,
             'vendor_store': vendor_store,
             'vendor_products_list': vendor_products_list,
@@ -86,10 +82,7 @@ def home_processors(request):
         }
     except BaseException as e:
         return {
-                   'setting': None,
-                   'setting_data_en': None,
-                   'setting_data_ar': None,
-                   'index_language': None,
+
                    'store_owner': None,
                    'vendor_store': None,
                    'setting_data': None,
@@ -148,3 +141,26 @@ def filter_processors(request):
 
     }
     return data
+
+
+def language_processors(request):
+    try:
+        language = {
+            'setting': Setting.objects.last(),
+            'setting_data':request.LANGUAGE_CODE,
+             'setting_data_en': SettingLang.objects.get(lang='en'),
+             'setting_data_ar': SettingLang.objects.get(lang='ar'),
+             'index_language': Language.objects.all(),
+
+        }
+        return language
+    except Exception as e:
+        language = {
+            'setting': None,
+            'setting_data':None,
+                   'setting_data_en': None,
+                   'setting_data_ar': None,
+                   'index_language': None,
+
+        }
+        return language
