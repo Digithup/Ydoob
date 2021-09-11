@@ -159,6 +159,7 @@ class AdminUserCreate(View):
 class AdminUserEdit(UpdateView):
     model = User
     fields = '__all__'
+
     template_name = 'users/admin-user-edit.html'
     success_url = reverse_lazy('core:AdminUsersList')
 

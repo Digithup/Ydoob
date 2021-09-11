@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load i18n %}
 {% block body %}
     <div class="page-body">
 
@@ -9,15 +9,16 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="page-header-left">
-                            <h3>Dashboard
-                                <small>{{ setting.title }} Admin panel</small>
+                            <h3>{% translate 'Dashboard' %}
+                                <small>{{ setting.title }} {% translate 'Admin panel' %}</small>
                             </h3>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <ol class="breadcrumb pull-right">
-                            <li class="breadcrumb-item"><a href="index.html"><i data-feather="home"></i></a></li>
-                            <li class="breadcrumb-item active">Dashboard</li>
+                            <li class="breadcrumb-item"><a href="{% url 'core:AdminIndex' %}"><i
+                                    data-feather="{% translate 'home' %}"></i></a></li>
+                            <li class="breadcrumb-item active">{% translate 'Dashboard' %}</li>
                         </ol>
                     </div>
                 </div>
@@ -36,8 +37,12 @@
                                     <div class="align-self-center text-center"><i data-feather="navigation"
                                                                                   class="font-warning"></i></div>
                                 </div>
-                                <div class="media-body col-8"><span class="m-0">Earnings</span>
-                                    <h3 class="mb-0">$ <span class="counter">6659</span><small> This Month</small></h3>
+                                <div class="media-body col-8"><span class="m-0">{% translate 'Earnings' %}</span>
+
+
+                                    <h3 class="mb-0">$ <span
+                                            class="counter">{{ admin_earnings_total|floatformat }}</span><small>{% translate 'This Month' %}</small>
+                                    </h3>
                                 </div>
                             </div>
                         </div>
@@ -51,8 +56,10 @@
                                     <div class="align-self-center text-center"><i data-feather="box"
                                                                                   class="font-secondary"></i></div>
                                 </div>
-                                <div class="media-body col-8"><span class="m-0">Products</span>
-                                    <h3 class="mb-0">$ <span class="counter">9856</span><small> This Month</small></h3>
+                                <div class="media-body col-8"><span class="m-0">{% translate 'Products' %}</span>
+                                    <h3 class="mb-0"><span
+                                            class="counter">{{ admin_products_count }}</span><small>{% translate 'This Month' %} </small>
+                                    </h3>
                                 </div>
                             </div>
                         </div>
@@ -81,8 +88,14 @@
                                     <div class="align-self-center text-center"><i data-feather="users"
                                                                                   class="font-danger"></i></div>
                                 </div>
-                                <div class="media-body col-8"><span class="m-0">New Vendors</span>
-                                    <h3 class="mb-0">$ <span class="counter">45631</span><small> This Month</small></h3>
+                                <div class="media-body col-8"><span class="m-0"
+                                                                    style="padding-left:-40px">{% translate 'New Vendors' %}  || {% translate 'Pending Vendors' %}</span>
+                                    <h3 class="mb-0"><span class="counter"
+                                                           style="padding-left:20px">{{ new_vendor }} </span><small>{% translate 'This Month' %} </small>
+                                        <span class="counter"
+                                              style="padding-left:20px">{{ pending_vendor }} </span><small>{% translate 'This Month' %} </small>
+                                    </h3>
+
                                 </div>
                             </div>
                         </div>
@@ -104,14 +117,10 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="market-chart"></div>
-                            <div class="code-box-copy">
-                                <button class="code-box-copy__btn btn-clipboard" data-clipboard-target="#example-head"
-                                        title="Copy"><i class="icofont icofont-copy-alt"></i></button>
-                                <pre><code class="language-html" id="example-head">&lt;!-- Cod Box Copy begin --&gt;
-&lt;div class="market-chart"&gt;&lt;/div&gt;
-&lt;!-- Cod Box Copy end --&gt;</code></pre>
-                            </div>
+                            <div id="container" style="width: 75%;">
+    <canvas id="MarketValue" data-url="{% url 'core:MarketValue' %}"></canvas>
+  </div>
+
                         </div>
                     </div>
                 </div>
@@ -122,7 +131,7 @@
                             <div class="card-header-right">
                                 <ul class="list-unstyled card-option">
                                     <li><i class="icofont icofont-simple-left"></i></li>
-                                    <li><i class="view-html fa fa-code"></i></li>
+
                                     <li><i class="icofont icofont-maximize full-card"></i></li>
                                     <li><i class="icofont icofont-minus minimize-card"></i></li>
                                     <li><i class="icofont icofont-refresh reload-card"></i></li>
@@ -142,91 +151,19 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td class="digits">$120.00</td>
-                                        <td class="font-danger">Bank Transfers</td>
-                                        <td class="digits">On Way</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td class="digits">$90.00</td>
-                                        <td class="font-secondary">Ewallets</td>
-                                        <td class="digits">Delivered</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td class="digits">$240.00</td>
-                                        <td class="font-warning">Cash</td>
-                                        <td class="digits">Delivered</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td class="digits">$120.00</td>
-                                        <td class="font-primary">Direct Deposit</td>
-                                        <td class="digits">$6523</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td class="digits">$50.00</td>
-                                        <td class="font-primary">Bank Transfers</td>
-                                        <td class="digits">Delivered</td>
-                                    </tr>
+                                    <tr>{% for rs in admin_order_total %}
+                                        <td>{{ rs.code }}</td>
+                                        <td class="digits">${{ rs.total }}</td>
+                                        <td class="font-danger">{{ rs.payment_method }}</td>
+                                        <td class="digits">{{ rs.status }}</td>
+
+                                        </tr> {% endfor %}
+
                                     </tbody>
                                 </table>
-                                <a href="order.html" class="btn btn-primary">View All Orders</a>
+                                <a href="{% url 'core:Order' %}" class="btn btn-primary">View All Orders</a>
                             </div>
-                            <div class="code-box-copy">
-                                <button class="code-box-copy__btn btn-clipboard" data-clipboard-target="#example-head1"
-                                        title="" data-original-title="Copy"><i class="icofont icofont-copy-alt"></i>
-                                </button>
-                                <pre class=" language-html"><code class=" language-html" id="example-head1">
-&lt;div class="user-status table-responsive latest-order-table"&gt;
-    &lt;table class="table table-bordernone"&gt;
-        &lt;thead&gt;
-            &lt;tr&gt;
-                &lt;th scope="col"&gt;Order ID&lt;/th&gt;
-                &lt;th scope="col"&gt;Order Total&lt;/th&gt;
-                &lt;th scope="col"&gt;Payment Method&lt;/th&gt;
-                &lt;th scope="col"&gt;Status&lt;/th&gt;
-            &lt;/tr&gt;
-        &lt;/thead&gt;
-        &lt;tbody&gt;
-            &lt;tr&gt;
-                &lt;td&gt;1&lt;/td&gt;
-                &lt;td class="digits"&gt;$120.00&lt;/td&gt;
-                &lt;td class="font-secondary"&gt;Bank Transfers&lt;/td&gt;
-                &lt;td class="digits"&gt;Delivered&lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;2&lt;/td&gt;
-                &lt;td class="digits"&gt;$90.00&lt;/td&gt;
-                &lt;td class="font-secondary"&gt;Ewallets&lt;/td&gt;
-                &lt;td class="digits"&gt;Delivered&lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;3&lt;/td&gt;
-                &lt;td class="digits"&gt;$240.00&lt;/td&gt;
-                &lt;td class="font-secondary"&gt;Cash&lt;/td&gt;
-                &lt;td class="digits"&gt;Delivered&lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;4&lt;/td&gt;
-                &lt;td class="digits"&gt;$120.00&lt;/td&gt;
-                &lt;td class="font-primary"&gt;Direct Deposit&lt;/td&gt;
-                &lt;td class="digits"&gt;Delivered&lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;5&lt;/td&gt;
-                &lt;td class="digits"&gt;$50.00&lt;/td&gt;
-                &lt;td class="font-primary"&gt;Bank Transfers&lt;/td&gt;
-                &lt;td class="digits"&gt;Delivered&lt;/td&gt;
-            &lt;/tr&gt;
-        &lt;/tbody&gt;
-    &lt;/table&gt;
-&lt;/div&gt;
-                                    </code></pre>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -236,9 +173,9 @@
                             <h6>Total Sales</h6>
                             <div class="row">
                                 <div class="col-6">
-                                    <div class="small-chartjs">
-                                        <div class="flot-chart-placeholder" id="simple-line-chart-sparkline-3"></div>
-                                    </div>
+                                    <div id="container" style="width: 25%;">
+    <canvas id="TotalSales" data-url="{% url 'core:TotalSales' %}"></canvas>
+  </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="value-graph">
@@ -252,7 +189,7 @@
                                 <div class="media-body">
                                     <span>Sales Last Month</span>
                                     <h2 class="mb-0">9054</h2>
-                                    <p>0.25% <span><i class="fa fa-angle-up"></i></span></p>
+                                    <p>0.50% <span><i class="fa fa-angle-down"></i></span></p>
                                     <h5 class="f-w-600">Gross sales of August</h5>
                                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting</p>
                                 </div>
@@ -271,9 +208,9 @@
                             <h6>Total purchase</h6>
                             <div class="row">
                                 <div class="col-6">
-                                    <div class="small-chartjs">
-                                        <div class="flot-chart-placeholder" id="simple-line-chart-sparkline"></div>
-                                    </div>
+                                    <div id="container" style="width: 25%;">
+    <canvas id="TotalPurchase" data-url="{% url 'core:TotalPurchase' %}"></canvas>
+  </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="value-graph">
@@ -306,9 +243,9 @@
                             <h6>Total cash transaction</h6>
                             <div class="row">
                                 <div class="col-6">
-                                    <div class="small-chartjs">
-                                        <div class="flot-chart-placeholder" id="simple-line-chart-sparkline-2"></div>
-                                    </div>
+                                    <div id="container" style="width: 25%;">
+    <canvas id="TotalCashTransaction" data-url="{% url 'core:TotalCashTransaction' %}"></canvas>
+  </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="value-graph">
@@ -341,9 +278,9 @@
                             <h6>Daily Deposits</h6>
                             <div class="row">
                                 <div class="col-6">
-                                    <div class="small-chartjs">
-                                        <div class="flot-chart-placeholder" id="simple-line-chart-sparkline-1"></div>
-                                    </div>
+                                      <div id="container" style="width: 25%;">
+    <canvas id="TotalDeposits" data-url="{% url 'core:TotalDeposits' %}"></canvas>
+  </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="value-graph">
@@ -386,15 +323,12 @@
                             </div>
                         </div>
                         <div class="card-body sell-graph">
-                            <canvas id="myGraph"></canvas>
-                            <div class="code-box-copy">
-                                <button class="code-box-copy__btn btn-clipboard" data-clipboard-target="#example-head3"
-                                        title="" data-original-title="Copy"><i class="icofont icofont-copy-alt"></i>
-                                </button>
-                                <pre class=" language-html"><code class=" language-html" id="example-head3">&lt;div class="card-body sell-graph"&gt;
-   &lt;canvas id="myGraph"&gt;&lt;/canvas&gt;
-&lt;/div&gt;</code></pre>
-                            </div>
+                            <div id="container" style="width: 75%;">
+    <canvas id="BuyAndSell" data-url="{% url 'core:BuyAndSell' %}"></canvas>
+  </div>
+
+
+
                         </div>
                     </div>
                 </div>
@@ -820,9 +754,9 @@
                                 <div class="col-xl-3 col-sm-6 xl-50">
                                     <div class="order-graph">
                                         <h6>Orders By Location</h6>
-                                        <div class="chart-block chart-vertical-center">
-                                            <canvas id="myDoughnutGraph"></canvas>
-                                        </div>
+                                        <div id="container" style="width: 50%;">
+    <canvas id="OrderByLocation" data-url="{% url 'core:OrderByLocation' %}"></canvas>
+  </div>
                                         <div class="order-graph-bottom">
                                             <div class="media">
                                                 <div class="order-color-primary"></div>
@@ -831,41 +765,16 @@
                                                     </h6>
                                                 </div>
                                             </div>
-                                            <div class="media">
-                                                <div class="order-color-secondary"></div>
-                                                <div class="media-body">
-                                                    <h6 class="mb-0">Kenya <span class="pull-right">$347</span></h6>
-                                                </div>
-                                            </div>
-                                            <div class="media">
-                                                <div class="order-color-danger"></div>
-                                                <div class="media-body">
-                                                    <h6 class="mb-0">Liberia<span class="pull-right">$468</span></h6>
-                                                </div>
-                                            </div>
-                                            <div class="media">
-                                                <div class="order-color-warning"></div>
-                                                <div class="media-body">
-                                                    <h6 class="mb-0">Christmas Island<span
-                                                            class="pull-right">$742</span></h6>
-                                                </div>
-                                            </div>
-                                            <div class="media">
-                                                <div class="order-color-success"></div>
-                                                <div class="media-body">
-                                                    <h6 class="mb-0">Saint Helena <span class="pull-right">$647</span>
-                                                    </h6>
-                                                </div>
-                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xl-3 col-sm-6 xl-50">
                                     <div class="order-graph sm-order-space">
                                         <h6>Sales By Location</h6>
-                                        <div class="peity-chart-dashboard text-center">
-                                            <span class="pie-colours-1">4,7,6,5</span>
-                                        </div>
+                                        <div id="container" style="width: 50%;">
+    <canvas id="SalesByLocation" data-url="{% url 'core:SalesByLocation' %}"></canvas>
+  </div>
                                         <div class="order-graph-bottom sales-location">
                                             <div class="media">
                                                 <div class="order-shape-primary"></div>
@@ -874,137 +783,20 @@
                                                     </h6>
                                                 </div>
                                             </div>
-                                            <div class="media">
-                                                <div class="order-shape-secondary"></div>
-                                                <div class="media-body">
-                                                    <h6 class="mb-0 mr-0">Brasil <span class="pull-right">10%</span>
-                                                    </h6>
-                                                </div>
-                                            </div>
-                                            <div class="media">
-                                                <div class="order-shape-danger"></div>
-                                                <div class="media-body">
-                                                    <h6 class="mb-0 mr-0">United Kingdom<span
-                                                            class="pull-right">34%</span></h6>
-                                                </div>
-                                            </div>
-                                            <div class="media">
-                                                <div class="order-shape-warning"></div>
-                                                <div class="media-body">
-                                                    <h6 class="mb-0 mr-0">Australia<span class="pull-right">5%</span>
-                                                    </h6>
-                                                </div>
-                                            </div>
-                                            <div class="media">
-                                                <div class="order-shape-success"></div>
-                                                <div class="media-body">
-                                                    <h6 class="mb-0 mr-0">Canada <span class="pull-right">25%</span>
-                                                    </h6>
-                                                </div>
-                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 xl-100">
                                     <div class="order-graph xl-space">
                                         <h6>Revenue for last month</h6>
-                                        <div class="ct-4 flot-chart-container"></div>
+                                        <div id="container" style="width: 50%;">
+    <canvas id="RevenueByLocation" data-url="{% url 'core:RevenueByLocation' %}"></canvas>
+  </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="code-box-copy">
-                                <button class="code-box-copy__btn btn-clipboard" data-clipboard-target="#example-head2"
-                                        title="" data-original-title="Copy"><i class="icofont icofont-copy-alt"></i>
-                                </button>
-                                <pre class=" language-html"><code class=" language-html" id="example-head2">&lt;div class="row"&gt;
-   &lt;div class="col-xl-3 col-sm-6 xl-50"&gt;
-      &lt;div class="order-graph"&gt;
-         &lt;h6&gt;Orders By Location&lt;/h6&gt;
-         &lt;div class="chart-block chart-vertical-center"&gt;
-            &lt;canvas id="myDoughnutGraph"&gt;&lt;/canvas&gt;
-         &lt;/div&gt;
-         &lt;div class="order-graph-bottom"&gt;
-            &lt;div class="media"&gt;
-               &lt;div class="order-color-primary"&gt;&lt;/div&gt;
-               &lt;div class="media-body"&gt;
-                  &lt;h6 class="mb-0"&gt;Saint Lucia &lt;span class="pull-right"&gt;$157&lt;/span&gt;&lt;/h6&gt;
-               &lt;/div&gt;
-            &lt;/div&gt;
-            &lt;div class="media"&gt;
-               &lt;div class="order-color-secondary"&gt;&lt;/div&gt;
-               &lt;div class="media-body"&gt;
-                  &lt;h6 class="mb-0"&gt;Kenya &lt;span class="pull-right"&gt;$347&lt;/span&gt;&lt;/h6&gt;
-               &lt;/div&gt;
-            &lt;/div&gt;
-            &lt;div class="media"&gt;
-               &lt;div class="order-color-danger"&gt;&lt;/div&gt;
-               &lt;div class="media-body"&gt;
-                  &lt;h6 class="mb-0"&gt;Liberia&lt;span class="pull-right"&gt;$468&lt;/span&gt;&lt;/h6&gt;
-               &lt;/div&gt;
-            &lt;/div&gt;
-            &lt;div class="media"&gt;
-               &lt;div class="order-color-warning"&gt;&lt;/div&gt;
-               &lt;div class="media-body"&gt;
-                  &lt;h6 class="mb-0"&gt;Christmas Island&lt;span class="pull-right"&gt;$742&lt;/span&gt;&lt;/h6&gt;
-               &lt;/div&gt;
-            &lt;/div&gt;
-            &lt;div class="media"&gt;
-               &lt;div class="order-color-success"&gt;&lt;/div&gt;
-               &lt;div class="media-body"&gt;
-                  &lt;h6 class="mb-0"&gt;Saint Helena &lt;span class="pull-right"&gt;$647&lt;/span&gt;&lt;/h6&gt;
-               &lt;/div&gt;
-            &lt;/div&gt;
-         &lt;/div&gt;
-      &lt;/div&gt;
-   &lt;/div&gt;
-   &lt;div class="col-xl-3 col-sm-6 xl-50"&gt;
-      &lt;div class="order-graph sm-order-space"&gt;
-         &lt;h6&gt;Sales By Location&lt;/h6&gt;
-         &lt;div class="peity-chart-dashboard text-center"&gt;
-            &lt;span class="pie-colours-1"&gt;4,7,6,5&lt;/span&gt;
-         &lt;/div&gt;
-         &lt;div class="order-graph-bottom sales-location"&gt;
-            &lt;div class="media"&gt;
-               &lt;div class="order-shape-primary"&gt;&lt;/div&gt;
-                  &lt;div class="media-body"&gt;
-                     &lt;h6 class="mb-0 mr-0"&gt;Germany &lt;span class="pull-right"&gt;25%&lt;/span&gt;&lt;/h6&gt;
-                  &lt;/div&gt;
-            &lt;/div&gt;
-            &lt;div class="media"&gt;
-               &lt;div class="order-shape-secondary"&gt;&lt;/div&gt;
-               &lt;div class="media-body"&gt;
-                  &lt;h6 class="mb-0 mr-0"&gt;Brasil &lt;span class="pull-right"&gt;10%&lt;/span&gt;&lt;/h6&gt;
-               &lt;/div&gt;
-            &lt;/div&gt;
-            &lt;div class="media"&gt;
-               &lt;div class="order-shape-danger"&gt;&lt;/div&gt;
-                  &lt;div class="media-body"&gt;
-                     &lt;h6 class="mb-0 mr-0"&gt;United Kingdom&lt;span class="pull-right"&gt;34%&lt;/span&gt;&lt;/h6&gt;
-                  &lt;/div&gt;
-            &lt;/div&gt;
-            &lt;div class="media"&gt;
-               &lt;div class="order-shape-warning"&gt;&lt;/div&gt;
-               &lt;div class="media-body"&gt;
-                  &lt;h6 class="mb-0 mr-0"&gt;Australia&lt;span class="pull-right"&gt;5%&lt;/span&gt;&lt;/h6&gt;
-               &lt;/div&gt;
-            &lt;/div&gt;
-            &lt;div class="media"&gt;
-               &lt;div class="order-shape-success"&gt;&lt;/div&gt;
-               &lt;div class="media-body"&gt;
-                  &lt;h6 class="mb-0 mr-0"&gt;Canada &lt;span class="pull-right"&gt;25%&lt;/span&gt;&lt;/h6&gt;
-               &lt;/div&gt;
-            &lt;/div&gt;
-         &lt;/div&gt;
-      &lt;/div&gt;
-   &lt;/div&gt;
-   &lt;div class="col-xl-6 xl-100"&gt;
-      &lt;div class="order-graph xl-space"&gt;
-         &lt;h6&gt;Revenue for last month&lt;/h6&gt;
-         &lt;div class="ct-4 flot-chart-container"&gt;&lt;/div&gt;
-      &lt;/div&gt;
-   &lt;/div&gt;
-&lt;/div&gt;</code></pre>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -1014,5 +806,401 @@
         <!-- Container-fluid Ends-->
 
     </div>
+
+{% endblock %}
+
+
+
+{% block custom_js %}
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+  <script>
+
+    $(function () {
+
+      var $OrderByLocation = $("#OrderByLocation");
+      $.ajax({
+        url: $OrderByLocation.data("url"),
+        success: function (data) {
+
+          var ctx = $OrderByLocation[0].getContext("2d");
+
+          new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: 'total',
+                backgroundColor: [
+      'rgb(255, 99, 132)',
+      'rgb(54, 162, 235)',
+      'rgb(255, 205, 86)'
+    ],
+
+    hoverOffset: 4,
+                data: data.data
+              }]
+            },
+            options: {
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Total Bar Chart'
+              }
+            }
+          });
+
+        }
+      });
+
+    });
+
+  </script>
+     <script>
+
+    $(function () {
+
+      var SalesByLocation = $("#SalesByLocation");
+      $.ajax({
+        url: SalesByLocation.data("url"),
+        success: function (data) {
+
+          var ctx = SalesByLocation[0].getContext("2d");
+
+          new Chart(ctx, {
+            type: 'pie',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: 'total',
+                backgroundColor: [
+      'rgb(255, 99, 132)',
+      'rgb(54, 162, 235)',
+      'rgb(255, 205, 86)'
+    ],
+
+    hoverOffset: 4,
+                data: data.data
+              }]
+            },
+            options: {
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Total Bar Chart'
+              }
+            }
+          });
+
+        }
+      });
+
+    });
+
+  </script>
+      <script>
+
+    $(function () {
+
+      var RevenueByLocation = $("#RevenueByLocation");
+      $.ajax({
+        url: RevenueByLocation.data("url"),
+        success: function (data) {
+
+          var ctx = RevenueByLocation[0].getContext("2d");
+
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: 'total',
+                 borderColor: 'rgb(75, 192, 192)',
+                   tension: 0.1,
+
+
+                data: data.data
+              }]
+            },
+            options: {
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Total Bar Chart'
+              }
+            }
+          });
+
+        }
+      });
+
+    });
+
+  </script>
+      <script>
+
+    $(function () {
+
+      var BuyAndSell = $("#BuyAndSell");
+      $.ajax({
+        url: BuyAndSell.data("url"),
+        success: function (data) {
+
+          var ctx = BuyAndSell[0].getContext("2d");
+
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: 'total',
+                 borderColor: 'rgb(75, 192, 192)',
+                   tension: 0.1,
+
+
+                data: data.data
+              }]
+            },
+            options: {
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Total Bar Chart'
+              }
+            }
+          });
+
+        }
+      });
+
+    });
+
+  </script>
+
+
+      <script>
+
+    $(function () {
+
+      var TotalSales = $("#TotalSales");
+      $.ajax({
+        url: TotalSales.data("url"),
+        success: function (data) {
+
+          var ctx = TotalSales[0].getContext("2d");
+
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: 'total',
+                 borderColor: 'rgb(75, 192, 192)',
+                   tension: 0.1,
+
+
+                data: data.data
+              }]
+            },
+            options: {
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Total Bar Chart'
+              }
+            }
+          });
+
+        }
+      });
+
+    });
+
+  </script>
+      <script>
+
+    $(function () {
+
+      var TotalPurchase = $("#TotalPurchase");
+      $.ajax({
+        url: TotalPurchase.data("url"),
+        success: function (data) {
+
+          var ctx = TotalPurchase[0].getContext("2d");
+
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: 'total',
+                 borderColor: 'rgb(75, 192, 192)',
+                   tension: 0.1,
+
+
+                data: data.data
+              }]
+            },
+            options: {
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Total Bar Chart'
+              }
+            }
+          });
+
+        }
+      });
+
+    });
+
+  </script>
+      <script>
+
+    $(function () {
+
+      var TotalCashTransaction = $("#TotalCashTransaction");
+      $.ajax({
+        url: TotalCashTransaction.data("url"),
+        success: function (data) {
+
+          var ctx = TotalCashTransaction[0].getContext("2d");
+
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: 'total',
+                 borderColor: 'rgb(75, 192, 192)',
+                   tension: 0.1,
+
+
+                data: data.data
+              }]
+            },
+            options: {
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Total Bar Chart'
+              }
+            }
+          });
+
+        }
+      });
+
+    });
+
+  </script>
+    <script>
+
+    $(function () {
+
+      var TotalDeposits = $("#TotalDeposits");
+      $.ajax({
+        url: TotalDeposits.data("url"),
+        success: function (data) {
+
+          var ctx = TotalDeposits[0].getContext("2d");
+
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: 'total',
+                 borderColor: 'rgb(75, 192, 192)',
+                   tension: 0.1,
+
+
+                data: data.data
+              }]
+            },
+            options: {
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Total Bar Chart'
+              }
+            }
+          });
+
+        }
+      });
+
+    });
+
+  </script>
+     <script>
+
+    $(function () {
+
+      var MarketValue = $("#MarketValue");
+      $.ajax({
+        url: MarketValue.data("url"),
+        success: function (data) {
+
+          var ctx = MarketValue[0].getContext("2d");
+
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: 'total',
+                 borderColor: 'rgb(75, 192, 192)',
+                   tension: 0.1,
+
+
+                data: data.data
+              }]
+            },
+            options: {
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Total Bar Chart'
+              }
+            }
+          });
+
+        }
+      });
+
+    });
+
+  </script>
+
+
 
 {% endblock %}

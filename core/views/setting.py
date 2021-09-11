@@ -195,7 +195,6 @@ class SettingDelete(DeleteView):
 
 class AdminSite(ListView):
     model = Site
-
     template_name = 'setting/site/admin-site.html'
 
 

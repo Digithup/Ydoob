@@ -1,10 +1,11 @@
 {% load static %}
 
+
 <!-- latest jquery-->
 <script src="{%  static '' %}assets/js/jquery-3.3.1.min.js"></script>
+
 <!-- Bootstrap js-->
-<script src="{%  static '' %}assets/js/popper.min.js"></script>
-<script src="{%  static '' %}assets/js/bootstrap.js"></script>
+<script src="{%  static '' %}assets/js/bootstrap.bundle.min.js"></script>
 
 <!-- feather icon js-->
 <script src="{%  static '' %}assets/js/icons/feather-icon/feather.min.js"></script>
@@ -12,13 +13,6 @@
 
 <!-- Sidebar jquery-->
 <script src="{%  static '' %}assets/js/sidebar-menu.js"></script>
-<!--dropzone js-->
-<script src="{%  static '' %}assets/js/dropzone/dropzone.js"></script>
-<script src="{%  static '' %}assets/js/dropzone/dropzone-script.js"></script>
-
-<!--dropzone js-->
-<script src="{%  static '' %}assets/js/dropzone/dropzone.js"></script>
-<script src="{%  static '' %}assets/js/dropzone/dropzone-script.js"></script>
 
 <!--chartist js-->
 <script src="{%  static '' %}assets/js/chart/chartist/chartist.js"></script>
@@ -48,24 +42,27 @@
 <!--Customizer admin-->
 <script src="{%  static '' %}assets/js/admin-customizer.js"></script>
 
-<!-- Touchspin Js-->
+<!--dashboard custom js-->
+<script src="{%  static '' %}assets/js/dashboard/default.js"></script>
+
+<!--right sidebar js-->
+<script src="{%  static '' %}assets/js/chat-menu.js"></script>
+
+<!--height equal js-->
+<script src="{%  static '' %}assets/js/height-equal.js"></script>
+
+<!-- lazyload js-->
+<script src="{%  static '' %}assets/js/lazysizes.min.js"></script>
+
+<!--script admin-->
+<script src="{%  static '' %}assets/js/admin-script.js"></script>
+
+{#######################Add Product#####################################}
+
+<!-- touchspin js-->
 <script src="{%  static '' %}assets/js/touchspin/vendors.min.js"></script>
 <script src="{%  static '' %}assets/js/touchspin/touchspin.js"></script>
 <script src="{%  static '' %}assets/js/touchspin/input-groups.min.js"></script>
-
-<!-- Rating Js-->
-<script src="{%  static '' %}assets/js/rating/jquery.barrating.js"></script>
-<script src="{%  static '' %}assets/js/rating/rating-script.js"></script>
-
-<!-- Owlcarousel js-->
-<script src="{%  static '' %}assets/js/owlcarousel/owl.carousel.js"></script>
-<script src="{%  static '' %}assets/js/dashboard/product-carousel.js"></script>
-
-<!-- Jsgrid js-->
-<script src="{%  static '' %}assets/js/jsgrid/jsgrid.min.js"></script>
-<script src="{%  static '' %}assets/js/jsgrid/griddata-manage-product.js"></script>
-<script src="{%  static '' %}assets/js/jsgrid/jsgrid-manage-product.js"></script>
-
 
 <!-- form validation js-->
 <script src="{%  static '' %}assets/js/dashboard/form-validation-custom.js"></script>
@@ -80,38 +77,26 @@
 <script src="{%  static '' %}assets/js/jquery.elevatezoom.js"></script>
 <script src="{%  static '' %}assets/js/zoom-scripts.js"></script>
 
+{#######################List Product#####################################}
 
-<!--dashboard custom js-->
-<script src="{%  static '' %}assets/js/dashboard/default.js"></script>
-
-
-<!--right sidebar js-->
-<script src="{%  static '' %}assets/js/chat-menu.js"></script>
-
-<!--height equal js-->
-<script src="{%  static '' %}assets/js/height-equal.js"></script>
-
-<!-- lazyload js-->
-<script src="{%  static '' %}assets/js/lazysizes.min.js"></script>
-
-<!--script admin-->
-<script src="{%  static '' %}assets/js/admin-script.js"></script>
-
-  <!-- Page Specific JS File -->
-  <script src="{% static '/js/page/index-0.js' %}"></script>
-<!-- Datatable js-->
-<script src="{%  static '' %}js/datatables/jquery.dataTables.min.js"></script>
-<script src="{%  static '' %}js/datatables/custom-basic.js"></script>
+<!-- Jsgrid js-->
+<script src="{%  static '' %}assets/js/jsgrid/jsgrid.min.js"></script>
+<script src="{%  static '' %}assets/js/jsgrid/griddata-productlist-digital.js"></script>
+<script src="{%  static '' %}assets/js/jsgrid/jsgrid-list.js"></script>
 
 
- <!-- Jquery ui-->
+{#######################Report#####################################}
+<!-- Google chart js-->
+<script src="{%  static '' %}assets/js/chart/google/google-chart-loader.js"></script>
 
- <script src="{% static 'modules/jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
 
-{#form repeater#}
-<script src="{% static 'js/jquery.repeater.min.js' %}"></script>
-<!-- select2  File -->
- <script src="{% static '' %}modules/select2/dist/js/select2.min.js"></script>
+<!--Report chart-->
+<script src="{%  static '' %}assets/js/admin-reports.js"></script>
+
+{####################################DasBoard Chart JS#############}
+
+
+
 
 <script>
     $(window).on('load', function () {

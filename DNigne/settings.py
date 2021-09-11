@@ -152,6 +152,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.template.context_processors.i18n',
                 'core.context_processors.core_processors',
+                'core.context_processors.admin_summary',
+                'core.context_processors.admin_chart',
                 'home.context_processors.home_processors',
                 'home.context_processors.user_processors',
                 'home.context_processors.filter_processors',

@@ -1,0 +1,107 @@
+{% extends 'admin/adminbase.html' %}
+
+{% load crispy_forms_filters %}
+{% load static %}
+
+{% block body %}
+    {% load i18n %}
+    <div class="page-body">
+        <!-- Container-fluid starts-->
+        <div class="container-fluid">
+            <div class="page-header">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="page-header-left">
+                            <h3>Store  Setting
+                                <small>{{ setting.title }} Admin panel</small>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <ol class="breadcrumb pull-right">
+                            <li class="breadcrumb-item"><a href="/"><i data-feather="home"></i></a></li>
+                            <li class="breadcrumb-item">Setting</li>
+                            <li class="breadcrumb-item active">{{ setting_data.title }}</li>
+                            {% if index_language.id != setting_data.id %}
+                            <li class="breadcrumb-item active">{{ setting_data.title }}</li>
+                                {% else %}
+
+                                <li class="breadcrumb-item active">{{ setting_data.title }}</li>
+                            {% endif %}
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Container-fluid Ends-->
+                <!-- Container-fluid Ends-->
+
+
+        <!-- Container-fluid starts-->
+        <div class="container-fluid">
+            <div class="row product-adding">
+                {% if form_show_errors %}
+                {% endif %}
+                {% if form.errors %}
+                    {% for error_field, error_message in form.errors.items %}
+
+                        <div class="alert alert-danger">
+                            {{ error_field|striptags }}: {{ error_message|striptags }}
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+
+                {% endif %}</div>
+
+            <div class="col-xl-12">
+                <form class="needs-validation add-product-form" novalidate=""
+                      enctype="multipart/form-data" action="{% url 'core:AdminVendorCreate'  %}"
+                      method="post">
+                    {% csrf_token %}
+
+                    <div class="card ">
+                        <div class="card-body  ">
+                            <div class="container-fluid">
+                                <div class=" product-adding">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>{% translate "General" %}</h5>
+                                        </div>
+                                        <div class="card-body ">
+
+                                            <div class="digital-add needs-validation ">
+                                                <div class="form-group row">
+                                                    <label for="validationCustom0"
+                                                           class="col-md-4"></label>
+                                                    {{ form|crispy }}
+                                                </div>
+
+
+
+
+                                            </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="card-header">
+                                    <div class="form-group mb-0 align-content-end">
+                                        <div class="product-buttons text-center">
+                                            <button type="submit" class="btn btn-primary">Add</button>
+                                            <button type="button" class="btn btn-light">Discard</button>
+                                        </div>
+                                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Container-fluid Ends-->
+
+
+{% endblock %}
+
+{% block foot %} {% include 'admin/footer.html' %}  {% endblock %}
+{% block js %}{% include 'admin/js.html' %}{% endblock %}

@@ -1,7 +1,8 @@
-from django.urls import path, include
 from django.urls import path
 
 from core.tests import AddSetting, UpdateSetting
+from core.views.analytics import my_dashboard, population_chart, OrderByLocation, SalesByLocation, RevenueByLocation, \
+    BuyAndSell, TotalSales, TotalPurchase, TotalCashTransaction, TotalDeposits, MarketValue
 from core.views.catalog import AddCategory, categories, EditCategory, DeleteCategory, \
     ProductsAddMedia, ProductEditMedia, ProductMediaDelete, ProductsAddStocks, file_upload, AdminIndex, \
     ProductsDeleted, DeleteManufacture, EditManufacture, AddManufacture, ManufacturerListView, \
@@ -18,6 +19,7 @@ from core.views.design import BannerDetailView, BannerDelete, \
 from core.views.order import OrdersListView, EditOrder, OrderDetailView
 from core.views.setting import SettingDelete, AdminSetting, AdminSite, AdminSiteUpdate, PaymentMethodsList, \
     PaymentMethodsDelete, PaymentMethodsUpdate, PaymentMethodsCreate
+from core.views.store import AdminVendorList, VendorDetail, VendorUpdate, VendorCreate, VendorDelete
 from core.views.users import AdminLogin, AdminLogout, AdminUserCreate, \
     AdminUserDetail, AdminUserEdit, AdminUserDelete, AdminUsersList, AdminUserGroupList, AdminUserGroupCreate, \
     AdminUserGroupDelete, AdminUserGroupEdit
@@ -29,6 +31,30 @@ urlpatterns = [
     path('', AdminIndex, name='AdminIndex'),
 
     # path('admin/logout', AdminIndex, name='AdminIndex'),
+    ########## categories  #########
+    # path('dashboard_with_pivot', dashboard_with_pivot, name='dashboard_with_pivot'),
+
+    ########## Analytics   #########
+    path('OrderByLocation-chart/', OrderByLocation, name='OrderByLocation'),
+    path('SalesByLocation-chart/', SalesByLocation, name='SalesByLocation'),
+    path('RevenueByLocation-chart/', RevenueByLocation, name='RevenueByLocation'),
+    path('BuyAndSell-chart/', BuyAndSell, name='BuyAndSell'),
+    path('TotalSales-chart/', TotalSales, name='TotalSales'),
+    path('TotalPurchase-chart/', TotalPurchase, name='TotalPurchase'),
+    path('TotalCashTransaction-chart/', TotalCashTransaction, name='TotalCashTransaction'),
+    path('TotalDeposits-chart/', TotalDeposits, name='TotalDeposits'),
+    path('MarketValue-chart/', MarketValue, name='MarketValue'),
+
+    path('my_dashboard/', my_dashboard, name='my_dashboard'),
+    path('population-chart/', population_chart, name='population-chart'),
+
+    # path('json-example/data/', chart_data, name='chart_data'),
+    # path('statistics/', statistics_view, name='shop-statistics'),  # new
+    # path('chart/filter-options/', get_filter_options, name='chart-filter-options'),
+    # path('chart/sales/<int:year>/', get_sales_chart, name='chart-sales'),
+    # path('chart/spend-per-customer/<int:year>/', spend_per_customer_chart, name='chart-spend-per-customer'),
+    # path('chart/payment-success/<int:year>/', payment_success_chart, name='chart-payment-success'),
+    # path('chart/payment-method/<int:year>/', payment_method_chart, name='chart-payment-method'),
 
     ########## categories  #########
     path('category/', categories, name='categories'),
@@ -136,6 +162,13 @@ urlpatterns = [
     path('groups/edit/<int:pk>', AdminUserGroupEdit.as_view(), name='AdminUserGroupEdit'),
     path('groups/delete/<int:id>', AdminUserGroupDelete.as_view(), name='AdminUserGroupDelete'),
 
+    ########## Stores   #########
+    path('vendor', AdminVendorList.as_view(), name='AdminVendorList'),
+    path('vendor/create/', VendorCreate.as_view(), name='AdminVendorCreate'),
+    path('vendor/<int:pk>/', VendorDetail.as_view(), name='AdminVendorDetail'),
+    path('vendor/update/<int:pk>/', VendorUpdate.as_view(), name='AdminVendorUpdate'),
+    path('vendor/delete/<int:pk>/', VendorDelete.as_view(), name='AdminVendorDelete'),
+
     ########## setting   #########
     path('setting/', AdminSetting.as_view(), name='AdminSetting'),
     path('setting/add', AddSetting, name='AdminSiteAddSetting'),
@@ -149,7 +182,5 @@ urlpatterns = [
 
     path('site/', AdminSite.as_view(), name='AdminSite'),
     path('site/update/<int:pk>', AdminSiteUpdate.as_view(), name='AdminSiteUpdate'),
-
-
 
 ]

@@ -1,6 +1,9 @@
+import self
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models import Sum
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.text import slugify
 
 from DeliverySystem.models import DeliveryPerson
@@ -72,8 +75,24 @@ class Order(models.Model):
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ['code']
+
     def __str__(self):
         return self.user.first_name
+
+
+    def get_previous_bills(self):
+        return Order.objects.filter(update_at=timezone.now(), status = 'Completed')
+
+    #total_filter = Order.objects.filter(ordered=True).aggregate(total_price=Sum('total')),
+
+    def get_all_earnings(self):
+        return sum(p.total for p in self.get_previous_bills())
+    #
+    # def total_sale(self):
+    #     total = Order.objects.aggregate(TOTAL=Sum('total'))['TOTAL']
+    #     return total
 
 
 class OrderProduct(models.Model):

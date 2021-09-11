@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-{% if request.Language.CODE == 'en' %}
+{% if setting_data == 'en' %}
 <html  lang="en" >
- {% else %}
+ {% elif setting_data == 'ar' %}
  <html lang="ar" dir="rtl" >
+    {% else %}
+    <html  lang="en" >
  {% endif %}
 {% load static %}
 {% load i18n %}
@@ -50,6 +52,10 @@
     <!-- Themify icon-->
     <link rel="stylesheet" type="text/css" href="{% static '' %}assets/css/vendors/themify-icons.css">
 
+<script src="https://code.highcharts.com/highcharts.src.js"></script>
+
+
+
     {% block custom_css %}
     {% endblock custom_css %}
     {# <!--TailwindCSS-->#}
@@ -75,11 +81,14 @@
     return cookieValue;
     }
 </head>
-{% if request.Language.CODE == 'en' %}
+{% if setting_data == 'en' %}
 <body>
+    {% elif setting_data == 'ar' %}
+    <<body class="rtl dark">
+
  {% else %}
- <html lang="ar" dir="rtl" >
-<body class="rtl">
+ <body>
+
 {% endif %}
 
 <!-- page-wrapper Start-->
@@ -208,7 +217,7 @@
                                     class="main-circle"></span></div>
                         </div>
                         <ul class="profile-dropdown onhover-show-div p-20 profile-dropdown-hover">
-                            <li><a href="#"><i data-feather="user"></i>Edit Profile</a></li>
+                            <li><a href="{% url 'core:AdminUserEdit' user.id %}"><i data-feather="user"></i>Edit Profile</a></li>
                             <li><a href="#"><i data-feather="mail"></i>Inbox</a></li>
                             <li><a href="#"><i data-feather="lock"></i>Lock Screen</a></li>
                             <li><a href="#"><i data-feather="settings"></i>Settings</a></li>

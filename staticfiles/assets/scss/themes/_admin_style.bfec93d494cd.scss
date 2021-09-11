@@ -516,6 +516,14 @@ a {
     width: auto!important;
   }
 }
+
+.chart-vertical-center{
+  display: flex;
+  justify-content: center;
+  #myDoughnutGraphs, #myPolarGraph{
+    width: auto!important;
+  }
+}
 // product list
 .products-admin {
   .product-box {

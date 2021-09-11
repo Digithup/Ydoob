@@ -11,7 +11,7 @@ from sales.models.orders import Order
 class OrdersListView(ListView):
     model = Order
     template_name = 'sales/orders/admin-orders.html'
-    paginate_by = 100  # if pagination is desired
+    paginate_by = 5  # if pagination is desired
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
