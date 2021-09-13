@@ -45,7 +45,7 @@ UserModel = get_user_model()
 @unauthenticated_user
 def UserSignup(request):
     if request.method == 'GET':
-        return render(request, 'users/register/CustomerRegister.html')
+        return render(request, 'Users/register/CustomerRegister.html')
     if request.method == 'POST':
         form = UserSignUpForm(request.POST)
         # print(form.errors.as_data())
@@ -55,7 +55,7 @@ def UserSignup(request):
             user.save()
             current_site = get_current_site(request)
             mail_subject = 'Activate your account.'
-            message = render_to_string('users/register/UserActiveEmailMessage.html', {
+            message = render_to_string('Users/register/UserActiveEmailMessage.html', {
                 'user': user,
                 'domain': current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -66,10 +66,10 @@ def UserSignup(request):
                 mail_subject, message, to=[to_email]
             )
             email.send()
-            return render(request, 'users/register/UserActiveEmailSent.html')
+            return render(request, 'Users/register/UserActiveEmailSent.html')
     else:
         form = UserSignUpForm()
-    return render(request, 'users/register/CustomerRegister.html', {'form': form})
+    return render(request, 'Users/register/CustomerRegister.html', {'form': form})
 
 @unauthenticated_user
 def UserActivate(request, uidb64, token):
