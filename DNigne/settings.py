@@ -186,41 +186,69 @@ AUTHENTICATION_BACKENDS = (
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#                 'default': {
+#
+#                     'ENGINE': 'django.db.backends.mysql',
+#                     'NAME': env('DB_NAME'),
+#                     'USER': env('DB_USER'),
+#                     'PASSWORD': env('DB_PASSWORD'),
+#                     'HOST': env('DB_HOST'),
+#                     'PORT': env('DB_PORT'),
+#                 }
+#             },
 
-if 'RDS_DB_NAME' in os.environ:
-    DATABASES = {
+# if DEBUG:
+# DATABASES = {
+#     'default': {
+#
+#         'ENGINE': 'django.db.backends.mysql',
+#                 'NAME': env('DB_NAME'),
+#                 'USER': env('DB_USER'),
+#                 'PASSWORD': env('DB_PASSWORD'),
+#                 'HOST': env('DB_HOST'),
+#                 'PORT': env('DB_PORT'),
+#     }
+# }
+
+DATABASES = {
         'default': {
+
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ['RDS_DB_NAME'],
-            'USER': os.environ['RDS_USERNAME'],
-            'PASSWORD': os.environ['RDS_PASSWORD'],
-            'HOST': os.environ['RDS_HOSTNAME'],
-            'PORT': os.environ['RDS_PORT'],
+            'NAME': env('server_DB_NAME'),
+            'USER': env('server_DB_USER'),
+            'PASSWORD': env('server_DB_PASSWORD'),
+            'HOST': env('server_DB_HOST'),
+            'PORT': env('server_DB_PORT'),
         }
     }
-else:
-    # DATABASES = {
-    #     'default': {
-    #
-    #         'ENGINE': 'django.db.backends.mysql',
-    #         'NAME': env('DB_NAME'),
-    #         'USER': env('DB_USER'),
-    #         'PASSWORD': env('DB_PASSWORD'),
-    #         'HOST': env('DB_HOST'),
-    #         'PORT': env('DB_PORT'),
-    #     }
-    # },
-    DATABASES = {
-        'default': {
 
-                        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-                        'NAME': env('server_DB_NAME'),
-                        'USER': env('server_DB_USER'),
-                        'PASSWORD':env('server_DB_PASSWORD'),
-                        'HOST': env('server_DB_HOST'),
-                        'PORT': env('server_DB_PORT'),
-                    }
-    }
+
+
+# if 'RDS_DB_NAME' in os.environ:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#             'NAME': os.environ['RDS_DB_NAME'],
+#             'USER': os.environ['RDS_USERNAME'],
+#             'PASSWORD': os.environ['RDS_PASSWORD'],
+#             'HOST': os.environ['RDS_HOSTNAME'],
+#             'PORT': os.environ['RDS_PORT'],
+#         }
+#     }
+# else:
+#     DATABASES = {
+#         'default': {
+#
+#             'ENGINE': 'django.db.backends.mysql',
+#             'NAME': env('DB_NAME'),
+#             'USER': env('DB_USER'),
+#             'PASSWORD': env('DB_PASSWORD'),
+#             'HOST': env('DB_HOST'),
+#             'PORT': env('DB_PORT'),
+#         }
+#     },
+#
 
 # python3 -c 'import psycopg2 as db; conn = db.connect("postgres://qjyolhgk:kHMr9gkyJ8gO-j2IBj7iZ2cFVql5nWpr@chunee.db.elephantsql.com/qjyolhgk"); print(conn.get_backend_pid()); conn.close()'
 
@@ -287,13 +315,7 @@ LOCALE_PATHS = (
 )
 
 DEFAULT_CURRENCY = 'USD'
-CITIES_COUNTRY_MODEL = 'localization.models.CustomCountryModel'
-CITIES_DATA_DIR = '/var/data'
-CITIES_SLUGIFY_FUNCTION = 'cities.util.default_slugify'
-CITIES_NO_LONGER_EXISTENT_COUNTRY_CODES = ['CS', 'AN']
-CITIES_VALIDATE_POSTAL_CODES = True
-# Import cities without region (default False)
-CITIES_SKIP_CITIES_WITH_EMPTY_REGIONS = True
+
 
 # CUSTOM
 FORCE_SESSION_TO_ONE = True  # Default is false

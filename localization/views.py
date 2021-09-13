@@ -11,9 +11,10 @@ from django.utils import translation
 # Create your views here.
 from django.views.generic import CreateView, UpdateView, DeleteView
 
-from localization.models import Language
+
 
 #############Rosetta##########
+from localization.models.models import Language
 
 User = get_user_model()
 def all_lang(request):

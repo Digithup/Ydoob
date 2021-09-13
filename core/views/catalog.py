@@ -1,13 +1,10 @@
-import datetime
-import json
-
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q, Count
-from django.http import HttpResponse, HttpResponseRedirect, request, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, request
 from django.shortcuts import render
 # Create your views here.
 from django.urls import reverse_lazy, reverse
@@ -24,12 +21,11 @@ from catalog.models.models import Categories, Products, ProductMedia, ProductTag
     ProductTransaction, AttributesDetails, OptionsDetails, Variants
 from catalog.models.product_options import Manufacturer, FiltersGroup, Filters, AttributesGroup, Attributes, Options, \
     OptionsType, Color, Size
-from core.decorators import admin_required, allow_user, admin_only, allowed_users
-from core.forms.forms import SearchForm
+from core.decorators import allowed_users
 from core.models.setting import Setting
-from localization.models import Language
-
+from localization.models.models import Language
 from vendors.models import Vendor
+
 User = get_user_model()
 
 

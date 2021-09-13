@@ -1,9 +1,7 @@
-from django.conf import settings
 from django.db.models import Sum
 
 from catalog.models.models import Products
-from core.models.setting import Setting, SettingLang
-from localization.models import Language
+from core.models.setting import Setting
 from sales.models.orders import Order
 from vendors.models import Vendor
 

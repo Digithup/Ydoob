@@ -13,10 +13,11 @@ from django.views.generic import ListView, DeleteView, UpdateView, CreateView
 from core.decorators import allowed_users
 from core.forms.setting import SettingLangForm, SettingForm, SiteForm
 from core.models.setting import Setting, SettingLang
-from localization.models import Language
+
 
 
 # Create your views here.
+from localization.models.models import Language
 from sales.forms.order import PaymentMethodsForm
 from sales.models.orders import PaymentMethods
 

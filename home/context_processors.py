@@ -1,11 +1,12 @@
 from django.db.models import Min, Max
 
 from catalog.models.models import Products, ProductMedia, Categories
+from localization.models.models import Language
 from sales.models.cart import Wishlist
 from catalog.models.product_options import Manufacturer
 from core.models.design import SliderMedia, Banners
 from core.models.setting import Setting, SettingLang
-from localization.models import Language
+
 from user.models import UserAddress
 
 from vendors.models import Vendor, StoreMedia

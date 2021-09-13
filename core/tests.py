@@ -11,7 +11,7 @@ from catalog.models.models import Categories, Products, ProductMedia, ProductTra
 from catalog.models.product_options import Filters
 from core.forms.setting import SettingForm, SettingLangForm, SettingTagForm
 from core.models.setting import Setting, SettingLang, SettingTags
-from localization.models import Language
+from localization.models.models import Language
 
 User = get_user_model()
 
