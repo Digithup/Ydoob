@@ -43,7 +43,7 @@ from user.signals import user_logged_in
 
 class DeliveryLoginView(View):
     """
-    Description:Will be used to login and logout Users.\n
+    Description:Will be used to login and logout users.\n
     """
     template_name = 'DeliveryAdmin/Delivery_login.html'
 

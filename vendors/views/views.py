@@ -281,12 +281,12 @@ class SellerDashboard(SellerAccountMixin, FormMixin, View):
 
     def get(self, request, *args, **kwargs):
         apply_form = self.get_form()  # NewSellerForm()
-        Users = self.get_account()
-        exists = Users
+        users = self.get_account()
+        exists = users
         active = None
         context = {}
         if exists:
-            active = Users.active
+            active = users.active
         if not exists and not active:
             context["title"] = "Apply for Account"
             context["apply_form"] = apply_form

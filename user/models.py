@@ -18,9 +18,9 @@ class UserManager(BaseUserManager):
                     , is_seller=False,
                     is_admin=False, is_customer=True, ):
         if not email:
-            raise ValueError("Users must have an email address")
+            raise ValueError("users must have an email address")
         if not password:
-            raise ValueError("Users must have a password")
+            raise ValueError("users must have a password")
         user_obj = self.model(
             email=self.normalize_email(email),
             first_name=first_name,
@@ -84,7 +84,7 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=200, blank=True, null=True)
     last_name = models.CharField(max_length=200, blank=True, null=True)
     phone = models.CharField(blank=True, null=True, max_length=20)
-    image = models.ImageField(upload_to='images/Users/%y/%m',
+    image = models.ImageField(upload_to='images/users/%y/%m',
                               default='images/dashboard-bases/man.png')
     facebook = models.URLField(blank=True, max_length=50)
     instagram = models.URLField(blank=True, max_length=50)
@@ -214,5 +214,5 @@ class GuestEmail(models.Model):
 
     class Meta:
         verbose_name = 'Guest User'
-        verbose_name_plural = 'Guest Users'
+        verbose_name_plural = 'Guest users'
         ordering = ['-timestamp']

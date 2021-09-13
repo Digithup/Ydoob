@@ -161,15 +161,15 @@ urlpatterns = [
     path('design/create/', BannerCreate, name='BannerCreate'),
     path('design/delete/<int:pk>/', BannerDelete.as_view(), name='BannerDelete'),
 
-    ################ Users ################
+    ################ users ################
     path('login/', AdminLogin.as_view(), name='AdminLogin'),
     path('logout/', AdminLogout, name='AdminLogout'),
 
-    path('Users/', AdminUsersList.as_view(), name='AdminUsersList'),
-    path('Users/create/', AdminUserCreate.as_view(), name='AdminUserCreate'),
-    path('Users/profile/<int:pk>', AdminUserDetail.as_view(), name='AdminUserDetail'),
-    path('Users/uprofile/<int:pk>/', AdminUserEdit.as_view(), name='AdminUserEdit'),
-    path('Users/dprofile/<int:id>', AdminUserDelete.as_view(), name='AdminUserDelete'),
+    path('users/', AdminUsersList.as_view(), name='AdminUsersList'),
+    path('users/create/', AdminUserCreate.as_view(), name='AdminUserCreate'),
+    path('users/profile/<int:pk>', AdminUserDetail.as_view(), name='AdminUserDetail'),
+    path('users/uprofile/<int:pk>/', AdminUserEdit.as_view(), name='AdminUserEdit'),
+    path('users/dprofile/<int:id>', AdminUserDelete.as_view(), name='AdminUserDelete'),
 
     path('groups/', AdminUserGroupList.as_view(), name='AdminUserGroupList'),
     path('groups/create/', AdminUserGroupCreate.as_view(), name='AdminUserGroupCreate'),

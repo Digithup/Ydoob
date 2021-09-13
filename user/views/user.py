@@ -45,7 +45,7 @@ UserModel = get_user_model()
 @unauthenticated_user
 def UserSignup(request):
     if request.method == 'GET':
-        return render(request, 'Users/register/CustomerRegister.html')
+        return render(request, 'users/register/CustomerRegister.html')
     if request.method == 'POST':
         form = UserSignUpForm(request.POST)
         # print(form.errors.as_data())
@@ -55,7 +55,7 @@ def UserSignup(request):
             user.save()
             current_site = get_current_site(request)
             mail_subject = 'Activate your account.'
-            message = render_to_string('Users/register/UserActiveEmailMessage.html', {
+            message = render_to_string('users/register/UserActiveEmailMessage.html', {
                 'user': user,
                 'domain': current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -66,10 +66,10 @@ def UserSignup(request):
                 mail_subject, message, to=[to_email]
             )
             email.send()
-            return render(request, 'Users/register/UserActiveEmailSent.html')
+            return render(request, 'users/register/UserActiveEmailSent.html')
     else:
         form = UserSignUpForm()
-    return render(request, 'Users/register/CustomerRegister.html', {'form': form})
+    return render(request, 'users/register/CustomerRegister.html', {'form': form})
 
 @unauthenticated_user
 def UserActivate(request, uidb64, token):
@@ -88,9 +88,9 @@ def UserActivate(request, uidb64, token):
 
 class UserLogin(View):
     """
-    Description:Will be used to login and logout Users.\n
+    Description:Will be used to login and logout users.\n
     """
-    template_name = 'Users/register/CustomerLogin.html'
+    template_name = 'users/register/CustomerLogin.html'
 
     def get(self, request, *args, **kwargs):
 
@@ -275,7 +275,7 @@ def CreateAddress(request):
     else:
         form = UserUpdateAddressForm()
 
-    return save_address_form(request, form, 'Users/includes/partial_book_create.html')
+    return save_address_form(request, form, 'users/includes/partial_book_create.html')
 
 @login_required(login_url='/login')  # Check login
 def UpdateAddress(request, pk):
@@ -284,7 +284,7 @@ def UpdateAddress(request, pk):
         form = UserUpdateAddressForm(request.POST, instance=address)
     else:
         form = UserUpdateAddressForm(instance=address)
-    return save_address_form(request, form, 'Users/includes/partial_book_update.html')
+    return save_address_form(request, form, 'users/includes/partial_book_update.html')
 
 @login_required(login_url='/login')  # Check login
 def DeleteAddress(request, pk):
@@ -318,12 +318,12 @@ class PasswordContextMixin:
 
 
 class PasswordResetView(PasswordContextMixin, FormView):
-    email_template_name = 'Users/RestPassword/password_reset_email.html'
+    email_template_name = 'users/RestPassword/password_reset_email.html'
     extra_email_context = None
     form_class = PasswordResetForm
     from_email = None
     html_email_template_name = None
-    subject_template_name = 'Users/RestPassword/password_reset_subject.txt'
+    subject_template_name = 'users/RestPassword/password_reset_subject.txt'
     success_url = reverse_lazy('user:passwordResetDone')
     template_name = 'users/RestPassword/password_reset_form.html'
     title = _('Password reset')

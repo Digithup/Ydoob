@@ -68,7 +68,7 @@ class SessionRosettaStorage(BaseRosettaStorage):
 
 
 class CacheRosettaStorage(BaseRosettaStorage):
-    # unlike the session storage backend, cache is shared among all Users
+    # unlike the session storage backend, cache is shared among all users
     # so we need to per-user key prefix, which we vendor in the session
     def __init__(self, request):
         super(CacheRosettaStorage, self).__init__(request)

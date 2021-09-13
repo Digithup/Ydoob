@@ -106,7 +106,7 @@ class PasswordResetForm(forms.Form):
         """Given an email, return matching user(s) who should receive a reset.
 
         This allows subclasses to more easily customize the default policies
-        that prevent inactive Users and Users with unusable passwords from
+        that prevent inactive users and users with unusable passwords from
         resetting their password.
         """
         email_field_name = UserModel.get_email_field_name()
@@ -121,8 +121,8 @@ class PasswordResetForm(forms.Form):
         )
 
     def save(self, domain_override=None,
-             subject_template_name='Users/RestPassword/password_reset_subject.txt',
-             email_template_name='Users/RestPassword/password_reset_email.html',
+             subject_template_name='users/RestPassword/password_reset_subject.txt',
+             email_template_name='users/RestPassword/password_reset_email.html',
              use_https=False, token_generator=default_token_generator,
              from_email=None, request=None, html_email_template_name=None,
              extra_email_context=None):

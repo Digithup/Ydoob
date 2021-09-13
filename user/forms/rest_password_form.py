@@ -161,7 +161,7 @@
 #
 # class AuthenticationForm(forms.Form):
 #     """
-#     Base class for authenticating Users. Extend this to get a form that accepts
+#     Base class for authenticating users. Extend this to get a form that accepts
 #     username/password logins.
 #     """
 #     username = UsernameField(widget=forms.TextInput(attrs={'autofocus': True}))
@@ -213,7 +213,7 @@
 #         """
 #         Controls whether the given User may log in. This is a policy setting,
 #         independent of end-user authentication. This default behavior is to
-#         allow login by active Users, and reject login by inactive Users.
+#         allow login by active users, and reject login by inactive users.
 #
 #         If the given user cannot log in, this method should raise a
 #         ``ValidationError``.

@@ -21,7 +21,7 @@ User = get_user_model()
 
 class AdminLogin(View):
     """
-    Description:Will be used to login and logout Users.\n
+    Description:Will be used to login and logout users.\n
     """
     template_name = 'admin/login.html'
 
@@ -120,7 +120,7 @@ class AdminUserCreate(View):
     """
     Description:View to create a new user.\n
     """
-    template_name = 'Users/admin-user-create.html'
+    template_name = 'users/admin-user-create.html'
 
     def get(self, request, *args, **kwargs):
         form = UserSignUpForm()

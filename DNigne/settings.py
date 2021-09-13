@@ -199,16 +199,27 @@ if 'RDS_DB_NAME' in os.environ:
         }
     }
 else:
+    # DATABASES = {
+    #     'default': {
+    #
+    #         'ENGINE': 'django.db.backends.mysql',
+    #         'NAME': env('DB_NAME'),
+    #         'USER': env('DB_USER'),
+    #         'PASSWORD': env('DB_PASSWORD'),
+    #         'HOST': env('DB_HOST'),
+    #         'PORT': env('DB_PORT'),
+    #     }
+    # },
     DATABASES = {
         'default': {
 
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': env('DB_NAME'),
-            'USER': env('DB_USER'),
-            'PASSWORD': env('DB_PASSWORD'),
-            'HOST': env('DB_HOST'),
-            'PORT': env('DB_PORT'),
-        }
+                        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+                        'NAME': env('server_DB_NAME'),
+                        'USER': env('server_DB_USER'),
+                        'PASSWORD':env('server_DB_PASSWORD'),
+                        'HOST': env('server_DB_HOST'),
+                        'PORT': env('server_DB_PORT'),
+                    }
     }
 
 # python3 -c 'import psycopg2 as db; conn = db.connect("postgres://qjyolhgk:kHMr9gkyJ8gO-j2IBj7iZ2cFVql5nWpr@chunee.db.elephantsql.com/qjyolhgk"); print(conn.get_backend_pid()); conn.close()'

@@ -14,7 +14,7 @@ user_logged_in = Signal(providing_args=['instance','request'])
 
 from django.dispatch import Signal
 
-# signal sent when Users successfully recover their passwords
+# signal sent when users successfully recover their passwords
 user_recovers_password = Signal(
     providing_args=['user', 'request']
 )
