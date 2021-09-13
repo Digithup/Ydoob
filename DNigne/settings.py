@@ -77,7 +77,6 @@ INSTALLED_APPS = [
 THIRD_PARTY_APPS = [
     'ckeditor',
     'ckeditor_uploader',
-
     'mptt',
     'rest_framework',
     'corsheaders',
@@ -92,7 +91,7 @@ THIRD_PARTY_APPS = [
     'channels',
     "bootstrap4",
     "bootstrap_datepicker_plus",
-'import_export',
+    'import_export',
 
 ]
 OWN_APPS = [
