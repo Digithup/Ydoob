@@ -5,7 +5,9 @@ from django.contrib.auth import get_user_model, login, logout, authenticate
 from django.contrib.auth import (
     login as auth_login,
 )
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
@@ -25,16 +27,12 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
-from django.contrib.auth import update_session_auth_hash
-from django.contrib import messages
-from django.shortcuts import render, redirect
 from social_django.models import UserSocialAuth
-from user.decorators import unauthenticated_user, allowed_users
+
+from user.decorators import unauthenticated_user
+from user.forms.forms import PasswordResetForm, SetPasswordForm
 from user.forms.forms import UserSignUpForm, UserLoginForm, UserUpdateImageForm, UserUpdateProfileForm, \
     UserUpdateAddressForm
-from user.forms.forms import PasswordResetForm, SetPasswordForm
 from user.models import UserAddress
 from user.signals import user_logged_in
 
@@ -70,6 +68,7 @@ def UserSignup(request):
     else:
         form = UserSignUpForm()
     return render(request, 'users/register/CustomerRegister.html', {'form': form})
+
 
 @unauthenticated_user
 def UserActivate(request, uidb64, token):
@@ -145,6 +144,7 @@ class UserLogin(View):
         }
         return render(request, self.template_name, context)
 
+
 def UserLogout(request):
     logout(request)
     return redirect('home:index')
@@ -152,7 +152,7 @@ def UserLogout(request):
 
 ################Profile##############
 @login_required(login_url='/login')  # Check login
-#@allowed_users
+# @allowed_users
 def UserProfile(request, slug):
     user = User.objects.get(id=request.user.id)
     address = UserAddress.objects.filter(user=user)
@@ -161,6 +161,7 @@ def UserProfile(request, slug):
                'address': address,
                }
     return render(request, 'users/register/CustomerProfile.html', context)
+
 
 @login_required(login_url='/login')  # Check login
 def UpdateImage(request, slug):
@@ -245,6 +246,7 @@ def address_list(request):
                }
     return render(request, 'users/register/CustomerProfile.html', context)
 
+
 @login_required(login_url='/login')  # Check login
 def save_address_form(request, form, template_name):
     data = {}
@@ -264,9 +266,10 @@ def save_address_form(request, form, template_name):
         else:
             data['form_is_valid'] = False
             messages.error(request, "Error")
-    context = {'form': form,'address':address}
+    context = {'form': form, 'address': address}
     data['html_form'] = render_to_string(template_name, context, request=request)
     return JsonResponse(data)
+
 
 @login_required(login_url='/login')  # Check login
 def CreateAddress(request):
@@ -277,6 +280,7 @@ def CreateAddress(request):
 
     return save_address_form(request, form, 'users/includes/partial_book_create.html')
 
+
 @login_required(login_url='/login')  # Check login
 def UpdateAddress(request, pk):
     address = get_object_or_404(UserAddress, pk=pk)
@@ -285,6 +289,7 @@ def UpdateAddress(request, pk):
     else:
         form = UserUpdateAddressForm(instance=address)
     return save_address_form(request, form, 'users/includes/partial_book_update.html')
+
 
 @login_required(login_url='/login')  # Check login
 def DeleteAddress(request, pk):
@@ -302,8 +307,10 @@ def DeleteAddress(request, pk):
         data['html_form'] = render_to_string('users/includes/partial_book_delete.html', context, request=request)
     return JsonResponse(data)
 
+
 ###########Rest Password#############
 INTERNAL_RESET_SESSION_TOKEN = '_password_reset_token'
+
 
 class PasswordContextMixin:
     extra_context = None
@@ -329,7 +336,6 @@ class PasswordResetView(PasswordContextMixin, FormView):
     title = _('Password reset')
     token_generator = default_token_generator
 
-
     @method_decorator(csrf_protect)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
@@ -350,10 +356,11 @@ class PasswordResetView(PasswordContextMixin, FormView):
         return super().form_valid(form)
 
 
-
 class PasswordResetDoneView(PasswordContextMixin, TemplateView):
     template_name = 'users/RestPassword/password_reset_done.html'
     title = _('Password reset sent')
+
+
 class PasswordResetConfirmView(PasswordContextMixin, FormView):
     form_class = SetPasswordForm
     post_reset_login = False
@@ -425,6 +432,8 @@ class PasswordResetConfirmView(PasswordContextMixin, FormView):
                 'validlink': False,
             })
         return context
+
+
 class PasswordResetCompleteView(PasswordContextMixin, TemplateView):
     template_name = 'users/RestPassword/password_reset_complete.html'
     title = _('Password reset complete')
@@ -433,7 +442,6 @@ class PasswordResetCompleteView(PasswordContextMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['login_url'] = resolve_url(settings.LOGIN_URL)
         return context
-
 
 
 @login_required
@@ -463,6 +471,7 @@ def settings(request):
         'facebook_login': facebook_login,
         'can_disconnect': can_disconnect
     })
+
 
 @login_required
 def password(request):
