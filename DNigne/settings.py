@@ -92,7 +92,7 @@ THIRD_PARTY_APPS = [
     "bootstrap4",
     "bootstrap_datepicker_plus",
     'import_export',
-'cities',
+
 
 ]
 OWN_APPS = [
@@ -288,6 +288,13 @@ LOCALE_PATHS = (
 
 DEFAULT_CURRENCY = 'USD'
 CITIES_COUNTRY_MODEL = 'localization.models.CustomCountryModel'
+CITIES_DATA_DIR = '/var/data'
+CITIES_SLUGIFY_FUNCTION = 'cities.util.default_slugify'
+CITIES_NO_LONGER_EXISTENT_COUNTRY_CODES = ['CS', 'AN']
+CITIES_VALIDATE_POSTAL_CODES = True
+# Import cities without region (default False)
+CITIES_SKIP_CITIES_WITH_EMPTY_REGIONS = True
+
 # CUSTOM
 FORCE_SESSION_TO_ONE = True  # Default is false
 
