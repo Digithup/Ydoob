@@ -36,7 +36,8 @@ from django.utils.text import slugify
 
 
 class Country(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30,default='Egypt')
+    name_ar = models.CharField(max_length=30,default='مصر')
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
@@ -49,7 +50,8 @@ class Country(models.Model):
 
 class Governorates(models.Model):
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30,default='Qena')
+    name_ar = models.CharField(max_length=30,default='قنا')
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
@@ -59,7 +61,8 @@ class Governorates(models.Model):
 
 class City(models.Model):
     governorates = models.ForeignKey(Governorates, on_delete=models.CASCADE)
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30,default='Qena')
+    name_ar = models.CharField(max_length=30,default='Qena')
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
@@ -69,7 +72,8 @@ class City(models.Model):
 
 class Area(models.Model):
     city = models.ForeignKey(City, on_delete=models.CASCADE)
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30,default='Qena')
+    name_ar = models.CharField(max_length=30,default='Qena')
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):

@@ -18,6 +18,7 @@ from core.views.delivery import CourierCreate, CourierEdit, CourierDetail, Couri
 from core.views.design import BannerDetailView, BannerDelete, \
     SliderView, SliderDelete, SliderGroupCreate, SliderDetailView, BannersView, BannerCreate, \
     SliderCreate
+from core.views.localization import CountryListView, CountryCreate, CountryDetailView, CountryEdit, CountryDelete
 from core.views.order import OrdersListView, EditOrder, OrderDetailView
 from core.views.setting import SettingDelete, AdminSetting, AdminSite, AdminSiteUpdate, PaymentMethodsList, \
     PaymentMethodsDelete, PaymentMethodsUpdate, PaymentMethodsCreate
@@ -182,6 +183,14 @@ urlpatterns = [
     path('vendor/<int:pk>/', VendorDetail.as_view(), name='AdminVendorDetail'),
     path('vendor/update/<int:pk>/', VendorUpdate.as_view(), name='AdminVendorUpdate'),
     path('vendor/delete/<int:pk>/', VendorDelete.as_view(), name='AdminVendorDelete'),
+
+
+    ########## localization   #########
+    path('country', CountryListView.as_view(), name='CountryListView'),
+    path('country/create/', CountryCreate.as_view(), name='CountryCreate'),
+    path('country/<int:pk>/', CountryDetailView.as_view(), name='CountryDetailView'),
+    path('country/update/<int:pk>/', CountryEdit.as_view(), name='CountryEdit'),
+    path('country/delete/<int:pk>/', CountryDelete.as_view(), name='CountryDelete'),
 
     ########## setting   #########
     path('setting/', AdminSetting.as_view(), name='AdminSetting'),

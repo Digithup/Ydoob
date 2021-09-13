@@ -1,0 +1,172 @@
+{% extends 'admin/adminbase.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% block body %}
+{% load i18n %}
+    <div class="page-body">
+
+        <!-- Container-fluid starts-->
+        <div class="container-fluid">
+            <div class="page-header">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="page-header-left">
+                            <h3>Add Filters
+                                <small>Multikart Admin panel</small>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <ol class="breadcrumb pull-right">
+                            <li class="breadcrumb-item"><a href="{% url 'core:AdminIndex' %}"><i
+                                    data-feather="home"></i></a>
+                            </li>
+
+                            <li class="breadcrumb-item active">{% translate 'Add Country' %}</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Container-fluid Ends-->
+
+
+        <!-- Container-fluid starts-->
+        <div class="container-fluid">
+            <div class="row product-adding">
+                {% if form_show_errors %}
+                {% endif %}
+                {% if form.errors %}
+                    {% for error_field, error_message in form.errors.items %}
+
+                        <div class="alert alert-danger">
+                            {{ error_field|striptags }}: {{ error_message|striptags }}
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+
+                {% endif %}</div>
+
+            <div class="col-xl-12">
+                <form class="needs-validation add-product-form" novalidate=""
+                      enctype="multipart/form-data" action="{% url 'core:CountryCreate' %}"
+                      method="post">
+                    {% csrf_token %}
+
+                         <div class="card ">
+                        <div class="card-body  ">
+                            <div class="container-fluid">
+                                <div class=" product-adding">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>{% translate ' Variant Type' %}</h5>
+                                        </div>
+                                        <div class="card-body ">
+
+                                                <div class="variant_div">
+                                                    <div class="row col-md-12 variant_div_row first_variant">
+                                                        <div class="col-md-6">
+                                                            <label>Title</label>
+                                                            <input type="text" name="name" required=""
+                                                                   class="form-control title" placeholder="Title">
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label>Ar Title</label>
+                                                            <input type="text" name="name_ar" required="" id="colorCode"
+                                                                    class="form-control colorChooser" title="" placeholder="Title">
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <br>
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <button class="btn btn-success btn-block add_variant"
+                                                                type="button">ADD
+                                                            DETAILS
+                                                        </button>
+                                                    </div>
+
+                                                    <div class="col-lg-6">
+                                                        <button class="btn btn-danger btn-block remove_variant"
+                                                                type="button">
+                                                            REMOVE DETAILS
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-header">
+                                                <div class="form-group mb-0 align-content-end">
+                                                    <div class="product-buttons text-center">
+                                                        <button type="submit" class="btn btn-primary">Add</button>
+                                                        <a href="{% url 'core:Options' %}">
+                                                            <button type="button" class="btn btn-primary"
+                                                                    data-toggle="modal"
+                                                                    data-original-title="test"
+                                                                    data-target="#exampleModal">Discard
+                                                            </button>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Container-fluid Ends-->
+
+
+
+
+
+
+    {% if uploaded_file_url %}
+        <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
+    {% endif %}
+{% endblock %}
+
+<!-- Container-fluid Ends-->
+
+{% block custom_js %}
+   <script>
+    $(".add_variant").click(function () {
+            var variant_row = $(".first_variant").clone();
+            variant_row.removeClass("first_variant").val("");
+            variant_row.removeClass("product_variant");
+
+            $(".variant_div").append(variant_row);
+        });
+        $(".remove_variant").click(function () {
+            if ($(".variant_div").find(".variant_div_row").length > 1) {
+                $(".variant_div").children().last().remove();
+            }
+        });
+   </script>
+    <script>
+    jQuery(document).ready(function($){
+    $('#VariantGroup').change(function () {
+    // hide all optional elements
+    $('#colorCode').hide();
+
+
+
+
+});
+});
+    </script>
+{% endblock custom_js %}
+
+
+
+
+
+
+{% block foot %} {% include 'admin/footer.html' %}  {% endblock %}
+{% block js %} {% include 'admin/js.html' %}  {% endblock %}
+

@@ -96,7 +96,7 @@
                     class="fa fa-angle-right pull-right"></i></a>
                 <ul class="sidebar-submenu">
                     <li><a href="{% url 'localization:all_lang' %}"><i class="fa fa-circle"></i>{% translate "Translations" %}</a></li>
-                    <li><a href="currency-rates.html"><i class="fa fa-circle"></i>Currency Rates</a></li>
+                    <li><a href="{% url 'core:CountryListView' %}"><i class="fa fa-circle"></i>{% translate "Country " %}</a></li>
                     <li><a href="taxes.html"><i class="fa fa-circle"></i>Taxes</a></li>
                 </ul>
             </li>
