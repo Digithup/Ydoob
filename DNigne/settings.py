@@ -92,6 +92,7 @@ THIRD_PARTY_APPS = [
     "bootstrap4",
     "bootstrap_datepicker_plus",
     'import_export',
+'cities',
 
 ]
 OWN_APPS = [
@@ -286,7 +287,7 @@ LOCALE_PATHS = (
 )
 
 DEFAULT_CURRENCY = 'USD'
-
+CITIES_COUNTRY_MODEL = 'localization.models.CustomCountryModel'
 # CUSTOM
 FORCE_SESSION_TO_ONE = True  # Default is false
 
