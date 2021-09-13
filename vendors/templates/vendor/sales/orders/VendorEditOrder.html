@@ -2,6 +2,10 @@
 {% load crispy_forms_filters %}
 {% load static %}
 {% load i18n %}
+ {% load bootstrap4 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery='full' %}
+    {{ form.media }}
 {% block body %}
 
     <div class="page-body">
@@ -12,7 +16,7 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="page-header-left">
-                            <h3>Add Filters
+                            <h3>Order Details
                                 <small>Multikart Admin panel</small>
                             </h3>
                         </div>
@@ -48,6 +52,7 @@
 
                 {% endif %}</div>
          <div class="col-xl-12">
+         {{ form.media }}
                 <form class="needs-validation add-product-form" novalidate=""
                       enctype="multipart/form-data" action="{% url 'vendors:EditOrder' object.pk %}"
                       method="post">
@@ -63,7 +68,8 @@
                                         <td>Payment Method:
                                 {{ rs.order.payment_method }}</td>
                                       {% endfor %}
-                                        <td class="pull-right"> {{ form }}</td>
+                                <td> {% bootstrap_form form %}</td>
+
 
                                 <button  type="submit" class="btn btn-primary pull-right">Change</button>
                                 </div></div></form>
@@ -106,40 +112,40 @@
                                             <div class="card-body  ">
                                                <h5 class="f-w-600">Profile</h5>
                                         <div class="table-responsive profile-table">
-                                            {% for rs in order.orderproduct_set.all %}
+
                                             <table class="table table-borderless">
                                                 <tbody>
                                                 <tr>
                                                     <td>First Name:</td>
-                                                    <td>{{ rs.order.user.first_name }}</td>
+                                                    <td>{{ orderproduct.order.user.first_name }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Last Name:</td>
-                                                    <td>{{  rs.order.user.last_name }}</td>
+                                                    <td>{{  orderproduct.order.user.last_name }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Email:</td>
-                                                    <td>{{  rs.order.user.email }}</td>
+                                                    <td>{{  orderproduct.order.user.email }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Address:</td>
-                                                    <td>{{  rs.order.address.address_title }}</td>
+                                                    <td>{{  orderproduct.order.address.address_title }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Mobile Number:</td>
-                                                    <td>{{  rs.order.address.address_title }}</td>
+                                                    <td>{{  orderproduct.order.address.address_title }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>DOB:</td>
-                                                    <td>{{ rs.order.create_at }}</td>
+                                                    <td>{{ orderproduct.order.create_at }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Location:</td>
-                                                    <td>{{  rs.order.city }}</td>
+                                                    <td>{{  orderproduct.order.city }}</td>
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                            {% endfor %}
+
                                         </div>
                                             </div>
                                         </div>
@@ -151,40 +157,40 @@
                                  aria-labelledby="description-tabs">
                                 <h4>description</h4>
                                 <div class="table-responsive profile-table">
-                                            {% for rs in order.orderproduct_set.all %}
+
                                             <table class="table table-borderless">
                                                 <tbody>
                                                 <tr>
                                                     <td>Product:</td>
-                                                    <td>{{ rs.product.title }}</td>
+                                                    <td>{{ orderproduct.product.title }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Quantity:</td>
-                                                    <td>{{  rs.quantity }}</td>
+                                                    <td>{{  orderproduct.quantity }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Amount:</td>
-                                                    <td>{{ rs.amount }}</td>
+                                                    <td>{{ orderproduct.amount }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Status:</td>
-                                                    <td>{{ rs.order.status }}</td>
+                                                    <td>{{ orderproduct.order.status }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Mobile Number:</td>
-                                                    <td>{{  rs.order.phone }}</td>
+                                                    <td>{{  orderproduct.order.phone }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>DOB:</td>
-                                                    <td>{{ rs.order.create_at }}</td>
+                                                    <td>{{ orderproduct.order.create_at }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Location:</td>
-                                                    <td>{{  rs.order.city }}</td>
+                                                    <td>{{  orderproduct.order.city }}</td>
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                            {% endfor %}
+
                                         </div>
 
 
@@ -211,3 +217,6 @@
 {% block foot %} {% include 'vendor/vendor-base/footer.html' %}  {% endblock %}
 {% block js %}{% include 'vendor/vendor-base/js.html' %}{% endblock %}
 
+{% block custom_js %}
+
+{% endblock  %}

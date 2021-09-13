@@ -2,6 +2,9 @@
 <html lang="en">
 {% load static %}
 {% load i18n %}
+{% load bootstrap4 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery='full' %}
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -39,7 +42,8 @@
     <!-- App css-->
     <link rel="stylesheet" type="text/css" href="{%  static '' %}assets/css/admin.css">
 </head>
-
+{% block extrahead %}
+{% endblock %}
 <body>
 
 <!-- page-wrapper Start-->

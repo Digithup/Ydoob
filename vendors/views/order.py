@@ -1,3 +1,4 @@
+from bootstrap_datepicker_plus import DateTimePickerInput
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -38,10 +39,11 @@ class VendorOrderDetailView(DetailView):
 
 
 class VendorEditOrder(UpdateView):
-    model = Order
+    model = OrderProduct
     form_class = OrderStatusForm
     template_name = 'vendor/sales/orders/VendorEditOrder.html'
     success_url = reverse_lazy('vendors:Order')
+
 
 
     # @method_decorator(vendor_only)

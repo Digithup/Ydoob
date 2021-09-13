@@ -27,7 +27,7 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 
-
+from user.views.user import PasswordContextMixin
 
 UserModel = get_user_model()
 

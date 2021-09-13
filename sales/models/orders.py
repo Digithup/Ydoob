@@ -1,16 +1,9 @@
-import self
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models import Sum
-from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
 
-from DeliverySystem.models import DeliveryPerson
 from catalog.models.models import Products
-from helper import modelHelper
-
-from sales.models.cart import Location
 from sales.models.payment import Payment
 from user.models import UserAddress
 from vendors.models import Vendor
@@ -71,6 +64,7 @@ class Order(models.Model):
     ordered = models.BooleanField(default=False)
     email = models.CharField(max_length=100)
     ip = models.CharField(blank=True, max_length=20)
+
     adminnote = models.CharField(blank=True, max_length=100)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
@@ -79,7 +73,7 @@ class Order(models.Model):
         ordering = ['code']
 
     def __str__(self):
-        return self.user.first_name
+        return self.code
 
 
     def get_previous_bills(self):
@@ -96,6 +90,10 @@ class Order(models.Model):
 
 
 class OrderProduct(models.Model):
+    DeliverySystem = (
+        ('Ydoob', 'Ydoob'),
+        ('Self', 'Self'),
+    )
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Products, on_delete=models.CASCADE)
@@ -104,6 +102,10 @@ class OrderProduct(models.Model):
     price = models.FloatField()
     amount = models.FloatField()
     status = models.CharField(max_length=10, choices=STATUS, default='New')
+    delivery_by = models.CharField(max_length=10, choices=DeliverySystem, default=False)
+    delivery_taken_datetime = models.DateTimeField(null=True, blank=True)
+    delivery_person_ip = models.GenericIPAddressField(
+        protocol="both", unpack_ipv4=False, null=True, blank=True)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
 

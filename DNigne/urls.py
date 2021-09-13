@@ -22,6 +22,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 import notification
+from DeliverySystem import consumers
 from home.tests import ajaxcolortest,  ajaxpricetest
 from localization import views
 
@@ -43,6 +44,7 @@ urlpatterns += i18n_patterns(
     path('dashboard/', include('localization.urls'), name='localization'),
     path('', include('notification.urls'),name='notifications'),
     path('', include('home.urls'), name='home'),
+    path('delivery/', include('DeliverySystem.urls'), name='DeliverySystem'),
     path('', include('catalog.urls'), name='catalog'),
     path('', include('sales.urls'), name='sales'),
     path('', include('vendors.urls'), name='vendors'),
@@ -61,6 +63,9 @@ urlpatterns += i18n_patterns(
     # prefix_default_language=True,
 
 )
+websocket_urlpatterns = [
+    path('ws/jobs/<job_id>/', consumers.JobConsumer.as_asgi())
+]
 
 # handler404 = error.error_handler
 # handler500 = error.error_handler

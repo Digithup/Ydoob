@@ -52,7 +52,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in Productsion!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS: List[str] = ['127.0.0.1','dnigne.herokuapp.com']
+ALLOWED_HOSTS: List[str] = ['127.0.0.1', 'dnigne.herokuapp.com']
 
 AUTH_USER_MODEL = 'user.User'
 # ALLOWED_HOSTS = [
@@ -77,7 +77,7 @@ INSTALLED_APPS = [
 THIRD_PARTY_APPS = [
     'ckeditor',
     'ckeditor_uploader',
-    "bootstrap4",
+
     'mptt',
     'rest_framework',
     'corsheaders',
@@ -88,6 +88,11 @@ THIRD_PARTY_APPS = [
     'social_django',
     'whitenoise.runserver_nostatic',
     'formtools',
+    'notification',
+    'channels',
+    "bootstrap4",
+    "bootstrap_datepicker_plus",
+'import_export',
 
 ]
 OWN_APPS = [
@@ -102,7 +107,6 @@ OWN_APPS = [
     'reports.apps.ReportsConfig',
     'sales.apps.SalesConfig',
     'vendors.apps.VendorsConfig',
-    'notification',
 
     'user.apps.UserConfig',
     'billing',
@@ -198,7 +202,7 @@ else:
     DATABASES = {
         'default': {
 
-            'ENGINE':'django.db.backends.mysql',
+            'ENGINE': 'django.db.backends.mysql',
             'NAME': env('DB_NAME'),
             'USER': env('DB_USER'),
             'PASSWORD': env('DB_PASSWORD'),
@@ -363,3 +367,22 @@ MyFatoorah_api_key = env('MyFatoorah_api_key')
 MyFatoorah_WEBHOOK_SECRET = env('MyFatoorah_WEBHOOK_SECRET')
 
 django_heroku.settings(locals())
+
+FIREBASE_ADMIN_CREDENTIAL = os.path.join(BASE_DIR, "ydoob-ff08e-firebase-adminsdk-j7532-952cfe0721.json")
+GOOGLE_MAP_API_KEY = "AIzaSyBxYTF5b1oobhbQo_dylaatAYm1BwARBb4"
+
+PAYPAL_MODE = "sandbox"
+PAYPAL_CLIENT_ID = "YOUR_PAYPAL_CLIENT_ID"
+PAYPAL_CLIENT_SECRET = "YOUR_PAYPAL_CLIENT_SECRET"
+
+NOTIFICATION_URL = "YOUR_HEROKU_URL"
+ASGI_APPLICATION = "DNigne.asgi.application"
+# Channels
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": ['YOUR_HEROKU_REDIS_URL'],
+        },
+    },
+}

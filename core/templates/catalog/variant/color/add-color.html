@@ -141,31 +141,6 @@
             variant_row.removeClass("product_variant");
 
 
-            variant_row.find("#VariantGroup option:selected").each(function () {
-        var value = $(this).val();
-        if(value == "3" || value == "4" ) {
-            this('#colorCode').show();
-
-        } else if(value == "1") {
-            this('#colorCode').hide();
-
-        } else if (value == "3") {
-			  html += '	<div class="form-group">';
-			  html += '	  <label class="col-sm-2 control-label" for="input-value' + option_row + '">{{ entry_option_value }}</label>';
-			  html += '	  <div class="col-sm-10"><input type="text" name="product_option[' + option_row + '][value]" value="" placeholder="{{ entry_option_value }}" id="input-value' + option_row + '" class="form-control" /></div>';
-			  html += '	</div>';
-		  }
-
-    });
-            variant_row.find("#product_variant").select2({
-                theme: "classic",
-                closeOnSelect: true,
-                placeholder: 'Add Product variant',
-                minimumInputLength: 1,
-                maximumSelectionLength: 5,
-                allowClear: true,
-            });
-
             $(".variant_div").append(variant_row);
         });
         $(".remove_variant").click(function () {
@@ -182,22 +157,7 @@
 
 
 
-    $("#VariantGroup option:selected").each(function () {
-        var value = $(this).val();
-        if(value == "Color" || value == "Size-Color" ) {
-            $('#colorCode').show();
 
-        } else if(value == "None") {
-            $('#colorCode').hide();
-
-        } if (value == "Size") {
-			  html += '	<div class="form-group">';
-			  html += '	  <label class="col-sm-2 control-label" for="input-value' + option_row + '">{{ entry_option_value }}</label>';
-			  html += '	  <div class="col-sm-10"><input type="text" name="product_option[' + option_row + '][value]" value="" placeholder="{{ entry_option_value }}" id="input-value' + option_row + '" class="form-control" /></div>';
-			  html += '	</div>';
-		  }
-
-    });
 });
 });
     </script>

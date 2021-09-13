@@ -1,5 +1,6 @@
 from django.urls import path
 
+from core.reports.catalog import product_export_data
 from core.tests import AddSetting, UpdateSetting
 from core.views.analytics import my_dashboard, population_chart, OrderByLocation, SalesByLocation, RevenueByLocation, \
     BuyAndSell, TotalSales, TotalPurchase, TotalCashTransaction, TotalDeposits, MarketValue
@@ -13,6 +14,7 @@ from core.views.catalog import AddCategory, categories, EditCategory, DeleteCate
     OptionsListView, EditOption, AddOption, DeleteOption, \
     ColorListView, AddColor, EditColor, DeleteColor, SizeListView, EditSize, AddSize, DeleteSize, \
     VariantListView, load_option
+from core.views.delivery import CourierCreate, CourierEdit, CourierDetail, CourierListView
 from core.views.design import BannerDetailView, BannerDelete, \
     SliderView, SliderDelete, SliderGroupCreate, SliderDetailView, BannersView, BannerCreate, \
     SliderCreate
@@ -79,6 +81,11 @@ urlpatterns = [
          name="Products_add_stocks"),
     path('products/file_upload', file_upload, name="file_upload"),
 
+    path('products/report/', product_export_data, name="ProductsReport"),
+
+
+
+
     ########## Filters  #########
     path('FiltersGroup/', FiltersGroupListView.as_view(), name='FiltersGroup'),
     path('FiltersGroup/edit/<int:pk>/', EditFiltersGroup.as_view(), name='EditFiltersGroup'),
@@ -133,6 +140,13 @@ urlpatterns = [
     path('sales/', OrdersListView.as_view(), name='Order'),
     path('sales/edit/<int:pk>/', EditOrder.as_view(), name='EditOrder'),
     path('sales/<int:pk>/', OrderDetailView.as_view(), name='OrderDetail'),
+
+        ########## DeliveryOrder   #########
+    path('courier/', CourierListView.as_view(), name='Courier'),
+    path('courier/create/', CourierCreate.as_view(), name='CourierCreate'),
+    path('courier/<int:pk>/', CourierDetail.as_view(), name='CourierDetail'),
+    path('courier/edit/<int:pk>/', CourierEdit.as_view(), name='CourierEdit'),
+
 
     ########## Slider   #########
     path('slider', SliderView.as_view(), name='SliderView'),

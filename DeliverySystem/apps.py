@@ -1,5 +1,8 @@
 from django.apps import AppConfig
 
 
-class DeliverysystemConfig(AppConfig):
+class DeliverySystemConfig(AppConfig):
     name = 'DeliverySystem'
+
+    def ready(self):
+        import core.signals

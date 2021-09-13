@@ -2,14 +2,15 @@ import os
 import uuid
 
 from ckeditor_uploader.fields import RichTextUploadingField
+from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import AbstractBaseUser
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
-from user.models import User
 
+User = get_user_model()
 
 class Vendor(models.Model):
     STATUS = (

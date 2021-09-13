@@ -104,6 +104,7 @@ class User(AbstractBaseUser):
 
     USERNAME_FIELD = 'email'
 
+
     objects = UserManager()
 
     def save(self, *args, **kwargs):
@@ -116,10 +117,9 @@ class User(AbstractBaseUser):
     def get_full_name(self):
         full_name = None
         if self.first_name or self.last_name:
-            full_name = self.first_name + " " + self.last_name
+            return self.first_name + " " + self.last_name
         else:
-            full_name = self.email
-        return full_name
+            return self.email
 
     def get_short_name(self):
         # The user is identified by their email address

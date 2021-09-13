@@ -12,7 +12,8 @@
                         <h3>Products List
                             <small>
                                 <ol class="breadcrumb pull-left">
-                                    <li class="breadcrumb-item"><a href="{% url 'core:AdminIndex' %}"><i data-feather="home"></i></a></li>
+                                    <li class="breadcrumb-item"><a href="{% url 'core:AdminIndex' %}"><i
+                                            data-feather="home"></i></a></li>
                                     <li class="breadcrumb-item">Physical</li>
                                     <li class="breadcrumb-item active">Products List</li>
                                 </ol>
@@ -23,16 +24,34 @@
                     </div>
                 </div>
 
-                <div class="col-lg-6">
-                    <div class="card-tools pull-right ">
+               <div class="row col-md-12 card-tools pull-right">
+                    <div class="col-md-4">
+
                         <a href="{% url 'core:ProductAdd' %}">
                             <button type="button" class="btn btn-primary" data-toggle="modal"
                                     data-original-title="test" data-target="#exampleModal">Add Products
                             </button>
                         </a>
-                    </div>
+
 
                 </div>
+                    <div class="col-md-6">
+
+                        <form method="post" action="{% url 'core:ProductsReport' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <p>Please select format of file.</p>
+                            <select name="file-format" class="form-control my-3">
+                                <option selected>Choose format...</option>
+                                <option>CSV</option>
+                                <option>JSON</option>
+                                <option>XLS (Excel)</option>
+                            </select>
+                            <button class="btn btn-primary" type="submit">Export</button>
+                        </form>
+
+
+                </div>
+               </div>
 
             </div>
         </div>
@@ -40,59 +59,65 @@
     <!-- Container-fluid Ends-->
 
 
-<!-- Container-fluid starts-->
-            <div class="container-fluid">
-                <div class="row products-admin ratio_asos">
-{% for rs in object_list %}
-                    <div class="col-xl-3 col-sm-6">
-                        <div class="card">
-                            <div class="card-body product-box">
+    <!-- Container-fluid starts-->
+    <div class="container-fluid">
+        <div class="row products-admin ratio_asos">
+            {% for rs in object_list %}
+                <div class="col-xl-3 col-sm-6">
+                    <div class="card">
+                        <div class="card-body product-box">
 
-                                <div class="img-wrapper">
+                            <div class="img-wrapper">
 
-                                    <div class="front">
-                                        <a href=""><img src="{{ rs.media.image.url }}" class="img-fluid blur-up lazyload bg-img"  alt=""></a>
-                                        <div class="product-hover">
-                                            <ul>
-                                                <li>
-                                                    <a href="{% url 'core:ProductUpdate' rs.product.id %}">
+                                <div class="front">
+                                    <a href=""><img src="{{ rs.media.image.url }}"
+                                                    class="img-fluid blur-up lazyload bg-img" alt=""></a>
+                                    <div class="product-hover">
+                                        <ul>
+                                            <li>
+                                                <a href="{% url 'core:ProductUpdate' rs.product.id %}">
 
-                                                    <button class="btn" type="button" data-original-title=""  title="">
-                                                    <i class="ti-pencil-alt"></i></button></a>
-                                                </li>
-                                                <li>
-                                                    <a href="{% url 'core:ProductDelete' rs.product.id  %}"
-                                                   onclick="return confirm('Are you sure you want to delete {{ rs.title }}?')">
-                                                <button class="btn" type="button" data-original-title="" title=""><i
-                                                        class="ti ti-trash"></i></button>
+                                                    <button class="btn" type="button" data-original-title="" title="">
+                                                        <i class="ti-pencil-alt"></i></button>
                                                 </a>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'core:ProductDelete' rs.product.id %}"
+                                                   onclick="return confirm('Are you sure you want to delete {{ rs.title }}?')">
+                                                    <button class="btn" type="button" data-original-title="" title=""><i
+                                                            class="ti ti-trash"></i></button>
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
-                                <div class="product-detail">
-                                    <div class="rating"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i></div>
-                                    <a href="#">
-                                        <h6>{{ rs.product.title }}</h6>
-                                    </a>
-                                    <h4>${{ rs.product.price }} <del>$600.00</del></h4>
-                                    <ul class="color-variant">
-                                        <li class="bg-light0"></li>
-                                        <li class="bg-light1"></li>
-                                        <li class="bg-light2"></li>
-                                    </ul>
+                            </div>
+                            <div class="product-detail">
+                                <div class="rating"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i
+                                        class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>
                                 </div>
+                                <a href="#">
+                                    <h6>{{ rs.product.title }}</h6>
+                                </a>
+                                <h4>${{ rs.product.price }}
+                                    <del>$600.00</del>
+                                </h4>
+                                <ul class="color-variant">
+                                    <li class="bg-light0"></li>
+                                    <li class="bg-light1"></li>
+                                    <li class="bg-light2"></li>
+                                </ul>
                             </div>
                         </div>
                     </div>
-{% endfor %}
                 </div>
-            </div>
-            <!-- Container-fluid Ends-->
+            {% endfor %}
+        </div>
+    </div>
+    <!-- Container-fluid Ends-->
 
 
- {% if page_obj.has_previous or page_obj.has_next %}
+    {% if page_obj.has_previous or page_obj.has_next %}
         <nav class="mt-4">
             <ul class="pagination">
                 {% if page_obj.has_previous %}
@@ -106,7 +131,8 @@
                         </a>
                     </li>
                 {% endif %}
-                <li class="page-item disabled"><a class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a></li>
+                <li class="page-item disabled"><a class="page-link">Page {{ page_obj.number }}
+                    of {{ page_obj.paginator.num_pages }}</a></li>
                 {% if page_obj.has_next %}
                     <li class="page-item">
                         <a class="page-link" href="?page={{ page_obj.next_page_number }}">

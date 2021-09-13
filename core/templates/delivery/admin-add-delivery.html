@@ -1,0 +1,165 @@
+{% extends 'admin/adminbase.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% load i18n %}
+{% block body %}
+
+    <div class="page-body">
+
+        <!-- Container-fluid starts-->
+        <div class="container-fluid">
+            <div class="page-header">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="page-header-left">
+                            <h3>Add Filters
+                                <small>Multikart Admin panel</small>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <ol class="breadcrumb pull-right">
+                            <li class="breadcrumb-item"><a href="{% url 'core:AdminIndex' %}"><i
+                                    data-feather="home"></i></a>
+                            </li>
+
+                            <li class="breadcrumb-item active">Add Filter</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Container-fluid Ends-->
+
+
+       <!-- Container-fluid starts-->
+    <div class="container-fluid">
+        <form class="needs-validation add-Products-form" novalidate=""
+              enctype="multipart/form-data" action=""
+              method="post">
+            {% csrf_token %}
+            <div class="row product-adding">
+
+                <div class="col-xl-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                {% if form.errors %}
+
+                                    {% for error_field, error_message in form.errors.items %}
+
+                                        <div class="alert alert-danger">
+                                            {{ error_field|striptags }}: {{ error_message|striptags }}
+                                            <strong>{{ error|escape }}</strong>
+                                        </div>
+                                    {% endfor %}
+
+                                {% endif %}
+
+
+                            </div>
+                            <h5>{% translate 'General' %}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="digital-add needs-validation">
+
+                                <div class="form-group">
+
+                                    {{ form.user|as_crispy_field }}
+
+                                </div>
+                                <div class="form-group">
+                                    {{ form.status|as_crispy_field }}
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>{% translate 'Image Upload' %}</h5>
+                        </div>
+                        <div class="card-body media_div_row">
+                            <div class="add-product ">
+                                <div class="row  ">
+                                    <div class="col-md-6">
+                                        <img alt=""
+                                             class="img-fluid image_zoom_1 blur-up lazyloaded img_preview">
+                                    </div>
+                                    <div class="col-md4 pull-left">
+                                        <ul class="file-upload-product">
+
+                                            <li>
+                                                <div class="box-input-file"><input class="upload select_media"
+                                                                                   type="file"
+                                                                                   name="image">
+                                                    <i class="fa fa-plus "><select hidden
+                                                                                   class="form-control media_type">
+                                                        <option value="1">Image</option>
+
+                                                    </select></i></div>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col-xl-6">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Meta Data</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="digital-add needs-validation">
+                                <div class="form-group">
+                                    <label for="validationCustom05"
+                                           class="col-form-label pt-0">{% translate ' Slug' %}</label>
+                                    <input class="form-control" id="slug" type="text" =""
+                                           value="{{ categories.slug }}" name="slug">
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label">{% translate 'Meta keywords' %}</label>
+                                    <textarea rows="4" cols="12" name="keywords"></textarea>
+                                </div>
+                                <div class="decor">
+                                    {% if field.errors %}
+                                        <div class="alert alert-danger" style="margin:10px">
+                                        {{ field.errors }}
+
+                                    {% endif %}
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <div class="product-buttons text-center">
+                                            <button type="submit" class="btn btn-primary">{% translate 'Add' %}</button>
+                                            <button type="button" href="{% url 'core:categories' %} "
+                                                    class="btn btn-light">{% translate 'Discard' %}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </form>
+    </div>
+    <!-- Container-fluid Ends-->
+
+
+{% endblock %}
+
+
+
+{% block foot %} {% include 'admin/footer.html' %}  {% endblock %}
+{% block js %} {% include 'admin/js.html' %}  {% endblock %}
+

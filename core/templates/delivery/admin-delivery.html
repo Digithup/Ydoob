@@ -1,0 +1,94 @@
+{% extends 'admin/adminbase.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block body %}
+  <!-- Container-fluid starts-->
+    <div class="container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="page-header-left">
+                        <h3>Category List
+                            <small>
+                                <ol class="breadcrumb pull-left">
+                                    <li class="breadcrumb-item"><a href="{% url 'core:AdminIndex' %}"><i data-feather="home"></i></a></li>
+
+                                    <li class="breadcrumb-item active">Delivery </li>
+                                </ol>
+                            </small>
+                        </h3>
+
+                        </ol>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card-tools pull-right ">
+                        <a href="{% url 'core:CourierCreate' %}">
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-original-title="test" data-target="#exampleModal">Add Delivery
+                            </button>
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Container-fluid Ends-->
+
+
+            <!-- Container-fluid starts-->
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Manage Order</h5>
+                            </div>
+                            <div class="card-body order-datatable">
+                                <table class="display" id="basic-1">
+                                    <thead>
+                                    <tr>
+                                        <th>Order Id</th>
+                                        <th>Product</th>
+                                         <th>Total</th>
+                                        <th>Payment Status</th>
+                                        <th>Payment Method</th>
+                                        <th>Order Status</th>
+                                        <th>Date</th>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for rs in object_list %}
+                                    <tr>
+                                        <td><a  href="{% url 'core:CourierEdit' rs.id  %}">#   {{ forloop.counter }}</a></td>
+
+                                        <td>
+
+
+                                               {{ rs.user  }}
+
+                                        </td>
+                                    <td>${{ rs.total }}</td>
+                                        <td><span class="badge badge-secondary">{{ rs.payment_status }}</span></td>
+                                        <td>{{ rs.payment_method }}</td>
+                                        <td><span class="badge badge-success">{{ rs.status }}</span></td>
+                                        <td>{{ rs.update_at }}</td>
+
+                                    </tr>
+                               {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Container-fluid Ends-->
+
+{% endblock %}
+{% block foot %} {% include 'admin/footer.html' %}  {% endblock %}
+{% block js %} {% include 'admin/js.html' %}  {% endblock %}
