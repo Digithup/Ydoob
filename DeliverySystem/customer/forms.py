@@ -1,8 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from DeliverySystem.models import  Job
-from sales.models.orders import Order
+from DeliverySystem.models import Job
 
 
 class BasicUserForm(forms.ModelForm):
