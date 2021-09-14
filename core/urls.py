@@ -1,6 +1,8 @@
 from django.urls import path
 
 from core.reports.catalog import product_export_data
+from core.reports.localization import country_export_data, country_import_data, governorates_export_data, \
+    governorates_import_data, city_export_data, city_import_data, area_export_data, area_import_data
 from core.tests import AddSetting, UpdateSetting
 from core.views.analytics import my_dashboard, population_chart, OrderByLocation, SalesByLocation, RevenueByLocation, \
     BuyAndSell, TotalSales, TotalPurchase, TotalCashTransaction, TotalDeposits, MarketValue
@@ -84,9 +86,6 @@ urlpatterns = [
 
     path('products/report/', product_export_data, name="ProductsReport"),
 
-
-
-
     ########## Filters  #########
     path('FiltersGroup/', FiltersGroupListView.as_view(), name='FiltersGroup'),
     path('FiltersGroup/edit/<int:pk>/', EditFiltersGroup.as_view(), name='EditFiltersGroup'),
@@ -142,12 +141,11 @@ urlpatterns = [
     path('sales/edit/<int:pk>/', EditOrder.as_view(), name='EditOrder'),
     path('sales/<int:pk>/', OrderDetailView.as_view(), name='OrderDetail'),
 
-        ########## DeliveryOrder   #########
+    ########## DeliveryOrder   #########
     path('courier/', CourierListView.as_view(), name='Courier'),
     path('courier/create/', CourierCreate.as_view(), name='CourierCreate'),
     path('courier/<int:pk>/', CourierDetail.as_view(), name='CourierDetail'),
     path('courier/edit/<int:pk>/', CourierEdit.as_view(), name='CourierEdit'),
-
 
     ########## Slider   #########
     path('slider', SliderView.as_view(), name='SliderView'),
@@ -184,13 +182,23 @@ urlpatterns = [
     path('vendor/update/<int:pk>/', VendorUpdate.as_view(), name='AdminVendorUpdate'),
     path('vendor/delete/<int:pk>/', VendorDelete.as_view(), name='AdminVendorDelete'),
 
-
     ########## localization   #########
     path('country', CountryListView.as_view(), name='CountryListView'),
     path('country/create/', CountryCreate.as_view(), name='CountryCreate'),
     path('country/<int:pk>/', CountryDetailView.as_view(), name='CountryDetailView'),
     path('country/update/<int:pk>/', CountryEdit.as_view(), name='CountryEdit'),
     path('country/delete/<int:pk>/', CountryDelete.as_view(), name='CountryDelete'),
+    path('country/report/export/', country_export_data, name="CountryReportExport"),
+    path('country/report/import/', country_import_data, name="CountryReportImport"),
+
+    path('governorates/report/export/', governorates_export_data, name="GovernoratesReportExport"),
+    path('governorates/report/imprt/', governorates_import_data, name="GovernoratesReportImport"),
+
+    path('city/report/export/', city_export_data, name="CityReportExport"),
+    path('city/report/import/', city_import_data, name="CityReportImport"),
+
+    path('area/report/export/', area_export_data, name="AreaReportExport"),
+    path('area/report/import/', area_import_data, name="AreaReportImport"),
 
     ########## setting   #########
     path('setting/', AdminSetting.as_view(), name='AdminSetting'),

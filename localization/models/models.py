@@ -61,8 +61,8 @@ class Governorates(models.Model):
 
 class City(models.Model):
     governorates = models.ForeignKey(Governorates, on_delete=models.CASCADE)
-    name = models.CharField(max_length=30,default='Qena')
-    name_ar = models.CharField(max_length=30,default='Qena')
+    name = models.CharField(max_length=50,default='Qena')
+    name_ar = models.CharField(max_length=50,default='Qena')
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
