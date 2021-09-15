@@ -1,8 +1,9 @@
 {% load crispy_forms_filters %}
 {% load static %}
 {% load bootstrap4 %}
-
 {% load myapptags %}
+{% shopcartcount user.id as count %}
+
 {% load i18n %}
 <!-- header start -->
 {#<header class="header-style-5 border-style" id="sticky-header">#}
@@ -30,8 +31,8 @@
                 </div>
                 <div class="col-lg-6 text-end">
                     <ul class="header-dropdown">
-                        <li class="mobile-wishlist"><a href="{% url 'sales:Wishlist' %}"><i class="fa fa-heart"
-                                                                                            aria-hidden="true"><span>{{ wish_count }}</span></i></a>
+                        <li class="mobile-wishlist"><a href="{% url 'sales:Wishlist' %}"><span>{{ wish_count }}</span><i class="fa fa-heart"
+                                                                                            aria-hidden="true"></i></a>
                         </li>
                         <li class="onhover-dropdown mobile-account"><i class="fa fa-user" aria-hidden="true"></i>
                             {% if user.is_authenticated %} {{ user.first_name }}
@@ -44,12 +45,12 @@
                                             {% if store_owner %}
                                                 {% for rs in store_owner %}
 
-                                                    {% if rs.activation == 1 and rs.status == 1  %}
+                                                    {% if rs.activation == 1 and rs.status == 1 %}
                                                         <li>
                                                             <a href="{% url 'vendors:VendorDashboard' rs.slug %}">{% translate 'Dashboard' %}</a>
                                                             <input type="hidden" value="rs.id">
                                                         </li>
-                                                        {% else %}
+                                                    {% else %}
 
                                                         {% if rs.activation == 1 and rs.status == 0 %}
                                                             <li><a href="{% url 'vendors:StoreWaiting' %}">
@@ -62,12 +63,13 @@
 
                                                     {% if rs.activation == 0  and rs.status == 0 %}
                                                         <li><a href="{% url 'vendors:StoreWaiting' %}">
-                                                                <h6>{% translate 'Vendor wait activation' %}</h6></a></li>
-                                                        {% else %}
+                                                            <h6>{% translate 'Vendor wait activation' %}</h6></a></li>
+                                                    {% else %}
                                                         {% if rs.activation == 0  and rs.status == 1 %}
-                                                        <li><a href="{% url 'vendors:StoreWaiting' %}">
-                                                                <h6>{% translate 'Vendor wait activation' %}</h6></a></li>
-                                                    {% endif %}{% endif %}
+                                                            <li><a href="{% url 'vendors:StoreWaiting' %}">
+                                                                <h6>{% translate 'Vendor wait activation' %}</h6></a>
+                                                            </li>
+                                                        {% endif %}{% endif %}
 
                                                 {% endfor %}
                                             {% else %}
@@ -119,10 +121,8 @@
                     <div>
 
                         <form class="form_search autocomplete-me" action="{% url 'home:search' %}">
-
                             <input name="q" type="text" class="nav-search nav-search-field" placeholder="search"
                                    aria-expanded="true"/>
-
                             <button type="submit" name="nav-submit-button" class="btn-search">
                                 <i class="ti-search"></i>
                             </button>
@@ -184,76 +184,76 @@
                                             </ul>
                                         </div>
                                     </li>
-
                                     <li class="onhover-div mobile-cart">
-                                        {% load myapptags %}
-                                        {% shopcartcount user.id as count %}
                                         <div></span><img src="{% static '' %}assets/images/icon/cart.png"
                                                          class="img-fluid blur-up lazyload" alt=""> <span
-                                                class="qty">{{ count }}</span></div>
-
-
-                                        <ul class="show-div shopping-cart row">
-                                            <li>
-                                                {% for rs in shopcart %}
-                                                    {% with product=rs.product %}
-                                                        <div class="media ">
-                                                        {% for rm in product.productmedia_set.all %}
-
-                                                            <ul><a href="#"><img alt="" height="20px" width="40px"
-                                                                                 class="mr-3 img-box"
-                                                                                 src="{{ rm.image.url }}">{% endfor %}
-                                                    </a></ul>
-
-                                                        <div class="media-body col-md-4">
-                                                            <a href="#">
-                                                                <h4>{{ product.title }}</h4>
-                                                            </a>
-                                                            <h4>
-                                                                <span>{{ rs.quantity }} x $ {{ product.price }}</span>
-                                                            </h4>
-                                                        </div> {% endwith %}
-
-                                                </div>
-                                                    <li>
-
-                                                {% endfor %}
-                                                <div class="total">
-                                                    <h5>subtotal : <span>{{ total }}</span></h5>
-                                                </div>
-                                                </li>
-
-                                            {% if user.is_authenticated %}
-                                                <li>
-                                                    <div class="buttons"><a href="{% url 'sales:ShopCart' %}"
-                                                                            class="view-cart">viewcart</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-                                                        <a href="{% url 'sales:Checkout' %}"
-                                                           class="checkout">{% translate 'checkout' %}</a>
-
-                                                    </div>
-                                                </li>
-                                            {% else %}
-                                                <li>
-                                                    <div class="buttons"><a href="{% url 'sales:ShopCart' %}"
-                                                                            class="view-cart">viewcart</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-                                                        <a href="{% url 'user:CustomerLogin' %}">{% translate 'checkout' %}</a>
-
-                                                    </div>
-                                                </li>
-                                            {% endif %}
-
-
-                                        </ul>
-                                    </li>
-                                </ul>
+                                                class="qty">{{ count }}</span><i class="ti-shopping-cart"></i>
                             </div>
+
+
+                            <ul class="show-div shopping-cart row">
+                                <li>
+                                    {% for rs in shopcart %}
+                                        {% with product=rs.product %}
+                                            <div class="media ">
+                                            {% for rm in product.productmedia_set.all %}
+
+                                                <ul><a href="#"><img alt="" height="20px" width="40px"
+                                                                     class="mr-3 img-box"
+                                                                     src="{{ rm.image.url }}">{% endfor %}
+                                        </a></ul>
+
+                                            <div class="media-body col-md-4">
+                                                <a href="#">
+                                                    <h4>{{ product.title }}</h4>
+                                                </a>
+                                                <h4>
+                                                    <span>{{ rs.quantity }} x $ {{ product.price }}</span>
+                                                </h4>
+                                            </div> {% endwith %}
+
+                                    </div>
+                                        <li>
+
+                                    {% endfor %}
+                                    <div class="total">
+                                        <h5>subtotal : <span>{{ total }}</span></h5>
+                                    </div>
+                                    </li>
+
+                                {% if user.is_authenticated %}
+                                    <li>
+                                        <div class="buttons"><a href="{% url 'sales:ShopCart' %}"
+                                                                class="view-cart">viewcart</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                            <a href="{% url 'sales:Checkout' %}"
+                                               class="checkout">{% translate 'checkout' %}</a>
+
+                                        </div>
+                                    </li>
+                                {% else %}
+                                    <li>
+                                        <div class="buttons"><a href="{% url 'sales:ShopCart' %}"
+                                                                class="view-cart">viewcart</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                            <a href="{% url 'user:CustomerLogin' %}">{% translate 'checkout' %}</a>
+
+                                        </div>
+                                    </li>
+                                {% endif %}
+                            </div>
+
+
+                            </ul>
+                            </li>
+
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
     </div>
     <div class="bottom-part bottom-light">
@@ -565,25 +565,25 @@
             </div>
         </div>
     </div>
- <div class="container">
-            {% include 'admin/partials/messages.html' %}
-            {% block content %}
-            {% endblock %}
-            {% if messages %}
-                {% for message in messages %}
-                    {% if message.tags == "success" %}
-                        <div class="alert alert-success">
-                            {{ message }}
-                        </div>
-                    {% endif %}
-                    {% if message.tags == "error" %}
-                        <div class="alert alert-danger">
-                            {{ message }}
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        </div>
+    <div class="container">
+        {#            {% include 'admin/partials/messages.html' %}#}
+        {% block content %}
+        {% endblock %}
+        {#            {% if messages %}#}
+        {#                {% for message in messages %}#}
+        {#                    {% if message.tags == "success" %}#}
+        {#                        <div class="alert alert-success">#}
+        {#                            {{ message }}#}
+        {#                        </div>#}
+        {#                    {% endif %}#}
+        {#                    {% if message.tags == "error" %}#}
+        {#                        <div class="alert alert-danger">#}
+        {#                            {{ message }}#}
+        {#                        </div>#}
+        {#                    {% endif %}#}
+        {#                {% endfor %}#}
+        {#            {% endif %}#}
+    </div>
 </header>
 <!-- header end -->
 

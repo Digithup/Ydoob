@@ -6,9 +6,11 @@ from django.db.models.manager import EmptyManager
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 
+from localization.models.models import Governorates, City, Area
+
 Type = (
-    ('1', 'Home'),
-    ('2', 'Business'),
+    ('Home', 'Home'),
+    ('Business', 'Business'),
 
 )
 
@@ -167,16 +169,16 @@ class User(AbstractBaseUser):
 
 
 class UserAddress(models.Model):
-    address_title = models.CharField(max_length=150)
+    address_title = models.CharField(max_length=150 ,null=False,blank=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=150)
-    last_name = models.CharField(blank=True, null=True, max_length=150)
-    governorate = models.CharField(blank=True, null=True, max_length=150)
-    city = models.CharField(blank=True, null=True, max_length=20)
-    area = models.CharField(blank=True, null=True, max_length=50)
-    street_name = models.CharField(blank=True, null=True, max_length=150)
-    location_type = models.CharField(max_length=10, choices=Type)
-    phone = models.CharField(blank=True, null=True, max_length=150)
+    first_name = models.CharField(max_length=150 ,null=False,blank=False)
+    last_name = models.CharField(max_length=150 ,null=False,blank=False)
+    governorate = models.ForeignKey(Governorates,on_delete=models.CASCADE,max_length=150 ,null=False,blank=False)
+    city = models.ForeignKey(City,on_delete=models.CASCADE,max_length=20 ,null=False,blank=False)
+    area = models.ForeignKey(Area,on_delete=models.CASCADE,max_length=50 ,null=True,blank=True)
+    street_name = models.CharField(max_length=150,null=False,blank=False)
+    location_type = models.CharField(max_length=10, choices=Type,null=False,blank=False)
+    phone = models.CharField(max_length=150,null=False,blank=False)
     country = models.CharField(blank=True, null=True, max_length=50)
     shipping_note = models.CharField(blank=True, null=True, max_length=255)
     building_name = models.CharField(blank=True, null=True, max_length=255)

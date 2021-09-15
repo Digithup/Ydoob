@@ -158,10 +158,10 @@ def language_processors(request):
     except Exception as e:
         language = {
             'setting': None,
-            'setting_data':None,
+            'setting_data':request.LANGUAGE_CODE,
                    'setting_data_en': None,
                    'setting_data_ar': None,
-                   'index_language': None,
+                   'index_language': Language.objects.all(),
 
         }
         return language

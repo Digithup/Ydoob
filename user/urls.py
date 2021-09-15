@@ -4,7 +4,7 @@ from django.urls import path
 
 from .views.user import UserSignup, UserActivate, UserLogin, UserLogout, UserProfile, UpdateImage, UpdateProfile, \
     PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView, address_list, \
-    DeleteAddress, UpdateAddress, CreateAddress
+    DeleteAddress, UpdateAddress, CreateAddress, load_cities
 
 app_name = 'user'
 
@@ -36,8 +36,10 @@ urlpatterns = [
     ##########Address################
     path('user/booklist/', address_list, name='address_list'),
     path('user/cadress/', CreateAddress, name='CreateAddress'),
+    path('user/cadress/ajax/load-cities/', load_cities, name='ajax_load_cities'),  # <-- this one here
     path('user/adress/<int:pk>', DeleteAddress, name='DeleteAddress'),
     url(r'^user/adress/(?P<pk>\d+)/update/$', UpdateAddress, name='UpdateAddress'),
+
 
 
 

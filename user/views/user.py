@@ -26,9 +26,10 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic.base import TemplateView
-from django.views.generic.edit import FormView
+from django.views.generic.edit import FormView, CreateView
 from social_django.models import UserSocialAuth
 
+from localization.models.models import City
 from user.decorators import unauthenticated_user
 from user.forms.forms import PasswordResetForm, SetPasswordForm
 from user.forms.forms import UserSignUpForm, UserLoginForm, UserUpdateImageForm, UserUpdateProfileForm, \
@@ -269,7 +270,10 @@ def save_address_form(request, form, template_name):
     context = {'form': form, 'address': address}
     data['html_form'] = render_to_string(template_name, context, request=request)
     return JsonResponse(data)
-
+def load_cities(request):
+    governorates_id = request.GET.get('governorates')
+    cities = City.objects.filter(governorates_id=governorates_id).order_by('name')
+    return render(request, 'users/register/city_dropdown_list_options.html', {'cities': cities})
 
 @login_required(login_url='/login')  # Check login
 def CreateAddress(request):
@@ -279,7 +283,11 @@ def CreateAddress(request):
         form = UserUpdateAddressForm()
 
     return save_address_form(request, form, 'users/includes/partial_book_create.html')
-
+class CreateAddressl(CreateView):
+    model = UserAddress
+    form_class = UserUpdateAddressForm
+    success_url = reverse_lazy('address_list')
+    template_name = 'users/includes/partial_book_create.html'
 
 @login_required(login_url='/login')  # Check login
 def UpdateAddress(request, pk):

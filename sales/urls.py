@@ -23,7 +23,7 @@ urlpatterns = [
     #path('cart/update_item/', updateItem, name="update_item"),
 
 ##############wishlist#####################
-    path('cart/wishlist/', WishlistView.as_view(), name="Wishlist"),
+    path('cart/wishlist/', WishlistView, name="Wishlist"),
     path('cart/addwishlist/', addWishlist, name="AddWishlist"),
     path('cart/deletefromwishlist/<int:id>', deletefromWishlist, name='DeleteFromWishlist'),
 

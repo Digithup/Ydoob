@@ -16,7 +16,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
 
-
+from localization.models.models import City
 from user.models import UserAddress
 
 User = get_user_model()
@@ -73,10 +73,28 @@ class UserUpdateImageForm(forms.ModelForm):
 class UserUpdateAddressForm(forms.ModelForm):
     class Meta:
         model = UserAddress
-        fields = ['address_title', 'slug', 'first_name']
-        # fields = '__all__'
+        # fields = ['address_title', 'slug', 'first_name']
+        fields = ['address_title', 'location_type', 'first_name',
+                  'last_name','phone', 'governorate', 'city', 'area', 'street_name']
         exclude = ['user', ]
-        # fields = ['image',]
+
+    # fields = ['image',]
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['city'].queryset = City.objects.none()
+
+        if 'governorate' in self.data:
+            try:
+                governorates_id = int(self.data.get('governorate'))
+                self.fields['city'].queryset = City.objects.filter(governorates_id=governorates_id).order_by('name')
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty City queryset
+        elif self.instance.pk:
+            self.fields['city'].queryset = self.instance.country.city_set.order_by('name')
+
+
+
+
 ################REst Password###########
 class PasswordResetForm(forms.Form):
     email = forms.EmailField(
@@ -117,7 +135,7 @@ class PasswordResetForm(forms.Form):
         return (
             u for u in active_users
             if u.has_usable_password() and
-            _unicode_ci_compare(email, getattr(u, email_field_name))
+               _unicode_ci_compare(email, getattr(u, email_field_name))
         )
 
     def save(self, domain_override=None,

@@ -1,5 +1,6 @@
-<form method="post" action="{% url 'user:CreateAddress'  %}"
-       class="js-book-create-form">
+{% load crispy_forms_filters %}
+<form method="post" action="{% url 'user:CreateAddress'  %} " id="userForm"
+      data-cities-url="{% url 'user:ajax_load_cities' %}" novalidate class="js-book-create-form">
   {% csrf_token %}
   <div class="modal-header">
    <button type="button" class="btn btn-classic" data-bs-dismiss="modal" aria-label="Close">
@@ -8,10 +9,56 @@
     <h4 class="modal-title">Create a new Address</h4>
   </div>
   <div class="modal-body">
-    {% include 'users/includes/partial_book_form.html' %}
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li {% if message.tags %}
+                class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+{% if form.errors %}
+    {% for error_field, error_message in form.errors.items %}
+        <div class="alert alert-danger">
+            {{ error_field|striptags }}: {{ error_message|striptags }}
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+
+{% endif %}
+<div class="form-group{% if field.errors %} has-error{% endif %}">
+    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+    {{ form|crispy }}
+
+    {% for error in field.errors %}
+        <p class="help-block">{{ error }}</p>
+    {% endfor %}
+</div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-classic"  data-bs-dismiss="modal">Close</button>
     <button type="submit" class="btn btn-primary">Create Address</button>
   </div>
 </form>
+
+
+{% block custom_js %}
+
+    <script>
+    $("#id_governorate").change(function () {
+      var url = $("#userForm").attr("data-cities-url");  // get the url of the `load_cities` view
+      var governorateId = $(this).val();  // get the selected country ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'governorates': governorateId       // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_city").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+    });
+  </script>
+{% endblock  %}

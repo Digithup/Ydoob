@@ -92,7 +92,7 @@ class Cart(object):
 #
 #     return JsonResponse('Item was added', safe=False)
 
-
+@login_required(login_url='/login')  # Check login
 class WishlistView(generic.View):
     def get(self, request, *args, **kwargs):
         wish_item = Wishlist.objects.filter(user=request.user)
@@ -101,7 +101,7 @@ class WishlistView(generic.View):
         }
         return render(self.request, 'wishlist.html', context)
 
-
+@login_required(login_url='/login')  # Check login
 def addWishlist(request):
     if request.method == "POST":
         product_var_id = request.POST.get('product-id')

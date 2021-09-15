@@ -37,7 +37,7 @@ class SettingLang(models.Model):
     lang = models.CharField(max_length=6 , default='en' ,blank=True,null=True)
     title = models.CharField(max_length=150, null=True, default='Nigne')
     keywords = models.CharField(max_length=255, default=' ', null=True)
-    company = models.CharField(max_length=50, default=' ', null=True)
+    copyright = models.CharField(max_length=50, default=' ', null=True)
     address = models.CharField(blank=True, max_length=100, default='', null=True)
     about = RichTextUploadingField(blank=True, default='', null=True)
     contact = RichTextUploadingField(blank=True, default='', null=True)

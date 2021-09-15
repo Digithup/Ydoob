@@ -4,6 +4,7 @@ from django.urls import reverse
 
 from DNigne import settings
 from catalog.models.models import Categories
+from core.models.setting import Setting, SettingLang
 from sales.models.cart import ShopCart
 
 register = template.Library()
@@ -12,6 +13,18 @@ register = template.Library()
 @register.simple_tag
 def categorylist():
     return Categories.objects.all()
+
+# @register.simple_tag
+# def SiteSetting():
+#     try:
+#         settings = Setting.objects.all()
+#         setting_list = []
+#         for setting in settings:
+#             settings_lang = SettingLang.objects.filter(setting=setting.id, ).first()
+#             setting_list.append({"settings": settings, "settings_lang": settings_lang})
+#         return setting_list
+#     except Exception as e:
+#         return None
 
 
 @register.simple_tag

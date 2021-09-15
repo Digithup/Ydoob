@@ -29,8 +29,9 @@ class AddLang(CreateView):
     model = Language
     template_name = 'add-lang.html'
     fields = '__all__'
-
     success_url = reverse_lazy('localization:all_lang')
+
+
 class EditLang(UpdateView):
     model = Language
     fields = '__all__'
