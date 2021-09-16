@@ -1,16 +1,12 @@
 from datetime import timezone
 
-from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 
 from core.decorators import allowed_users
-from core.forms.store import  AdminVendorForm
-from core.utils.utilities import notify_admin, notify_user
-from notification.utilities import create_notification
+from core.forms.store import AdminVendorForm
 from vendors.models import Vendor
 
 User = get_user_model()

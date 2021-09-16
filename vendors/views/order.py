@@ -41,8 +41,10 @@ class VendorOrderDetailView(DetailView):
 class VendorEditOrder(UpdateView):
     model = OrderProduct
     form_class = OrderStatusForm
+
     template_name = 'vendor/sales/orders/VendorEditOrder.html'
     success_url = reverse_lazy('vendors:Order')
+
 
 
 

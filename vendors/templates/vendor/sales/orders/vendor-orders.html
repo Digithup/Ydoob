@@ -4,9 +4,6 @@
 
 {% block body %}
 
-
-
-
   <!-- Container-fluid starts-->
             <div class="container-fluid">
                 <div class="page-header">
@@ -20,7 +17,7 @@
                         </div>
                         <div class="col-lg-6">
                             <ol class="breadcrumb pull-right">
-                                <li class="breadcrumb-item"><a href="index.html"><i data-feather="home"></i></a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'vendors:VendorIndex' %}"><i data-feather="home"></i></a></li>
                                 <li class="breadcrumb-item">Sales</li>
                                 <li class="breadcrumb-item active">Orders</li>
                             </ol>
@@ -53,7 +50,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for rs in vendor_order %}
+                                    {% for rs in object_list %}
                                     <tr>
                                         <td><a  href="{% url 'vendors:EditOrder' rs.id  %}">#{{ rs.order.code }}</a></td>
 

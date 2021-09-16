@@ -17,7 +17,7 @@ from django.views.generic.base import RedirectView, View
 
 from catalog.models.models import Products, ProductMedia
 from core.decorators import admin_required
-from notification.utilities import create_notification
+from notification.utilities import  create_notification_admin
 from sales.models.orders import OrderProduct
 
 from vendors.forms import SellerRegisterForm, AlreadyUserSellerRegisterForm, CreateVendorForm
@@ -113,9 +113,9 @@ class VendorCreate(View):
                     form.save()
                     admin=User.objects.filter(admin=True)
                     print(admin)
-                    create_notification(request, admin, 'NewVendorCreate', extra_id=form.id,
+                    create_notification_admin(request, admin, 'NewVendorCreate', extra_id=form.id,
                                         extra_info=vendor_id)
-                    data=form
+
                     notify_admin(form)
                     notify_user(form)
                     #return HttpResponse("OK")
@@ -215,8 +215,6 @@ class EditStore(View):
         about = request.POST.get("about")
         keywords = request.POST.get("keywords")
         slug = request.POST.get("slug")
-        country = request.POST.get("country")
-        city = request.POST.get("city")
         address = request.POST.get("address")
         facebook = request.POST.get("facebook")
         instagram = request.POST.get("instagram")
@@ -230,8 +228,6 @@ class EditStore(View):
         store.about = about
         store.keywords = keywords
         store.slug = slug
-        store.country = country
-        store.city = city
         store.address = address
         store.facebook = facebook
         store.instagram = instagram

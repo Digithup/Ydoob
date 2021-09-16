@@ -62,12 +62,12 @@
                         <div class="card-header">
                             <div class="row col-md-12">
                                 <div class="col-md3">
-                                    {% for rs in order.orderproduct_set.all %}
+
                                         <td>Payment Stats:
-                                {{ rs.order.payment_status.title }}</td>
+                                {{ object.order.payment_status.title }}</td>
                                         <td>Payment Method:
-                                {{ rs.order.payment_method }}</td>
-                                      {% endfor %}
+                                {{ object.order.payment_method }}</td>
+
                                 <td> {% bootstrap_form form %}</td>
 
 

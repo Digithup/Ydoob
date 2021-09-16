@@ -11,7 +11,7 @@ from django.utils.crypto import get_random_string
 from django.views import View
 
 from catalog.models.models import Products, Variants
-from notification.utilities import create_notification
+from notification.utilities import  create_notification_vendor
 from sales.forms.forms import CheckoutForm
 from sales.models.cart import ShopCart
 
@@ -198,7 +198,7 @@ def Checkout(request):
                     # variant.quantity -= int(rs.quantity)
                     variant.save()
                 # ************ <> *****************
-                create_notification(request, detail.vendor.vendor, 'NewOrder', extra_id=detail.id,extra_info=rs.product)
+                create_notification_vendor(request, detail.vendor.vendor, 'NewOrder', extra_id=detail.id,extra_info=rs.product)
                 notify_customer(data)
                 notify_vendor(detail)
 
