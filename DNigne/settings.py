@@ -107,10 +107,10 @@ OWN_APPS = [
     'reports.apps.ReportsConfig',
     'sales.apps.SalesConfig',
     'vendors.apps.VendorsConfig',
-
     'user.apps.UserConfig',
     'billing',
-    'DeliverySystem'
+    'DeliverySystem',
+    'helper',
 
 ]
 

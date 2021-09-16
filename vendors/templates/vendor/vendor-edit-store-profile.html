@@ -31,7 +31,7 @@
     <!-- breadcrumb End -->
 
     <form class="needs-validation" id="myform" enctype="multipart/form-data"
-          action="{% url 'vendors:EditStore' store.slug %}"
+          action="{% url 'vendors:EditStore' vendor.slug %}"
           method="post">
 
         {% csrf_token %}

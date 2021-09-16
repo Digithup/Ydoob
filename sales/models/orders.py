@@ -24,9 +24,10 @@ payment_status_choice = (
 class PaymentMethods(models.Model):
     method = models.CharField(max_length=255, null=False, blank=False)
     title=models.CharField(max_length=255, null=False, blank=False)
-    count = models.BigIntegerField(null=False, blank=False, default=0)
+    count = models.BigIntegerField(null=True, blank=True, default=0)
+    image=models.ImageField(blank=True, upload_to='images/payment_method/%Y/%m/%d')
     status = models.CharField(max_length=10, choices=STATUS,default='False')
-    slug = models.SlugField(null=False, max_length=128,default='nigne')
+    slug = models.SlugField(null=True,blank=True, max_length=128,default='COD')
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
 
@@ -64,7 +65,6 @@ class Order(models.Model):
     ordered = models.BooleanField(default=False)
     email = models.CharField(max_length=100)
     ip = models.CharField(blank=True, max_length=20)
-
     adminnote = models.CharField(blank=True, max_length=100)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)

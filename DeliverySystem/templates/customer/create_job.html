@@ -35,11 +35,11 @@
             <div class="col-lg-4">
                 <div class="card">
                     <div class="card-header">
-                        JOB SUMMARY
+                        Order SUMMARY
                     </div>
                     <div class="card-body">
                         {% if not job %}
-                            <p>A summary of your job information will appear here</p>
+                            <p>A summary of your Order information will appear here</p>
                         {% else %}
 
                             {% if step > 1 %}
@@ -120,7 +120,7 @@
 
                                     <div class="form-group">
                                         <label for="validationCustomtitle"
-                                               class="col-form-label pt-0"><span>*</span>{% translate 'Title Ar' %}
+                                               class="col-form-label pt-0"><span>*</span>{% translate 'Order Code' %}
                                         </label>
                                         <input class="form-control" id="validationCustomtitle" type="text"
                                                required=""
@@ -128,11 +128,43 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="validationCustomtitle"
-                                               class="col-form-label pt-0"><span>*</span>{% translate 'pro' %}
+                                               class="col-form-label pt-0"><span>*</span>{% translate 'Product' %}
                                         </label>
                                         <input class="form-control" id="validationCustomtitle" type="text"
                                                required=""
                                                value="{{ orderproduct.product.title }}" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="validationCustomtitle"
+                                               class="col-form-label pt-0"><span>*</span>{% translate 'Category' %}
+                                        </label>
+                                        <input class="form-control" id="validationCustomtitle" type="text"
+                                               required=""
+                                               value="{{ orderproduct.product.category }}" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="validationCustomtitle"
+                                               class="col-form-label pt-0"><span>*</span>{% translate 'Size' %}
+                                        </label>
+                                        <input class="form-control" id="validationCustomtitle" type="text"
+                                               required=""
+                                               value="{{ orderproduct.product.weight }} " disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="validationCustomtitle"
+                                               class="col-form-label pt-0"><span>*</span>{% translate 'Quantity' %}
+                                        </label>
+                                        <input class="form-control" id="validationCustomtitle" type="text"
+                                               required=""
+                                               value="{{ orderproduct.quantity }}" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="validationCustomtitle"
+                                               class="col-form-label pt-0"><span>*</span>{% translate 'Billing Amount' %}
+                                        </label>
+                                        <input class="form-control" id="validationCustomtitle" type="text"
+                                               required=""
+                                               value="{{ orderproduct.amount }}" disabled>
                                     </div>
                                 </div>
 
@@ -158,9 +190,9 @@
                                         <div class="col-lg-8">
                                             {% csrf_token %}
                                             {% bootstrap_form step2_form exclude='pickup_lat, pickup_lng' %}
-                                            <input hidden id="pickup_lat" name="pickup_lat"
+                                            <input  id="pickup_lat" name="pickup_lat"
                                                    value="{{ job.pickup_lat }}"/>
-                                            <input hidden id="pickup_lng" name="pickup_lng"
+                                            <input  id="pickup_lng" name="pickup_lng"
                                                    value="{{ job.pickup_lng }}">
                                         </div>
                                         <div class="col-lg-4">

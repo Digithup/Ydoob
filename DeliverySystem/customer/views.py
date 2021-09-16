@@ -191,10 +191,6 @@ def create_order_page(request,code):
         elif request.POST.get('step') == '4':
             if creating_job.price:
                 try:
-
-
-
-
                     creating_job.status = Job.PROCESSING_STATUS
                     creating_job.save()
 

@@ -51,6 +51,8 @@
 
     <!-- Themify icon-->
     <link rel="stylesheet" type="text/css" href="{% static '' %}assets/css/vendors/themify-icons.css">
+ <!-- jsgrid css-->
+    <link rel="stylesheet" type="text/css" href="{% static '' %}assets/css/vendors/jsgrid.css">
 
 <script src="https://code.highcharts.com/highcharts.src.js"></script>
 
@@ -183,11 +185,22 @@
                                         <div class="media">
                                             <div class="media-body">
                                                 <h6 class="mt-0 txt-success"><span><i
-                                                        class="download-color font-success" data-feather="download"></i></span>Download
+                                                        class="download-color font-success" data-feather="shopping-bag"></i></span>Download
                                                     Complete</h6>
                                                 <p class="mb-0">Lorem ipsum dolor sit amet, consectetuer.</p>
                                                 <strong>{{ notification.created_by.email }}</strong> sent you a
                                                 message<br>
+                                                <small>{{ notification.created_at|timesince }} ago</small>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {% elif notification.notification_type == 'NewVendorCreate' %}
+                                    <li>
+                                        <div class="media">
+                                            <div class="media-body">
+                                                <h6 class="mt-0 txt-success"><span><i
+                                                        class="download-color font-success" data-feather="user-plus"></i></span>{%  translate ' New Vendor Created' %}</h6>
+                                                <strong>{{ notification.created_by.email }}</strong> <br>
                                                 <small>{{ notification.created_at|timesince }} ago</small>
                                             </div>
                                         </div>

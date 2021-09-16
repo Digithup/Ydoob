@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.utils.text import slugify
 from requests import request
 
+from localization.models.models import City, Governorates
 from user.forms.forms import UserSignUpForm
 from vendors.models import Vendor
 
@@ -76,17 +77,41 @@ class AlreadyUserSellerRegisterForm(forms.ModelForm):
             return user
 
 
-class StoreAddForm(forms.ModelForm):
+class CreateVendorForm(forms.ModelForm):
     class Meta:
         model = Vendor
         # fields = '__all__'
-        fields = ['title', 'email', 'phone', ]
-        exclude = ['vendor']
-
+        fields = ['title', 'email', 'phone','company','country','governorates','city' ]
         def clean_title(self, title):
             email = slugify(title)
             if Vendor.objects.filter(email=email).exists():
                 raise ValidationError('Vendor with this Email already exists.')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['governorates'].queryset = Governorates.objects.none()
+        self.fields['city'].queryset = City.objects.none()
+
+        if 'country' in self.data:
+            try:
+                country_id = int(self.data.get('country'))
+                self.fields['governorates'].queryset = Governorates.objects.filter(country_id=country_id).order_by('name')
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty City queryset
+        elif self.instance.pk:
+            self.fields['governorates'].queryset = self.instance.country.city_set.order_by('name')
+        if 'governorates' in self.data:
+            try:
+                governorates_id = int(self.data.get('governorates'))
+                self.fields['city'].queryset = City.objects.filter(governorates_id=governorates_id).order_by('name')
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty City queryset
+        elif self.instance.pk:
+            self.fields['city'].queryset = self.instance.country.city_set.order_by('name')
+
+
+
+
 
 
 class StoreAddFormm(forms.ModelForm):
@@ -111,7 +136,7 @@ class StoreAddFormm(forms.ModelForm):
             })
         else:
             def save(self, commit=True):
-                obj = super(StoreAddForm, self).save(False)
+                obj = super(StoreAddFormm, self).save(False)
                 # obj.vendor = User.objects.filter(vendor=)
                 commit and obj.save()
                 return obj

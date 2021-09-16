@@ -205,6 +205,7 @@ def Checkout(request):
             ShopCart.objects.filter(user_id=current_user.id).delete()  # Clear & Delete shopcart
             request.session['cart_items'] = 0
             messages.success(request, "Your Orders has been completed. Thank you ")
+
             # SEnd Email Notification
 
 

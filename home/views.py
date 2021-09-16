@@ -108,7 +108,11 @@ def product_detail(request, id, slug):
     category = Categories.objects.all()
 
     product = Products.objects.get(slug=slug)
-    store=Vendor.objects.get(vendor__id=product.seller.id)
+    try:
+        store = Vendor.objects.get(vendor__id=product.seller.id)
+    except:
+        store = None
+
 
     if defaultlang != currentlang:
         try:
@@ -134,6 +138,7 @@ def product_detail(request, id, slug):
             variant = Variants.objects.get(id=variant_id)  # selected product by click color radio
             colors = Variants.objects.filter(product=product, size_id=variant.size_id)
             images = Variants.objects.filter(product=product, size_id=variant.size_id)
+
             sizes = Variants.objects.raw(
                 'SELECT * FROM  catalog_variants  WHERE product_id=%s GROUP BY size_id', [id])
             query += variant.title + ' Size:' + str(variant.size) + ' Color:' + str(variant.color )
@@ -142,6 +147,7 @@ def product_detail(request, id, slug):
             variants = Variants.objects.filter(product=product)
             colors = Variants.objects.filter(product=product, size_id=variants[0].size_id)
             images = Variants.objects.filter(product=product, size_id=variants[0].size_id)
+
             sizes = Variants.objects.raw(
                 'SELECT * FROM  catalog_variants  WHERE product_id=%s GROUP BY size_id', [id])
             variant = Variants.objects.get(id=variants[0].id)
@@ -154,17 +160,44 @@ def product_detail(request, id, slug):
 def ajaxcolor(request):
     data = {}
     if request.POST.get('action') == 'post':
+
         size_id = request.POST.get('size')
         productid = request.POST.get('productid')
-        colors = Variants.objects.filter(product_id=productid, variant__title=size_id)
+        colors = Variants.objects.filter(product_id=productid, size_id=size_id)
+        images = Variants.objects.filter(product_id=productid, size_id=size_id)
+        prices = Variants.objects.filter(product_id=productid, size_id=size_id)
         context = {
             'size_id': size_id,
             'productid': productid,
             'colors': colors,
+            'images':images,
+            'prices':prices
         }
-        data = {'rendered_table': render_to_string('Product-Page/templates/Products-Page/color_list.html', context=context)}
+        print(request)
+        data = {'rendered_table': render_to_string('Products-Page/color_list.html', context=context)}
         return JsonResponse(data)
     return JsonResponse(data)
+
+def ajaxprice(request):
+    data = {}
+    if request.POST.get('action') == 'post':
+
+        size_id = request.POST.get('size')
+        productid = request.POST.get('productid')
+
+        prices = Variants.objects.filter(product_id=productid, size_id=size_id)
+        context = {
+            'size_id': size_id,
+            'productid': productid,
+
+            'prices':prices
+        }
+        print(request)
+        data = {'rendered_table': render_to_string('Products-Page/price_list.html', context=context)}
+        return JsonResponse(data)
+    return JsonResponse(data)
+
+
 
 
 def to_json(self, objects):

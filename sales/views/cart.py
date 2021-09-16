@@ -92,37 +92,23 @@ class Cart(object):
 #
 #     return JsonResponse('Item was added', safe=False)
 
-@login_required(login_url='/login')  # Check login
-class WishlistView(generic.View):
-    def get(self, request, *args, **kwargs):
-        wish_item = Wishlist.objects.filter(user=request.user)
-        context = {
-            'wish_item': wish_item
-        }
-        return render(self.request, 'wishlist.html', context)
-
-@login_required(login_url='/login')  # Check login
-def addWishlist(request):
-    if request.method == "POST":
-        product_var_id = request.POST.get('product-id')
-        product_var = Products.objects.get(id=product_var_id)
-        try:
-            wish_item = Wishlist.objects.get(user=request.user, product=product_var)
-            if wish_item:
-                wish_item.quantity += 1
-                wish_item.save()
-        except:
-            Wishlist.objects.create(user=request.user, product=product_var)
-        finally:
-            return HttpResponseRedirect(reverse('sales:Wishlist'))
+def index(request):
+    return HttpResponse("Orders Page")
 
 
-def deletefromWishlist(request, id):
-    Wishlist.objects.filter(id=id).delete()
-    messages.success(request, "Your item deleted form Wishlist.")
-    return HttpResponseRedirect(reverse('sales:Wishlist'))
-
-
+def shopcart(request):
+    category = Categories.objects.all()
+    current_user = request.user  # Access User Session information
+    shopcart = ShopCart.objects.filter(user_id=current_user.id)
+    total=0
+    for rs in shopcart:
+        total += rs.product.price * rs.quantity
+    #return HttpResponse(str(total))
+    context={'shopcart': shopcart,
+             'category':category,
+             'total': total,
+             }
+    return render(request,'cart.html',context)
 @login_required(login_url='/login')  # Check login
 def AddToCart(request, id):
     url = request.META.get('HTTP_REFERER')  # get last url
@@ -165,7 +151,7 @@ def AddToCart(request, id):
                 data.quantity = form.cleaned_data['quantity']
 
                 data.save()
-            messages.success(request, "Product added to Shopcart 4",request.POST)
+            messages.success(request, "Product added to Shop Cart ",request.POST)
             print(request.POST)
             return HttpResponseRedirect(url)
         else:
@@ -188,31 +174,48 @@ def AddToCart(request, id):
             data.variant_id = None
             data.store_id = vendorid
             data.save()  #
-        messages.success(request, "Product added to Shopcart3")
+        messages.success(request, "Product added to Shopc Cart")
         return HttpResponseRedirect(url)
-
-
-def index(request):
-    return HttpResponse("Orders Page")
-
-
-def shopcart(request):
-    category = Categories.objects.all()
-    current_user = request.user  # Access User Session information
-    shopcart = ShopCart.objects.filter(user_id=current_user.id)
-    total=0
-    for rs in shopcart:
-        total += rs.product.price * rs.quantity
-    #return HttpResponse(str(total))
-    context={'shopcart': shopcart,
-             'category':category,
-             'total': total,
-             }
-    return render(request,'cart.html',context)
-
 
 @login_required(login_url='/login')  # Check login
 def deletefromcart(request, id):
     ShopCart.objects.filter(id=id).delete()
     messages.success(request, "Your item deleted form Shopcart.")
     return HttpResponseRedirect("/shopcart")
+
+
+
+@login_required(login_url='/login')  # Check login
+class WishlistView(generic.View):
+    def get(self, request, *args, **kwargs):
+        wish_item = Wishlist.objects.filter(user=request.user)
+        context = {
+            'wish_item': wish_item
+        }
+        return render(self.request, 'wishlist.html', context)
+
+@login_required(login_url='/login')  # Check login
+def addWishlist(request):
+    if request.method == "POST":
+        product_var_id = request.POST.get('product-id')
+        product_var = Products.objects.get(id=product_var_id)
+        try:
+            wish_item = Wishlist.objects.get(user=request.user, product=product_var)
+            if wish_item:
+                wish_item.quantity += 1
+                wish_item.save()
+        except:
+            Wishlist.objects.create(user=request.user, product=product_var)
+        finally:
+            return HttpResponseRedirect(reverse('sales:Wishlist'))
+
+
+def deletefromWishlist(request, id):
+    Wishlist.objects.filter(id=id).delete()
+    messages.success(request, "Your item deleted form Wishlist.")
+    return HttpResponseRedirect(reverse('sales:Wishlist'))
+
+
+
+
+

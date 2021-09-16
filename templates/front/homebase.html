@@ -68,23 +68,7 @@
 {% block javascript %}{% endblock %}
 
 
-<script>
-    function toast(message, type) {
-      bootoast.toast({
-        position: 'leftBottom',
-        message,
-        type,
-      });
-    }
 
-    {% if messages %}
-
-    {% for message in messages %}
-    toast('{{ message }}', '{{ message.tags }}');
-    {% endfor %}
-
-    {% endif %}
-  </script>
 </body>
 
 </html>

@@ -20,7 +20,7 @@
 
 <body>
   <nav class="navbar {% if not request.user.is_authenticated %} navbar-expand-lg {% endif%} navbar-light bg-warning">
-    <a class="navbar-brand" href="/">Fast Parcel</a>
+    <a class="navbar-brand" href="/">Ydoob.com</a>
 
     {% if not request.user.is_authenticated %}
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -49,7 +49,7 @@
   {% block content %}{% endblock %}
 
   <footer class="text-center mt-5 mb-5">
-    &copy; PythonYoga.com
+    &copy; Ydoob.com
   </footer>
 
   <script src="https://unpkg.com/bootoast@1.0.1/dist/bootoast.min.js"></script>

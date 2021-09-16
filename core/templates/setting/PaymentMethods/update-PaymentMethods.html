@@ -2,7 +2,7 @@
 
 {% load crispy_forms_filters %}
 {% load static %}
-{% load %}
+
 {% block body %}
     {% load i18n %}
     <div class="page-body">
@@ -34,582 +34,74 @@
             </div>
         </div>
         <!-- Container-fluid Ends-->
+                <!-- Container-fluid Ends-->
+
+
         <!-- Container-fluid starts-->
         <div class="container-fluid">
             <div class="row product-adding">
-                <div class="col-xl-12">
-                    <div class="card">
-                        <form class="needs-validation" enctype="multipart/form-data"
-                              action="{% url 'core:UpdateSetting' setting.slug %}"
-                              method="post">
-                            {% csrf_token %}
+                {% if form_show_errors %}
+                {% endif %}
+                {% if form.errors %}
+                    {% for error_field, error_message in form.errors.items %}
 
-                               <div>
-                                {% if setting_form.errors %}
+                        <div class="alert alert-danger">
+                            {{ error_field|striptags }}: {{ error_message|striptags }}
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
 
-                                    {% for error_field, error_message in setting_form.errors.items %}
+                {% endif %}</div>
 
-                                        <div class="alert alert-danger">
-                                            {{ error_field|striptags }}: {{ error_message|striptags }}
-                                            <strong>{{ error|escape }}</strong>
+            <div class="col-xl-12">
+                <form class="needs-validation add-product-form" novalidate=""
+                      enctype="multipart/form-data" action="{% url 'core:PaymentMethodsCreate'  %}"
+                      method="post">
+                    {% csrf_token %}
+
+                    <div class="card ">
+                        <div class="card-body  ">
+                            <div class="container-fluid">
+                                <div class=" product-adding">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>{% translate "General" %}</h5>
                                         </div>
-                                    {% endfor %}
+                                        <div class="card-body ">
 
-                                {% endif %}
-                                {% if lang_form.errors %}
-                                    {% for error_field, error_message in lang_form.errors.items %}
-
-                                        <div class="alert alert-danger">
-                                            {{ error_field|striptags }}: {{ error_message|striptags }}
-                                            <strong>{{ error|escape }}</strong>
-                                        </div>
-                                    {% endfor %}
-
-                                {% endif %}
-                               {% if tags_form.errors %}
-                                    {% for error_field, error_message in tags_form.errors.items %}
-
-                                        <div class="alert alert-danger">
-                                            {{ error_field|striptags }}: {{ error_message|striptags }}
-                                            <strong>{{ error|escape }}</strong>
-                                        </div>
-                                    {% endfor %}
-
-                                {% endif %}
-
-
-                            </div>
-                            <div class="card-body">
-                                <ul class="nav nav-tabs tab-coupon" id="myTab" role="tablist">
-                                    <li class="nav-item"><a class="nav-link active show" id="general-tab"
-                                                            data-toggle="tab"
-                                                            href="#general" role="tab" aria-controls="general"
-                                                            aria-selected="true" data-original-title=""
-                                                            title="">General</a>
-                                    </li>
-                                    <li class="nav-item"><a class="nav-link" id="data-tabs" data-toggle="tab"
-                                                            href="#data"
-                                                            role="tab" aria-controls="data" aria-selected="false"
-                                                            data-original-title="" title="">Data</a></li>
-                                    <li class="nav-item"><a class="nav-link" id="image-tabs" data-toggle="tab"
-                                                            href="#image"
-                                                            role="tab" aria-controls="image" aria-selected="false"
-                                                            data-original-title="" title="">Image</a></li>
-
-                                    <li class="nav-item"><a class="nav-link" id="seo-tabs" data-toggle="tab" href="#seo"
-                                                            role="tab" aria-controls="seo" aria-selected="false"
-                                                            data-original-title="" title="">SEO</a></li>
-                                </ul>
-                                <div class="tab-content" id="myTabContent">
-                                    <div class="card tab-pane fade active show" id="general" role="tabpanel"
-                                    aria-labelledby="general-tab">
-
-                                        <ul class="nav nav-tabs tab-coupon" id="general-tab" role="tablist" >
-                                            {% for language in index_language %}
-                                                <li class=" nav-item  tab-coupon mx-3  active show " ><a  href="#language{{ language.id }}" data-toggle="tab"><img height="10px" width="10px"
-                                                        src="{{ language.image.url }} " title="{{ language.name }}"/> {{ language.name }}</a></li> {% endfor %}
-                                        </ul>
-                                        <div class=" tab-content ">
-                                            {% for language in  hh %}
-                                                {% if forloop.counter0 %}
-                                                <div class="card tab-pane fade "  id="language{{ language.id }}">
-                                                        <div class="form-group row required">
-                                                        <label class="col-sm-2 control-label"
-                                                               for="input-name{{ language.id }}">{{ language.name.capitalize }}
-                                                            Title</label>
-                                                        <div class="col-sm-10 show">
-                                                            <input type="text"
-                                                                   name="title[]"
-                                                                   {% for rs in setting_data   %}
-                                                                   value="{{ setting.title }}"
-                                                                   {% endfor %}
-                                                                   placeholder="Title"
-                                                                   class="form-control"/>
-                                                        <input type="text"
-                                                                   name="lang[]"
-                                                                   value="{{ language.code }}"
-                                                                   class="form-control"/>
-                                                            {% if error_name %}
-                                                                <div class="text-danger">{{ error_name }}</div>
-                                                            {% endif %}
-                                                        </div>
-
-
-                                                    </div>
-
-
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-2 control-label"
-                                                               for="{{ language.language_id }}">keywords</label>
-                                                        <div class="col-sm-10">
-                                                            <textarea
-                                                                    name="keywords[]"
-                                                                    placeholder="keywords"
-                                                                    class="form-control">{{ language.id }}</textarea>
-                                                        </div>
-                                                         {% if error_name %}
-                                                                <div class="text-danger">{{ error_name }}</div>
-                                                            {% endif %}
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-2 control-label"
-                                                               for="input-meta-title{{ language.language_id }}">company</label>
-                                                        <div class="col-sm-10">
-                                                            <input type="text"
-                                                                   name="company[]"
-                                                                   value="{{ language.name }}"
-                                                                   placeholder="{{ entry_meta_title }}"
-                                                                   id="input-meta-title{{ language.language_id }}"
-                                                                   class="form-control"/>
-                                                            {% if error_meta_title %}
-                                                                <div class="text-danger">{{ error_meta_title }}</div>
-                                                            {% endif %}
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-2 control-label"
-                                                               for="{{ language.language_id }}">about</label>
-                                                        <div class="col-sm-10">
-                                                            <textarea
-                                                                    name="about[]"
-                                                                    rows="5" placeholder="{{ entry_meta_description }}"
-                                                                    id="input-meta-description{{ language.language_id }}"
-                                                                    class="form-control">{{ language.id }}</textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-2 control-label"
-                                                               for="{{ language.language_id }}">address</label>
-                                                        <div class="col-sm-10">
-                                                            <textarea
-                                                                    name="address[]"
-                                                                    rows="5" placeholder="{{ entry_meta_keyword }}"
-                                                                    id="input-meta-keyword{{ language.language_id }}"
-                                                                    class="form-control">{{ language.id }}</textarea>
-                                                        </div>
-                                                    </div>
+                                            <div class="digital-add needs-validation ">
+                                                <div class="form-group row">
+                                                    <label for="validationCustom0"
+                                                           class="col-md-4"><span></span></label>
+                                                    {{ form|crispy }}
                                                 </div>
-                                                {% else %}
-                                                <div class="card tab-pane fade  active show  "  id="language{{ language.id }}">
-                                                        <div class="form-group row required">
-                                                        <label class="col-sm-2 control-label"
-                                                               for="input-name{{ language.id }}">{{ language.name.capitalize }}
-                                                            Title</label>
-                                                        <div class="col-sm-10 show">
-                                                            <input type="text"
-                                                                   name="title[]"
-                                                                   {% for rs in setting_data   %}
-                                                                   value="{{ rs.title }}"
-                                                                   {% endfor %}
-                                                                   placeholder="Title"
-                                                                   class="form-control"/>
-                                                        <input type="text"
-                                                                   name="lang[]"
-                                                                   value="{{ language.code }}"
-                                                                   class="form-control"/>
-                                                            {% if error_name %}
-                                                                <div class="text-danger">{{ error_name }}</div>
-                                                            {% endif %}
-                                                        </div>
 
 
-                                                    </div>
 
 
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-2 control-label"
-                                                               for="{{ language.language_id }}">keywords</label>
-                                                        <div class="col-sm-10">
-                                                            <textarea
-                                                                    name="keywords[]"
-                                                                    placeholder="keywords"
-                                                                    class="form-control">{{ language.id }}</textarea>
-                                                        </div>
-                                                         {% if error_name %}
-                                                                <div class="text-danger">{{ error_name }}</div>
-                                                            {% endif %}
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-2 control-label"
-                                                               for="input-meta-title{{ language.language_id }}">company</label>
-                                                        <div class="col-sm-10">
-                                                            <input type="text"
-                                                                   name="company[]"
-                                                                   value="{{ language.name }}"
-                                                                   placeholder="{{ entry_meta_title }}"
-                                                                   id="input-meta-title{{ language.language_id }}"
-                                                                   class="form-control"/>
-                                                            {% if error_meta_title %}
-                                                                <div class="text-danger">{{ error_meta_title }}</div>
-                                                            {% endif %}
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-2 control-label"
-                                                               for="{{ language.language_id }}">about</label>
-                                                        <div class="col-sm-10">
-                                                            <textarea
-                                                                    name="about[]"
-                                                                    rows="5" placeholder="{{ entry_meta_description }}"
-                                                                    id="input-meta-description{{ language.language_id }}"
-                                                                    class="form-control">{{ language.id }}</textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-2 control-label"
-                                                               for="{{ language.language_id }}">address</label>
-                                                        <div class="col-sm-10">
-                                                            <textarea
-                                                                    name="address[]"
-                                                                    rows="5" placeholder="{{ entry_meta_keyword }}"
-                                                                    id="input-meta-keyword{{ language.language_id }}"
-                                                                    class="form-control">{{ language.id }}</textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="data" role="tabpanel" aria-labelledby="data-tabs">
-                                        <h4>Data</h4>
-                                        <div class="form-group mb-3 row">
-                                            <label for="validationCustom02" class="col-xl-3 col-sm-4 mb-0">phone
-                                                :</label>
-                                            <input class="form-control col-xl-8 col-sm-7" id="validationCustom02"
-                                                   name="phone" value="5" type="text" required="">
-                                            <div class="valid-feedback">Looks good!</div>
-                                             {% if error_name %}
-                                                                <div class="text-danger">{{ error_name }}</div>
-                                                            {% endif %}
-                                        </div>
-                                        <div class="form-group mb-3 row">
-                                            <label for="validationCustom02" class="col-xl-3 col-sm-4 mb-0">email
-                                                :</label>
-                                            <input class="form-control col-xl-8 col-sm-7" id="validationCustom02"
-                                                   name="email" value="nigne@gmail.com" type="text" required="">
-                                            <div class="valid-feedback">Looks good!</div>
-                                        </div>
-
-                                        <div class="form-group mb-3 row">
-                                            <label for="validationCustom02" class="col-xl-3 col-sm-4 mb-0">facebook
-                                                :</label>
-                                            <input class="form-control col-xl-8 col-sm-7" id="validationCustom02"
-                                                   name="facebook" value="https://www.facebook.com/" type="text" required="">
-                                            <div class="valid-feedback">Looks good!</div>
-                                        </div>
-                                        <div class="form-group mb-3 row">
-                                            <label for="validationCustom02" class="col-xl-3 col-sm-4 mb-0">instagram
-                                                :</label>
-                                            <input class="form-control col-xl-8 col-sm-7" id="validationCustom02"
-                                                   name="instagram" value="https://www.facebook.com/" type="text" required="">
-                                            <div class="valid-feedback">Looks good!</div>
-                                        </div>
-                                        <div class="form-group mb-3 row">
-                                            <label for="validationCustom02" class="col-xl-3 col-sm-4 mb-0">twitter
-                                                :</label>
-                                            <input class="form-control col-xl-8 col-sm-7" id="validationCustom02"
-                                                   name="twitter" value="https://www.facebook.com/" type="text" required="">
-                                            <div class="valid-feedback">Looks good!</div>
-                                        </div>
-                                        <div class="form-group mb-3 row">
-                                            <label for="validationCustom02" class="col-xl-3 col-sm-4 mb-0">youtube
-                                                :</label>
-                                            <input class="form-control col-xl-8 col-sm-7" id="validationCustom02"
-                                                   name="youtube" value="https://www.facebook.com/" type="text" required="">
-                                            <div class="valid-feedback">Looks good!</div>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="tab-pane fade" id="image" role="tabpanel" aria-labelledby="image-tabs">
-                                        {{ formset.management_form }}
-                                    <div class="add-product">
-                                        <div class="row media_div_row ">
-                                            <div class="col-xl-4 xl-50 col-sm-12 col-12">
-                                                <img alt=""
-                                                     class="img-fluid image_zoom_1 blur-up lazyloaded img_preview">
                                             </div>
-                                            <div class="col-xl-3 xl-50 col-sm-6 col-3">
-                                                <ul class="file-upload-product">
-
-                                                    <li>
-                                                        <div class="box-input-file"><input class="upload select_media"
-                                                                                           type="file"
-                                                                                           name="image">
-                                                            <i class="fa fa-plus "><select hidden name="media_type[]"
-                                                                                           class="form-control media_type">
-                                                                <option value="1">Image</option>
-                                                                <option value="2">Video</option>
-                                                            </select></i></div>
-                                                    </li>
-
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    </div>
-                                     <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo-tabs">
-
-                                    <h4>{% translate 'SEO' %}</h4>
-
-                                    <div class="form-group  row">
-                                        <label for="validationCustom02"
-                                               class="col-md-4">{% translate 'Slug' %}
-                                        </label>
-                                        <input class=" form-control col-md-6" id="slug"
-                                               name="slug" type="text" required="">
-                                        <div class="valid-feedback">Looks good!</div>
-                                    </div>
-
-
-                                    <div class="form-group row ">
-                                        <label for="validationCustom0"
-                                               class=" col-md-4"><span>*</span>
-                                            {% translate 'Meta Tag Title' %}</label>
-                                        <input class="form-control col-md-6"
-                                               id="validationCustom0" type="text"
-                                               name="meta_title" value="5" required="">
 
 
                                     </div>
-
-                                    <div class="form-group row ">
-                                        <label for="validationCustom0"
-                                               class=" col-md-4"><span>*</span>
-                                            {% translate 'Meta Tag Description' %}</label>
-                                        <input class="form-control col-md-6"
-                                               id="validationCustom0" type="text"
-                                               name="meta_description" value="5" required="">
-
-
-                                    </div>
-
-                                    <div class="form-group row ">
-                                        <label for="validationCustom0"
-                                               class=" col-md-4"><span>*</span>
-                                            {% translate 'Meta Tag Keywords' %}</label>
-                                        <input class="form-control col-md-6"
-                                               id="validationCustom0" type="text"
-                                               name="meta_keywords" value="5" required="">
-
-
-                                    </div>
-
-                                    <div class="form-group tagline  row ">
-
-                                        <label for="validationCustom0"
-                                               class=" col-md-4"><span>*</span>
-                                            {% translate 'Site Tags' %}</label>
-                                        <input class="tag"
-                                               id="validationCustom0" type="text"
-                                               name="tags" value="5" data-role="tagsinput"
-                                               required="required">
-                                    </div>
-
-                                    <div class="form-group row">
-                                            <label for="validationCustom0"
-                                                   class=" col-md-4"><span>*</span>
-                                                {% translate 'status' %} </label>
-                                            <select name="status"
-                                                    class="custom-select  col-md-6">
-                                                {% for value, text in setting_form.status.field.choices %}
-                                                    <option value="{{ value }}">{{ text }}</option>
-                                                {% endfor %}
-                                            </select>
-
-                                    </div></div>
-
-
-                                    <div class="offset-xl-3 offset-sm-4">
-                                <button type="submit" class="btn btn-primary  ">Add</button>
-                                <a href="{% url 'core:AdminSetting' %}">
-                                    <button type="button" class="btn btn-light" data-toggle="modal"
-                                            data-original-title="test" data-target="#exampleModal">Discard
-                                    </button>
-                                </a>
-
-                            </div>
                                 </div>
+                                <div class="card-header">
+                                    <div class="form-group mb-0 align-content-end">
+                                        <div class="product-buttons text-center">
+                                            <button type="submit" class="btn btn-primary">Add</button>
+                                            <button type="button" class="btn btn-light">Discard</button>
+                                        </div>
+                                    </div>
+                </form>
 
-                            </div>
-                        </form>
-                    </div>
 
-                </div>
             </div>
-            <!-- Container-fluid Ends-->
         </div>
     </div>
+
     <!-- Container-fluid Ends-->
 
+
 {% endblock %}
-{% block custom_js %}
 
-    <script src="//cdn.tiny.cloud/1/u6oa5pnpaa1vxho1md7uk4zmq2ai7xuf5o5wfgyrc131vpj6/tinymce/5/tinymce.min.js"
-            referrerpolicy="origin"></script>
-    <script>
-        tinymce.init({
-            selector: "textarea#long_desc",
-            height: 300,
-            plugins: [
-                "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
-                "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime nonbreaking",
-                "save table contextmenu directionality emoticons template paste textcolor",
-            ],
-            images_upload_url: "{% url 'core:file_upload' %}",
-            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",
-            style_formats: [
-                {title: "Bold text", inline: "b"},
-                {title: "Red text", inline: "span", styles: {color: "#ff0000"}},
-                {title: "Red header", block: "h1", styles: {color: "#ff0000"}},
-                {title: "Example 1", inline: "span", classes: "example1"},
-                {title: "Example 2", inline: "span", classes: "example2"},
-                {title: "Table styles"},
-                {title: "Table row 1", selector: "tr", classes: "tablerow1"},
-            ],
-            automatic_uploads: true,
-            file_picker_types: 'image',
-            file_picker_callback: function (cb, value, meta) {
-                var input = document.createElement('input');
-                input.setAttribute('type', 'file');
-                input.setAttribute('accept', 'image/*');
-
-                /*
-                Note: In modern browsers input[type="file"] is functional without
-                even adding it to the DOM, but that might not be the case in some older
-                or quirky browsers like IE, so you might want to add it to the DOM
-                just in case, and visually hide it. And do not forget do remove it
-                once you do not need it anymore.
-                */
-
-                input.onchange = function () {
-                    var file = this.files[0];
-
-                    var reader = new FileReader();
-                    reader.onload = function () {
-                        /*
-                        Note: Now we need to register the blob in TinyMCEs image blob
-                        registry. In the next release this part hopefully won't be
-                        necessary, as we are looking to handle it internally.
-                        */
-                        var id = 'blobid' + (new Date()).getTime();
-                        var blobCache = tinymce.activeEditor.editorUpload.blobCache;
-                        var base64 = reader.result.split(',')[1];
-                        var blobInfo = blobCache.create(id, file, base64);
-                        blobCache.add(blobInfo);
-
-                        /* call the callback and populate the Title field with the file name */
-                        cb(blobInfo.blobUri(), {title: file.name});
-                    };
-                    reader.readAsDataURL(file);
-                };
-
-                input.click();
-            },
-        });
-    </script>
-    <script>
-        $(".add_media").click(function () {
-            var media_row = $(".first_media").clone();
-            media_row.removeClass("first_media");
-            media_row.replaceAll("src", "")
-            media_row.find(".select_media").val("");
-            media_row.find(".img_preview").attr("src", "").css({"border": "none"}).css({"border-radius": "0px"}).hide();
-            media_row.find(".video_preview").attr("src", "").css({"border": "none"}).css({"border-radius": "0px"}).hide();
-            $(".media_div").append(media_row);
-        });
-        $(".remove_media").click(function () {
-            if ($(".media_div").find(".media_div_row").length > 1) {
-                $(".media_div").children().last().remove();
-            }
-        });
-
-        $(".add_details").click(function () {
-            var details_row = $(".first_details").clone();
-            details_row.removeClass("first_details");
-            details_row.find(".title_title").val("");
-            details_row.find(".title_details").val("");
-            $(".details_div").append(details_row);
-        });
-        $(".remove_details").click(function () {
-            if ($(".details_div").find(".details_div_row").length > 1) {
-                $(".details_div").children().last().remove();
-            }
-        });
-
-        $(".add_about").click(function () {
-            var about_row = $(".first_about").clone();
-            about_row.removeClass("first_about");
-            about_row.find(".about_title").val("");
-            $(".about_div").append(about_row);
-        });
-        $(".remove_about").click(function () {
-            if ($(".about_div").find(".about_div_row").length > 1) {
-                $(".about_div").children().last().remove();
-            }
-        });
-
-        $(document).on("change", ".select_media", function () {
-            var media_type = $(this).parents(".media_div_row").find(".media_type").val();
-            var img_preview = $(this).parents(".media_div_row").find(".img_preview");
-            var vid_preview = $(this).parents(".media_div_row").find(".video_preview");
-            showPreviewMedia(this, media_type, img_preview, vid_preview);
-        });
-
-        function showPreviewMedia(input, media_type, img_preview, video_preview) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    if (media_type == "1") {
-                        img_preview.attr("src", e.target.result);
-                        img_preview.show();
-                        img_preview.css({"border": "5px solid orange"});
-                        img_preview.css({"border-radius": "10px"});
-                    }
-                    if (media_type == "2") {
-                        video_preview.show();
-                        video_preview.css({"border": "5px solid orange"});
-                        video_preview.css({"border-radius": "10px"});
-                        video_preview.attr("src", e.target.result);
-                        video_preview.load();
-                        video_preview.play();
-
-                    }
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-
-        $(".submit_btn").click(function () {
-            var form = new FormData($("#myform")[0]);
-            form.append("long_desc", tinyMCE.activeEditor.getContent());
-
-            //AJAX CODE
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function () {
-                if (xhr.status == 200) {
-                    console.log(xhr.responseText);
-                }
-            }
-            xhr.open("POST", "{% url 'core:AdminSiteAddSetting' %}", true);
-            $("#progressbar").show();
-
-            //UPDATING PROGRESS BAR
-            xhr.upload.addEventListener("progress", function (ev) {
-                if (ev.lengthComputable) {
-                    var percentage = (ev.loaded / ev.total * 100 | 0);
-                    $("#progressbar").css({"width": "" + percentage + "%"}).text("Uploading .." + percentage + "%");
-                    console.log(percentage);
-                }
-            });
-
-            xhr.send(form);
-        })
-
-    </script>
-    <script src="//bootstrap-tagsinput.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
-{% endblock custom_js %}
 {% block foot %} {% include 'admin/footer.html' %}  {% endblock %}
 {% block js %}{% include 'admin/js.html' %}{% endblock %}

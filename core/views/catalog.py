@@ -281,7 +281,6 @@ def ProductAdd(request):  # sourcery skip: aug-assign, convert-to-enumerate
             slug = product_form.cleaned_data['slug']
             media_content_list = request.FILES.getlist("image")
             category = Categories.objects.get(title=category)
-
             seller = User.objects.get(id=seller)
             product_form = None
             if not product_form:
@@ -1111,7 +1110,7 @@ def AddColor(request):  # sourcery skip: aug-assign, convert-to-enumerate
                 messages.success(request,
                                  "Yeeew, check it out on the home page!")
 
-                return HttpResponseRedirect("/admin/Variant/")
+                return HttpResponseRedirect(reverse_lazy('core:Variant'))
 
             else:
                 print("Form invalid, see below error msg")
@@ -1137,7 +1136,7 @@ class EditColor(UpdateView):
     model = Color
     fields = '__all__'
     template_name = 'catalog/variant/color/edit-color.html'
-    success_url = reverse_lazy('core:Color')
+    success_url = reverse_lazy('core:Variant')
 
     @method_decorator(allowed_users(allowed_roles=['admin']))
     def dispatch(self, *args, **kwargs):
@@ -1147,7 +1146,7 @@ class EditColor(UpdateView):
 class DeleteColor(DeleteView):
     model = Color
     fields = '__all__'
-    success_url = reverse_lazy('core:Color')
+    success_url = reverse_lazy('core:Variant')
 
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
@@ -1210,7 +1209,7 @@ def AddSize(request):  # sourcery skip: aug-assign, convert-to-enumerate
                 messages.success(request,
                                  "Yeeew, check it out on the home page!")
 
-                return HttpResponseRedirect("/admin/Variant/")
+                return HttpResponseRedirect(reverse_lazy('core:Variant'))
 
             else:
                 print("Form invalid, see below error msg")
@@ -1234,7 +1233,7 @@ class EditSize(UpdateView):
     model = Color
     fields = '__all__'
     template_name = 'catalog/variant/size/edit-size.html'
-    success_url = reverse_lazy('core:Size')
+    success_url = reverse_lazy('core:Variant')
 
     @method_decorator(allowed_users(allowed_roles=['admin']))
     def dispatch(self, *args, **kwargs):

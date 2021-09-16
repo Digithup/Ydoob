@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+        <title>Interiorshop</title>
+
+        <style type="text/css">
+            html {
+                width: 100%;
+            }
+
+            body {
+                width: 100%;
+                font-family: Arial;
+                font-size: 14px;
+                background-color: #fff;
+                color: #333;
+            }
+        </style>
+    </head>
+
+    <body>
+        <table width="100%" cellspacing="0" cellpadding="0">
+            <tr>
+                <td><h1>New order</h1></td>
+            </tr>
+
+            <tr>
+                <td>
+                    <h3>Details</h3>
+
+                    <b>Name:</b> {{ data.user.first_name }} {{ data.user.last_name }}<br>
+                    <b>Address:</b> {{ data.address.address_title }}<br>
+                    <b>Governorate and City:</b> {{data.address.governorate }} {{ data.address.city }}<br>
+                    <b>E-mail:</b> {{ data.email }}<br>
+                    <b>Phone:</b> {{ data.address.phone }}<br>
+                    <b>p1:</b> {{ order.product.title }}<br>
+
+                </td>
+            </tr>
+
+            <tr>
+               <td>
+                    <h3>Products</h3>
+
+                    <table width="100%" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td><b>Product</b></td>
+                            <td><b>Price</b></td>
+                            <td><b>Quantity</b></td>
+                            <td><b>Total</b></td>
+                            <td><b>Vendor</b></td>
+                        </tr>
+
+                        {% for item in data.orderproduct_set.all %}
+                              {% if item.vendor == item.vendor %}
+
+                                <tr>
+                                    <td>{{ item.product.title }}</td>
+                                    <td>${{ item.orderprice }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                 <td>{{ item.amount }}</td>
+                                 <td>{{ item.vendor }}</td>
+
+                                </tr>
+                            {% endif %}
+
+                        {% endfor %}
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

@@ -1,6 +1,9 @@
 from django.urls import path
 
-from core.reports.catalog import product_export_data
+
+from core.reports.catalog.catalog import  products_export_data, \
+    products_import_data
+from core.reports.catalog.varaint import colors_import_data, colors_export_data, size_export_data, size_import_data
 from core.reports.localization import country_export_data, country_import_data, governorates_export_data, \
     governorates_import_data, city_export_data, city_import_data, area_export_data, area_import_data
 from core.tests import AddSetting, UpdateSetting
@@ -84,7 +87,9 @@ urlpatterns = [
          name="Products_add_stocks"),
     path('products/file_upload', file_upload, name="file_upload"),
 
-    path('products/report/', product_export_data, name="ProductsReport"),
+
+    path('products/report/export/', products_export_data, name="ProductsReportExport"),
+    path('products/report/imprt/', products_import_data, name="ProductsReportImport"),
 
     ########## Filters  #########
     path('FiltersGroup/', FiltersGroupListView.as_view(), name='FiltersGroup'),
@@ -119,15 +124,20 @@ urlpatterns = [
 
     ########## Variant #########
     path('Variant/', VariantListView.as_view(), name='Variant'),
-    path('Color/', ColorListView.as_view(), name='Color'),
-    path('Color/edit/<int:pk>/', EditColor.as_view(), name='EditColor'),
-    path('Color/add/', AddColor, name='AddColor'),
-    path('Color/delete/<int:pk>/', DeleteColor.as_view(), name='DeleteColor'),
+    path('color/', ColorListView.as_view(), name='Color'),
+    path('color/edit/<int:pk>/', EditColor.as_view(), name='EditColor'),
+    path('color/add/', AddColor, name='AddColor'),
+    path('color/delete/<int:pk>/', DeleteColor.as_view(), name='DeleteColor'),
+    path('color/report/export/', colors_export_data, name="ColorsReportExport"),
+    path('color/report/imprt/', colors_import_data, name="ColorsReportImport"),
 
-    path('Size/', SizeListView.as_view(), name='Size'),
-    path('Size/edit/<int:pk>/', EditSize.as_view(), name='EditSize'),
-    path('Size/add/', AddSize, name='AddSize'),
-    path('Size/delete/<int:pk>/', DeleteSize.as_view(), name='DeleteSize'),
+    path('size/', SizeListView.as_view(), name='Size'),
+    path('size/edit/<int:pk>/', EditSize.as_view(), name='EditSize'),
+    path('size/add/', AddSize, name='AddSize'),
+    path('size/delete/<int:pk>/', DeleteSize.as_view(), name='DeleteSize'),
+    path('size/report/export/', size_export_data, name="SizeReportExport"),
+    path('size/report/imprt/', size_import_data, name="SizeReportImport"),
+
 
     ########## Manufacturer   #########
     path('manufacture/', ManufacturerListView.as_view(), name='Manufacturers'),

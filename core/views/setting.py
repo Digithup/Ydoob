@@ -211,7 +211,6 @@ class AdminSiteUpdate(UpdateView):
 
 class PaymentMethodsList(ListView):
     model = PaymentMethods
-
     template_name = 'setting/PaymentMethods/admin-PaymentMethods.html'
 
 
@@ -229,7 +228,7 @@ class PaymentMethodsCreate(CreateView):
 
 class PaymentMethodsUpdate(UpdateView):
     model=PaymentMethods
-    form_class=SiteForm
+    fields = '__all__'
     template_name = 'setting/PaymentMethods/update-PaymentMethods.html'
     success_url = reverse_lazy('core:PaymentMethodsList')
 

@@ -24,6 +24,7 @@ from django.urls import path, include
 import notification
 from DeliverySystem import consumers
 from home.tests import ajaxcolortest,  ajaxpricetest
+from home.views import ajaxprice, ajaxcolor
 from localization import views
 
 
@@ -48,18 +49,12 @@ urlpatterns += i18n_patterns(
     path('', include('catalog.urls'), name='catalog'),
     path('', include('sales.urls'), name='sales'),
     path('', include('vendors.urls'), name='vendors'),
+    path('', include('helper.urls'), name='helper'),
 
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('api-auth/', include('rest_framework.urls')),
-    path('ajaxcolor/', ajaxcolortest, name='ajaxcolor'),
-    path('ajaxprice/', ajaxpricetest, name='ajaxprice'),
-
-
-    # path('search/', SearchView(), name='search'),
-    # path('search_auto/', search_auto, name='search_auto'),
-
-
-
+    path('ajaxcolor/', ajaxcolor, name='ajaxcolor'),
+    path('ajaxprice/', ajaxprice, name='ajaxprice'),
     # prefix_default_language=True,
 
 )

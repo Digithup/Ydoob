@@ -1,11 +1,8 @@
 {% extends 'admin/adminbase.html' %}
 {% load static %}
 {% load i18n %}
+
 {% block body %}
-    {% load i18n %}
-
-
-
 
     <div class="page-body">
 
@@ -15,168 +12,307 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="page-header-left">
-                            <h3>{% translate " Attribute" %}
-                                <small>
-                                    <ol class="breadcrumb pull-left">
-                                        <li class="breadcrumb-item"><a href="{% url 'core:AdminIndex' %}"><i
-                                                data-feather="home"></i></a></li>
-
-                                        <li class="breadcrumb-item active">{% translate 'Varaint' %} </li>
-                                    </ol>
-                                </small>
+                            <h3>Variant
+                                <small>Multikart Admin panel</small>
                             </h3>
-
-                            </ol>
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="card-tools pull-right ">
-                            <a href="{% url 'core:AddColor' %}">
-                                <button type="button" class="btn btn-primary" data-toggle="modal"
-                                        data-original-title="test" data-target="#exampleModal">Add Color
-                                </button>
-                            </a>
-                            <a href="{% url 'core:AddSize' %}">
-                                <button type="button" class="btn btn-primary" data-toggle="modal"
-                                        data-original-title="test" data-target="#exampleModal">Add Size
-                                </button>
-                            </a>
-
-                        </div>
-
+                        <ol class="breadcrumb pull-right">
+                            <li class="breadcrumb-item"><a href="index.html"><i data-feather="home"></i></a></li>
+                            <li class="breadcrumb-item active">Category</li>
+                        </ol>
                     </div>
-
                 </div>
             </div>
         </div>
         <!-- Container-fluid Ends-->
 
-        <div class="card-body p-0 ">
-            <table class="table table-striped projects">
-                <thead>
-                <tr>
-                    <th style="width: 1%">
-                        #
-                    </th>
-                    <th style="width: 20%">
-                        Varaint
-                    </th>
-                    <th style="width: 20%">
-                        Variant Group
-                    </th>
+        <!-- Container-fluid starts-->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Products Category</h5>
 
-                    <th style="width: 19%">
-                        Sort Order
-                    </th>
-                    <th style="width: 40%">
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for rs in size %}
-                    <tr>
-                        <td>
-                            {{ forloop.counter }}
-                        </td>
-                        <td>
+                        </div>
+                        <div class="card-body">
 
-                            <a>
+                            <div class="btn-popup pull-right">
+                                <button type="button" class="btn btn-primary " data-bs-toggle="modal"
+                                        data-original-title="test" data-bs-target="#exampleModal">Imprt/Export
+                                </button>
+                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title f-w-600" id="exampleModalLabel">Import /
+                                                    Export</h5>
+                                                <button class="btn-close" type="button" data-bs-dismiss="modal"
+                                                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                                            </div>
+                                            <div class="modal-body ">
+                                                <div id="Color" >
+                                                    <form method="post" action="{% url 'core:ColorsReportExport' %}"
+                                                      enctype="multipart/form-data">
+                                                    {% csrf_token %}
 
-                                   {{ rs.name }}
+                                                    <div class="row col-12">
+                                                        <div class="col-md-4">
+                                                            <label > colors! Export.</label>
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <select class="form-control  col-md" name="file-format"
+                                                                    id="exampleFormControlSelect1"
+                                                                    title="Country! Export.">
+                                                                <option selected>Choose format...</option>
+                                                                <option>CSV</option>
+                                                                <option>JSON</option>
+                                                                <option>XLS (Excel)</option>
+                                                            </select>
+
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <button class="btn btn-primary col-md" type="submit">
+                                                                Export
+                                                            </button>
+                                                        </div>
 
 
+                                                    </div>
 
-                            </a>
-                            <br/>
-                            <small>
 
-                            </small>
-                        </td>
-                        <td>
-                            <a>
-                                {{ rs.group.title }}
+                                                </form>
+                                                 <br>
+                                                <form method="post" action="{% url 'core:ColorsReportImport' %}"
+                                                      enctype="multipart/form-data">
+                                                    {% csrf_token %}
 
-                            </a>
+                                                      <div class="row col-12">
+                                                          <div class="col-md-4">
+                                                            <label > colors! Import.</label>
+                                                        </div>
 
-                            </ul>
-                        </td>
+                                                        <div class="col-md-4">
+                                                             <input type="file" name="colors-file">
+                                                        </div>
 
-                        <td class="project-state">
-                            <span class="badge badge-success">{{ rs.sort_order }}</span>
-                        </td>
-                        <td class="project-actions text-right">
+                                                        <div class="col-md-4">
+                                                            <button class="btn btn-primary col-md" type="submit">
+                                                                Import
+                                                            </button>
+                                                        </div>
 
-                            <a class="btn btn-info btn-sm" href="{% url 'core:EditSize' rs.id %}">
-                                <i class="fas fa-pencil-alt">
-                                </i>
-                                Edit
-                            </a>
-                            <a href="{% url 'core:DeleteSize' rs.id  %}"
-                                                   onclick="return confirm('Are you sure you want to delete {{ rs.name }}?')">
-                                                <button class="btn" type="button" data-original-title="" title=""><i
-                                                        class="ti-trash"></i></button>
+
+                                                    </div>
+                                                </form>
+                                                </div>
+                                                <hr>
+
+                                                <div id="Size" >
+                                                    <form method="post" action="{% url 'core:SizeReportExport' %}"
+                                                      enctype="multipart/form-data">
+                                                    {% csrf_token %}
+
+                                                    <div class="row col-12">
+                                                        <div class="col-md-4">
+                                                            <label > Size! Export.</label>
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <select class="form-control  col-md" name="file-format"
+                                                                    id="exampleFormControlSelect1"
+                                                                    title="Country! Export.">
+                                                                <option selected>Choose format...</option>
+                                                                <option>CSV</option>
+                                                                <option>JSON</option>
+                                                                <option>XLS (Excel)</option>
+                                                            </select>
+
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <button class="btn btn-primary col-md" type="submit">
+                                                                Export
+                                                            </button>
+                                                        </div>
+
+
+                                                    </div>
+
+
+                                                </form>
+                                                 <br>
+                                                <form method="post" action="{% url 'core:SizeReportImport' %}"
+                                                      enctype="multipart/form-data">
+                                                    {% csrf_token %}
+
+                                                      <div class="row col-12">
+                                                          <div class="col-md-4">
+                                                            <label > Size! Import.</label>
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                             <input type="file" name="colors-file">
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <button class="btn btn-primary col-md" type="submit">
+                                                                Import
+                                                            </button>
+                                                        </div>
+
+
+                                                    </div>
+                                                </form>
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+
+                                                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">
+                                                    Close
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="{% url 'core:AddColor' %}">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                            data-original-title="test" data-target="#exampleModal">+ Color
+                                    </button>
+                                </a>
+                                <a href="{% url 'core:AddSize' %}">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                            data-original-title="test" data-target="#exampleModal">+ Size
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="card-body p-0 ">
+                                <table class="table category-table">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 1%">
+                                            #
+                                        </th>
+                                        <th style="width: 20%">
+                                            Varaint
+                                        </th>
+                                        <th style="width: 20%">
+                                            Variant Group
+                                        </th>
+
+                                        <th style="width: 20%">
+                                            Sort Order
+                                        </th>
+                                        <th style="width: 20%">
+                                            Edit/Delte
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for rs in size %}
+                                        <tr>
+                                            <td>
+                                                {{ forloop.counter }}
+                                            </td>
+                                            <td>
+                                                <a>
+                                                    {{ rs.name }}
+
                                                 </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-                 {% for rs in object_list %}
-                    <tr>
-                        <td>
-                            {{ forloop.counter }}
-                        </td>
-                        <td>
+                                                <br/>
+                                                <small>
 
-                            <a>
+                                                </small>
+                                            </td>
+                                            <td>
+                                                <a>
+                                                    {{ rs.group.title }}
 
-                                    <input disabled type="color" id="head" name="head"
-                                           value="{{ rs.code }}"><span>{{ rs.name }}</span>
-
-
-
-                            </a>
-                            <br/>
-                            <small>
-
-                            </small>
-                        </td>
-                        <td>
-                            <a>
-                                {{ rs.group.title }}
-
-                            </a>
-
-                            </ul>
-                        </td>
-
-                        <td class="project-state">
-                            <span class="badge badge-success">{{ rs.sort_order }}</span>
-                        </td>
-                        <td class="project-actions text-right">
-
-                            <a class="btn btn-info btn-sm" href="{% url 'core:EditColor' rs.id %}">
-                                <i class="fas fa-pencil-alt">
-                                </i>
-                                Edit
-                            </a>
-                            <a href="{% url 'core:DeleteColor' rs.id  %}"
-                                                   onclick="return confirm('Are you sure you want to delete {{ rs.name }}?')">
-                                                <button class="btn" type="button" data-original-title="" title=""><i
-                                                        class="ti-trash"></i></button>
                                                 </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            {% if is_paginated %}
-                {% include "_pagination.html" %}
-            {% endif %}
+
+                                                </ul>
+                                            </td>
+
+                                            <td class="project-state">
+                                                <span class="badge badge-success">{{ rs.sort_order }}</span>
+                                            </td>
+                                            <td class="project-actions text-right">
+
+                                                <a class="btn btn-info btn-sm" href="{% url 'core:EditSize' rs.id %}">
+                                                    <i class="fas fa-pencil-alt">
+                                                    </i>
+                                                    Edit
+                                                </a>
+                                                <a href="{% url 'core:DeleteSize' rs.id %}"
+                                                   onclick="return confirm('Are you sure you want to delete {{ rs.name }}?')">
+                                                    <button class="btn" type="button" data-original-title="" title=""><i
+                                                            class="ti-trash"></i></button>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    {% for rs in object_list %}
+                                        <tr>
+                                            <td>
+                                                {{ forloop.counter }}
+                                            </td>
+                                            <td>
+
+                                                <a>
+
+                                                    <input disabled type="color" id="head" name="head"
+                                                           value="{{ rs.code }}"><span>{{ rs.name }}</span>
+
+
+                                                </a>
+                                                <br/>
+                                                <small>
+
+                                                </small>
+                                            </td>
+                                            <td>
+                                                <a>
+                                                    {{ rs.group.title }}
+
+                                                </a>
+
+                                                </ul>
+                                            </td>
+
+                                            <td class="project-state">
+                                                <span class="badge badge-success">{{ rs.sort_order }}</span>
+                                            </td>
+                                            <td class="project-actions text-right">
+
+                                                <a class="btn btn-info btn-sm" href="{% url 'core:EditColor' rs.id %}">
+                                                    <i class="fas fa-pencil-alt">
+                                                    </i>
+                                                    Edit
+                                                </a>
+                                                <a href="{% url 'core:DeleteColor' rs.id %}"
+                                                   onclick="return confirm('Are you sure you want to delete {{ rs.name }}?')">
+                                                    <button class="btn" type="button" data-original-title="" title=""><i
+                                                            class="ti-trash"></i></button>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- /.card-body -->
-    </div>
-    <!-- /.card -->
+        <!-- Container-fluid Ends-->
 
     </div>
+
 
     <!-- Container-fluid Ends-->
 

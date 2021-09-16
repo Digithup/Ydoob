@@ -2,7 +2,7 @@ from django.urls import path
 
 from . import search, views
 from .tests import product_detailtest
-from .views import CategoriesDetail, CategoryDetail, ProductsListView, ProductSearch, error403
+from .views import CategoriesDetail, CategoryDetail, ProductsListView, ProductSearch, error403, product_detail
 
 app_name = 'home'
 urlpatterns = [
@@ -19,7 +19,7 @@ urlpatterns = [
 
     ############ Product ##############
     # path('product/<slug:slug>/', ProductDetailView.as_view(), name='ProductDetail'),
-    path('product/<int:id>/<slug:slug>/', product_detailtest, name='ProductDetail'),
+    path('product/<int:id>/<slug:slug>/', product_detail, name='ProductDetail'),
 
     # path('search/<int:pk>/', ProductDetailView.as_view(), name='ProductDetail'),
 

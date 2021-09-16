@@ -9,4 +9,4 @@ from sales.models.orders import PaymentMethods
 class PaymentMethodsForm(ModelForm):
     class Meta:
         model = PaymentMethods
-        fields = '__all__'
+        fields = ['title','method','image','status']

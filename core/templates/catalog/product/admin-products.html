@@ -6,8 +6,8 @@
     <!-- Container-fluid starts-->
     <div class="container-fluid">
         <div class="page-header">
-            <div class="row">
-                <div class="col-lg-6">
+            <div class="row col-md-12">
+                <div class="col-md-6">
                     <div class="page-header-left">
                         <h3>Products List
                             <small>
@@ -22,36 +22,106 @@
 
                         </ol>
                     </div>
-                </div>
 
-               <div class="row col-md-12 card-tools pull-right">
-                    <div class="col-md-4">
+                </div>
+                <div class="col-md-6">
+                     <div class=" card-body pull-right">
+                        <div class="btn-popup pull-right">
+                            <button type="button" class="btn btn-primary " data-bs-toggle="modal"
+                                    data-original-title="test" data-bs-target="#exampleModal">Imprt/Export
+                            </button>
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title f-w-600" id="exampleModalLabel">Import /
+                                                Export</h5>
+                                            <button class="btn-close" type="button" data-bs-dismiss="modal"
+                                                    aria-label="Close"><span aria-hidden="true">×</span></button>
+                                        </div>
+                                        <div class="modal-body ">
+                                            <div id="Product">
+                                                <form method="post" action="{% url 'core:ProductsReportExport' %}"
+                                                      enctype="multipart/form-data">
+                                                    {% csrf_token %}
+
+                                                    <div class="row col-12">
+                                                        <div class="col-md-4">
+                                                            <label> Product! Export.</label>
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <select class="form-control  col-md" name="file-format"
+                                                                    id="exampleFormControlSelect1"
+                                                                    title="Country! Export.">
+                                                                <option selected>Choose format...</option>
+                                                                <option>CSV</option>
+                                                                <option>JSON</option>
+                                                                <option>XLS (Excel)</option>
+                                                            </select>
+
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <button class="btn btn-primary col-md" type="submit">
+                                                                Export
+                                                            </button>
+                                                        </div>
+
+
+                                                    </div>
+
+
+                                                </form>
+                                                <br>
+                                                <form method="post" action="{% url 'core:ProductsReportImport' %}"
+                                                      enctype="multipart/form-data">
+                                                    {% csrf_token %}
+
+                                                    <div class="row col-12">
+                                                        <div class="col-md-4">
+                                                            <label> Product! Import.</label>
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <input type="file" name="products-file">
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <button class="btn btn-primary col-md" type="submit">
+                                                                Import
+                                                            </button>
+                                                        </div>
+
+
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+
+                                            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">
+                                                Close
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            &nbsp;
+                        </div>&nbsp;&nbsp;
 
                         <a href="{% url 'core:ProductAdd' %}">
                             <button type="button" class="btn btn-primary" data-toggle="modal"
-                                    data-original-title="test" data-target="#exampleModal">Add Products
+                                    data-original-title="test" data-target="#exampleModal">+ Product
                             </button>
-                        </a>
+                        </a>&nbsp;&nbsp;
 
-
-                </div>
-                    <div class="col-md-6">
-
-                        <form method="post" action="{% url 'core:ProductsReport' %}" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <p>Please select format of file.</p>
-                            <select name="file-format" class="form-control my-3">
-                                <option selected>Choose format...</option>
-                                <option>CSV</option>
-                                <option>JSON</option>
-                                <option>XLS (Excel)</option>
-                            </select>
-                            <button class="btn btn-primary" type="submit">Export</button>
-                        </form>
-
+                    </div>
 
                 </div>
-               </div>
+
+
 
             </div>
         </div>

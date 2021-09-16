@@ -21,9 +21,20 @@
                             <small>{{ notification.created_at|timesince }} ago</small>
                         </a>
                     {% elif notification.notification_type == 'NewOrder' %}
-
                         <a href="{% url 'core:EditOrder' notification.extra_id %}">
                             <strong>{{ notification.created_by.first_name }}</strong> New order {{ notification.extra_info.title|truncatechars:4 }}  <br>
+                            <small>{{ notification.created_at|timesince }} ago</small>
+
+                        </a>
+                        {% elif notification.notification_type == 'NewRegistration' %}
+                        <a href="{% url 'core:AdminUsersList' %}">
+                            <strong>{{ notification.created_by.first_name }}</strong> New Customer Registration {{ notification.extra_info.title|truncatechars:4 }}  <br>
+                            <small>{{ notification.created_at|timesince }} ago</small>
+
+                        </a>
+                        {% elif notification.notification_type == 'NewVendorCreate' %}
+                        <a href="{% url 'core:AdminVendorList'  %}">
+                            <strong>{{ notification.created_by.first_name }}</strong> New Vendor Registration {{ notification.extra_info.title|truncatechars:4 }}  <br>
                             <small>{{ notification.created_at|timesince }} ago</small>
 
                         </a>

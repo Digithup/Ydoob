@@ -5,21 +5,24 @@ from django.contrib.auth import login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.template.context_processors import request
 from django.urls import reverse, reverse_lazy
+from django.utils.crypto import get_random_string
 from django.utils.html import format_html
 from django.views.generic import CreateView, UpdateView, ListView
 from django.views.generic.base import RedirectView, View
 
 from catalog.models.models import Products, ProductMedia
 from core.decorators import admin_required
+from notification.utilities import create_notification
 from sales.models.orders import OrderProduct
 
-from vendors.forms import SellerRegisterForm, AlreadyUserSellerRegisterForm
+from vendors.forms import SellerRegisterForm, AlreadyUserSellerRegisterForm, CreateVendorForm
 from vendors.models import Vendor, StoreMedia
+from vendors.utilities import notify_admin, notify_user
 
 User = get_user_model()
 
@@ -37,6 +40,7 @@ class SellerRegister(CreateView):
         user = form.save()
         login(self.request, user)
         return redirect('home:index')
+
 
 @login_required(login_url='/login')  # Check login
 def AlreadyUserSellerRegister(request, slug):
@@ -71,51 +75,77 @@ def AlreadyUserSellerRegister(request, slug):
         return render(request, 'accounts/AlreadyUserSellerRegister.html', context)
 
 
-class CreateStore(View):
+class VendorCreate(View):
     def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return render(request, "store-page/create-store.html", )
+        form = CreateVendorForm()
+        context = {
+            'form': form,
+        }
+        return render(request, "store-page/create-store.html", context)
 
-        else:
-            if request.user.is_authenticated and request.user.seller:
-                messages.error(request,
-                               format_html('''You already have a vendor wait for activate &nbsp; &nbsp;  or learn how to sell &nbsp; 
-                                <a href=""> Edit</a> ''',
-                                           reverse('home:index', )))
-            return redirect('user:CustomerLogin')
     def post(self, request, *args, **kwargs):
-        title_group = request.POST.get("title")
-        address = request.POST.get("address")
-        phone = request.POST.get("phone")
-        email = request.POST.get("email")
-        vendor_id = request.user.id
-        print(request.POST)
-        vendor = User.objects.filter(seller=True)
-        status = Vendor.objects.filter(status=False, vendor_id=vendor_id)
+        if request.method == 'POST':
 
-        if vendor and status:
-            messages.error(request,
-                           format_html('''You already have a vendor wait for activate &nbsp; &nbsp;  or learn how to sell &nbsp; 
-                <a href=""> Edit</a> ''',
-                                       reverse('home:index', )))
+            form = CreateVendorForm(request.POST, request.FILES, )
 
-            return render(request, "store-page/create-store.html", )
+            if form.is_valid():
+                title = form.cleaned_data["title"]
+                email = form.cleaned_data["email"]
+                phone = form.cleaned_data["phone"]
+                company = form.cleaned_data["company"]
+                country = form.cleaned_data["country"]
+                governorates = form.cleaned_data["governorates"]
+                city = form.cleaned_data["city"]
+                code = get_random_string(25).upper()  # random cod
+                vendor_id = request.user.id
+                print(request.POST)
+                vendor = User.objects.filter(seller=True)
+                status = Vendor.objects.filter(status=False, vendor_id=vendor_id)
 
+                if vendor and status:
+                    messages.error(request,
+                                   format_html('''You already have a vendor wait for activate &nbsp; &nbsp;  or learn how to sell &nbsp; 
+                                        <a href=""> Edit</a> ''', reverse('home:index', )))
+                    return render(request, "store-page/create-store.html", )
+                else:
+                    form = Vendor(title=title, phone=phone, email=email, company=company, country=country,
+                                  governorates=governorates, city=city, vendor_id=vendor_id,code=code)
+                    form.save()
+                    admin=User.objects.filter(admin=True)
+                    print(admin)
+                    create_notification(request, admin, 'NewVendorCreate', extra_id=form.id,
+                                        extra_info=vendor_id)
+                    data=form
+                    notify_admin(form)
+                    notify_user(form)
+                    #return HttpResponse("OK")
+                    return HttpResponseRedirect(reverse_lazy('vendors:CreateSuccess'))
+            else:
+                print("Form invalid, see below error msg")
+                print(request.POST)
+                messages.error(request, "Error")
+                context = {
+                    'form': form,
+                }
+                return render(request, "store-page/create-store.html", context)
         else:
-            store = Vendor(title=title_group, address=address, phone=phone, email=email, vendor_id=vendor_id)
-            store.save()
-            # return HttpResponse("OK")
-            return render(request, 'store-page/create-success.html', )
-            #return HttpResponseRedirect(reverse_lazy('vendors:CreateSuccess'))
+            form = CreateVendorForm()
+            context = {
+                'form': form,
+            }
+            return render(request, "store-page/create-store.html", context)
 
 
 def CreateSuccess(request, ):
-    is_seller = User.objects.filter(id=request.user.id ,seller=True)
-    if request.user.is_authenticated and is_seller  :
-        return render(request, 'store-page/create-success.html')
+    is_seller = User.objects.filter(id=request.user.id, seller=True)
+    if request.user.is_authenticated and is_seller:
+        vendor=Vendor.objects.get(vendor_id=request.user.id).code
+        context={
+            'vendor':vendor
+        }
+        return render(request, 'store-page/create-success.html',context)
     else:
         return render(request, 'front/ErrorPage/404.html')
-
 
 
 def StoreWaiting(request):
@@ -125,7 +155,6 @@ def StoreWaiting(request):
     context = {'status': status,
                }
     return render(request, 'store-page/store-waiting.html', context)
-
 
 
 class VendorDashboard(View):
@@ -158,25 +187,23 @@ class VendorDashboard(View):
             return render(request, 'front/ErrorPage/403.html')
 
 
-
 class EditStore(View):
-
     def get(self, request, *args, **kwargs, ):
         slug = kwargs["slug"]
+        print(slug)
         user = request.user.id
-
         try:
-            if request.user.is_authenticated and Vendor.objects.get(slug=slug, vendor__id=user):
-                store = Vendor.objects.get(slug=slug, vendor__id=user)
-                store_media = StoreMedia.objects.filter(store_id=store.id).first()
+            if Vendor.objects.get(slug=slug, vendor__id=user):
+                vendor = Vendor.objects.get(slug=slug, vendor__id=user)
+                store_media = StoreMedia.objects.filter(store_id=vendor.id).first()
 
                 return render(request, "vendor/vendor-edit-store-profile.html",
-                              {"vendor": store, 'store_media': store_media})
+                              {"vendor": vendor, 'store_media': store_media})
             else:
                 return render(request, 'front/ErrorPage/404.html')
-        except:
+        except Exception as e:
+            print(e)
             return render(request, 'front/ErrorPage/403.html')
-
 
     def post(self, request, *args, **kwargs):
         title = request.POST.get("title")
@@ -226,7 +253,7 @@ class EditStore(View):
             print(request)
             messages.error(request, "Error")
 
-        return redirect(reverse('vendors:VendorDashboard',kwargs={"slug": slug},)
+        return redirect(reverse('vendors:VendorDashboard', kwargs={"slug": slug}, )
                         )
 
         # return HttpResponse("OK")
@@ -239,9 +266,6 @@ def store_delete(request, user_id):
     store.is_delete = True
     store.save()
     return redirect('vendors')
-
-
-
 
 
 # Seller catalog list and details

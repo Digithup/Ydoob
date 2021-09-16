@@ -1,0 +1,9 @@
+<option value="">---------</option>
+{% for governorate in governorates %}
+<option value="{{ governorate.pk }}">{{ governorate.name }}</option>
+{% endfor %}
+
+<option value="">---------</option>
+{% for city in cities %}
+<option value="{{ city.pk }}">{{ city.name }}</option>
+{% endfor %}

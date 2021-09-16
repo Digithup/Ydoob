@@ -7,11 +7,15 @@ class Notification(models.Model):
     MESSAGE = 'message'
     APPLICATION = 'application'
     NewOrder = 'new_order'
+    NewRegistration ='NewRegistration'
+    NewVendorCreate='NewVendorCreate'
 
     CHOICES = (
         (MESSAGE, 'Message'),
         (APPLICATION, 'Application'),
         (NewOrder, 'NewOrder'),
+        (NewRegistration, 'NewRegistration'),
+        (NewVendorCreate, 'NewVendorCreate'),
 
     )
 

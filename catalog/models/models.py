@@ -97,7 +97,7 @@ class Products(models.Model):
     status = models.CharField(max_length=10, null=True)
     variant = models.CharField(max_length=10, choices=VARIANTS, default='None')
     sort_order = models.SmallIntegerField(default=0, null=True)
-    slug = models.SlugField(unique=True, null=False, max_length=128)
+    slug = models.SlugField(unique=True, null=True,blank=True, max_length=128)
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
 
@@ -158,9 +158,9 @@ class Variants(models.Model):
     product = models.ForeignKey(Products, on_delete=models.CASCADE, null=True, blank=True)
     size = models.ForeignKey(Size, on_delete=models.CASCADE, blank=True, null=True)
     color = models.ForeignKey(Color, on_delete=models.CASCADE, blank=True, null=True)
-    price = models.DecimalField(max_digits=12, decimal_places=2,default=0)
-    quantity = models.IntegerField(default=1)
-    image = models.FileField(verbose_name='Product Image',  upload_to='images/products/%Y/%m/')
+    price = models.DecimalField(max_digits=12, decimal_places=2,default=0,blank=True, null=True)
+    quantity = models.IntegerField(default=1,blank=True, null=True)
+    image = models.FileField(verbose_name='Product Image',upload_to='images/products/%Y/%m/',blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -4,8 +4,8 @@ from vendors.tets2 import ProductCreateTest3
 from vendors.views.catalog import VendorIndex, ProductsList,  ProductsDeleted, file_upload, \
     ProductsAddStocks, ProductMediaDelete, ProductEditMedia, ProductsAddMedia, ProductUpdate, VendorProductAdd
 from vendors.views.order import VendorOrdersListView, VendorEditOrder, VendorOrderDetailView
-from vendors.views.views import SellerRegister, CreateStore, CreateSuccess, StoreWaiting, VendorDashboard, EditStore, \
-    AlreadyUserSellerRegister
+from vendors.views.views import SellerRegister, CreateSuccess, StoreWaiting, VendorDashboard, EditStore, \
+    AlreadyUserSellerRegister, VendorCreate
 
 app_name = 'vendors'
 
@@ -16,7 +16,7 @@ urlpatterns = [
     ###############Front Seller Url##############
     path('register/seller/', SellerRegister.as_view(), name='SellerRegister'),
     path('register/sellers/<slug:slug>', AlreadyUserSellerRegister, name='AlreadyUserSellerRegister'),
-    path('startselling/', CreateStore.as_view(), name='CreateStore'),
+    path('startselling/', VendorCreate.as_view(), name='CreateStore'),
     path('CreateSuccess/', CreateSuccess, name='CreateSuccess'),
     path('StoreWaiting/', StoreWaiting, name='StoreWaiting'),
     path('vendor/<slug:slug>', VendorDashboard.as_view(), name='VendorDashboard'),
