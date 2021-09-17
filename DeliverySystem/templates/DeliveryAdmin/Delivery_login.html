@@ -1,3 +1,4 @@
+{% load crispy_forms_filters %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -6,38 +7,35 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-          content="Multikart admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
-    <meta name="keywords"
-          content="admin template, Multikart admin template, dashboard template, flat admin template, responsive admin template, web app">
+    <meta name="description" content="Multikart admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
+    <meta name="keywords" content="admin template, Multikart admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="pixelstrap">
-    <link rel="icon" href="{% static '' %}images/dashboard/favicon.png" type="image/x-icon">
-    <link rel="shortcut icon" href="{% static '' %}images/dashboard/favicon.png" type="image/x-icon">
+    <link rel="icon" href="{%  static '' %}assets/images/dashboard/favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="{%  static '' %}assets/images/dashboard/favicon.png" type="image/x-icon">
     <title>Multikart - Premium Admin Template</title>
 
     <!-- Google font-->
     <link href="https://fonts.googleapis.com/css?family=Work+Sans:100,200,300,400,500,600,700,800,900" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Font Awesome-->
-    <link rel="stylesheet" type="text/css" href="{% static '' %}css/fontawesome.css">
+    <link rel="stylesheet" type="text/css" href="{%  static '' %}assets/css/vendors/fontawesome.css">
 
     <!-- Flag icon-->
-    <link rel="stylesheet" type="text/css" href="{% static '' %}css/themify.css">
+    <link rel="stylesheet" type="text/css" href="{%  static '' %}assets/css/vendors/themify-icons.css">
 
     <!-- slick icon-->
-    <link rel="stylesheet" type="text/css" href="{% static '' %}css/slick.css">
-    <link rel="stylesheet" type="text/css" href="{% static '' %}css/slick-theme.css">
+    <link rel="stylesheet" type="text/css" href="{%  static '' %}assets/css/vendors/slick.css">
+    <link rel="stylesheet" type="text/css" href="{%  static '' %}assets/css/vendors/slick-theme.css">
 
     <!-- jsgrid css-->
-    <link rel="stylesheet" type="text/css" href="{% static '' %}css/jsgrid.css">
+    <link rel="stylesheet" type="text/css" href="{%  static '' %}assets/css/vendors/jsgrid.css">
 
     <!-- Bootstrap css-->
-    <link rel="stylesheet" type="text/css" href="{% static '' %}css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="{%  static '' %}assets/css/vendors/bootstrap.css">
 
     <!-- App css-->
-    <link rel="stylesheet" type="text/css" href="{% static '' %}css/admin.css">
+    <link rel="stylesheet" type="text/css" href="{%  static '' %}assets/css/admin.css">
 
 </head>
 <body>
@@ -46,6 +44,30 @@
 <div class="page-wrapper">
     <div class="authentication-box">
         <div class="container">
+             <div>
+                            {% if login_form.errors %}
+
+                                {% for error_field, error_message in login_form.errors.items %}
+
+                                    <div class="alert alert-danger">
+                                        {{ error_field|striptags }}: {{ error_message|striptags }}
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+
+                            {% endif %}
+             {% if signup_form.errors %}
+
+                                {% for error_field, error_message in signup_form.errors.items %}
+
+                                    <div class="alert alert-danger">
+                                        {{ error_field|striptags }}: {{ error_message|striptags }}
+                                        <strong>{{ error|escape }}</strong>
+                                    </div>
+                                {% endfor %}
+
+                            {% endif %}
+             </div>
             <div class="row">
                 <div class="col-md-5 p-0 card-left">
                     <div class="card bg-primary">
@@ -185,26 +207,28 @@
                         <div class="card-body">
                             <ul class="nav nav-tabs nav-material" id="top-tab" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="top-profile-tab" data-toggle="tab"
+                                    <a class="nav-link active" id="top-profile-tab" data-bs-toggle="tab"
                                        href="#top-profile" role="tab" aria-controls="top-profile"
-                                       aria-selected="true"><span class="icon-user mr-2"></span>Login</a>
+                                       aria-selected="true"><span class="icon-user me-2"></span>Login</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="contact-top-tab" data-toggle="tab" href="#top-contact"
+                                    <a class="nav-link" id="contact-top-tab" data-bs-toggle="tab" href="#top-contact"
                                        role="tab" aria-controls="top-contact" aria-selected="false"><span
-                                            class="icon-unlock mr-2"></span>Register</a>
+                                            class="icon-unlock me-2"></span>Register</a>
                                 </li>
                             </ul>
                             <div class="tab-content" id="top-tabContent">
                                 <div class="tab-pane fade show active" id="top-profile" role="tabpanel"
                                      aria-labelledby="top-profile-tab">
                                     <form class="form-horizontal auth-form" method="POST" action="
-                                            {% if action_url %}{{ action_url }}{% else %}{% url 'users:user_login' %}  {% endif %}">
+                                            {% if action_url %}{{ action_url }} {% else %}{% url 'DeliverySystem:DeliveryLogin' %}{% endif %}">
                                         {% csrf_token %}
 
                                         {% if next_url %}
-                                            <input type="hidden" name="next" value='{{ next_url }}'>
+                                            <input type="" name="next" value='{{ next_url }}'>
+
                                         {% endif %}
+
                                         <div class="form-group">
                                             <input required="" name="email" type="email" class="form-control"
                                                    placeholder="email" id="exampleInputEmail1">
@@ -228,29 +252,25 @@
                                         <div class="form-footer">
                                             <span>Or Login up with social platforms</span>
                                             <ul class="social">
-                                                <li><a class="icon-facebook" href=""></a></li>
-                                                <li><a class="icon-twitter" href=""></a></li>
-                                                <li><a class="icon-instagram" href=""></a></li>
-                                                <li><a class="icon-pinterest" href=""></a></li>
+                                                <li><a class="ti-facebook" href=""></a></li>
+                                                <li><a class="ti-twitter" href=""></a></li>
+                                                <li><a class="ti-instagram" href=""></a></li>
+                                                <li><a class="ti-pinterest" href=""></a></li>
                                             </ul>
                                         </div>
                                     </form>
+
                                 </div>
+
                                 <div class="tab-pane fade" id="top-contact" role="tabpanel"
                                      aria-labelledby="contact-top-tab">
-                                    <form class="form-horizontal auth-form">
+
+                                    <form class="form-horizontal auth-form" action="{% url 'DeliverySystem:DeliveryRegister' %}" method="post">
+                              {% csrf_token %}
                                         <div class="form-group">
-                                            <input required="" name="login[username]" type="email" class="form-control"
-                                                   placeholder="Username" id="exampleInputEmail12">
+                                            {{ signup_form|crispy }}
                                         </div>
-                                        <div class="form-group">
-                                            <input required="" name="login[password]" type="password"
-                                                   class="form-control" placeholder="Password">
-                                        </div>
-                                        <div class="form-group">
-                                            <input required="" name="login[password]" type="password"
-                                                   class="form-control" placeholder="Confirm Password">
-                                        </div>
+
                                         <div class="form-terms">
                                             <div class="custom-control custom-checkbox mr-sm-2">
                                                 <input type="checkbox" class="custom-control-input"
@@ -258,7 +278,7 @@
                                                 <label class="custom-control-label"
                                                        for="customControlAutosizing1"><span>I agree all statements in <a
                                                         href=""
-                                                        class="pull-right">Terms &amp; Conditions</a></span></label>
+                                                        class="pull-right">Terms &amp; Conditionss</a></span></label>
                                             </div>
                                         </div>
                                         <div class="form-button">
@@ -267,10 +287,10 @@
                                         <div class="form-footer">
                                             <span>Or Sign up with social platforms</span>
                                             <ul class="social">
-                                                <li><a class="icon-facebook" href=""></a></li>
-                                                <li><a class="icon-twitter" href=""></a></li>
-                                                <li><a class="icon-instagram" href=""></a></li>
-                                                <li><a class="icon-pinterest" href=""></a></li>
+                                                <li><a class="ti-facebook" href=""></a></li>
+                                                <li><a class="ti-twitter" href=""></a></li>
+                                                <li><a class="ti-instagram" href=""></a></li>
+                                                <li><a class="ti-pinterest" href=""></a></li>
                                             </ul>
                                         </div>
                                     </form>
@@ -287,33 +307,32 @@
 </div>
 
 <!-- latest jquery-->
-<script src="{% static '' %}js/jquery-3.3.1.min.js"></script>
+<script src="{%  static '' %}assets/js/jquery-3.3.1.min.js"></script>
 
 <!-- Bootstrap js-->
-<script src="{% static '' %}js/popper.min.js"></script>
-<script src="{% static '' %}js/bootstrap.js"></script>
+<script src="{%  static '' %}assets/js/bootstrap.bundle.min.js"></script>
 
 <!-- feather icon js-->
-<script src="{% static '' %}js/icons/feather-icon/feather.min.js"></script>
-<script src="{% static '' %}js/icons/feather-icon/feather-icon.js"></script>
+<script src="{%  static '' %}assets/js/icons/feather-icon/feather.min.js"></script>
+<script src="{%  static '' %}assets/js/icons/feather-icon/feather-icon.js"></script>
 
 <!-- Sidebar jquery-->
-<script src="{% static '' %}js/sidebar-menu.js"></script>
-<script src="{% static '' %}js/slick.js"></script>
+<script src="{%  static '' %}assets/js/sidebar-menu.js"></script>
+<script src="{%  static '' %}assets/js/slick.js"></script>
 
 <!-- Jsgrid js-->
-<script src="{% static '' %}js/jsgrid/jsgrid.min.js"></script>
-<script src="{% static '' %}js/jsgrid/griddata-invoice.js"></script>
-<script src="{% static '' %}js/jsgrid/jsgrid-invoice.js"></script>
+<script src="{%  static '' %}assets/js/jsgrid/jsgrid.min.js"></script>
+<script src="{%  static '' %}assets/js/jsgrid/griddata-invoice.js"></script>
+<script src="{%  static '' %}assets/js/jsgrid/jsgrid-invoice.js"></script>
 
 <!-- lazyload js-->
-<script src="{% static '' %}js/lazysizes.min.js"></script>
+<script src="{%  static '' %}assets/js/lazysizes.min.js"></script>
 
 <!--right sidebar js-->
-<script src="{% static '' %}js/chat-menu.js"></script>
+<script src="{%  static '' %}assets/js/chat-menu.js"></script>
 
 <!--script admin-->
-<script src="{% static '' %}js/admin-script.js"></script>
+<script src="{%  static '' %}assets/js/admin-script.js"></script>
 <script>
     $('.single-item').slick({
             arrows: false,
@@ -321,6 +340,5 @@
         }
     );
 </script>
-
 </body>
 </html>

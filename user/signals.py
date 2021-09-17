@@ -22,8 +22,6 @@ user_recovers_password = Signal(
 
 def customer_profile(sender, instance, created, **kwargs):
 	if created:
-		group = Group.objects.get(name='customer')
-		instance.groups.add(group.id)
 
 		print('Profile created!')
 

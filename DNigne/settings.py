@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 from typing import List
 
-import django_heroku
+
 from django.conf import settings
 from django.contrib import messages
 
@@ -29,7 +29,7 @@ import os
 import tempfile
 from pathlib import Path
 import environ
-import django_heroku
+
 
 from django.contrib.messages import constants as message_constants
 from django.utils.translation import ugettext_lazy as _
@@ -406,7 +406,7 @@ MyFatoorah_base_url = env('MyFatoorah_base_url')
 MyFatoorah_api_key = env('MyFatoorah_api_key')
 MyFatoorah_WEBHOOK_SECRET = env('MyFatoorah_WEBHOOK_SECRET')
 
-django_heroku.settings(locals())
+
 
 FIREBASE_ADMIN_CREDENTIAL = os.path.join(BASE_DIR, "ydoob-ff08e-firebase-adminsdk-j7532-952cfe0721.json")
 GOOGLE_MAP_API_KEY = "AIzaSyBxYTF5b1oobhbQo_dylaatAYm1BwARBb4"

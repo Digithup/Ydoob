@@ -57,7 +57,7 @@ class Order(models.Model):
     code = models.CharField(max_length=5, editable=False)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     payment_method = models.ForeignKey(PaymentMethods, on_delete=models.PROTECT, null=False, blank=False)
-    payment_status = models.CharField( max_length=100, null=False, blank=False, default="1", choices=payment_status_choice)
+    payment_status = models.CharField( max_length=100, null=False, blank=False, default="Pending", choices=payment_status_choice)
     payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, blank=True, null=True)
     address = models.ForeignKey(UserAddress, on_delete=models.SET_NULL, null=True)
     total = models.FloatField()

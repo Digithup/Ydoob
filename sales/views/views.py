@@ -164,6 +164,7 @@ def Checkout(request):
             data = Order()
             data.address = address
             data.payment_method = payment_method
+            data.payment_status='Pending'
             data.user_id = current_user.id
             data.email=current_user.email
             data.total = total
@@ -239,6 +240,7 @@ class PaymentView(LoginRequiredMixin, View):
         payment_method = PaymentMethods.objects.get(id=order.payment_method.id)
         print(payment_method)
         if payment_method.method == "COD":
+            Order.objects.filter(pk=order.pk).update(payment_status='Cash on delivery')
             print('cod')
             return render(request, 'payments/payment_success.html', )
         elif payment_method.method == 'Stripe':

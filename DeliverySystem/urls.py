@@ -2,13 +2,16 @@ from django.urls import path
 
 from DeliverySystem.courier import views as courier_views, apis as courier_apis
 from DeliverySystem.customer import views as customer_views
-from DeliverySystem.views.dashboard import DeliveryDashboard, DeliveryOrder
+from DeliverySystem.views.dashboard import DeliveryDashboard, DeliveryOrder, DeliveryLoginView, DeliverySignup, \
+    DeliveryLogout
 
 app_name = 'DeliverySystem'
 
 urlpatterns = [
+    path('login/', DeliveryLoginView.as_view(), name="DeliveryLogin"),
+    path('login/', DeliverySignup, name='DeliveryRegister'),
+    path('logout/', DeliveryLogout, name='DeliveryLogout'),
 
-    # path('', DeliveryLoginView.as_view(), name="DeliveryLoginView"),
     path('', DeliveryDashboard, name="DeliveryIndex"),
     path('orders', DeliveryOrder, name="DeliveryOrder"),
 
