@@ -92,6 +92,7 @@ THIRD_PARTY_APPS = [
     "bootstrap4",
     "bootstrap_datepicker_plus",
     'import_export',
+    'django_extensions',
 
 
 ]
@@ -199,29 +200,29 @@ AUTHENTICATION_BACKENDS = (
 #             },
 
 # if DEBUG:
-DATABASES = {
-    'default': {
-
-        'ENGINE': 'django.db.backends.mysql',
-                'NAME': env('DB_NAME'),
-                'USER': env('DB_USER'),
-                'PASSWORD': env('DB_PASSWORD'),
-                'HOST': env('DB_HOST'),
-                'PORT': env('DB_PORT'),
-    }
-}
-
 # DATABASES = {
-#         'default': {
+#     'default': {
 #
-#             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#             'NAME': env('server_DB_NAME'),
-#             'USER': env('server_DB_USER'),
-#             'PASSWORD': env('server_DB_PASSWORD'),
-#             'HOST': env('server_DB_HOST'),
-#             'PORT': env('server_DB_PORT'),
-#         }
+#         'ENGINE': 'django.db.backends.mysql',
+#                 'NAME': env('DB_NAME'),
+#                 'USER': env('DB_USER'),
+#                 'PASSWORD': env('DB_PASSWORD'),
+#                 'HOST': env('DB_HOST'),
+#                 'PORT': env('DB_PORT'),
 #     }
+# }
+
+DATABASES = {
+        'default': {
+
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': env('server_DB_NAME'),
+            'USER': env('server_DB_USER'),
+            'PASSWORD': env('server_DB_PASSWORD'),
+            'HOST': env('server_DB_HOST'),
+            'PORT': env('server_DB_PORT'),
+        }
+    }
 
 
 
