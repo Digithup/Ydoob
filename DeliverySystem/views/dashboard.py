@@ -138,7 +138,7 @@ class DeliveryLoginView(View):
             signup_form = DeliverySignUpForm()
         return render(request, 'DeliveryAdmin/Delivery_login.html', {'signup_form': signup_form})
 
-    def post(self, request, *args, **kwargs):
+    def DeliverySignin(self, request, *args, **kwargs):
         login_form = UserLoginForm(request.POST or None)
 
         next_ = request.GET.get('next')

@@ -9,7 +9,7 @@ app_name = 'DeliverySystem'
 
 urlpatterns = [
     path('login/', DeliveryLoginView.as_view(), name="DeliveryLogin"),
-    path('login/', DeliverySignup, name='DeliveryRegister'),
+    #path('login/', DeliverySignup, name='DeliveryRegister'),
     path('logout/', DeliveryLogout, name='DeliveryLogout'),
 
     path('', DeliveryDashboard, name="DeliveryIndex"),
