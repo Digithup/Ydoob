@@ -73,7 +73,7 @@ class SliderCreate(View):
 
     def post(self, request, *args, **kwargs):
         title = request.POST.get("title")
-        group = request.POST.get("groups")
+        group = request.POST.get("group")
         status = request.POST.get("status")
         sort_order = request.POST.get("sort_order")
         media_type_list = request.POST.getlist("media_type[]")

@@ -1,3 +1,4 @@
+import self
 from ckeditor_uploader.fields import RichTextUploadingField
 from currencies.models import Currency
 from django.db import models
@@ -17,8 +18,8 @@ Type = (
 
 class UserManager(BaseUserManager):
     def create_user(self, email, first_name=None, last_name=None, password=None, is_active=True, is_staff=False
-                    , is_seller=False,
-                    is_admin=False, is_customer=True, ):
+                    , is_seller=False, is_admin=False,is_superuser=False, is_customer=True, ):
+
         if not email:
             raise ValueError("users must have an email address")
         if not password:
@@ -34,6 +35,7 @@ class UserManager(BaseUserManager):
         user_obj.staff = is_staff
         user_obj.admin = is_admin
         user_obj.active = is_active
+        user_obj.is_superuser=is_superuser
         user_obj.save(using=self._db)
         return user_obj
 
@@ -43,6 +45,7 @@ class UserManager(BaseUserManager):
             first_name=first_name,
             last_name=last_name,
             password=password,
+
 
         )
 
@@ -72,8 +75,10 @@ class UserManager(BaseUserManager):
             last_name=last_name,
             password=password,
             is_staff=True,
-            is_admin=True
+            is_admin=True,
+            is_superuser=True,
         )
+
 
 
 class User(AbstractBaseUser):
@@ -82,7 +87,6 @@ class User(AbstractBaseUser):
     """
     id = models.AutoField(primary_key=True)
     email = models.EmailField(verbose_name='email address', max_length=255, unique=True)
-    # user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=200, blank=True, null=True)
     last_name = models.CharField(max_length=200, blank=True, null=True)
     phone = models.CharField(blank=True, null=True, max_length=20)
@@ -93,20 +97,19 @@ class User(AbstractBaseUser):
     twitter = models.URLField(blank=True, max_length=50)
     youtube = models.URLField(blank=True, max_length=50)
     about = RichTextUploadingField(blank=True)
-    active = models.BooleanField(default=True)
-    is_active = models.BooleanField(default=True)
-    customer = models.BooleanField(default=True)
     seller = models.BooleanField(default=False)
-    staff = models.BooleanField(default=False)
-    admin = models.BooleanField(default=False)
-    groups = models.ManyToManyField(Group, blank=True)
+    delivery = models.BooleanField(default=False)
+    customer = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    groups = models.ManyToManyField(Group, blank=True,)
     currency = models.ForeignKey(Currency, on_delete=models.CASCADE, null=True, blank=True)
     slug = models.SlugField(unique=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     USERNAME_FIELD = 'email'
-
-
     objects = UserManager()
 
     def save(self, *args, **kwargs):

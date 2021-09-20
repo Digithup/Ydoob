@@ -101,44 +101,7 @@ class DeliveryLoginView(View):
                 "signup_form": signup_form,
             }
             return render(request, self.template_name, context)
-
-    def DeliverySignup(self, request, *args, **kwargs):
-
-        if request.method == 'POST':
-            signup_form = DeliverySignUpForm(request.POST)
-            # print(form.errors.as_data())
-            if signup_form.is_valid():
-                groups = Group.objects.get_or_create(name='delivery')
-
-                user = signup_form.save(commit=False)
-                user.is_active = False
-                # user.groups.set='delivery'
-
-                user.save()
-                user.groups.set('delivery')
-                current_site = get_current_site(request)
-                mail_subject = 'Activate your account.'
-                message = render_to_string('register/deliveryActiveEmailMessage.html', {
-                    'user': user,
-                    'domain': current_site.domain,
-                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                    'token': default_token_generator.make_token(user),
-                })
-                to_email = signup_form.cleaned_data.get('email')
-                email = EmailMessage(
-                    mail_subject, message, to=[to_email]
-                )
-                email.send()
-                return render(request, 'register/deliveryActiveEmailSent.html')
-            else:
-                messages.error(request, "Error")
-                print(request.POST)
-        else:
-
-            signup_form = DeliverySignUpForm()
-        return render(request, 'DeliveryAdmin/Delivery_login.html', {'signup_form': signup_form})
-
-    def DeliverySignin(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         login_form = UserLoginForm(request.POST or None)
 
         next_ = request.GET.get('next')
@@ -165,8 +128,7 @@ class DeliveryLoginView(View):
                     messages.error(request, "Error")
                     print(request.POST)
                     print(request)
-                    print('error')
-                    return redirect("/")
+                    return HttpResponseRedirect(reverse_lazy('DeliverySystem:DeliveryIndex'))
 
             else:
                 print("error")

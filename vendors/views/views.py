@@ -3,20 +3,27 @@ from django.contrib import messages
 from django.contrib import messages
 from django.contrib.auth import login, get_user_model
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.files.storage import FileSystemStorage
+from django.core.mail import EmailMessage
 from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.template.context_processors import request
+from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils.crypto import get_random_string
+from django.utils.encoding import force_bytes
 from django.utils.html import format_html
+from django.utils.http import urlsafe_base64_encode
 from django.views.generic import CreateView, UpdateView, ListView
 from django.views.generic.base import RedirectView, View
 
 from catalog.models.models import Products, ProductMedia
-from core.decorators import admin_required
+from core.decorators import admin_required, unauthenticated_user
 from notification.utilities import  create_notification_admin
 from sales.models.orders import OrderProduct
 
@@ -26,8 +33,47 @@ from vendors.utilities import notify_admin, notify_user
 
 User = get_user_model()
 
+@unauthenticated_user
+def SellerRegister(request):
+    if request.method == 'GET':
+        form= SellerRegisterForm
+        context={
+            'form':form
+        }
+        return render(request, 'accounts/SellerRegister.html',context)
+    if request.method == 'POST':
+        exit_group = Group.objects.get_or_create(name='vendor')
+        form = SellerRegisterForm(request.POST)
+        # print(form.errors.as_data())
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+            group = Group.objects.get(name='vendor')
+            group.user_set.add(user)
 
-class SellerRegister(CreateView):
+
+
+            current_site = get_current_site(request)
+            mail_subject = 'Activate your account.'
+            message = render_to_string('users/register/UserActiveEmailMessage.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': default_token_generator.make_token(user),
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
+            return render(request, 'users/register/UserActiveEmailSent.html')
+    else:
+        form = SellerRegisterForm()
+    return render(request, 'users/register/CustomerRegister.html', {'form': form})
+
+
+class SellerRegisters(CreateView):
     model = User
     form_class = SellerRegisterForm
     template_name = 'accounts/SellerRegister.html'
@@ -38,6 +84,8 @@ class SellerRegister(CreateView):
 
     def form_valid(self, form):
         user = form.save()
+        group = Group.objects.get(name='vendor')
+        group.user_set.add(user)
         login(self.request, user)
         return redirect('home:index')
 

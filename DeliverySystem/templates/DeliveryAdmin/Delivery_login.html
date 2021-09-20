@@ -247,7 +247,7 @@
                                             </div>
                                         </div>
                                         <div class="form-button">
-                                            <button class="btn btn-primary" value="Login" type="submit">Login</button>
+                                            <button class="btn btn-primary" name="SigninButton" value="Login" type="submit">Login</button>
                                         </div>
                                         <div class="form-footer">
                                             <span>Or Login up with social platforms</span>
@@ -265,7 +265,7 @@
                                 <div class="tab-pane fade" id="top-contact" role="tabpanel"
                                      aria-labelledby="contact-top-tab">
 
-                                    <form class="form-horizontal auth-form" action="{% url 'DeliverySystem:DeliveryRegister' %}" method="post">
+                                    <form class="form-horizontal auth-form" action="{% url 'DeliverySystem:DeliveryLogin' %}" method="post">
                               {% csrf_token %}
                                         <div class="form-group">
                                             {{ signup_form|crispy }}
@@ -282,7 +282,7 @@
                                             </div>
                                         </div>
                                         <div class="form-button">
-                                            <button class="btn btn-primary" type="submit">Register</button>
+                                            <button class="btn btn-primary" name="SignupButton" type="submit">Register</button>
                                         </div>
                                         <div class="form-footer">
                                             <span>Or Sign up with social platforms</span>
@@ -340,5 +340,8 @@
         }
     );
 </script>
+<script src="https://unpkg.com/bootoast@1.0.1/dist/bootoast.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/bootoast@1.0.1/dist/bootoast.min.css">
+<script>
 </body>
 </html>

@@ -14,7 +14,7 @@ urlpatterns = [
 
 
     ###############Front Seller Url##############
-    path('register/seller/', SellerRegister.as_view(), name='SellerRegister'),
+    path('register/seller/', SellerRegister, name='SellerRegister'),
     path('register/sellers/<slug:slug>', AlreadyUserSellerRegister, name='AlreadyUserSellerRegister'),
     path('startselling/', VendorCreate.as_view(), name='CreateStore'),
     path('CreateSuccess/', CreateSuccess, name='CreateSuccess'),

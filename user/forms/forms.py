@@ -50,7 +50,7 @@ class UserLoginForm(forms.Form):
             if not user.check_password(password):
                 raise forms.ValidationError("Incorrect Password")
 
-            if not user.active:
+            if not user.is_active:
                 raise forms.ValidationError("This user is not longer active.")
 
         return super(UserLoginForm, self).clean(*args, **kwargs)

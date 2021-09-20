@@ -8,6 +8,7 @@ from django.contrib.auth import (
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
+from django.contrib.auth.models import Group
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
@@ -46,12 +47,16 @@ def UserSignup(request):
     if request.method == 'GET':
         return render(request, 'users/register/CustomerRegister.html')
     if request.method == 'POST':
+
+
         form = UserSignUpForm(request.POST)
         # print(form.errors.as_data())
         if form.is_valid():
             user = form.save(commit=False)
             user.is_active = False
             user.save()
+            group = Group.objects.get(name='customer')
+            group.user_set.add(user)
             current_site = get_current_site(request)
             mail_subject = 'Activate your account.'
             message = render_to_string('users/register/UserActiveEmailMessage.html', {
