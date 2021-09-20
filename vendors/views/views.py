@@ -23,7 +23,7 @@ from django.views.generic import CreateView, UpdateView, ListView
 from django.views.generic.base import RedirectView, View
 
 from catalog.models.models import Products, ProductMedia
-from core.decorators import admin_required, unauthenticated_user
+from core.decorators import  unauthenticated_user
 from notification.utilities import  create_notification_admin
 from sales.models.orders import OrderProduct
 

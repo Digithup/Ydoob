@@ -204,6 +204,13 @@ class UserAddress(models.Model):
     def __str__(self):
         return self.address_title
 
+    def get_full_address(self):
+        full_address = None
+        if self.governorate or self.city or self.area or self.street_name:
+            return self.governorate.name + " " + self.city.name + " " +  self.street_name
+        else:
+            return self.governorate
+
 
 class GuestEmail(models.Model):
     '''

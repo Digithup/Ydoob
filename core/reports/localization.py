@@ -10,8 +10,8 @@ def country_export_data(request):
     if request.method == 'POST':
         # Get selected option from form
         file_format = request.POST['file-format']
-        employee_resource = CountryResource()
-        dataset = employee_resource.export()
+        country_resource = CountryResource()
+        dataset = country_resource.export()
         if file_format == 'CSV':
             response = HttpResponse(dataset.csv, content_type='text/csv')
             response['Content-Disposition'] = 'attachment; filename="country_data.csv"'
@@ -31,35 +31,28 @@ def country_export_data(request):
 
 
 
-    return render(request, 'export.html')
+    return render(request, 'localization/country/admin-country.html')
 
 def country_import_data(request):
     if request.method == 'POST':
-        file_format = request.POST['file-format']
-        employee_resource = CountryResource()
+        country_resource = CountryResource()
         dataset = Dataset()
-        new_employees = request.FILES['importData']
+        new_country = request.FILES['country-file']
 
-        if file_format == 'CSV':
-            imported_data = dataset.load(new_employees.read().decode('utf-8'),format='csv')
-            result = employee_resource.import_data(dataset, dry_run=True)
-        elif file_format == 'JSON':
-            imported_data = dataset.load(new_employees.read().decode('utf-8'),format='json')
-            # Testing data import
-            result = employee_resource.import_data(dataset, dry_run=True)
+        imported_data = dataset.load(new_country.read().decode('utf-8'), format='csv')
+        result = country_resource.import_data(dataset, dry_run=True)  # Test the data import
 
         if not result.has_errors():
-            # Import now
-            employee_resource.import_data(dataset, dry_run=False)
+            country_resource.import_data(dataset, dry_run=False)  # Actually import now
 
-    return render(request, 'import.html')
+    return render(request, 'catalog/variant/admin-variant.html')
 
 def governorates_export_data(request):
     if request.method == 'POST':
         # Get selected option from form
         file_format = request.POST['file-format']
-        employee_resource = GovernoratesResource()
-        dataset = employee_resource.export()
+        governorates_resource = GovernoratesResource()
+        dataset = governorates_resource.export()
         if file_format == 'CSV':
             response = HttpResponse(dataset.csv, content_type='text/csv')
             response['Content-Disposition'] = 'attachment; filename="governorates_data.csv"'
@@ -77,28 +70,8 @@ def governorates_export_data(request):
             response['Content-Disposition'] = 'attachment; filename="governorates_data.xls"'
             return response
 
-    return render(request, 'export.html')
-
-def governorates_import_datass(request):
-    if request.method == 'POST':
-        file_format = request.POST['file-format']
-        employee_resource = GovernoratesResource()
-        dataset = Dataset()
-        new_employees = request.FILES['importData']
-
-        if file_format == 'CSV':
-            imported_data = dataset.load(new_employees.read().decode('utf-8'),format='csv')
-            result = employee_resource.import_data(dataset, dry_run=True)
-        elif file_format == 'JSON':
-            imported_data = dataset.load(new_employees.read().decode('utf-8'),format='json')
-            # Testing data import
-            result = employee_resource.import_data(dataset, dry_run=True)
-
-        if not result.has_errors():
-            # Import now
-            employee_resource.import_data(dataset, dry_run=False)
-
     return render(request, 'localization/country/admin-country.html')
+
 
 def governorates_import_data(request):
     if request.method == 'POST':
@@ -119,33 +92,33 @@ def city_export_data(request):
     if request.method == 'POST':
         # Get selected option from form
         file_format = request.POST['file-format']
-        employee_resource = CityResource()
-        dataset = employee_resource.export()
+        city_resource = CityResource()
+        dataset = city_resource.export()
         if file_format == 'CSV':
             response = HttpResponse(dataset.csv, content_type='text/csv')
-            response['Content-Disposition'] = 'attachment; filename="exported_data.csv"'
+            response['Content-Disposition'] = 'attachment; filename="city_data.csv"'
             return response
         elif file_format == 'JSON':
             response = HttpResponse(dataset.json, content_type='application/json')
-            response['Content-Disposition'] = 'attachment; filename="exported_data.json"'
+            response['Content-Disposition'] = 'attachment; filename="city_data.json"'
             return response
         elif file_format == 'XLS (Excel)':
             response = HttpResponse(dataset.xls, content_type='application/vnd.ms-excel')
-            response['Content-Disposition'] = 'attachment; filename="exported_data.xls"'
+            response['Content-Disposition'] = 'attachment; filename="city_data.xls"'
             return response
 
-    return render(request, 'export.html')
+    return render(request, 'localization/country/admin-country.html')
 def city_import_data(request):
     if request.method == 'POST':
-        person_resource = CityResource()
+        city_resource = CityResource()
         dataset = Dataset()
         new_persons = request.FILES['city-file']
         print(request)
         imported_data = dataset.load(new_persons.read().decode('utf-8'),format='csv')
-        result = person_resource.import_data(dataset, dry_run=True)  # Test the data import
+        result = city_resource.import_data(dataset, dry_run=True)  # Test the data import
 
         if not result.has_errors():
-            person_resource.import_data(dataset, dry_run=False)  # Actually import now
+            city_resource.import_data(dataset, dry_run=False)  # Actually import now
             print(request.POST)
 
     return render(request, 'localization/country/admin-country.html')
@@ -155,40 +128,34 @@ def area_export_data(request):
     if request.method == 'POST':
         # Get selected option from form
         file_format = request.POST['file-format']
-        employee_resource = AreaResource()
-        dataset = employee_resource.export()
+        area_resource = AreaResource()
+        dataset = area_resource.export()
         if file_format == 'CSV':
             response = HttpResponse(dataset.csv, content_type='text/csv')
-            response['Content-Disposition'] = 'attachment; filename="exported_data.csv"'
+            response['Content-Disposition'] = 'attachment; filename="area_data.csv"'
             return response
         elif file_format == 'JSON':
             response = HttpResponse(dataset.json, content_type='application/json')
-            response['Content-Disposition'] = 'attachment; filename="exported_data.json"'
+            response['Content-Disposition'] = 'attachment; filename="area_data.json"'
             return response
         elif file_format == 'XLS (Excel)':
             response = HttpResponse(dataset.xls, content_type='application/vnd.ms-excel')
-            response['Content-Disposition'] = 'attachment; filename="exported_data.xls"'
+            response['Content-Disposition'] = 'attachment; filename="area_data.xls"'
             return response
 
-    return render(request, 'export.html')
+    return render(request, 'localization/country/admin-country.html')
 
 def area_import_data(request):
     if request.method == 'POST':
-        file_format = request.POST['file-format']
-        employee_resource = AreaResource()
+        area_resource = AreaResource()
         dataset = Dataset()
-        new_employees = request.FILES['importData']
-
-        if file_format == 'CSV':
-            imported_data = dataset.load(new_employees.read().decode('utf-8'),format='csv')
-            result = employee_resource.import_data(dataset, dry_run=True)
-        elif file_format == 'JSON':
-            imported_data = dataset.load(new_employees.read().decode('utf-8'),format='json')
-            # Testing data import
-            result = employee_resource.import_data(dataset, dry_run=True)
+        new_persons = request.FILES['area-file']
+        print(request)
+        imported_data = dataset.load(new_persons.read().decode('utf-8'), format='csv')
+        result = area_resource.import_data(dataset, dry_run=True)  # Test the data import
 
         if not result.has_errors():
-            # Import now
-            employee_resource.import_data(dataset, dry_run=False)
+            area_resource.import_data(dataset, dry_run=False)  # Actually import now
+            print(request.POST)
 
-    return render(request, 'import.html')
+    return render(request, 'localization/country/admin-country.html')

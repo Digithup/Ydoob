@@ -15,6 +15,7 @@ from django.conf import settings
 
 from DeliverySystem.models import *
 from sales.models.orders import Order, OrderProduct
+from vendors.models import Vendor
 
 cred = credentials.Certificate(settings.FIREBASE_ADMIN_CREDENTIAL)
 #firebase_admin.initialize_app(cred)
@@ -120,6 +121,7 @@ def create_order_page(request,code):
     current_customer = request.user
     order=Order.objects.get(code=code)
     orderproduct=OrderProduct.objects.get(order=order,status='Accepted',delivery_by='Ydoob')
+    vendor = Vendor.objects.get(orderproduct__order=order)
 
     # if not current_customer.stripe_payment_method_id:
     #     return redirect(reverse('customer:payment_method'))
@@ -157,6 +159,8 @@ def create_order_page(request,code):
 
         elif request.POST.get('step') == '2':
             step2_form = forms.JobCreateStep2Form(request.POST, instance=creating_job)
+
+
             if step2_form.is_valid():
                 creating_job = step2_form.save()
                 return redirect('DeliverySystem:CreateOrder', order.code)
@@ -245,6 +249,7 @@ def create_order_page(request,code):
         "GOOGLE_MAP_API_KEY": settings.GOOGLE_MAP_API_KEY,
         "order":order,
         "orderproduct": orderproduct,
+        "vendor":vendor,
     })
 
 @login_required(login_url="/sign-in/?next=/customer/")

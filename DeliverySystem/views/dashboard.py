@@ -34,6 +34,7 @@ from django.shortcuts import render, redirect
 from social_django.models import UserSocialAuth
 
 from DeliverySystem.forms import DeliveryLoginForm, DeliverySignUpForm
+from core.decorators import delivery_only
 from sales.models.orders import OrderProduct, Order
 from user.decorators import unauthenticated_user, allowed_users
 from user.forms.forms import UserSignUpForm, UserLoginForm, UserUpdateImageForm, UserUpdateProfileForm, \
@@ -120,16 +121,11 @@ class DeliveryLoginView(View):
                     instance=user,
                     request=request
                 )
-                if is_safe_url(redirect_path, request.get_host()):
-                    return HttpResponseRedirect(reverse_lazy('DeliverySystem:DeliveryIndex'))
-                    print('super')
-
-                else:
+                if not is_safe_url(redirect_path, request.get_host()):
                     messages.error(request, "Error")
                     print(request.POST)
                     print(request)
-                    return HttpResponseRedirect(reverse_lazy('DeliverySystem:DeliveryIndex'))
-
+                return HttpResponseRedirect(reverse_lazy('DeliverySystem:DeliveryIndex'))
             else:
                 print("error")
                 messages.error(request, "Error")
@@ -148,7 +144,7 @@ def DeliveryLogout(request):
 
 
 @login_required(login_url='/delivery/login')  # Check login
-#@allowed_users(allowed_roles=['admin'])
+@delivery_only
 def DeliveryDashboard(request):
     if request.user.is_authenticated and User.objects.get(email=request.user ,delivery=True):
         return render(request, 'DeliveryAdmin/delivery-base/index.html')
@@ -182,6 +178,6 @@ def DeliveryOrder(request):
 #         context['now'] = timezone.now()
 #         return context
 #
-#     @method_decorator(allowed_users(allowed_roles=['admin']))
+#     @method_decorator(superuser_only)
 #     def dispatch(self, *args, **kwargs):
 #         return super(OrdersListView, self).dispatch(*args, **kwargs)

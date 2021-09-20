@@ -2,7 +2,7 @@ import functools
 import logging
 import time
 
-from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.contrib.auth import REDIRECT_FIELD_NAME, get_user_model
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponse
@@ -10,7 +10,7 @@ from django.shortcuts import redirect
 
 from DNigne import settings
 
-
+User = get_user_model()
 def unauthenticated_user(view_func):
     def wrapper_func(request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -19,67 +19,6 @@ def unauthenticated_user(view_func):
             return view_func(request, *args, **kwargs)
 
     return wrapper_func
-
-
-def allowed_users(allowed_roles=None):
-    if allowed_roles is None:
-        allowed_roles = [ 'vendor']
-
-    def decorator(view_func):
-        def wrapper_func(request, *args, **kwargs):
-
-            group = None
-            if request.user.groups.exists():
-                group = request.user.groups.all()[0].name
-
-            if group in allowed_roles:
-                return view_func(request, *args, **kwargs)
-            else:
-                return redirect('home:Error403')
-
-        return wrapper_func
-
-    return decorator
-def vendor_only(view_func):
-    def wrapper_function(request, *args, **kwargs):
-        group = None
-        if request.user.groups.exists():
-            group = request.user.groups.all()[0].name
-
-
-
-        if group == 'vendor':
-            return redirect('home:Error403')
-
-        if group == 'customer':
-            return view_func(request, *args, **kwargs)
-
-    return wrapper_function
-
-def admin_only(view_func):
-    def wrapper_function(request, *args, **kwargs):
-        group = None
-        if request.user.groups.exists():
-            group = request.user.groups.all()[0].name
-
-        if group == 'customer':
-            return redirect('home:Error403')
-
-        if group == 'admin':
-            return view_func(request, *args, **kwargs)
-
-    return wrapper_function
-
-
-def allow_user(view_func):
-    def wrapper_func(request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return redirect('home:Error403')
-        else:
-            return view_func(request, *args, **kwargs)
-
-    return wrapper_func
-
 
 def superuser_only(function):
     """
@@ -109,62 +48,144 @@ def superuser_only(function):
     return _inner
 
 
-def superuser_required(view_func=None, redirect_field_name=REDIRECT_FIELD_NAME,
-                       login_url='account_login_url'):
-    """
-    Decorator for views that checks that the user is logged in and is a
-    superuser, redirecting to the login page if necessary.
-    """
-    actual_decorator = user_passes_test(
-        lambda u: u.active and u.is_superuser,
-        login_url=login_url,
-        redirect_field_name=redirect_field_name
-    )
-    if view_func:
-        return actual_decorator(view_func)
-    return actual_decorator
+def vendor_only(function):
+    def _inner(request, *args, **kwargs):
+        if not request.user.seller:
+            #raise PermissionDenied
+            return redirect('home:Error403')
+        return function(request, *args, **kwargs)
 
+    return _inner
 
-def admin_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url='user:CustomerLogin'):
-    """
-    Decorator for views that checks that the logged in user is a teacher,
-    redirects to the log-in page if necessary.
-    """
-    actual_decorator = user_passes_test(
-        lambda u: u.active and u.is_admin,
-        login_url=login_url,
-        redirect_field_name=redirect_field_name
-    )
-    if function:
-        return actual_decorator(function)
-    return actual_decorator
+def delivery_only(function):
+    def _inner(request, *args, **kwargs):
+        if not request.user.delivery:
+            #raise PermissionDenied
+            return redirect('home:Error403')
+        return function(request, *args, **kwargs)
 
+    return _inner
 
-def group_required(*group_names):
-    """Requires user membership in at least one of the groups passed in."""
-
-    def in_groups(u):
-        if u.is_authenticated():
-            if bool(u.groups.filter(name__in=group_names)) | u.is_superuser:
-                return True
-        return False
-
-    return user_passes_test(in_groups)
-
-
-def anonymous_required(function=None, redirect_url=None):
-    if not redirect_url:
-        redirect_url = settings.LOGIN_REDIRECT_URL
-
-    actual_decorator = user_passes_test(
-        lambda u: u.is_anonymous(),
-        login_url=redirect_url
-    )
-
-    if function:
-        return actual_decorator(function)
-    return actual_decorator
-
+#
+#
+# def allowed_users(allowed_roles=None):
+#     if allowed_roles is None:
+#         allowed_roles = [ 'vendor']
+#
+#     def decorator(view_func):
+#         def wrapper_func(request, *args, **kwargs):
+#
+#             group = None
+#             if request.user.groups.exists():
+#                 group = request.user.groups.all()[0].name
+#
+#             if group in allowed_roles:
+#                 return view_func(request, *args, **kwargs)
+#             else:
+#                 return redirect('home:Error403')
+#
+#         return wrapper_func
+#
+#     return decorator
+# def vendor_only(view_func):
+#     def wrapper_function(request, *args, **kwargs):
+#         group = None
+#         if request.user.groups.exists():
+#             group = request.user.groups.all()[0].name
+#
+#
+#
+#         if group == 'vendor':
+#             return redirect('home:Error403')
+#
+#         if group == 'customer':
+#             return view_func(request, *args, **kwargs)
+#
+#     return wrapper_function
+#
+# def admin_only(view_func):
+#     def wrapper_function(request, *args, **kwargs):
+#         group = None
+#         if request.user.is_authenticated and User.objects.get(email=request.user ,is_superuser=True):
+#             group = request.user.groups.all()[0].name
+#
+#         if group == 'customer':
+#             return redirect('home:Error403')
+#
+#         if group == 'admin':
+#             return view_func(request, *args, **kwargs)
+#
+#     return wrapper_function
+#
+# def allow_user(view_func):
+#     def wrapper_func(request, *args, **kwargs):
+#         if request.user.is_authenticated:
+#             return redirect('home:Error403')
+#         else:
+#             return view_func(request, *args, **kwargs)
+#
+#     return wrapper_func
+#
+#
+#
+#
+#
+# def superuser_required(view_func=None, redirect_field_name=REDIRECT_FIELD_NAME,
+#                    login_url='account_login_url'):
+#     """
+#     Decorator for views that checks that the user is logged in and is a
+#     superuser, redirecting to the login page if necessary.
+#     """
+#     actual_decorator = user_passes_test(
+#         lambda u: u.is_active and u.is_superuser,
+#         login_url=login_url,
+#         redirect_field_name=redirect_field_name
+#     )
+#     if view_func:
+#         return actual_decorator(view_func)
+#     return actual_decorator
+#
+#
+# def admin_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url='user:CustomerLogin'):
+#     """
+#     Decorator for views that checks that the logged in user is a teacher,
+#     redirects to the log-in page if necessary.
+#     """
+#     actual_decorator = user_passes_test(
+#         lambda u: u.active and u.is_admin,
+#         login_url=login_url,
+#         redirect_field_name=redirect_field_name
+#     )
+#     if function:
+#         return actual_decorator(function)
+#     return actual_decorator
+#
+#
+# def group_required(*group_names):
+#     """Requires user membership in at least one of the groups passed in."""
+#
+#     def in_groups(u):
+#         if u.is_authenticated():
+#             if bool(u.groups.filter(name__in=group_names)) | u.is_superuser:
+#                 return True
+#         return False
+#
+#     return user_passes_test(in_groups)
+#
+#
+# def anonymous_required(function=None, redirect_url=None):
+#     if not redirect_url:
+#         redirect_url = settings.LOGIN_REDIRECT_URL
+#
+#     actual_decorator = user_passes_test(
+#         lambda u: u.is_anonymous(),
+#         login_url=redirect_url
+#     )
+#
+#     if function:
+#         return actual_decorator(function)
+#     return actual_decorator
+#
 
 def ajax_required(f):
     """
