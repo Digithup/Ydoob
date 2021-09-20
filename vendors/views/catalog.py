@@ -10,7 +10,6 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
-from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DeleteView, DetailView, UpdateView, CreateView
@@ -22,11 +21,9 @@ from catalog.models.models import Categories, Products, ProductMedia, ProductTag
     ProductTransaction, Variants, OptionsDetails, AttributesDetails
 from catalog.models.product_options import Manufacturer, FiltersGroup, Filters, AttributesGroup, Attributes, Options, \
     OptionsType, Color, Size
-from core.decorators import allowed_users, vendor_only
 from core.forms.forms import SearchForm
 from core.models.setting import Setting
 from localization.models.models import Language
-
 from vendors.models import Vendor, StoreMedia
 
 User = get_user_model()

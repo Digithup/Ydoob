@@ -42,7 +42,7 @@ from user.forms.forms import PasswordResetForm, SetPasswordForm
 from user.models import UserAddress
 from user.signals import user_logged_in
 
-
+User = get_user_model()
 @unauthenticated_user
 def DeliverySignup(request):
     if request.method == 'GET':
@@ -150,7 +150,7 @@ def DeliveryLogout(request):
 @login_required(login_url='/delivery/login')  # Check login
 #@allowed_users(allowed_roles=['admin'])
 def DeliveryDashboard(request):
-    if request.user.is_authenticated:
+    if request.user.is_authenticated and User.objects.get(email=request.user ,delivery=True):
         return render(request, 'DeliveryAdmin/delivery-base/index.html')
     else:
         form = DeliveryLoginForm()
