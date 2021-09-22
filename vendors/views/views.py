@@ -1,5 +1,3 @@
-import objects as objects
-from django.contrib import messages
 from django.contrib import messages
 from django.contrib.auth import login, get_user_model
 from django.contrib.auth.decorators import login_required
@@ -8,25 +6,22 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
-from django.db.models import Q
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
-from django.template.context_processors import request
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils.crypto import get_random_string
 from django.utils.encoding import force_bytes
 from django.utils.html import format_html
 from django.utils.http import urlsafe_base64_encode
-from django.views.generic import CreateView, UpdateView, ListView
+from django.views.generic import CreateView
 from django.views.generic.base import RedirectView, View
 
-from catalog.models.models import Products, ProductMedia
-from core.decorators import  unauthenticated_user
-from notification.utilities import  create_notification_admin
+from catalog.models.models import Products
+from core.decorators import unauthenticated_user
+from notification.utilities import create_notification_admin
 from sales.models.orders import OrderProduct
-
 from vendors.forms import SellerRegisterForm, AlreadyUserSellerRegisterForm, CreateVendorForm
 from vendors.models import Vendor, StoreMedia
 from vendors.utilities import notify_admin, notify_user
@@ -203,6 +198,19 @@ def StoreWaiting(request):
     context = {'status': status,
                }
     return render(request, 'store-page/store-waiting.html', context)
+
+
+
+
+
+def AllVendor(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('user:CustomerLogin'))
+    else:
+        return render(request, "all-vendor/all-vendor.html",
+                     )
+
+
 
 
 class VendorDashboard(View):

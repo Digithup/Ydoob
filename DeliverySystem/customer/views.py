@@ -120,8 +120,8 @@ def payment_method_page(request):
 def create_order_page(request,code):
     current_customer = request.user
     order=Order.objects.get(code=code)
-    orderproduct=OrderProduct.objects.get(order=order,status='Accepted',delivery_by='Ydoob')
-    vendor = Vendor.objects.get(orderproduct__order=order)
+    order_product=OrderProduct.objects.get(order=order,status='Accepted',delivery_by='Ydoob')
+    vendor = Vendor.objects.all()
 
     # if not current_customer.stripe_payment_method_id:
     #     return redirect(reverse('customer:payment_method'))
@@ -226,8 +226,6 @@ def create_order_page(request,code):
 
                     # Error code will be authentication_required if authentication is needed
                     print("Code is: %s" % e)
-                    payment_intent_id = e.payment_intent['id']
-                    payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
                     print(e)
 
     # Determine the current step
@@ -248,7 +246,7 @@ def create_order_page(request,code):
         "step3_form": step3_form,
         "GOOGLE_MAP_API_KEY": settings.GOOGLE_MAP_API_KEY,
         "order":order,
-        "orderproduct": orderproduct,
+        "orderproduct": order_product,
         "vendor":vendor,
     })
 

@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 
 from catalog.models.models import Products
+
 from sales.models.payment import Payment
 from user.models import UserAddress
 from vendors.models import Vendor
@@ -102,6 +103,7 @@ class OrderProduct(models.Model):
     price = models.FloatField()
     amount = models.FloatField()
     status = models.CharField(max_length=10, choices=STATUS, default='New')
+
     delivery_by = models.CharField(max_length=10, choices=DeliverySystem, default=False)
     delivery_taken_datetime = models.DateTimeField(null=True, blank=True)
     delivery_person_ip = models.GenericIPAddressField(

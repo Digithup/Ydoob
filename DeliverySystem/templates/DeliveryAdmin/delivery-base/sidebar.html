@@ -43,7 +43,15 @@
                      <li><a href="profile.html"><i class="fa fa-circle"></i>{% translate 'Profile' %}</a></li>
                 </ul>
             </li>
-            <li><a class="sidebar-header" href="invoice.html"><i data-feather="archive"></i><span>{% translate 'Invoice' %}</span></a>
+           <li><a class="sidebar-header" href=""><i data-feather="archive"></i><span>Invoice</span><i
+                    class="fa fa-angle-right pull-right"></i></a>
+                <ul class="sidebar-submenu">
+
+                    <li><a href="{%  url 'invoice:DeliveryInvoices'  %}"><i class="fa fa-circle"></i>Invoices</a></li>
+                    <li><a href="{%  url 'invoice:DeliveryCreateInvoice'  %}"><i class="fa fa-circle"></i>Create Invoice</a></li>
+
+
+                </ul>
             </li>
             <li><a class="sidebar-header" href="{% url 'user:CustomerLogout' %}"><i data-feather="log-in"></i><span>{% translate 'Log Out' %}</span></a>
             </li>
