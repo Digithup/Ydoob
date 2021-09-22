@@ -14,20 +14,20 @@ from DeliverySystem.courier import forms
 def home(request):
     return redirect(reverse('DeliverySystem:AvailableOrders'))
 
-@login_required(login_url="/sign-in/?next=/courier/")
+@login_required(login_url="/sign-in/?next=/delivery/")
 def all_jobs_page(request):
     return render(request, 'courier/available_jobs.html', {
         "GOOGLE_MAP_API_KEY": settings.GOOGLE_MAP_API_KEY
     })
 
 
-@login_required(login_url="/sign-in/?next=/courier/")
+@login_required(login_url="/sign-in/?next=/delivery/")
 def available_jobs_page(request):
     return render(request, 'courier/available_jobs.html', {
         "GOOGLE_MAP_API_KEY": settings.GOOGLE_MAP_API_KEY
     })
 
-@login_required(login_url="/sign-in/?next=/courier/")
+@login_required(login_url="/sign-in/?next=/delivery/")
 def available_job_page(request, id):
     job = Job.objects.filter(id=id, status=Job.PROCESSING_STATUS).last()
 
@@ -56,7 +56,7 @@ def available_job_page(request, id):
         "job": job
     })
 
-@login_required(login_url="/sign-in/?next=/courier/")
+@login_required(login_url="/sign-in/?next=/delivery/")
 def current_job_page(request):
     job = Job.objects.filter(
         customer=request.user,
@@ -71,7 +71,7 @@ def current_job_page(request):
         "GOOGLE_MAP_API_KEY": settings.GOOGLE_MAP_API_KEY
     })
 
-@login_required(login_url="/sign-in/?next=/courier/")
+@login_required(login_url="/sign-in/?next=/delivery/")
 def current_job_take_photo_page(request, id):
     job = Job.objects.filter(
         id=id,
@@ -91,11 +91,11 @@ def current_job_take_photo_page(request, id):
         "order": order,
     })
 
-@login_required(login_url="/sign-in/?next=/courier/")
+@login_required(login_url="/sign-in/?next=/delivery/")
 def job_complete_page(request):
     return render(request, 'courier/job_complete.html')
 
-@login_required(login_url="/sign-in/?next=/courier/")
+@login_required(login_url="/sign-in/?next=/delivery/")
 def archived_jobs_page(request):
     jobs = Job.objects.filter(
         customer=request.user,
@@ -106,7 +106,7 @@ def archived_jobs_page(request):
         "jobs": jobs
     })
 
-@login_required(login_url="/sign-in/?next=/courier/")
+@login_required(login_url="/sign-in/?next=/delivery/")
 def profile_page(request):
     jobs = Job.objects.filter(
         customer=request.user,

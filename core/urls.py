@@ -198,8 +198,12 @@ urlpatterns = [
     path('country/<int:pk>/', CountryDetailView.as_view(), name='CountryDetailView'),
     path('country/update/<int:pk>/', CountryEdit.as_view(), name='CountryEdit'),
     path('country/delete/<int:pk>/', CountryDelete.as_view(), name='CountryDelete'),
+
+
     path('country/report/export/', country_export_data, name="CountryReportExport"),
     path('country/report/import/', country_import_data, name="CountryReportImport"),
+
+
 
     path('governorates/report/export/', governorates_export_data, name="GovernoratesReportExport"),
     path('governorates/report/imprt/', governorates_import_data, name="GovernoratesReportImport"),

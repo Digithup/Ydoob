@@ -112,8 +112,17 @@
                      <li><a href="profile.html"><i class="fa fa-circle"></i>Profile</a></li>
                 </ul>
             </li>
-            <li><a class="sidebar-header" href="invoice.html"><i data-feather="archive"></i><span>Invoice</span></a>
+            <li><a class="sidebar-header" href=""><i data-feather="archive"></i><span>Invoice</span><i
+                    class="fa fa-angle-right pull-right"></i></a>
+                <ul class="sidebar-submenu">
+
+                    <li><a href="{%  url 'invoice:AdminInvoices'  %}"><i class="fa fa-circle"></i>Invoices</a></li>
+                    <li><a href="{%  url 'invoice:AdminCreateInvoice'  %}"><i class="fa fa-circle"></i>Create Invoice</a></li>
+
+                     <li><a href="profile.html"><i class="fa fa-circle"></i>Profile</a></li>
+                </ul>
             </li>
+
             <li><a class="sidebar-header" href="../../user/templates/users/login.html"><i data-feather="log-in"></i><span>Login</span></a>
             </li>
         </ul>

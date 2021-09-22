@@ -31,7 +31,6 @@ User = get_user_model()
 def VendorIndex(request, *args, **kwargs,):
 
     user = request.user.id
-
     try:
         if request.user.is_authenticated and Vendor.objects.get(vendor__id=user):
             store = Vendor.objects.get(vendor__id=user)

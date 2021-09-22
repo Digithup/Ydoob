@@ -21,12 +21,9 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-import notification
 from DeliverySystem import consumers
-from home.tests import ajaxcolortest,  ajaxpricetest
 from home.views import ajaxprice, ajaxcolor
 from localization import views
-
 
 urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
@@ -42,10 +39,12 @@ urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
     path('', include('user.urls'), name='user'),
     path('dashboard/', include('core.urls'), name='core'),
+   path('delivery/', include('DeliverySystem.urls'), name='DeliverySystem'),
     path('dashboard/', include('localization.urls'), name='localization'),
     path('', include('notification.urls'),name='notifications'),
     path('', include('home.urls'), name='home'),
-    path('delivery/', include('DeliverySystem.urls'), name='DeliverySystem'),
+    path('', include('invoice.urls'), name='invoice'),
+
     path('', include('catalog.urls'), name='catalog'),
     path('', include('sales.urls'), name='sales'),
     path('', include('vendors.urls'), name='vendors'),

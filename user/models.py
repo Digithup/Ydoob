@@ -189,6 +189,9 @@ class UserAddress(models.Model):
     apartment_no = models.CharField(blank=True, null=True, max_length=255)
     nearest_landmark = models.CharField(blank=True, null=True, max_length=255)
     postal_code = models.CharField(blank=True, null=True, max_length=50)
+    lat = models.FloatField(default=0)
+    lng = models.FloatField(default=0)
+    fcm_token = models.TextField(blank=True)
     slug = models.SlugField(unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -203,6 +206,13 @@ class UserAddress(models.Model):
 
     def __str__(self):
         return self.address_title
+
+    def get_full_address(self):
+        full_address = None
+        if self.governorate or self.city or self.area or self.street_name:
+            return self.governorate.name + " " + self.city.name + " " +  self.street_name
+        else:
+            return self.governorate
 
 
 class GuestEmail(models.Model):

@@ -4,7 +4,7 @@ from django.forms import ModelForm
 
 
 from sales.models.cart import ShopCart
-from sales.models.orders import Order
+from sales.models.orders import Order, OrderProduct
 from vendors.models import Vendor
 
 
@@ -28,6 +28,13 @@ class CheckoutForm(ModelForm):
 class OrderCreateForm(forms.ModelForm):
     class Meta:
         model = Order
+        fields = '__all__'
+
+
+class OrderProductForm(ModelForm):
+
+    class Meta:
+        model = OrderProduct
         fields = '__all__'
 
 

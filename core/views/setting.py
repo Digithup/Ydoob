@@ -10,7 +10,7 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DeleteView, UpdateView, CreateView
 
-from core.decorators import allowed_users
+from core.decorators import  superuser_only
 from core.forms.setting import SettingLangForm, SettingForm, SiteForm
 from core.models.setting import Setting, SettingLang
 
@@ -27,8 +27,8 @@ class AdminSetting(ListView):
 
     template_name = 'setting/admin-setting.html'
 
-@login_required(login_url='/login')
-@allowed_users(allowed_roles=['admin'])
+@login_required(login_url='/dashboard/login')
+@superuser_only
 def setting(request):
     setting = Setting.objects.first()
     setting_lang = SettingLang.objects.first()
@@ -47,8 +47,8 @@ def setting(request):
 
     return render(request, 'setting.html', context)
 
-@login_required(login_url='/login')
-@allowed_users(allowed_roles=['admin'])
+@login_required(login_url='/dashboard/login')
+@superuser_only
 def add_setting(request):
 
     langlist = Language.objects.filter(status=True)
@@ -136,8 +136,8 @@ def add_setting(request):
     # return HttpResponseRedirect('/')
     return render(request, 'setting/add-setting.html', {'langlist': langlist})
 
-@login_required(login_url='/login')
-@allowed_users(allowed_roles=['admin'])
+@login_required(login_url='/dashboard/login')
+@superuser_only
 def update_setting(request):
     lang = Language.objects.all()
     try:
@@ -189,7 +189,7 @@ class SettingDelete(DeleteView):
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
 
-    @method_decorator(allowed_users(allowed_roles=['admin']))
+    @method_decorator(superuser_only)
     def dispatch(self, *args, **kwargs):
         return super(SettingDelete, self).dispatch(*args, **kwargs)
 
@@ -205,7 +205,7 @@ class AdminSiteUpdate(UpdateView):
     template_name = 'setting/site/update-site.html'
     success_url = reverse_lazy('core:AdminSite')
 
-    @method_decorator(allowed_users(allowed_roles=['admin']))
+    @method_decorator(superuser_only)
     def dispatch(self, *args, **kwargs):
         return super(AdminSiteUpdate, self).dispatch(*args, **kwargs)
 
@@ -221,7 +221,7 @@ class PaymentMethodsCreate(CreateView):
     template_name = 'setting/PaymentMethods/add-PaymentMethods.html'
     success_url = reverse_lazy('core:PaymentMethodsList')
 
-    # @method_decorator(allowed_users(allowed_roles=['admin']))
+    # @method_decorator(superuser_only)
     # def dispatch(self, *args, **kwargs):
     #     return super(PaymentMethodsCreate, self).dispatch(*args, **kwargs)
 
@@ -232,7 +232,7 @@ class PaymentMethodsUpdate(UpdateView):
     template_name = 'setting/PaymentMethods/update-PaymentMethods.html'
     success_url = reverse_lazy('core:PaymentMethodsList')
 
-    @method_decorator(allowed_users(allowed_roles=['admin']))
+    @method_decorator(superuser_only)
     def dispatch(self, *args, **kwargs):
         return super(PaymentMethodsUpdate, self).dispatch(*args, **kwargs)
 
