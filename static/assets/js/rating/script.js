@@ -1,7 +1,7 @@
 /*-----------------------------------------------------------------------------------
 
- Template Name:Multikart
- Template URI: themes.pixelstrap.com/multikart
+ Template Name:Ydoob
+ Template URI: themes.pixelstrap.com/Ydoob
  Description: This is E-commerce website
  Author: Pixelstrap
  Author URI: https://themeforest.net/user/pixelstrap

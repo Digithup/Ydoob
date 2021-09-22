@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 from typing import List
 
-import django_heroku
+
 from django.conf import settings
 from django.contrib import messages
 
@@ -52,7 +52,9 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in Productsion!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS: List[str] = ['127.0.0.1', 'dnigne.herokuapp.com','192.168.1.3']
+ALLOWED_HOSTS: List[str] = ['127.0.0.1', 'dnigne.herokuapp.com', '192.168.1.3','business.localhost']
+
+ROOT_URLCONF = 'DNigne.urls'
 
 AUTH_USER_MODEL = 'user.User'
 # ALLOWED_HOSTS = [
@@ -94,6 +96,7 @@ THIRD_PARTY_APPS = [
     'import_export',
 
 
+
 ]
 OWN_APPS = [
     ## internal apps
@@ -120,6 +123,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 DJANGO_NOTIFICATIONS_CONFIG = {'USE_JSONFIELD': True}
 
 MIDDLEWARE = [
+
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -131,6 +135,8 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
+
+
     # 'whitenoise.middleware.WhiteNoiseMiddleware',
 
 ]
@@ -179,7 +185,6 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.github.GithubOAuth2',
     'social_core.backends.twitter.TwitterOAuth',
     'social_core.backends.facebook.FacebookOAuth2',
-
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -203,11 +208,11 @@ DATABASES = {
     'default': {
 
         'ENGINE': 'django.db.backends.mysql',
-                'NAME': env('DB_NAME'),
-                'USER': env('DB_USER'),
-                'PASSWORD': env('DB_PASSWORD'),
-                'HOST': env('DB_HOST'),
-                'PORT': env('DB_PORT'),
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
     }
 }
 
@@ -316,7 +321,6 @@ LOCALE_PATHS = (
 
 DEFAULT_CURRENCY = 'USD'
 
-
 # CUSTOM
 FORCE_SESSION_TO_ONE = True  # Default is false
 
@@ -325,6 +329,7 @@ FORCE_SESSION_TO_ONE = True  # Default is false
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+CSS_LOCATION = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/upload/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "upload")
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -378,7 +383,6 @@ CART_SESSION_ID = 'cart'
 SESSION_COOKIE_AGE = 85555
 SESSION_COOKIE_SECURE = False
 
-ROOT_URLCONF = 'DNigne.urls'
 WSGI_APPLICATION = 'DNigne.wsgi.application'
 LOGOUT_REDIRECT_URL = '/'
 
@@ -406,7 +410,6 @@ MyFatoorah_base_url = env('MyFatoorah_base_url')
 MyFatoorah_api_key = env('MyFatoorah_api_key')
 MyFatoorah_WEBHOOK_SECRET = env('MyFatoorah_WEBHOOK_SECRET')
 
-django_heroku.settings(locals())
 
 FIREBASE_ADMIN_CREDENTIAL = os.path.join(BASE_DIR, "ydoob-ff08e-firebase-adminsdk-j7532-952cfe0721.json")
 GOOGLE_MAP_API_KEY = "AIzaSyBxYTF5b1oobhbQo_dylaatAYm1BwARBb4"

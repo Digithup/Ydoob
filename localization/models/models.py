@@ -39,7 +39,6 @@ from django.utils.text import slugify
 
 
 class Country(models.Model):
-    id = models.SmallIntegerField(primary_key=True, blank=False, null=False)
     name = models.CharField(max_length=30,default='Egypt')
     name_ar = models.CharField(max_length=30,default='مصر')
     slug = models.SlugField(unique=True)
@@ -66,7 +65,6 @@ class Governorates(models.Model):
 
 
 class City(models.Model):
-
     governorates = models.ForeignKey(Governorates, on_delete=models.CASCADE)
     name = models.CharField(max_length=50,default='Qena')
     name_ar = models.CharField(max_length=50,default='Qena')
@@ -80,7 +78,6 @@ class City(models.Model):
 
 
 class Area(models.Model):
-    id = models.SmallIntegerField(primary_key=True, blank=False, null=False)
     city = models.ForeignKey(City, on_delete=models.CASCADE)
     name = models.CharField(max_length=30,default='Qena')
     name_ar = models.CharField(max_length=30,default='Qena')

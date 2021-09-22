@@ -43,9 +43,7 @@
                         {% else %}
 
                             {% if step > 1 %}
-                                <h4>{{ job.name }}</h4>
-                                <span>{{ job.quantity }} Item</span><br/>
-                                <span>{{ job.get_size_display }} Job</span>
+                                <h4>{{ job.order }}</h4>
                             {% endif %}
 
                             {% if step > 2 %}
@@ -189,11 +187,20 @@
                                     <div class="row">
                                         <div class="col-lg-8">
                                             {% csrf_token %}
+                                            <div class="form-group">
+                                        <label for="validationCustomtitle"
+                                               class="col-form-label pt-0"><span>*</span>{% translate 'Billing Amount' %}
+                                        </label>
+                                        <input class="form-control" id="validationCustomtitle" type="text"
+                                               required=""
+                                               value="{{ order_product.product }}" disabled>
+                                    </div>
                                             {% bootstrap_form step2_form exclude='pickup_lat, pickup_lng' %}
                                             <input  id="pickup_lat" name="pickup_lat"
                                                    value="{{ job.pickup_lat }}"/>
                                             <input  id="pickup_lng" name="pickup_lng"
                                                    value="{{ job.pickup_lng }}">
+
                                         </div>
                                         <div class="col-lg-4">
                                             <div id="pickup-map"></div>
@@ -228,6 +235,15 @@
                                     <div class="row">
                                         <div class="col-lg-8">
                                             {% csrf_token %}
+                                             <div class="form-group">
+                                        <label for="validationCustomtitle"
+                                               class="col-form-label pt-0"><span>*</span>{% translate 'Delivery Info' %}
+                                        </label>
+                                        <input class="form-control" id="validationCustomtitle" type="text"
+                                               required=""
+                                               value="{{ order.address.get_full_address }}" disabled>
+                                    </div>
+
                                             {% bootstrap_form step3_form exclude='delivery_lat, delivery_lng' %}
                                             <input hidden id="delivery_lat" name="delivery_lat"
                                                    value="{{ job.delivery_lat }}"/>

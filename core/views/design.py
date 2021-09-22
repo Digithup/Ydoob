@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import TemplateView, DetailView, DeleteView, CreateView
 
-from core.decorators import allowed_users
+from core.decorators import superuser_only
 from core.forms.banner import BannersAddForm
 from core.models.design import Slider, SliderGroup, SliderMedia, Banners
 
@@ -21,7 +21,7 @@ class SliderView(TemplateView):
         context['sliders'] = Slider.objects.all()
         return context
 
-    @method_decorator(allowed_users(allowed_roles=['admin']))
+    @method_decorator(superuser_only)
     def dispatch(self, *args, **kwargs):
         return super(SliderView, self).dispatch(*args, **kwargs)
 
@@ -32,7 +32,7 @@ class SliderDetailView(DetailView):
     context_object_name = 'slider'
     template_name = 'design/slider/slider-detail.html'
 
-    @method_decorator(allowed_users(allowed_roles=['admin']))
+    @method_decorator(superuser_only)
     def dispatch(self, *args, **kwargs):
         return super(SliderDetailView, self).dispatch(*args, **kwargs)
 
@@ -43,7 +43,7 @@ class SliderGroupCreate(CreateView):
     template_name = 'design/slider/add-slider-group.html'
     success_url = reverse_lazy('core:SliderView')
 
-    @method_decorator(allowed_users(allowed_roles=['admin']))
+    @method_decorator(superuser_only)
     def dispatch(self, *args, **kwargs):
         return super(SliderGroupCreate, self).dispatch(*args, **kwargs)
 
@@ -56,7 +56,7 @@ class SliderDelete(DeleteView):
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
 
-    @method_decorator(allowed_users(allowed_roles=['admin']))
+    @method_decorator(superuser_only)
     def dispatch(self, *args, **kwargs):
         return super(SliderDelete, self).dispatch(*args, **kwargs)
 
@@ -103,7 +103,7 @@ class SliderCreate(View):
         # return HttpResponse("OK")
         return HttpResponseRedirect(reverse_lazy('core:SliderView'))
 
-    @method_decorator(allowed_users(allowed_roles=['admin']))
+    @method_decorator(superuser_only)
     def dispatch(self, *args, **kwargs):
         return super(SliderCreate, self).dispatch(*args, **kwargs)
 
@@ -119,7 +119,7 @@ class BannersView(TemplateView):
         context['banners'] = Banners.objects.all()
         return context
 
-    @method_decorator(allowed_users(allowed_roles=['admin']))
+    @method_decorator(superuser_only)
     def dispatch(self, *args, **kwargs):
         return super(BannersView, self).dispatch(*args, **kwargs)
 
@@ -129,7 +129,7 @@ class BannerDetailView(DetailView):
     context_object_name = 'design'
     template_name = 'design/banner/banner-detail.html'
 
-    @method_decorator(allowed_users(allowed_roles=['admin']))
+    @method_decorator(superuser_only)
     def dispatch(self, *args, **kwargs):
         return super(BannerDetailView, self).dispatch(*args, **kwargs)
 
@@ -142,12 +142,12 @@ class BannerDelete(DeleteView):
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
 
-    @method_decorator(allowed_users(allowed_roles=['admin']))
+    @method_decorator(superuser_only)
     def dispatch(self, *args, **kwargs):
         return super(BannerDelete, self).dispatch(*args, **kwargs)
 
-@login_required(login_url='/login')
-@allowed_users(allowed_roles=['admin'])
+@login_required(login_url='/dashboard/login')
+@superuser_only
 def BannerCreate(request):  # sourcery skip: aug-assign, convert-to-enumerate
 
     if request.method == "POST":
@@ -227,7 +227,7 @@ class BannerCdreate(View):
         # return HttpResponse("OK")
         return HttpResponseRedirect(reverse_lazy('core:BannerView'))
 
-    @method_decorator(allowed_users(allowed_roles=['admin']))
+    @method_decorator(superuser_only)
     def dispatch(self, *args, **kwargs):
         return super(BannerCdreate, self).dispatch(*args, **kwargs)
 
@@ -242,7 +242,7 @@ class MenuView(TemplateView):
         context['sliders'] = Slider.objects.all()
         return context
 
-    @method_decorator(allowed_users(allowed_roles=['admin']))
+    @method_decorator(superuser_only)
     def dispatch(self, *args, **kwargs):
         return super(MenuView, self).dispatch(*args, **kwargs)
 
@@ -252,7 +252,7 @@ class MenuDetailView(DetailView):
     context_object_name = 'slider'
     template_name = 'design/slider/slider-detail.html'
 
-    @method_decorator(allowed_users(allowed_roles=['admin']))
+    @method_decorator(superuser_only)
     def dispatch(self, *args, **kwargs):
         return super(MenuDetailView, self).dispatch(*args, **kwargs)
 
@@ -263,7 +263,7 @@ class MenuGroupCreate(CreateView):
     template_name = 'design/slider/add-slider-group.html'
     success_url = reverse_lazy('core:SliderView')
 
-    @method_decorator(allowed_users(allowed_roles=['admin']))
+    @method_decorator(superuser_only)
     def dispatch(self, *args, **kwargs):
         return super(MenuGroupCreate, self).dispatch(*args, **kwargs)
 
@@ -274,6 +274,6 @@ class MenuDelete(DeleteView):
     template_name = 'design/slider/confirm_delete.html'
     success_url = reverse_lazy('core:SliderView')
 
-    @method_decorator(allowed_users(allowed_roles=['admin']))
+    @method_decorator(superuser_only)
     def dispatch(self, *args, **kwargs):
         return super(MenuDelete, self).dispatch(*args, **kwargs)

@@ -1,13 +1,12 @@
-from bootstrap_datepicker_plus import DateTimePickerInput
+from django.urls import reverse_lazy
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, UpdateView
 
-from catalog.models.models import Products
-from core.decorators import allowed_users, vendor_only
+from core.decorators import vendor_only
 from core.forms.sales import OrderStatusForm
-from sales.models.orders import Order, OrderProduct
+from sales.models.orders import OrderProduct
 
 
 class VendorOrdersListView(ListView):
@@ -19,9 +18,9 @@ class VendorOrdersListView(ListView):
         context['vendor_order'] = OrderProduct.objects.filter(vendor_id=self.request.user.id)
         context['now'] = timezone.now()
         return context
-    # @method_decorator(vendor_only)
-    # def dispatch(self, *args, **kwargs):
-    #     return super(VendorOrdersListView, self).dispatch(*args, **kwargs)
+    @method_decorator(vendor_only)
+    def dispatch(self, *args, **kwargs):
+        return super(VendorOrdersListView, self).dispatch(*args, **kwargs)
 
 
 class VendorOrderDetailView(DetailView):
@@ -33,9 +32,9 @@ class VendorOrderDetailView(DetailView):
         context['now'] = timezone.now()
         return context
 
-    # @method_decorator(allowed_users(allowed_roles=['admin']))
-    # def dispatch(self, *args, **kwargs):
-    #     return super(VendorOrderDetailView, self).dispatch(*args, **kwargs)
+    @method_decorator(vendor_only)
+    def dispatch(self, *args, **kwargs):
+        return super(VendorOrderDetailView, self).dispatch(*args, **kwargs)
 
 
 class VendorEditOrder(UpdateView):
@@ -45,12 +44,9 @@ class VendorEditOrder(UpdateView):
     template_name = 'vendor/sales/orders/VendorEditOrder.html'
     success_url = reverse_lazy('vendors:Order')
 
-
-
-
-    # @method_decorator(vendor_only)
-    # def dispatch(self, *args, **kwargs):
-    #     return super(VendorEditOrder, self).dispatch(*args, **kwargs)
+    @method_decorator(vendor_only)
+    def dispatch(self, *args, **kwargs):
+        return super(VendorEditOrder, self).dispatch(*args, **kwargs)
 
 
 

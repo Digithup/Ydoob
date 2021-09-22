@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from core.decorators import allowed_users
+from core.decorators import superuser_only
 from core.forms.sales import OrderStatusForm
 from sales.models.orders import Order
 
@@ -18,7 +18,7 @@ class OrdersListView(ListView):
         context['now'] = timezone.now()
         return context
 
-    @method_decorator(allowed_users(allowed_roles=['admin']))
+    @method_decorator(superuser_only)
     def dispatch(self, *args, **kwargs):
         return super(OrdersListView, self).dispatch(*args, **kwargs)
 
@@ -32,7 +32,7 @@ class OrderDetailView(DetailView):
         context['now'] = timezone.now()
         return context
 
-    @method_decorator(allowed_users(allowed_roles=['admin']))
+    @method_decorator(superuser_only)
     def dispatch(self, *args, **kwargs):
         return super(OrderDetailView, self).dispatch(*args, **kwargs)
 
@@ -44,6 +44,6 @@ class EditOrder(UpdateView):
     template_name = 'sales/orders/admin_edit-order.html'
     success_url = reverse_lazy('core:Order')
 
-    @method_decorator(allowed_users(allowed_roles=['admin']))
+    @method_decorator(superuser_only)
     def dispatch(self, *args, **kwargs):
         return super(EditOrder, self).dispatch(*args, **kwargs)

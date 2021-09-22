@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from DeliverySystem.models import Job
+from DeliverySystem.models import Shipping
 
 
 class BasicUserForm(forms.ModelForm):
@@ -11,26 +11,24 @@ class BasicUserForm(forms.ModelForm):
 
 
 
-class JobCreateStep1Form(forms.ModelForm):
+class ShippingCreateStep1Form(forms.ModelForm):
 
   class Meta:
-    model = Job
+    model = Shipping
     fields = ('order',)
 
-class JobCreateStep2Form(forms.ModelForm):
-  pickup_address = forms.CharField(required=True)
-  pickup_name = forms.CharField(required=True)
-  pickup_phone = forms.CharField(required=True)
+class ShippingCreateStep2Form(forms.ModelForm):
+  vendor = forms.CharField(required=True)
+
 
   class Meta:
-    model = Job
-    fields = ('pickup_address', 'pickup_lat', 'pickup_lng', 'pickup_name', 'pickup_phone')
+    model = Shipping
+    fields = ('vendor', 'vendor_lat', 'vendor_lng')
 
-class JobCreateStep3Form(forms.ModelForm):
-  delivery_address = forms.CharField(required=True)
-  delivery_name = forms.CharField(required=True)
-  delivery_phone = forms.CharField(required=True)
+class ShippingCreateStep3Form(forms.ModelForm):
+  customer = forms.CharField(required=True)
+
 
   class Meta:
-    model = Job
-    fields = ('delivery_address', 'delivery_lat', 'delivery_lng', 'delivery_name', 'delivery_phone')
+    model = Shipping
+    fields = ('customer', 'customer_lat', 'customer_lng',)

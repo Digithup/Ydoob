@@ -5,7 +5,7 @@ from vendors.views.catalog import VendorIndex, ProductsList,  ProductsDeleted, f
     ProductsAddStocks, ProductMediaDelete, ProductEditMedia, ProductsAddMedia, ProductUpdate, VendorProductAdd
 from vendors.views.order import VendorOrdersListView, VendorEditOrder, VendorOrderDetailView
 from vendors.views.views import SellerRegister, CreateSuccess, StoreWaiting, VendorDashboard, EditStore, \
-    AlreadyUserSellerRegister, VendorCreate
+    AlreadyUserSellerRegister, VendorCreate, AllVendor
 
 app_name = 'vendors'
 
@@ -19,6 +19,8 @@ urlpatterns = [
     path('startselling/', VendorCreate.as_view(), name='CreateStore'),
     path('CreateSuccess/', CreateSuccess, name='CreateSuccess'),
     path('StoreWaiting/', StoreWaiting, name='StoreWaiting'),
+
+    path('vendor/', AllVendor, name='AllVendor'),
     path('vendor/<slug:slug>', VendorDashboard.as_view(), name='VendorDashboard'),
     path('vendor/edit/<slug:slug>', EditStore.as_view(), name='EditStore'),
 
@@ -26,8 +28,6 @@ urlpatterns = [
 
     ########## Products   #########
     path('vendor/dashboard/', VendorIndex, name='VendorIndex'),
-
-
     path('vendor/dashboard/products/', ProductsList.as_view(), name="ProductsList"),
     path('vendor/dashboard/productcreate', VendorProductAdd, name="ProductCreate"),
     path('vendor/dashboard/products/Product_edit/<str:product_id>', ProductUpdate.as_view(), name="ProductUpdate"),
